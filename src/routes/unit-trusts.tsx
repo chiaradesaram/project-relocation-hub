@@ -120,7 +120,10 @@ function UnitTrustPortfolio() {
                 </div>
                 <div className="shrink-0 text-right mr-1">
                   <p className="text-sm font-bold text-foreground">{fund.value}</p>
-                  <p className="text-xs font-medium text-success">{fund.earnings30d}</p>
+                  <div className="mt-0.5 flex items-center justify-end gap-1.5">
+                    <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">7d {fund.earnings7d}</span>
+                    <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">30d {fund.earnings30d}</span>
+                  </div>
                 </div>
                 {isOpen ? (
                   <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
