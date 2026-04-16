@@ -74,11 +74,12 @@ function UnitTrustPortfolio() {
       {/* Summary */}
       <div className="px-4 mt-2 text-center">
         <p className="text-xs uppercase tracking-wider text-muted-foreground">Total Balance</p>
-        <h2 className="text-3xl font-bold tracking-tight text-foreground mt-1">LKR 2,450,000</h2>
-        <p className="text-xs mt-1">
-          <span className="font-medium text-success">+4.5%</span>
-          <span className="text-muted-foreground"> · LKR 110,250 earned this month</span>
-        </p>
+        <p className="text-3xl font-bold tracking-tight text-foreground mt-1">LKR 2,450,000</p>
+        <div className="mt-2 flex items-center justify-center gap-4 text-[11px]">
+          <span className="text-muted-foreground">7d <span className="font-medium text-success">+16,436</span></span>
+          <span className="text-muted-foreground">30d <span className="font-medium text-success">+110,250</span></span>
+          <span className="text-muted-foreground">All <span className="font-medium text-success">+219,949</span></span>
+        </div>
       </div>
 
       {/* Invest / Redeem pills */}
