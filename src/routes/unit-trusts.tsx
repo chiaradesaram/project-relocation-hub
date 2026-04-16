@@ -20,6 +20,7 @@ interface Fund {
   name: string;
   description: string;
   value: string;
+  earnings7d: string;
   earnings30d: string;
   returnPct: string;
   subAccounts: SubAccount[];
@@ -30,6 +31,7 @@ const funds: Fund[] = [
     name: "Fixed Income Fund",
     description: "3 goals · Stable returns",
     value: "LKR 1,200,000",
+    earnings7d: "+9,200",
     earnings30d: "+38,400",
     returnPct: "+3.2%",
     subAccounts: [
@@ -42,6 +44,7 @@ const funds: Fund[] = [
     name: "High Yield Fund",
     description: "2 goals · Higher risk",
     value: "LKR 850,000",
+    earnings7d: "+12,400",
     earnings30d: "+49,300",
     returnPct: "+5.8%",
     subAccounts: [
@@ -53,6 +56,7 @@ const funds: Fund[] = [
     name: "Islamic Fund",
     description: "1 goal · Sharia-compliant",
     value: "LKR 400,000",
+    earnings7d: "+2,100",
     earnings30d: "+8,400",
     returnPct: "+2.1%",
     subAccounts: [
@@ -120,7 +124,10 @@ function UnitTrustPortfolio() {
                 </div>
                 <div className="shrink-0 text-right mr-1">
                   <p className="text-sm font-bold text-foreground">{fund.value}</p>
-                  <p className="text-xs font-medium text-success">{fund.earnings30d}</p>
+                  <div className="mt-0.5 flex items-center justify-end gap-1.5">
+                    <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">7d {fund.earnings7d}</span>
+                    <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">30d {fund.earnings30d}</span>
+                  </div>
                 </div>
                 {isOpen ? (
                   <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
