@@ -145,11 +145,12 @@
   }
 
   .gradient-primary {
-    background: linear-gradient(135deg, oklch(0.55 0.25 290), oklch(0.6 0.2 350));
+    background: var(--primary);
   }
 
   .gradient-portfolio {
-    background: linear-gradient(135deg, oklch(0.4 0.15 290), oklch(0.45 0.15 350));
+    background: color-mix(in oklch, var(--card) 70%, transparent);
+    backdrop-filter: blur(16px);
   }
 
   .gradient-card {
