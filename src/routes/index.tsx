@@ -118,25 +118,7 @@ function Dashboard() {
       </div>
 
       <div className="mx-4 mt-2 rounded-2xl border border-primary/15 bg-card/90 p-5 backdrop-blur-md">
-        <div className="mb-1 flex items-center justify-between">
-          <p className="text-xs uppercase tracking-wider text-muted-foreground">Total Portfolio</p>
-          <div className="flex items-center gap-1">
-            <button
-              onClick={() => setShowActionPicker("invest")}
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary transition hover:bg-muted/50"
-              title="Invest"
-            >
-              <ArrowUpRight className="h-3.5 w-3.5 text-success" />
-            </button>
-            <button
-              onClick={() => setShowActionPicker("redeem")}
-              className="flex h-7 w-7 items-center justify-center rounded-full bg-secondary transition hover:bg-muted/50"
-              title="Redeem"
-            >
-              <ArrowDownLeft className="h-3.5 w-3.5 text-muted-foreground" />
-            </button>
-          </div>
-        </div>
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">Total Portfolio</p>
         <div className="mt-2 flex items-center gap-4">
           <DonutChart items={portfolioItems} />
           <div className="min-w-0 flex-1">
@@ -155,6 +137,24 @@ function Dashboard() {
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Invest / Redeem pills */}
+      <div className="mx-4 mt-3 flex gap-2">
+        <button
+          onClick={() => setShowActionPicker("invest")}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/60 border border-border/30 backdrop-blur-md py-2.5 transition hover:bg-muted/10"
+        >
+          <ArrowUpRight className="h-4 w-4 text-success" />
+          <span className="text-xs font-medium text-foreground">Invest</span>
+        </button>
+        <button
+          onClick={() => setShowActionPicker("redeem")}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/60 border border-border/30 backdrop-blur-md py-2.5 transition hover:bg-muted/10"
+        >
+          <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs font-medium text-foreground">Redeem</span>
+        </button>
       </div>
 
       <div className="mx-4 mt-4">
