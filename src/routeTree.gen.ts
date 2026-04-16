@@ -9,8 +9,74 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as VstockRouteImport } from './routes/vstock'
+import { Route as UnitTrustsRouteImport } from './routes/unit-trusts'
+import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as RatesRouteImport } from './routes/rates'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MoreRouteImport } from './routes/more'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as InvestRouteImport } from './routes/invest'
+import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
+import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 
+const VstockRoute = VstockRouteImport.update({
+  id: '/vstock',
+  path: '/vstock',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnitTrustsRoute = UnitTrustsRouteImport.update({
+  id: '/unit-trusts',
+  path: '/unit-trusts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsRoute = TransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestsRoute = RequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RatesRoute = RatesRouteImport.update({
+  id: '/rates',
+  path: '/rates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoreRoute = MoreRouteImport.update({
+  id: '/more',
+  path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const InvestRoute = InvestRouteImport.update({
+  id: '/invest',
+  path: '/invest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const BankAccountsRoute = BankAccountsRouteImport.update({
+  id: '/bank-accounts',
+  path: '/bank-accounts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AnalyticalRoute = AnalyticalRouteImport.update({
+  id: '/analytical',
+  path: '/analytical',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +85,186 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/analytical': typeof AnalyticalRoute
+  '/bank-accounts': typeof BankAccountsRoute
+  '/invest': typeof InvestRoute
+  '/learn': typeof LearnRoute
+  '/more': typeof MoreRoute
+  '/profile': typeof ProfileRoute
+  '/rates': typeof RatesRoute
+  '/requests': typeof RequestsRoute
+  '/transactions': typeof TransactionsRoute
+  '/unit-trusts': typeof UnitTrustsRoute
+  '/vstock': typeof VstockRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/analytical': typeof AnalyticalRoute
+  '/bank-accounts': typeof BankAccountsRoute
+  '/invest': typeof InvestRoute
+  '/learn': typeof LearnRoute
+  '/more': typeof MoreRoute
+  '/profile': typeof ProfileRoute
+  '/rates': typeof RatesRoute
+  '/requests': typeof RequestsRoute
+  '/transactions': typeof TransactionsRoute
+  '/unit-trusts': typeof UnitTrustsRoute
+  '/vstock': typeof VstockRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/analytical': typeof AnalyticalRoute
+  '/bank-accounts': typeof BankAccountsRoute
+  '/invest': typeof InvestRoute
+  '/learn': typeof LearnRoute
+  '/more': typeof MoreRoute
+  '/profile': typeof ProfileRoute
+  '/rates': typeof RatesRoute
+  '/requests': typeof RequestsRoute
+  '/transactions': typeof TransactionsRoute
+  '/unit-trusts': typeof UnitTrustsRoute
+  '/vstock': typeof VstockRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/analytical'
+    | '/bank-accounts'
+    | '/invest'
+    | '/learn'
+    | '/more'
+    | '/profile'
+    | '/rates'
+    | '/requests'
+    | '/transactions'
+    | '/unit-trusts'
+    | '/vstock'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/analytical'
+    | '/bank-accounts'
+    | '/invest'
+    | '/learn'
+    | '/more'
+    | '/profile'
+    | '/rates'
+    | '/requests'
+    | '/transactions'
+    | '/unit-trusts'
+    | '/vstock'
+  id:
+    | '__root__'
+    | '/'
+    | '/analytical'
+    | '/bank-accounts'
+    | '/invest'
+    | '/learn'
+    | '/more'
+    | '/profile'
+    | '/rates'
+    | '/requests'
+    | '/transactions'
+    | '/unit-trusts'
+    | '/vstock'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AnalyticalRoute: typeof AnalyticalRoute
+  BankAccountsRoute: typeof BankAccountsRoute
+  InvestRoute: typeof InvestRoute
+  LearnRoute: typeof LearnRoute
+  MoreRoute: typeof MoreRoute
+  ProfileRoute: typeof ProfileRoute
+  RatesRoute: typeof RatesRoute
+  RequestsRoute: typeof RequestsRoute
+  TransactionsRoute: typeof TransactionsRoute
+  UnitTrustsRoute: typeof UnitTrustsRoute
+  VstockRoute: typeof VstockRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/vstock': {
+      id: '/vstock'
+      path: '/vstock'
+      fullPath: '/vstock'
+      preLoaderRoute: typeof VstockRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unit-trusts': {
+      id: '/unit-trusts'
+      path: '/unit-trusts'
+      fullPath: '/unit-trusts'
+      preLoaderRoute: typeof UnitTrustsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/requests': {
+      id: '/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof RequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rates': {
+      id: '/rates'
+      path: '/rates'
+      fullPath: '/rates'
+      preLoaderRoute: typeof RatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/more': {
+      id: '/more'
+      path: '/more'
+      fullPath: '/more'
+      preLoaderRoute: typeof MoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/invest': {
+      id: '/invest'
+      path: '/invest'
+      fullPath: '/invest'
+      preLoaderRoute: typeof InvestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/bank-accounts': {
+      id: '/bank-accounts'
+      path: '/bank-accounts'
+      fullPath: '/bank-accounts'
+      preLoaderRoute: typeof BankAccountsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/analytical': {
+      id: '/analytical'
+      path: '/analytical'
+      fullPath: '/analytical'
+      preLoaderRoute: typeof AnalyticalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,7 +277,27 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AnalyticalRoute: AnalyticalRoute,
+  BankAccountsRoute: BankAccountsRoute,
+  InvestRoute: InvestRoute,
+  LearnRoute: LearnRoute,
+  MoreRoute: MoreRoute,
+  ProfileRoute: ProfileRoute,
+  RatesRoute: RatesRoute,
+  RequestsRoute: RequestsRoute,
+  TransactionsRoute: TransactionsRoute,
+  UnitTrustsRoute: UnitTrustsRoute,
+  VstockRoute: VstockRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
