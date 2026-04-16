@@ -1,219 +1,164 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { TrendingUp, ArrowUpRight, ArrowDownRight } from "lucide-react";
+import { ChevronRight, ChevronDown, ArrowUpRight, ArrowDownLeft, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts")({
   component: UnitTrustPortfolio,
 });
 
-const accounts = [
-  {
-    name: "Individual Account",
-    balance: "LKR 1,213,749",
-    totalEarnings: "LKR 143,749",
-    earnings7d: "LKR 16,992",
-    earnings30d: "LKR 61,900",
-    return7d: "+1.4%",
-    return30d: "+5.1%",
-    goals: [
-      {
-        name: "Retirement",
-        funds: [
-          { name: "CAL Growth Fund", units: "12,450", nav: "28.54", value: "LKR 355,319", earnings7d: "LKR 7,462", earnings30d: "LKR 20,608", return7d: "+2.1%", return30d: "+5.8%", positive7d: true, positive30d: true },
-          { name: "CAL Income Fund", units: "8,200", nav: "22.10", value: "LKR 181,220", earnings7d: "LKR 725", earnings30d: "LKR 3,443", return7d: "+0.4%", return30d: "+1.9%", positive7d: true, positive30d: true },
-        ],
-      },
-      {
-        name: "Emergency Fund",
-        funds: [
-          { name: "CAL Money Market Fund", units: "45,000", nav: "15.05", value: "LKR 677,210", earnings7d: "LKR 1,354", earnings30d: "LKR 5,418", return7d: "+0.2%", return30d: "+0.8%", positive7d: true, positive30d: true },
-        ],
-      },
-    ],
-  },
-  {
-    name: "Joint Account",
-    balance: "LKR 556,200",
-    totalEarnings: "LKR 76,200",
-    earnings7d: "-LKR 556",
-    earnings30d: "LKR 20,023",
-    return7d: "-0.1%",
-    return30d: "+3.6%",
-    goals: [
-      {
-        name: "General",
-        funds: [
-          { name: "CAL Balanced Fund", units: "15,800", nav: "35.20", value: "LKR 556,160", earnings7d: "-LKR 1,668", earnings30d: "LKR 17,797", return7d: "-0.3%", return30d: "+3.2%", positive7d: false, positive30d: true },
-        ],
-      },
-    ],
-  },
-];
+interface SubAccount {
+  name: string;
+  value: string;
+  earnings30d: string;
+  dotColor: string;
+}
 
-const recentTransactions = [
-  { fund: "CAL Growth Fund", type: "Creation", amount: "LKR 100,000", units: "+3,504", date: "Apr 10", positive: true },
-  { fund: "CAL Income Fund", type: "Redemption", amount: "LKR 50,000", units: "-2,262", date: "Apr 5", positive: false },
-  { fund: "CAL Balanced Fund", type: "Creation", amount: "LKR 200,000", units: "+5,682", date: "Mar 28", positive: true },
-  { fund: "CAL Growth Fund", type: "Dividend", amount: "LKR 12,500", units: "+438", date: "Mar 15", positive: true },
+interface Fund {
+  name: string;
+  description: string;
+  value: string;
+  earnings30d: string;
+  returnPct: string;
+  subAccounts: SubAccount[];
+}
+
+const funds: Fund[] = [
+  {
+    name: "Fixed Income Fund",
+    description: "3 goals · Stable returns",
+    value: "LKR 1,200,000",
+    earnings30d: "+38,400",
+    returnPct: "+3.2%",
+    subAccounts: [
+      { name: "Retirement", value: "LKR 700,000", earnings30d: "+4,200", dotColor: "oklch(0.6 0.2 260)" },
+      { name: "Emergency", value: "LKR 350,000", earnings30d: "+1,800", dotColor: "oklch(0.55 0.25 290)" },
+      { name: "General", value: "LKR 150,000", earnings30d: "+900", dotColor: "oklch(0.65 0.18 155)" },
+    ],
+  },
+  {
+    name: "High Yield Fund",
+    description: "2 goals · Higher risk",
+    value: "LKR 850,000",
+    earnings30d: "+49,300",
+    returnPct: "+5.8%",
+    subAccounts: [
+      { name: "Growth", value: "LKR 550,000", earnings30d: "+32,100", dotColor: "oklch(0.6 0.2 260)" },
+      { name: "General", value: "LKR 300,000", earnings30d: "+17,200", dotColor: "oklch(0.65 0.18 155)" },
+    ],
+  },
+  {
+    name: "Islamic Fund",
+    description: "1 goal · Sharia-compliant",
+    value: "LKR 400,000",
+    earnings30d: "+8,400",
+    returnPct: "+2.1%",
+    subAccounts: [
+      { name: "General", value: "LKR 400,000", earnings30d: "+8,400", dotColor: "oklch(0.65 0.18 155)" },
+    ],
+  },
 ];
 
 function UnitTrustPortfolio() {
   const navigate = useNavigate();
+  const [expanded, setExpanded] = useState<string | null>(funds[0].name);
 
-  const totalBalance = "LKR 1,769,949";
-  const totalEarnings = "LKR 219,949";
-  const earnings7d = "LKR 16,436";
-  const earnings30d = "LKR 81,923";
-  const return7d = "+1.2%";
-  const return30d = "+4.5%";
-  const lastCreation = "Apr 10, 2026";
-  const lastRedemption = "Apr 5, 2026";
+  const toggle = (name: string) => setExpanded(expanded === name ? null : name);
 
   return (
     <MobileLayout>
       <PageHeader title="Unit Trusts" showBack />
 
-      {/* Summary Card */}
-      <div className="mx-4 mt-2 gradient-portfolio rounded-2xl p-5">
-        <div className="grid grid-cols-3 gap-3 text-center">
-          <div>
-            <p className="text-[9px] text-muted-foreground">Total Balance</p>
-            <p className="text-sm font-bold text-foreground">{totalBalance}</p>
-          </div>
-          <div>
-            <p className="text-[9px] text-muted-foreground">Total Earnings</p>
-            <p className="text-sm font-bold text-success">{totalEarnings}</p>
-          </div>
-          <div>
-            <p className="text-[9px] text-muted-foreground">Return</p>
-            <p className="text-sm font-bold text-success">{return30d}</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3 mt-3 text-center">
-          <div className="bg-white/5 rounded-xl p-2">
-            <p className="text-[9px] text-muted-foreground">7-Day Earnings</p>
-            <p className="text-xs font-bold text-foreground">{earnings7d}</p>
-            <p className="text-[9px] text-success">{return7d}</p>
-          </div>
-          <div className="bg-white/5 rounded-xl p-2">
-            <p className="text-[9px] text-muted-foreground">30-Day Earnings</p>
-            <p className="text-xs font-bold text-foreground">{earnings30d}</p>
-            <p className="text-[9px] text-success">{return30d}</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-2 gap-3 mt-2 text-center">
-          <div>
-            <p className="text-[9px] text-muted-foreground">Last Creation</p>
-            <p className="text-[10px] font-medium text-foreground">{lastCreation}</p>
-          </div>
-          <div>
-            <p className="text-[9px] text-muted-foreground">Last Redemption</p>
-            <p className="text-[10px] font-medium text-foreground">{lastRedemption}</p>
-          </div>
-        </div>
-        <div className="flex gap-2 mt-3">
-          <button onClick={() => navigate({ to: "/invest", search: { product: "unit-trust" } })} className="flex-1 gradient-primary text-primary-foreground py-2 rounded-xl text-xs font-semibold">
-            Invest
-          </button>
-          <button onClick={() => navigate({ to: "/invest", search: { product: "unit-trust", action: "redeem" } })} className="flex-1 bg-secondary text-foreground py-2 rounded-xl text-xs font-semibold">
-            Redeem
-          </button>
-        </div>
+      {/* Summary */}
+      <div className="px-4 mt-2 text-center">
+        <p className="text-xs uppercase tracking-wider text-muted-foreground">Total Balance</p>
+        <h2 className="text-3xl font-bold tracking-tight text-foreground mt-1">LKR 2,450,000</h2>
+        <p className="text-xs mt-1">
+          <span className="font-medium text-success">+4.5%</span>
+          <span className="text-muted-foreground"> · LKR 110,250 earned this month</span>
+        </p>
       </div>
 
-      {/* Accounts & Fund Holdings */}
-      {accounts.map((account) => (
-        <div key={account.name} className="mx-4 mt-4">
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">{account.name.toUpperCase()}</p>
-          <div className="glass-card p-3">
-            <div className="grid grid-cols-2 gap-2 text-center mb-2">
-              <div>
-                <p className="text-[9px] text-muted-foreground">Balance</p>
-                <p className="text-xs font-bold text-foreground">{account.balance}</p>
-              </div>
-              <div>
-                <p className="text-[9px] text-muted-foreground">Total Earnings</p>
-                <p className="text-xs font-bold text-success">{account.totalEarnings}</p>
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-center mb-3">
-              <div>
-                <p className="text-[9px] text-muted-foreground">7-Day</p>
-                <p className="text-[10px] font-medium text-foreground">{account.earnings7d}</p>
-                <p className={`text-[9px] ${account.return7d.startsWith("+") ? "text-success" : "text-destructive"}`}>{account.return7d}</p>
-              </div>
-              <div>
-                <p className="text-[9px] text-muted-foreground">30-Day</p>
-                <p className="text-[10px] font-medium text-foreground">{account.earnings30d}</p>
-                <p className="text-[9px] text-success">{account.return30d}</p>
-              </div>
-            </div>
+      {/* Invest / Redeem pills */}
+      <div className="mx-4 mt-4 flex gap-2">
+        <button
+          onClick={() => navigate({ to: "/invest", search: { product: "unit-trust" } })}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
+        >
+          <ArrowUpRight className="h-4 w-4 text-success" />
+          <span className="text-xs font-medium text-foreground">Invest</span>
+        </button>
+        <button
+          onClick={() => navigate({ to: "/invest", search: { product: "unit-trust", action: "redeem" } })}
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
+        >
+          <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs font-medium text-foreground">Redeem</span>
+        </button>
+      </div>
 
-            {/* Goals Accordion */}
-            <Accordion type="multiple" defaultValue={account.goals.map((g) => g.name)} className="space-y-1.5">
-              {account.goals.map((goal) => (
-                <AccordionItem key={goal.name} value={goal.name} className="border-0">
-                  <AccordionTrigger className="text-xs font-medium text-foreground py-1.5 hover:no-underline">{goal.name}</AccordionTrigger>
-                  <AccordionContent className="pb-0">
-                    {goal.funds.map((fund) => (
-                      <div key={fund.name} className="bg-secondary/50 rounded-xl p-3 mb-1.5">
-                        <div className="flex justify-between items-center">
-                          <p className="text-[11px] font-semibold text-foreground">{fund.name}</p>
-                          <p className="text-xs font-bold text-foreground">{fund.value}</p>
-                        </div>
-                        <div className="grid grid-cols-4 gap-2 mt-2 text-center">
-                          <div>
-                            <p className="text-[8px] text-muted-foreground">Units</p>
-                            <p className="text-[10px] font-medium text-foreground">{fund.units}</p>
-                          </div>
-                          <div>
-                            <p className="text-[8px] text-muted-foreground">NAV</p>
-                            <p className="text-[10px] font-medium text-foreground">{fund.nav}</p>
-                          </div>
-                          <div>
-                            <p className="text-[8px] text-muted-foreground">7-Day</p>
-                            <p className="text-[10px] font-medium text-foreground">{fund.earnings7d}</p>
-                            <p className={`text-[8px] ${fund.positive7d ? "text-success" : "text-destructive"}`}>{fund.return7d}</p>
-                          </div>
-                          <div>
-                            <p className="text-[8px] text-muted-foreground">30-Day</p>
-                            <p className="text-[10px] font-medium text-foreground">{fund.earnings30d}</p>
-                            <p className={`text-[8px] ${fund.positive30d ? "text-success" : "text-destructive"}`}>{fund.return30d}</p>
-                          </div>
-                        </div>
+      {/* Fund Cards */}
+      <div className="mx-4 mt-5 space-y-3">
+        {funds.map((fund) => {
+          const isOpen = expanded === fund.name;
+          return (
+            <div
+              key={fund.name}
+              className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden"
+            >
+              {/* Fund row */}
+              <button
+                onClick={() => toggle(fund.name)}
+                className="flex w-full items-center gap-3 p-4 transition hover:bg-muted/10"
+              >
+                <div className="min-w-0 flex-1 text-left">
+                  <p className="text-sm font-semibold text-foreground">{fund.name}</p>
+                  <p className="text-xs text-muted-foreground">{fund.description}</p>
+                </div>
+                <div className="shrink-0 text-right mr-1">
+                  <p className="text-sm font-bold text-foreground">{fund.value}</p>
+                  <p className="text-xs font-medium text-success">{fund.earnings30d}</p>
+                </div>
+                {isOpen ? (
+                  <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+                ) : (
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                )}
+              </button>
+
+              {/* Sub-accounts */}
+              {isOpen && (
+                <div className="border-t border-border/20 px-4 pb-3 pt-2 space-y-1">
+                  {fund.subAccounts.map((sub) => (
+                    <div
+                      key={sub.name}
+                      className="flex items-center justify-between rounded-xl bg-background/30 px-3 py-2.5"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: sub.dotColor }} />
+                        <span className="text-xs font-medium text-foreground">{sub.name}</span>
                       </div>
-                    ))}
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </div>
-        </div>
-      ))}
-
-      {/* Transactions */}
-      <div className="mx-4 mt-4 mb-4">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">RECENT TRANSACTIONS</p>
-        <div className="space-y-2">
-          {recentTransactions.map((tx, i) => (
-            <div key={i} className="glass-card p-3 flex items-center gap-3">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center ${tx.positive ? "bg-success/20" : "bg-destructive/20"}`}>
-                {tx.positive ? <ArrowUpRight className="w-4 h-4 text-success" /> : <ArrowDownRight className="w-4 h-4 text-destructive" />}
-              </div>
-              <div className="flex-1">
-                <p className="text-xs font-medium text-foreground">{tx.fund}</p>
-                <p className="text-[10px] text-muted-foreground">{tx.type} · {tx.date}</p>
-              </div>
-              <div className="text-right">
-                <p className="text-xs font-semibold text-foreground">{tx.amount}</p>
-                <p className={`text-[10px] ${tx.positive ? "text-success" : "text-destructive"}`}>{tx.units} units</p>
-              </div>
+                      <div className="flex items-center gap-4">
+                        <span className="text-xs font-medium text-foreground">{sub.value}</span>
+                        <span className="text-[10px] font-medium text-success">{sub.earnings30d}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
-          ))}
-        </div>
+          );
+        })}
+      </div>
+
+      {/* Add new fund */}
+      <div className="mx-4 mt-4 mb-6">
+        <button className="flex w-full items-center justify-center gap-2 rounded-2xl border border-dashed border-border/40 bg-card/30 py-3 transition hover:bg-muted/10">
+          <Plus className="h-4 w-4 text-muted-foreground" />
+          <span className="text-xs font-medium text-muted-foreground">Add new fund</span>
+        </button>
       </div>
     </MobileLayout>
   );
