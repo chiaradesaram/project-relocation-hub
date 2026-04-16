@@ -20,6 +20,7 @@ interface Fund {
   name: string;
   description: string;
   value: string;
+  earnings7d: string;
   earnings30d: string;
   returnPct: string;
   subAccounts: SubAccount[];
