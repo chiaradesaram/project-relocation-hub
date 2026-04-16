@@ -73,8 +73,6 @@ const initialFunds: Fund[] = [
         valueNum: 350000,
         earnings30d: "+1,800",
         dotColor: "oklch(0.55 0.25 290)",
-        goalTarget: 500000,
-        goalLabel: "6-month cushion",
       },
       {
         id: "fi-general",
@@ -250,42 +248,42 @@ function UnitTrustPortfolio() {
               {/* Fund row */}
               <button
                 onClick={() => toggle(fund.name)}
-                className="flex w-full items-center gap-3 p-4 transition hover:bg-muted/10"
+                className="flex w-full items-center gap-2 p-3.5 transition hover:bg-muted/10"
               >
                 <div className="min-w-0 flex-1 text-left">
-                  <p className="text-sm font-semibold text-foreground">
+                  <p className="text-[13px] font-semibold text-foreground leading-tight">
                     {fund.name}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-[11px] text-muted-foreground mt-0.5">
                     {fund.description}
                   </p>
                 </div>
-                <div className="shrink-0 text-right mr-1">
-                  <p className="text-sm font-bold text-foreground">
+                <div className="shrink-0 text-right">
+                  <p className="text-[13px] font-bold text-foreground">
                     {fund.value}
                   </p>
                   {isOpen ? (
-                    <div className="mt-0.5 flex items-center justify-end gap-1.5">
-                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
+                    <div className="mt-0.5 flex items-center justify-end gap-1 flex-wrap">
+                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[8px] font-medium text-success">
                         7d {fund.earnings7d}
                       </span>
-                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
+                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[8px] font-medium text-success">
                         30d {fund.earnings30d}
                       </span>
-                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
+                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[8px] font-medium text-success">
                         All {fund.earningsAll}
                       </span>
                     </div>
                   ) : (
-                    <span className="mt-0.5 inline-block rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
-                      All time {fund.earningsAll}
+                    <span className="mt-0.5 inline-block rounded-full bg-success/10 px-1.5 py-px text-[8px] font-medium text-success">
+                      All {fund.earningsAll}
                     </span>
                   )}
                 </div>
                 {isOpen ? (
-                  <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <ChevronDown className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                 ) : (
-                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                 )}
               </button>
 
