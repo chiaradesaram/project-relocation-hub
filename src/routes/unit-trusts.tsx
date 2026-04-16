@@ -31,6 +31,7 @@ const funds: Fund[] = [
     name: "Fixed Income Fund",
     description: "3 goals · Stable returns",
     value: "LKR 1,200,000",
+    earnings7d: "+9,200",
     earnings30d: "+38,400",
     returnPct: "+3.2%",
     subAccounts: [
@@ -43,6 +44,7 @@ const funds: Fund[] = [
     name: "High Yield Fund",
     description: "2 goals · Higher risk",
     value: "LKR 850,000",
+    earnings7d: "+12,400",
     earnings30d: "+49,300",
     returnPct: "+5.8%",
     subAccounts: [
@@ -54,6 +56,7 @@ const funds: Fund[] = [
     name: "Islamic Fund",
     description: "1 goal · Sharia-compliant",
     value: "LKR 400,000",
+    earnings7d: "+2,100",
     earnings30d: "+8,400",
     returnPct: "+2.1%",
     subAccounts: [
