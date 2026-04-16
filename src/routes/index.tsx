@@ -10,16 +10,19 @@ export const Route = createFileRoute("/")({
 
 const portfolioItems = [
   {
-    name: "Unit Trusts", value: "2,450,000", earnings: "+110,250",
+    name: "Unit Trusts", value: "2,450,000", earnings30d: "+10,500",
     icon: PieChart, path: "/unit-trusts", percentage: 33, color: "oklch(0.6 0.2 260)",
+    status: null as string | null,
   },
   {
-    name: "Equities", value: "1,820,000", earnings: "+227,500",
+    name: "Equities", value: "1,820,000", earnings30d: "+22,750",
     icon: BarChart2, path: "/invest?product=equities", percentage: 25, color: "oklch(0.55 0.25 290)",
+    status: null as string | null,
   },
   {
-    name: "Treasuries", value: "3,100,000", earnings: "+127,100",
+    name: "Treasuries", value: "3,100,000", earnings30d: "+12,710",
     icon: Receipt, path: "/invest?product=treasuries", percentage: 42, color: "oklch(0.6 0.2 350)",
+    status: "Submitted" as string | null,
   },
 ];
 
@@ -170,10 +173,18 @@ function Dashboard() {
                 </div>
                 <div className="min-w-0 flex-1 text-left">
                   <p className="truncate text-sm font-medium text-foreground">{item.name}</p>
+                  {item.status && (
+                    <div className="mt-0.5 flex items-center gap-1.5">
+                      <span className="inline-flex items-center rounded-full bg-warning/15 px-2 py-0.5 text-[10px] font-medium text-warning">
+                        {item.status}
+                      </span>
+                      <span className="text-[10px] text-primary">Track application →</span>
+                    </div>
+                  )}
                 </div>
                 <div className="mr-1 flex shrink-0 items-center gap-3 text-right">
                   <p className="text-sm font-medium text-foreground">LKR {item.value}</p>
-                  <p className="text-xs font-medium text-success">{item.earnings}</p>
+                  <p className="text-xs font-medium text-success">{item.earnings30d}</p>
                 </div>
                 <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
               </button>
