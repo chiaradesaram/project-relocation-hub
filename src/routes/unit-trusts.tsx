@@ -22,6 +22,7 @@ interface Fund {
   value: string;
   earnings7d: string;
   earnings30d: string;
+  earningsAll: string;
   returnPct: string;
   subAccounts: SubAccount[];
 }
@@ -33,6 +34,7 @@ const funds: Fund[] = [
     value: "LKR 1,200,000",
     earnings7d: "+9,200",
     earnings30d: "+38,400",
+    earningsAll: "+96,000",
     returnPct: "+3.2%",
     subAccounts: [
       { name: "Retirement", value: "LKR 700,000", earnings30d: "+4,200", dotColor: "oklch(0.6 0.2 260)" },
@@ -46,6 +48,7 @@ const funds: Fund[] = [
     value: "LKR 850,000",
     earnings7d: "+12,400",
     earnings30d: "+49,300",
+    earningsAll: "+112,500",
     returnPct: "+5.8%",
     subAccounts: [
       { name: "Growth", value: "LKR 550,000", earnings30d: "+32,100", dotColor: "oklch(0.6 0.2 260)" },
@@ -58,6 +61,7 @@ const funds: Fund[] = [
     value: "LKR 400,000",
     earnings7d: "+2,100",
     earnings30d: "+8,400",
+    earningsAll: "+11,449",
     returnPct: "+2.1%",
     subAccounts: [
       { name: "General", value: "LKR 400,000", earnings30d: "+8,400", dotColor: "oklch(0.65 0.18 155)" },
@@ -124,10 +128,15 @@ function UnitTrustPortfolio() {
                 </div>
                 <div className="shrink-0 text-right mr-1">
                   <p className="text-sm font-bold text-foreground">{fund.value}</p>
-                  <div className="mt-0.5 flex items-center justify-end gap-1.5">
-                    <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">7d {fund.earnings7d}</span>
-                    <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">30d {fund.earnings30d}</span>
-                  </div>
+                  {isOpen ? (
+                    <div className="mt-0.5 flex items-center justify-end gap-1.5">
+                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">7d {fund.earnings7d}</span>
+                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">30d {fund.earnings30d}</span>
+                      <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">All {fund.earningsAll}</span>
+                    </div>
+                  ) : (
+                    <span className="mt-0.5 inline-block rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">All time {fund.earningsAll}</span>
+                  )}
                 </div>
                 {isOpen ? (
                   <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
