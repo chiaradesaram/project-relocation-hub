@@ -20,7 +20,7 @@ const portfolioItems = [
     status: null as string | null,
   },
   {
-    name: "Treasuries", value: "3,100,000", earnings30d: "+12,710",
+    name: "Treasuries", value: null, earnings30d: null,
     icon: Receipt, path: "/invest?product=treasuries", percentage: 42, color: "oklch(0.6 0.2 350)",
     status: "Submitted" as string | null,
   },
@@ -166,26 +166,24 @@ function Dashboard() {
               <button
                 key={item.name}
                 onClick={() => navigate({ to: item.path })}
-                className="flex w-full items-center gap-3 px-4 py-3 transition hover:bg-muted/10"
+                className="flex w-full items-center gap-3 px-4 py-3.5 transition hover:bg-muted/10"
               >
                 <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ backgroundColor: `${item.color}1a` }}>
                   <Icon className="h-4 w-4" style={{ color: item.color }} />
                 </div>
                 <div className="min-w-0 flex-1 text-left">
-                  <p className="truncate text-sm font-medium text-foreground">{item.name}</p>
-                  {item.status && (
-                    <div className="mt-0.5 flex items-center gap-1.5">
-                      <span className="inline-flex items-center rounded-full bg-warning/15 px-2 py-0.5 text-[10px] font-medium text-warning">
-                        {item.status}
-                      </span>
-                      <span className="text-[10px] text-primary">Track application →</span>
-                    </div>
-                  )}
+                  <p className="text-sm font-medium text-foreground">{item.name}</p>
                 </div>
-                <div className="mr-1 flex shrink-0 items-center gap-3 text-right">
-                  <p className="text-sm font-medium text-foreground">LKR {item.value}</p>
-                  <p className="text-xs font-medium text-success">{item.earnings30d}</p>
-                </div>
+                {item.status ? (
+                  <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-medium text-foreground">
+                    {item.status}
+                  </span>
+                ) : (
+                  <div className="flex shrink-0 items-center gap-3 text-right">
+                    <p className="text-sm font-medium text-foreground">LKR {item.value}</p>
+                    <p className="text-xs font-medium text-success">{item.earnings30d}</p>
+                  </div>
+                )}
                 <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
               </button>
             );
