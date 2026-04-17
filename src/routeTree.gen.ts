@@ -24,6 +24,7 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 
 const VstockRoute = VstockRouteImport.update({
   id: '/vstock',
@@ -100,6 +101,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
+  id: '/$subAccountId',
+  path: '/$subAccountId',
+  getParentRoute: () => UnitTrustsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -115,8 +121,9 @@ export interface FileRoutesByFullPath {
   '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
-  '/unit-trusts': typeof UnitTrustsRoute
+  '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
+  '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -132,8 +139,9 @@ export interface FileRoutesByTo {
   '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
-  '/unit-trusts': typeof UnitTrustsRoute
+  '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
+  '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -150,8 +158,9 @@ export interface FileRoutesById {
   '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
-  '/unit-trusts': typeof UnitTrustsRoute
+  '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
+  '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +180,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/unit-trusts'
     | '/vstock'
+    | '/unit-trusts/$subAccountId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -188,6 +198,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/unit-trusts'
     | '/vstock'
+    | '/unit-trusts/$subAccountId'
   id:
     | '__root__'
     | '/'
@@ -205,6 +216,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/unit-trusts'
     | '/vstock'
+    | '/unit-trusts/$subAccountId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -221,7 +233,7 @@ export interface RootRouteChildren {
   RedeemRoute: typeof RedeemRoute
   RequestsRoute: typeof RequestsRoute
   TransactionsRoute: typeof TransactionsRoute
-  UnitTrustsRoute: typeof UnitTrustsRoute
+  UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
 }
 
@@ -332,8 +344,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/unit-trusts/$subAccountId': {
+      id: '/unit-trusts/$subAccountId'
+      path: '/$subAccountId'
+      fullPath: '/unit-trusts/$subAccountId'
+      preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
+      parentRoute: typeof UnitTrustsRoute
+    }
   }
 }
+
+interface UnitTrustsRouteChildren {
+  UnitTrustsSubAccountIdRoute: typeof UnitTrustsSubAccountIdRoute
+}
+
+const UnitTrustsRouteChildren: UnitTrustsRouteChildren = {
+  UnitTrustsSubAccountIdRoute: UnitTrustsSubAccountIdRoute,
+}
+
+const UnitTrustsRouteWithChildren = UnitTrustsRoute._addFileChildren(
+  UnitTrustsRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -349,9 +380,18 @@ const rootRouteChildren: RootRouteChildren = {
   RedeemRoute: RedeemRoute,
   RequestsRoute: RequestsRoute,
   TransactionsRoute: TransactionsRoute,
-  UnitTrustsRoute: UnitTrustsRoute,
+  UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
