@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import HelpFAQ, { type FAQItem } from "@/components/HelpFAQ";
 import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb } from "lucide-react";
 
 export const Route = createFileRoute("/invest")({
@@ -56,30 +55,10 @@ function Invest() {
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
 
-  const faqByMethod: Record<InvestMethod, FAQItem[]> = {
-    instant: [
-      { q: "How long does Direct Invest take?", a: "Funds are debited instantly via Justpay. Your investment is reflected on the portal within 1 business day." },
-      { q: "Why is there a LKR 149,950 limit?", a: "This is the per-transfer limit set by Justpay. You can make multiple transfers in a day to invest more." },
-      { q: "Can I cancel a recurring investment?", a: "Yes — manage or delete any recurring plan from the Recurring Investments tab at any time." },
-      { q: "Which banks support Direct Invest?", a: "All major Sri Lankan banks supported by Justpay. Add your account from Bank Accounts to verify." },
-    ],
-    bank: [
-      { q: "Why is Deutsche Bank recommended?", a: "Transfers to Deutsche Bank are auto-verified — no proof of payment needed and processing is faster." },
-      { q: "How long do bank transfers take?", a: "Typically 1–2 business days after we receive your proof of payment and the funds clear." },
-      { q: "What proof of payment is accepted?", a: "A clear screenshot or PDF of the bank transfer receipt showing reference number, amount and date." },
-      { q: "Is there a transfer limit?", a: "No app-side limit. Your bank's daily transfer limits still apply." },
-    ],
-    flip: [
-      { q: "What is Flip?", a: "Flip moves funds instantly between your CAL fund accounts with no fees and no bank involved." },
-      { q: "How fast is a Flip?", a: "Instant. The transfer is reflected in both accounts immediately." },
-      { q: "Are there any fees?", a: "No — Flip between CAL accounts is completely free." },
-    ],
-  };
-
 
   return (
     <MobileLayout>
-      <PageHeader title="Invest" showBack />
+      <PageHeader title="Invest" showBack helpTopic="invest" />
 
       {/* Method Selector */}
       <div className="mx-4 mt-2">
@@ -412,8 +391,6 @@ function Invest() {
           {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Send Request"}
         </button>
       </div>
-
-      <HelpFAQ items={faqByMethod[method]} />
     </MobileLayout>
   );
 }

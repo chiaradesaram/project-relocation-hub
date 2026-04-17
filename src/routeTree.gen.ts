@@ -19,6 +19,7 @@ import { Route as MoreRouteImport } from './routes/more'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
 import { Route as InvestRouteImport } from './routes/invest'
+import { Route as HelpRouteImport } from './routes/help'
 import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
@@ -73,6 +74,11 @@ const InvestRoute = InvestRouteImport.update({
   path: '/invest',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BankAccountsRoute = BankAccountsRouteImport.update({
   id: '/bank-accounts',
   path: '/bank-accounts',
@@ -93,6 +99,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/analytical': typeof AnalyticalRoute
   '/bank-accounts': typeof BankAccountsRoute
+  '/help': typeof HelpRoute
   '/invest': typeof InvestRoute
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
@@ -108,6 +115,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytical': typeof AnalyticalRoute
   '/bank-accounts': typeof BankAccountsRoute
+  '/help': typeof HelpRoute
   '/invest': typeof InvestRoute
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
@@ -124,6 +132,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/analytical': typeof AnalyticalRoute
   '/bank-accounts': typeof BankAccountsRoute
+  '/help': typeof HelpRoute
   '/invest': typeof InvestRoute
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
@@ -141,6 +150,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analytical'
     | '/bank-accounts'
+    | '/help'
     | '/invest'
     | '/invest-summary'
     | '/learn'
@@ -156,6 +166,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analytical'
     | '/bank-accounts'
+    | '/help'
     | '/invest'
     | '/invest-summary'
     | '/learn'
@@ -171,6 +182,7 @@ export interface FileRouteTypes {
     | '/'
     | '/analytical'
     | '/bank-accounts'
+    | '/help'
     | '/invest'
     | '/invest-summary'
     | '/learn'
@@ -187,6 +199,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AnalyticalRoute: typeof AnalyticalRoute
   BankAccountsRoute: typeof BankAccountsRoute
+  HelpRoute: typeof HelpRoute
   InvestRoute: typeof InvestRoute
   InvestSummaryRoute: typeof InvestSummaryRoute
   LearnRoute: typeof LearnRoute
@@ -271,6 +284,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvestRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/bank-accounts': {
       id: '/bank-accounts'
       path: '/bank-accounts'
@@ -299,6 +319,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AnalyticalRoute: AnalyticalRoute,
   BankAccountsRoute: BankAccountsRoute,
+  HelpRoute: HelpRoute,
   InvestRoute: InvestRoute,
   InvestSummaryRoute: InvestSummaryRoute,
   LearnRoute: LearnRoute,
