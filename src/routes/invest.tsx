@@ -4,6 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb } from "lucide-react";
+import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 
 export const Route = createFileRoute("/invest")({
   component: Invest,

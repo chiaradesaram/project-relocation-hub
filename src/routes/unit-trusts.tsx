@@ -449,10 +449,11 @@ function UnitTrustPortfolio() {
                     Target amount (LKR)
                   </label>
                   <input
-                    type="number"
+                    type="text"
+                    inputMode="decimal"
                     placeholder="1,000,000"
-                    value={goalTarget}
-                    onChange={(e) => setGoalTarget(e.target.value)}
+                    value={formatAmountDisplay(goalTarget)}
+                    onChange={(e) => setGoalTarget(sanitizeAmountInput(e.target.value))}
                     autoFocus
                     className="w-full rounded-xl border border-border/30 bg-background/40 px-4 py-3 text-sm text-foreground placeholder:text-muted-foreground/50 outline-none focus:border-primary/50 transition"
                   />
