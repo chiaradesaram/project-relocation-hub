@@ -95,7 +95,7 @@ function Invest() {
                 onClick={() => setInvestType(type)}
                 className={`flex-1 py-2 rounded-lg text-[11px] font-semibold transition-all ${
                   investType === type
-                    ? "bg-primary text-primary-foreground shadow-md"
+                    ? "bg-primary/40 text-foreground shadow-sm"
                     : "text-muted-foreground"
                 }`}
               >
