@@ -36,7 +36,7 @@ function Redeem() {
   const methods = [
     { id: "instant" as const, icon: Zap, label: "Instant" },
     { id: "normal" as const, icon: Clock, label: "Normal" },
-    { id: "plan" as const, icon: Repeat, label: "Plan" },
+    { id: "plan" as const, icon: Repeat, label: "Redemption Plan" },
   ];
 
   const methodInfo: Record<RedeemMethod, string> = {
