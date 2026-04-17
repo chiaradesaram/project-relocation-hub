@@ -3,7 +3,7 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Zap, Clock, Repeat, Info, Edit2, Trash2 } from "lucide-react";
-import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
+import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format.ts";
 
 export const Route = createFileRoute("/redeem")({
   component: Redeem,
