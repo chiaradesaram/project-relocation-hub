@@ -14,7 +14,7 @@ type InvestType = "new" | "recurring";
 
 const funds = ["CAL Growth Fund", "CAL Income Fund", "CAL Balanced Fund", "CAL Money Market Fund"];
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
-const banks = ["Deutsche Bank ✦ Recommended", "Commercial Bank", "Sampath Bank", "HNB", "BOC"];
+const banks = ["Deutsche Bank", "Commercial Bank", "Sampath Bank", "HNB", "BOC"];
 const calBankAccounts = [
   { bank: "Deutsche Bank", accNo: "0012 3456 789", branch: "Colombo" },
   { bank: "Commercial Bank", accNo: "8001 2345 678", branch: "Colombo 07" },
