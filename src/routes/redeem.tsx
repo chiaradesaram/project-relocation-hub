@@ -181,9 +181,10 @@ function Redeem() {
           <div className="flex items-center gap-2 mt-2">
             <span className="text-xs text-muted-foreground">LKR</span>
             <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
+              type="text"
+              inputMode="decimal"
+              value={formatAmountDisplay(amount)}
+              onChange={(e) => setAmount(sanitizeAmountInput(e.target.value))}
               placeholder="0.00"
               className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
             />
