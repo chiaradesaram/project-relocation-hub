@@ -99,7 +99,7 @@ function Invest() {
                     : "text-muted-foreground"
                 }`}
               >
-                {type === "new" ? "New Investment" : "Recurring"}
+                {type === "new" ? "New Investment" : "Recurring Investments"}
               </button>
             ))}
           </div>
@@ -145,7 +145,7 @@ function Invest() {
           <div className="flex items-center justify-between">
             <span className="text-xs text-foreground flex items-center gap-2">
               <Repeat className={`w-3.5 h-3.5 transition-colors ${isRecurring ? "text-success" : "text-muted-foreground"}`} />
-              Set Recurring
+              Set Recurring investments
             </span>
             <button
               onClick={() => setIsRecurring(!isRecurring)}
