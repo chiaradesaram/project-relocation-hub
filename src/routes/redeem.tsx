@@ -12,6 +12,11 @@ type RedeemMethod = "instant" | "normal" | "plan";
 
 const funds = ["CAL Growth Fund", "CAL Income Fund", "CAL Balanced Fund", "CAL Money Market Fund"];
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
+const subAccountBalances: Record<string, number> = {
+  "Main Account": 845000,
+  "Joint Account": 320000,
+  "Minor Account": 75000,
+};
 const userBankAccounts = [
   { bank: "Commercial Bank", accNo: "8001 2345 678" },
   { bank: "HNB", accNo: "0098 7654 321" },
@@ -46,7 +51,9 @@ function Redeem() {
   };
 
   const numericAmount = Number(amount || 0);
+  const subAccountBalance = subAccountBalances[selectedAccount] ?? 0;
   const overInstantLimit = method === "instant" && numericAmount > INSTANT_DAILY_LIMIT;
+  const overBalance = method !== "plan" && selectedAccount !== "" && numericAmount > subAccountBalance;
 
   return (
     <MobileLayout>
