@@ -25,6 +25,7 @@ import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
+import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
@@ -108,6 +109,11 @@ const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const HelpIndexRoute = HelpIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HelpRoute,
+} as any)
 const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
   id: '/$subAccountId',
   path: '/$subAccountId',
@@ -137,13 +143,13 @@ export interface FileRoutesByFullPath {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
+  '/help/': typeof HelpIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/analytical': typeof AnalyticalRoute
   '/bank-accounts': typeof BankAccountsRoute
-  '/help': typeof HelpRouteWithChildren
   '/invest': typeof InvestRoute
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
@@ -156,6 +162,7 @@ export interface FileRoutesByTo {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
+  '/help': typeof HelpIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesById {
@@ -177,6 +184,7 @@ export interface FileRoutesById {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
+  '/help/': typeof HelpIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRouteTypes {
@@ -199,13 +207,13 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/unit-trusts/$subAccountId'
+    | '/help/'
     | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/analytical'
     | '/bank-accounts'
-    | '/help'
     | '/invest'
     | '/invest-summary'
     | '/learn'
@@ -218,6 +226,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/unit-trusts/$subAccountId'
+    | '/help'
     | '/unit-trusts'
   id:
     | '__root__'
@@ -238,6 +247,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/unit-trusts/$subAccountId'
+    | '/help/'
     | '/unit-trusts/'
   fileRoutesById: FileRoutesById
 }
@@ -373,6 +383,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsIndexRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/help/': {
+      id: '/help/'
+      path: '/'
+      fullPath: '/help/'
+      preLoaderRoute: typeof HelpIndexRouteImport
+      parentRoute: typeof HelpRoute
+    }
     '/unit-trusts/$subAccountId': {
       id: '/unit-trusts/$subAccountId'
       path: '/$subAccountId'
@@ -392,10 +409,12 @@ declare module '@tanstack/react-router' {
 
 interface HelpRouteChildren {
   HelpContactRoute: typeof HelpContactRoute
+  HelpIndexRoute: typeof HelpIndexRoute
 }
 
 const HelpRouteChildren: HelpRouteChildren = {
   HelpContactRoute: HelpContactRoute,
+  HelpIndexRoute: HelpIndexRoute,
 }
 
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
