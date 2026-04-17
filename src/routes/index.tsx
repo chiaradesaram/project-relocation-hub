@@ -123,7 +123,7 @@ function Dashboard() {
           <DonutChart items={portfolioItems} />
           <div className="min-w-0 flex-1">
             <h2 className="text-lg font-medium tracking-tight text-foreground">LKR 7,370,000</h2>
-            <p className="mt-0.5 text-[10px]">
+            <p className="mt-0.5 text-[11px]">
               <span className="font-normal text-success">+7.8%</span>
               <span className="text-muted-foreground/80"> · LKR 662,000 all time</span>
             </p>
@@ -173,7 +173,7 @@ function Dashboard() {
                     <Icon className="h-3 w-3" style={{ color: item.color }} />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[12px] font-normal text-foreground">{item.name}</p>
+                    <p className="text-[13px] font-normal text-foreground">{item.name}</p>
                   </div>
                   {item.status ? (
                     <span className="rounded-full bg-muted/70 px-2 py-0.5 text-[9px] font-normal text-muted-foreground">
