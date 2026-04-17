@@ -235,7 +235,7 @@ function ContactFlow() {
 
   return (
     <MobileLayout>
-      <PageHeader title="Contact us" hideHelp />
+      <PageHeader title="Contact us" showBack hideHelp />
 
       {/* Step indicator */}
       <div className="mx-4 mt-1 mb-3">
@@ -325,7 +325,6 @@ function ContactFlow() {
             <button
               type="button"
               onClick={() => {
-                setRefId("");
                 setStep(1);
                 setCategoryId(null);
                 setSubId(null);
