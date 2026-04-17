@@ -144,9 +144,6 @@ function UnitTrustPortfolio() {
                   <p className="text-[13px] font-semibold text-foreground leading-tight">
                     {fund.name}
                   </p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">
-                    {fund.description}
-                  </p>
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="text-[13px] font-bold text-foreground">
