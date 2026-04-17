@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
-import { Bell, BarChart2, Receipt, PieChart, X, ArrowUpRight, ArrowDownLeft, Zap, Gamepad2, ChevronRight } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, ArrowUpRight, ArrowDownLeft, Gamepad2, ChevronRight, Coins, Eye, FileText } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -216,14 +216,16 @@ function Dashboard() {
       <div className="mx-4 mt-2.5 mb-3">
         <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden p-2.5">
           <h3 className="px-1 pb-1.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Quick Actions</h3>
-          <div className="flex gap-2">
+          <div className="flex gap-1.5">
             {[
-              { icon: Zap, label: "Invest Now", action: () => setShowActionPicker("invest") },
               { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
+              { icon: Coins, label: "Dividends", action: () => navigate({ to: "/transactions" }) },
+              { icon: Eye, label: "Watchlist", action: () => navigate({ to: "/invest" }) },
+              { icon: FileText, label: "Research", action: () => navigate({ to: "/learn" }) },
             ].map(({ icon: Icon, label, action }) => (
-              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-border/20 bg-card/30 p-2.5 transition hover:bg-primary/5">
+              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-border/20 bg-card/30 px-1 py-2.5 transition hover:bg-primary/5">
                 <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-[10px] font-normal text-foreground">{label}</span>
+                <span className="text-[9.5px] font-normal text-foreground whitespace-nowrap">{label}</span>
               </button>
             ))}
           </div>
