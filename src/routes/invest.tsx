@@ -53,7 +53,7 @@ function Invest() {
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [showDeutscheDetails, setShowDeutscheDetails] = useState(false);
 
-  const showDeutscheBanner = selectedBank && !selectedBank.includes("Deutsche");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   return (
     <MobileLayout>
