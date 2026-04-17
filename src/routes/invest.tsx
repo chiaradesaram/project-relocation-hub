@@ -85,7 +85,7 @@ function Invest() {
       {/* Investment Type Toggle — instant only */}
       {method === "instant" && (
         <div className="mx-4 mt-3">
-          <div className="flex gap-1 bg-secondary rounded-xl p-1">
+          <div className="flex gap-1 rounded-xl p-1" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 22%, transparent)" }}>
             {(["new", "recurring"] as const).map((type) => (
               <button
                 key={type}
