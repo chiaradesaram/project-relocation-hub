@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Clock, Repeat, Info, ExternalLink, Edit2, Trash2 } from "lucide-react";
+import { Zap, Clock, Repeat, Info, Edit2, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/redeem")({
   component: Redeem,
@@ -128,17 +128,6 @@ function Redeem() {
             <option value="">Select fund</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
           </select>
-          {selectedFund && (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/rates" })}
-              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium"
-              style={{ color: "var(--portfolio-blue)" }}
-            >
-              View fund rates
-              <ExternalLink className="w-2.5 h-2.5" />
-            </button>
-          )}
         </div>
         <div>
           <label className="text-[10px] text-muted-foreground">Sub Account</label>
