@@ -91,7 +91,7 @@ function Transactions() {
 
   return (
     <MobileLayout>
-      <PageHeader title="Activity" showBack />
+      <PageHeader title="Transactions" showBack />
 
       {/* Product Filters */}
       <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-2">
@@ -192,7 +192,7 @@ function Transactions() {
           </div>
         ))}
         {filtered.length === 0 && (
-          <p className="text-center text-xs text-muted-foreground py-8">No activity found</p>
+          <p className="text-center text-xs text-muted-foreground py-8">No transactions found</p>
         )}
       </div>
     </MobileLayout>

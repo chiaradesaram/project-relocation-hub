@@ -5,7 +5,7 @@ import { Home, TrendingUp, ArrowLeftRight, BarChart3, Menu, PieChart, BarChart2,
 const navItems = [
   { icon: Home, label: "Home", path: "/" as const },
   { icon: TrendingUp, label: "Invest", path: "/invest" as const },
-  { icon: ArrowLeftRight, label: "Activity", path: "/transactions" as const },
+  { icon: ArrowLeftRight, label: "Transactions", path: "/transactions" as const },
   { icon: BarChart3, label: "Analytics", path: "/analytical" as const },
   { icon: Menu, label: "More", path: "/more" as const },
 ];
