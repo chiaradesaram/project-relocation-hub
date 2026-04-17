@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, X } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transactions")({
@@ -18,7 +18,7 @@ const subFiltersByProduct: Record<Product, string[]> = {
   Treasuries: ["All", "Investments", "Maturities", "Pending"],
 };
 
-type Status = "Confirmed" | "Pending" | "Cancelled";
+type Status = "Confirmed" | "Pending";
 
 type Tx = {
   name: string;
@@ -29,20 +29,21 @@ type Tx = {
   value: string;
   positive: boolean;
   status: Status;
+  createdDate?: string;
+  reflectedDate?: string;
 };
 
 const transactions: Tx[] = [
+  { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending", createdDate: "Apr 12, 2026 · 09:24", reflectedDate: "Apr 15, 2026 (est.)" },
+  { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending", createdDate: "Apr 2, 2026 · 14:10", reflectedDate: "Apr 5, 2026 (est.)" },
+  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026 (est.)" },
   { name: "CAL Growth Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 13, 2026", value: "LKR 125,000", positive: true, status: "Confirmed" },
-  { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending" },
   { name: "Treasury Bill 91D", product: "Treasuries", kind: "Maturity", subAccount: "Personal · Main", date: "Apr 12, 2026", value: "LKR 105,000", positive: true, status: "Confirmed" },
   { name: "CAL Equity Fund", product: "Unit Trusts", kind: "Redemption", subAccount: "Personal · Main", date: "Apr 8, 2026", value: "LKR 75,000", positive: false, status: "Confirmed" },
   { name: "JKH.N0000", product: "Equities", kind: "Dividend", subAccount: "Personal · CDS", date: "Apr 5, 2026", value: "LKR 3,200", positive: true, status: "Confirmed" },
   { name: "COMB.N0000", product: "Equities", kind: "Pay In", subAccount: "Personal · CDS", date: "Apr 3, 2026", value: "LKR 50,000", positive: true, status: "Confirmed" },
-  { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending" },
   { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed" },
-  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending" },
   { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed" },
-  { name: "CAL Growth Fund", product: "Unit Trusts", kind: "Redemption", subAccount: "Personal · Main", date: "Mar 25, 2026", value: "LKR 25,000", positive: false, status: "Cancelled" },
   { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
 ];
 
@@ -60,13 +61,11 @@ const subToKinds: Record<string, string[]> = {
 const statusStyles: Record<Status, string> = {
   Confirmed: "bg-success/15 text-success",
   Pending: "bg-warning/15 text-warning",
-  Cancelled: "bg-destructive/15 text-destructive",
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
   if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
-  if (status === "Cancelled") return <X className="w-4 h-4 text-destructive" />;
-  return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-destructive" />;
+  return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
 
 function Transactions() {
@@ -75,13 +74,19 @@ function Transactions() {
 
   const subs = subFiltersByProduct[product];
 
-  const filtered = transactions.filter((tx) => {
-    if (product !== "All" && tx.product !== product) return false;
-    if (sub === "All") return true;
-    if (sub === "Pending") return tx.status === "Pending";
-    const allowedKinds = subToKinds[sub] ?? [];
-    return allowedKinds.includes(tx.kind);
-  });
+  const filtered = transactions
+    .filter((tx) => {
+      if (product !== "All" && tx.product !== product) return false;
+      if (sub === "All") return true;
+      if (sub === "Pending") return tx.status === "Pending";
+      const allowedKinds = subToKinds[sub] ?? [];
+      return allowedKinds.includes(tx.kind);
+    })
+    .sort((a, b) => {
+      if (a.status === "Pending" && b.status !== "Pending") return -1;
+      if (a.status !== "Pending" && b.status === "Pending") return 1;
+      return 0;
+    });
 
   return (
     <MobileLayout>
@@ -127,16 +132,14 @@ function Transactions() {
       {/* Transaction List */}
       <div className="px-4 mt-3 space-y-2">
         {filtered.map((tx, i) => (
-          <div key={i} className="glass-card p-3 flex items-center gap-3">
+          <div key={i} className="glass-card p-3 flex items-start gap-3">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
                   ? "bg-warning/20"
-                  : tx.status === "Cancelled"
-                    ? "bg-destructive/20"
-                    : tx.positive
-                      ? "bg-success/20"
-                      : "bg-destructive/20"
+                  : tx.positive
+                    ? "bg-success/20"
+                    : "bg-muted/40"
               }`}
             >
               <StatusIcon status={tx.status} positive={tx.positive} />
@@ -151,11 +154,22 @@ function Transactions() {
               <p className="text-[10px] text-muted-foreground truncate">
                 {tx.kind} · {tx.subAccount}
               </p>
-              <p className="text-[9px] text-muted-foreground/70">{tx.date}</p>
+              {tx.status === "Pending" && tx.createdDate ? (
+                <div className="mt-1 space-y-0.5">
+                  <p className="text-[9px] text-muted-foreground/80">
+                    <span className="text-muted-foreground/60">Created:</span> {tx.createdDate}
+                  </p>
+                  <p className="text-[9px] text-muted-foreground/80">
+                    <span className="text-muted-foreground/60">Reflects on Portal:</span> {tx.reflectedDate}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[9px] text-muted-foreground/70">{tx.date}</p>
+              )}
             </div>
-            <div className="text-right">
+            <div className="text-right shrink-0">
               <p className="text-xs font-semibold text-foreground">{tx.value}</p>
-              <p className={`text-[10px] ${tx.positive ? "text-success" : "text-destructive"}`}>
+              <p className={`text-[10px] ${tx.positive ? "text-success" : "text-muted-foreground"}`}>
                 {tx.positive ? "+" : "−"} {tx.kind}
               </p>
             </div>
