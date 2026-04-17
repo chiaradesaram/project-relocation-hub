@@ -215,15 +215,15 @@ function Dashboard() {
 
       <div className="mx-4 mt-4 mb-4">
         <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden p-3">
-          <h3 className="px-1 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick Actions</h3>
+          <h3 className="px-1 pb-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70">Quick Actions</h3>
           <div className="flex gap-2">
             {[
               { icon: Zap, label: "Invest Now", action: () => setShowActionPicker("invest") },
               { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
             ].map(({ icon: Icon, label, action }) => (
               <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-border/30 bg-card/40 p-3 transition hover:bg-primary/5">
-                <Icon className="h-5 w-5 text-muted-foreground" />
-                <span className="text-[10px] font-medium text-foreground">{label}</span>
+                <Icon className="h-4 w-4 text-muted-foreground" />
+                <span className="text-[10px] font-normal text-foreground">{label}</span>
               </button>
             ))}
           </div>
