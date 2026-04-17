@@ -1,4 +1,4 @@
-// Strip everything except digits and a single decimal point
+// Strip everything except digits and a single decimal point.
 export function sanitizeAmountInput(raw: string): string {
   const cleaned = raw.replace(/[^\d.]/g, "");
   const parts = cleaned.split(".");
