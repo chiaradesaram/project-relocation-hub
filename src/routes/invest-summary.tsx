@@ -95,11 +95,12 @@ function InvestSummary() {
                 infoText="The date your investment becomes active."
               />
               <RowWithInfo
-                label="Reflected on Portal — by"
+                label="Reflected on Portal by"
                 value={reflectedDate}
                 open={openInfo === "reflected"}
                 onToggle={() => setOpenInfo(openInfo === "reflected" ? null : "reflected")}
                 infoText="Your investment will appear in your CAL Online portfolio and mobile app by this date, once all processing is complete."
+                accent
               />
             </>
           )}
@@ -145,23 +146,34 @@ function RowWithInfo({
   open,
   onToggle,
   infoText,
+  accent,
 }: {
   label: string;
   value: string;
   open: boolean;
   onToggle: () => void;
   infoText: string;
+  accent?: boolean;
 }) {
+  const accentColor = accent ? "var(--portfolio-blue)" : undefined;
   return (
     <div>
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] text-muted-foreground flex items-center gap-1">
-          {label}
+        <span
+          className="text-[11px] flex items-center gap-1"
+          style={accent ? { color: accentColor } : undefined}
+        >
+          <span className={accent ? "" : "text-muted-foreground"}>{label}</span>
           <button type="button" onClick={onToggle} aria-label={`About ${label}`}>
-            <Info className="w-3 h-3 text-muted-foreground" />
+            <Info className="w-3 h-3" style={accent ? { color: accentColor } : undefined} />
           </button>
         </span>
-        <span className="text-[11px] font-medium text-foreground text-right">{value}</span>
+        <span
+          className="text-[11px] font-medium text-right"
+          style={accent ? { color: accentColor } : undefined}
+        >
+          {value}
+        </span>
       </div>
       {open && (
         <p className="mt-1 text-[10px] text-muted-foreground/80 leading-relaxed">{infoText}</p>
