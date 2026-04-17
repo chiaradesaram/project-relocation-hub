@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, CheckCircle2 } from "lucide-react";
+import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb } from "lucide-react";
 
 export const Route = createFileRoute("/invest")({
   component: Invest,
@@ -240,9 +240,9 @@ function Invest() {
 
         {/* Deutsche Bank tip — instant only */}
         {method === "instant" && showDeutscheBanner && (
-          <div className="flex items-start gap-2 p-3 bg-warning/10 rounded-xl border border-warning/20">
-            <Info className="w-3.5 h-3.5 text-warning mt-0.5 shrink-0" />
-            <p className="text-[11px] text-warning">💡 Tip: Pay via Deutsche Bank next time — no proof of payment needed!</p>
+          <div className="flex items-start gap-2 p-3 rounded-xl border" style={{ background: "color-mix(in oklch, var(--portfolio-pink) 12%, transparent)", borderColor: "color-mix(in oklch, var(--portfolio-pink) 30%, transparent)" }}>
+            <Lightbulb className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-pink)" }} />
+            <p className="text-[11px]" style={{ color: "var(--portfolio-pink)" }}>Tip: Pay via Deutsche Bank next time — no proof of payment needed!</p>
           </div>
         )}
 
@@ -258,19 +258,24 @@ function Invest() {
             </div>
             <select value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
               <option value="">Select CAL bank account</option>
-              {calBankAccounts.map((a) => (
-                <option key={a.accNo}>{a.bank} — {a.accNo}</option>
-              ))}
+              {calBankAccounts.map((a) => {
+                const isDeutsche = a.bank.includes("Deutsche");
+                return (
+                  <option key={a.accNo} value={`${a.bank} — ${a.accNo}`}>
+                    {a.bank} — {a.accNo}{isDeutsche ? "  ✦ Recommended" : ""}
+                  </option>
+                );
+              })}
             </select>
 
             {/* Deutsche prompt — show when Pay To isn't Deutsche */}
             {!selectedPayTo.includes("Deutsche") && (
-              <div className="mt-2 p-3 rounded-xl border border-success/30" style={{ background: "color-mix(in oklch, var(--success) 12%, transparent)" }}>
+              <div className="mt-2 p-3 rounded-xl border" style={{ background: "color-mix(in oklch, var(--portfolio-pink) 10%, transparent)", borderColor: "color-mix(in oklch, var(--portfolio-pink) 28%, transparent)" }}>
                 <div className="flex items-start gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-success mt-0.5 shrink-0" />
+                  <Lightbulb className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "var(--portfolio-pink)" }} />
                   <div className="flex-1">
-                    <p className="text-[11px] font-semibold text-success">Skip proof of payment</p>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">Transfer to <span className="text-foreground font-medium">Deutsche Bank</span> for instant verification — no upload needed.</p>
+                    <p className="text-[11px] font-semibold" style={{ color: "var(--portfolio-pink)" }}>Pay to Deutsche Bank — skip proof of payment</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Transfers to Deutsche Bank are auto-verified, no upload needed.</p>
                     <div className="mt-2 p-2 rounded-lg bg-card/60 space-y-0.5">
                       <p className="text-[10px] text-muted-foreground">Bank: <span className="text-foreground font-medium">Deutsche Bank</span></p>
                       <p className="text-[10px] text-muted-foreground">A/C: <span className="text-foreground font-medium">{calBankAccounts[0].accNo}</span></p>
@@ -278,7 +283,8 @@ function Invest() {
                     </div>
                     <button
                       onClick={() => setSelectedPayTo(`${calBankAccounts[0].bank} — ${calBankAccounts[0].accNo}`)}
-                      className="mt-2 text-[10px] font-semibold text-success underline"
+                      className="mt-2 text-[10px] font-semibold underline"
+                      style={{ color: "var(--portfolio-pink)" }}
                     >
                       Use Deutsche Bank
                     </button>
