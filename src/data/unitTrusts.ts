@@ -24,6 +24,9 @@ export interface SubAccount {
   dotColor: string;
   goalTarget?: number;
   goalLabel?: string;
+  goalDeadline?: string; // ISO
+  units?: number;
+  navPerUnit?: number;
   createdAt: string; // ISO
   activity: ActivityEntry[];
 }
