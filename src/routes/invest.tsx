@@ -58,7 +58,7 @@ function Invest() {
 
   return (
     <MobileLayout>
-      <PageHeader title="Invest" showBack />
+      <PageHeader title="Invest" showBack helpTopic="invest" />
 
       {/* Method Selector */}
       <div className="mx-4 mt-2">
