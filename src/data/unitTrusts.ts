@@ -64,7 +64,6 @@ export const funds: Fund[] = [
         returnPct: "+3.4%",
         dotColor: "oklch(0.6 0.2 260)",
         goalTarget: 2000000,
-        goalLabel: "Retire at 55",
         createdAt: "2022-08-12",
         activity: [
           { type: "invest", amount: 50000, date: "2026-04-02", method: "Standing order" },
