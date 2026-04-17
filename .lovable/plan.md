@@ -1,44 +1,41 @@
 
-What I found
+Goal: fix the “Still need help?” card so it actually opens the contact form.
 
-- The click is wired up: each sub-account row already links to `/unit-trusts/$subAccountId`.
-- The detailed page also already exists in `src/routes/unit-trusts.$subAccountId.tsx`.
-- The real bug is routing structure: `src/routes/unit-trusts.tsx` is acting like the parent route for that detail page, but it does not render an `<Outlet />`.
-- So the URL can change to something like `/unit-trusts/fi-emergency`, while the detail screen never mounts. That makes it feel like “nothing happens”.
+What I found
+- `src/routes/help.tsx` links correctly to `/help/contact`.
+- `src/routes/help.contact.tsx` exists and the generated route tree includes `/help/contact`.
+- The real issue is the route structure: `help.contact.tsx` is nested under `/help`, but `src/routes/help.tsx` does not render an `<Outlet />`.
+- In TanStack Router, a child route under `/help` cannot render unless the parent `/help` route provides an outlet. So the URL can change, but nothing new appears.
 
 Plan
+1. Refactor `/help` into a layout route
+- Update `src/routes/help.tsx` to be a parent layout that renders only `<Outlet />`.
+- Match the existing pattern already used in `src/routes/unit-trusts.tsx`.
 
-1. Refactor `/unit-trusts` into a proper layout route
-   - Update `src/routes/unit-trusts.tsx` so it renders an `<Outlet />` instead of holding the portfolio screen directly.
+2. Move the current FAQ screen into an index child route
+- Create `src/routes/help.index.tsx`.
+- Move the current help hub UI there:
+  - quick links
+  - search bar
+  - popular searches
+  - FAQ list/accordion
+  - bottom “Still need help?” card
 
-2. Move the current portfolio screen into an index child route
-   - Create `src/routes/unit-trusts.index.tsx`.
-   - Move the existing Unit Trusts list UI there so `/unit-trusts` still shows the portfolio list.
+3. Keep `/help/contact` as the full contact page
+- Leave `src/routes/help.contact.tsx` as the child route for the form.
+- Keep the current flow intact:
+  - category dropdown
+  - dynamic sub-category
+  - smart suggestions
+  - tailored fields
+  - confirmation with team routing and 24-hour expectation
 
-3. Keep the detail page as the child route
-   - Leave `src/routes/unit-trusts.$subAccountId.tsx` as the detailed page for Emergency, Retirement, Growth, etc.
-   - Reuse the richer content already in that file: goal details, add money CTA, holdings, last invested date/amount, last redeemed date/amount.
-
-4. Verify the navigation flow
-   - Tapping any sub-account row or chevron should open the matching detail page.
-   - The back button should return to the Unit Trusts list.
-   - `/unit-trusts` should still show the normal portfolio overview.
+4. QA after the refactor
+- Confirm `/help` still shows the FAQ hub.
+- Confirm tapping “Still need help?” opens `/help/contact` and the form is visible.
+- Confirm back navigation returns to `/help`.
+- Confirm the dashboard/help icons still reach the help flow.
 
 Technical details
-
-```text
-Current structure
-/unit-trusts                  -> portfolio page
-/unit-trusts/$subAccountId    -> child detail route
-Problem: parent route does not render <Outlet />
-
-Fixed structure
-unit-trusts.tsx               -> layout route with <Outlet />
-unit-trusts.index.tsx         -> portfolio list page
-unit-trusts.$subAccountId.tsx -> full detail page
-```
-
-Expected result
-
-- Clicking Emergency / Retirement / other sub-accounts will actually open the detailed screen instead of seeming unresponsive.
-- This fixes the navigation bug without changing the URL structure you already wanted.
+- `src/routeTree.gen.ts` should not be edited manually; it will regenerate from the route file changes.
+- This is a routing/layout fix, not a form-logic rewrite.
