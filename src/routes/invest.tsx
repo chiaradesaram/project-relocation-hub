@@ -216,7 +216,19 @@ function Invest() {
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
         <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">TRANSFER DETAILS</p>
         <div>
-          <label className="text-[10px] text-muted-foreground">{method === "flip" ? "Transfer from" : "Pay from"}</label>
+          <label className="text-[10px] text-muted-foreground flex items-center gap-1">
+            {method === "flip" ? "Transfer from" : "Pay from"}
+            {method !== "flip" && (
+              <button type="button" onClick={() => setShowJustpayInfo(!showJustpayInfo)} aria-label="About Pay from">
+                <Info className="w-3 h-3 text-muted-foreground" />
+              </button>
+            )}
+          </label>
+          {showJustpayInfo && method !== "flip" && (
+            <p className="mt-1 text-[10px] text-muted-foreground bg-secondary/60 rounded-lg p-2">
+              Accounts need to be verified using Justpay.
+            </p>
+          )}
           <select
             value={selectedBank}
             onChange={(e) => {
