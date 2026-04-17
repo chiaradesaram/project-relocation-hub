@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink } from "lucide-react";
+import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/invest")({
   component: Invest,
@@ -39,14 +39,14 @@ function Invest() {
   const [showBankDetails, setShowBankDetails] = useState(false);
 
   const methods = [
-    { id: "instant" as const, icon: Zap, label: "Instant" },
+    { id: "instant" as const, icon: Zap, label: "Direct Invest" },
     { id: "bank" as const, icon: Building2, label: "Bank Transfer" },
     { id: "flip" as const, icon: ArrowLeftRight, label: "Flip" },
   ];
 
   const methodInfo: Record<InvestMethod, string> = {
-    instant: "Instant payment. Max LKR 150k per transfer — multiple allowed.",
-    bank: "Standard bank transfer. Any amount. Proof required. 1-2 business days.",
+    instant: "Direct Invest. Instant payment. Max LKR 150k per transfer — multiple allowed.",
+    bank: "Standard bank transfer. Any amount. Proof required unless paying to Deutsche Bank. 1-2 business days.",
     flip: "Move funds between CAL accounts instantly. No fees.",
   };
 
@@ -85,7 +85,7 @@ function Invest() {
       {/* Investment Type Toggle — instant only */}
       {method === "instant" && (
         <div className="mx-4 mt-3">
-          <div className="flex gap-1 bg-secondary rounded-xl p-1">
+          <div className="flex gap-1 rounded-xl p-1" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 22%, transparent)" }}>
             {(["new", "recurring"] as const).map((type) => (
               <button
                 key={type}
@@ -140,10 +140,13 @@ function Invest() {
       {method === "instant" && investType === "new" && (
         <div className="mx-4 mt-3 glass-card p-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-foreground">Set Recurring</span>
+            <span className="text-xs text-foreground flex items-center gap-2">
+              <Repeat className={`w-3.5 h-3.5 transition-colors ${isRecurring ? "text-success" : "text-muted-foreground"}`} />
+              Set Recurring
+            </span>
             <button
               onClick={() => setIsRecurring(!isRecurring)}
-              className={`w-9 h-5 rounded-full transition-all flex items-center ${isRecurring ? "bg-primary" : "bg-muted"}`}
+              className={`w-9 h-5 rounded-full transition-all flex items-center ${isRecurring ? "bg-success" : "bg-muted"}`}
             >
               <div className={`w-4 h-4 rounded-full bg-white shadow-md transition-transform ${isRecurring ? "translate-x-4" : "translate-x-0.5"}`} />
             </button>
@@ -235,8 +238,8 @@ function Invest() {
           </select>
         </div>
 
-        {/* Deutsche Bank recommendation banner */}
-        {method !== "flip" && showDeutscheBanner && (
+        {/* Deutsche Bank tip — instant only */}
+        {method === "instant" && showDeutscheBanner && (
           <div className="flex items-start gap-2 p-3 bg-warning/10 rounded-xl border border-warning/20">
             <Info className="w-3.5 h-3.5 text-warning mt-0.5 shrink-0" />
             <p className="text-[11px] text-warning">💡 Tip: Pay via Deutsche Bank next time — no proof of payment needed!</p>
@@ -259,6 +262,30 @@ function Invest() {
                 <option key={a.accNo}>{a.bank} — {a.accNo}</option>
               ))}
             </select>
+
+            {/* Deutsche prompt — show when Pay To isn't Deutsche */}
+            {!selectedPayTo.includes("Deutsche") && (
+              <div className="mt-2 p-3 rounded-xl border border-success/30" style={{ background: "color-mix(in oklch, var(--success) 12%, transparent)" }}>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-success mt-0.5 shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-[11px] font-semibold text-success">Skip proof of payment</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Transfer to <span className="text-foreground font-medium">Deutsche Bank</span> for instant verification — no upload needed.</p>
+                    <div className="mt-2 p-2 rounded-lg bg-card/60 space-y-0.5">
+                      <p className="text-[10px] text-muted-foreground">Bank: <span className="text-foreground font-medium">Deutsche Bank</span></p>
+                      <p className="text-[10px] text-muted-foreground">A/C: <span className="text-foreground font-medium">{calBankAccounts[0].accNo}</span></p>
+                      <p className="text-[10px] text-muted-foreground">Branch: <span className="text-foreground font-medium">{calBankAccounts[0].branch}</span></p>
+                    </div>
+                    <button
+                      onClick={() => setSelectedPayTo(`${calBankAccounts[0].bank} — ${calBankAccounts[0].accNo}`)}
+                      className="mt-2 text-[10px] font-semibold text-success underline"
+                    >
+                      Use Deutsche Bank
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -288,7 +315,7 @@ function Invest() {
         </div>
       )}
 
-      {method === "bank" && (
+      {method === "bank" && !selectedPayTo.includes("Deutsche") && (
         <div className="mx-4 mt-3 glass-card p-3">
           <label className="text-[10px] text-muted-foreground">Proof of payment</label>
           <div className="mt-2 border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center gap-2">
