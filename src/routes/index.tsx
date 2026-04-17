@@ -107,31 +107,31 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+      <div className="flex items-center justify-between px-4 pt-3 pb-1.5">
         <div>
-          <p className="text-xs text-muted-foreground">Good morning</p>
-          <h1 className="text-xl font-bold text-foreground">CAL Online</h1>
+          <p className="text-[10px] text-muted-foreground/80">Good morning</p>
+          <h1 className="text-base font-semibold text-foreground">CAL Online</h1>
         </div>
-        <button onClick={() => navigate({ to: "/profile" })} className="flex h-9 w-9 items-center justify-center rounded-full bg-secondary">
-          <Bell className="h-4 w-4 text-muted-foreground" />
+        <button onClick={() => navigate({ to: "/profile" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
+          <Bell className="h-3.5 w-3.5 text-muted-foreground" />
         </button>
       </div>
 
-      <div className="mx-4 mt-2 rounded-2xl border border-primary/15 bg-card/90 p-5 backdrop-blur-md">
-        <p className="text-[10px] uppercase tracking-wider text-muted-foreground/80">Total Portfolio</p>
-        <div className="mt-2 flex items-center gap-4">
+      <div className="mx-4 mt-1.5 rounded-2xl border border-primary/10 bg-card/80 p-4 backdrop-blur-md">
+        <p className="text-[9px] uppercase tracking-wider text-muted-foreground/70">Total Portfolio</p>
+        <div className="mt-1.5 flex items-center gap-3">
           <DonutChart items={portfolioItems} />
           <div className="min-w-0 flex-1">
-            <h2 className="text-xl font-semibold tracking-tight text-foreground">LKR 7,370,000</h2>
-            <p className="mt-1 text-[11px]">
-              <span className="font-medium text-success">+7.8%</span>
-              <span className="text-muted-foreground"> · LKR 662,000 all time</span>
+            <h2 className="text-lg font-medium tracking-tight text-foreground">LKR 7,370,000</h2>
+            <p className="mt-0.5 text-[10px]">
+              <span className="font-normal text-success">+7.8%</span>
+              <span className="text-muted-foreground/80"> · LKR 662,000 all time</span>
             </p>
-            <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+            <div className="mt-1.5 flex flex-wrap gap-x-2.5 gap-y-0.5">
               {portfolioItems.map((item) => (
                 <div key={item.name} className="flex items-center gap-1">
-                  <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-[9px] text-muted-foreground">{item.name}</span>
+                  <div className="h-1 w-1 rounded-full" style={{ backgroundColor: item.color }} />
+                  <span className="text-[9px] text-muted-foreground/80">{item.name}</span>
                 </div>
               ))}
             </div>
@@ -140,52 +140,52 @@ function Dashboard() {
       </div>
 
       {/* Invest / Redeem pills */}
-      <div className="mx-4 mt-3 flex gap-2">
+      <div className="mx-4 mt-2 flex gap-2">
         <button
           onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/60 border border-border/30 backdrop-blur-md py-2.5 transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
         >
-          <ArrowUpRight className="h-4 w-4 text-success" />
-          <span className="text-xs font-medium text-foreground">Invest</span>
+          <ArrowUpRight className="h-3.5 w-3.5 text-success" />
+          <span className="text-[11px] font-normal text-foreground">Invest</span>
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/60 border border-border/30 backdrop-blur-md py-2.5 transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
         >
-          <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
-          <span className="text-xs font-medium text-foreground">Redeem</span>
+          <ArrowDownLeft className="h-3.5 w-3.5 text-muted-foreground" />
+          <span className="text-[11px] font-normal text-foreground">Redeem</span>
         </button>
       </div>
 
-      <div className="mx-4 mt-4">
-        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden">
-          <h3 className="px-4 pt-3 pb-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70">Portfolio</h3>
-          <div className="divide-y divide-border/20 border-t border-border/20">
+      <div className="mx-4 mt-2.5">
+        <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
+          <h3 className="px-3.5 pt-2.5 pb-1.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Portfolio</h3>
+          <div className="divide-y divide-border/15 border-t border-border/15">
             {portfolioItems.map((item) => {
               const Icon = item.icon;
               return (
                 <button
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
-                  className="flex w-full items-center gap-3 px-4 py-3 transition hover:bg-muted/10"
+                  className="flex w-full items-center gap-2.5 px-3.5 py-2 transition hover:bg-muted/10"
                 >
-                  <div className="flex h-7 w-7 items-center justify-center rounded-full" style={{ backgroundColor: `${item.color}1a` }}>
-                    <Icon className="h-3.5 w-3.5" style={{ color: item.color }} />
+                  <div className="flex h-6 w-6 items-center justify-center rounded-full" style={{ backgroundColor: `${item.color}1a` }}>
+                    <Icon className="h-3 w-3" style={{ color: item.color }} />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[13px] font-normal text-foreground">{item.name}</p>
+                    <p className="text-[12px] font-normal text-foreground">{item.name}</p>
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-muted px-2 py-0.5 text-[10px] font-normal text-muted-foreground">
+                    <span className="rounded-full bg-muted/70 px-2 py-0.5 text-[9px] font-normal text-muted-foreground">
                       {item.status}
                     </span>
                   ) : (
-                    <div className="flex shrink-0 items-center gap-2.5 text-right">
-                      <p className="text-[13px] font-normal text-foreground">LKR {item.value}</p>
-                      <p className="text-[11px] font-normal text-success">{item.earnings30d}</p>
+                    <div className="flex shrink-0 items-center gap-2 text-right">
+                      <p className="text-[12px] font-normal text-foreground">LKR {item.value}</p>
+                      <p className="text-[10px] font-normal text-success">{item.earnings30d}</p>
                     </div>
                   )}
-                  <ChevronRight className="h-3.5 w-3.5 shrink-0 text-muted-foreground/60" />
+                  <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground/50" />
                 </button>
               );
             })}
@@ -193,18 +193,18 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-4">
-        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden">
-          <div className="flex items-center justify-between px-4 pt-3 pb-2">
-            <h3 className="text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70">Market Overview</h3>
-            <button onClick={() => navigate({ to: "/rates" })} className="text-[10px] font-medium text-primary">See All</button>
+      <div className="mx-4 mt-2.5">
+        <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
+          <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
+            <h3 className="text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Market Overview</h3>
+            <button onClick={() => navigate({ to: "/rates" })} className="text-[9px] font-normal text-primary/80">See All</button>
           </div>
-          <div className="divide-y divide-border/20 border-t border-border/20">
+          <div className="divide-y divide-border/15 border-t border-border/15">
             {marketData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between px-4 py-2.5">
-                <p className="text-[13px] font-normal text-foreground">{item.name}</p>
-                <p className="text-[13px] font-normal text-muted-foreground">{item.value}</p>
-                <p className={`text-[11px] font-normal ${item.positive ? "text-success" : "text-destructive"}`}>
+              <div key={item.name} className="flex items-center justify-between px-3.5 py-1.5">
+                <p className="text-[12px] font-normal text-foreground">{item.name}</p>
+                <p className="text-[12px] font-normal text-muted-foreground">{item.value}</p>
+                <p className={`text-[10px] font-normal ${item.positive ? "text-success" : "text-destructive"}`}>
                   {item.change}
                 </p>
               </div>
@@ -213,16 +213,16 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-4 mb-4">
-        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden p-3">
-          <h3 className="px-1 pb-2 text-[10px] font-medium uppercase tracking-wider text-muted-foreground/70">Quick Actions</h3>
+      <div className="mx-4 mt-2.5 mb-3">
+        <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden p-2.5">
+          <h3 className="px-1 pb-1.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Quick Actions</h3>
           <div className="flex gap-2">
             {[
               { icon: Zap, label: "Invest Now", action: () => setShowActionPicker("invest") },
               { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
             ].map(({ icon: Icon, label, action }) => (
-              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-border/30 bg-card/40 p-3 transition hover:bg-primary/5">
-                <Icon className="h-4 w-4 text-muted-foreground" />
+              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-border/20 bg-card/30 p-2.5 transition hover:bg-primary/5">
+                <Icon className="h-3.5 w-3.5 text-muted-foreground" />
                 <span className="text-[10px] font-normal text-foreground">{label}</span>
               </button>
             ))}
