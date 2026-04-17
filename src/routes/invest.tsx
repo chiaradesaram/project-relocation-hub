@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import HelpFAQ, { type FAQItem } from "@/components/HelpFAQ";
 import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb } from "lucide-react";
 
 export const Route = createFileRoute("/invest")({
