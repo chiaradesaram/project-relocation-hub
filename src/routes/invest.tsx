@@ -286,18 +286,25 @@ function Invest() {
             {/* Deutsche prompt — show when Pay To isn't Deutsche */}
             {!selectedPayTo.includes("Deutsche") && (
               <div className="mt-2 p-3 rounded-xl border" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 12%, transparent)", borderColor: "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)" }}>
-                <div className="flex items-start gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
+                  className="w-full flex items-start gap-2 text-left"
+                >
                   <Lightbulb className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "var(--portfolio-blue)" }} />
                   <div className="flex-1">
                     <p className="text-[11px] font-semibold" style={{ color: "var(--portfolio-blue)" }}>Pay to Deutsche Bank — skip proof of payment</p>
                     <p className="text-[10px] text-muted-foreground mt-0.5">Transfers to Deutsche Bank are auto-verified, no upload needed.</p>
-                    <div className="mt-2 p-2 rounded-lg bg-card/60 space-y-0.5">
-                      <p className="text-[10px] text-muted-foreground">Bank: <span className="text-foreground font-medium">Deutsche Bank</span></p>
-                      <p className="text-[10px] text-muted-foreground">A/C: <span className="text-foreground font-medium">{calBankAccounts[0].accNo}</span></p>
-                      <p className="text-[10px] text-muted-foreground">Branch: <span className="text-foreground font-medium">{calBankAccounts[0].branch}</span></p>
-                    </div>
                   </div>
-                </div>
+                  <ChevronDown className={`w-4 h-4 mt-0.5 shrink-0 transition-transform ${showDeutscheDetails ? "rotate-180" : ""}`} style={{ color: "var(--portfolio-blue)" }} />
+                </button>
+                {showDeutscheDetails && (
+                  <div className="mt-2 ml-6 p-2 rounded-lg bg-card/60 space-y-0.5">
+                    <p className="text-[10px] text-muted-foreground">Bank: <span className="text-foreground font-medium">Deutsche Bank</span></p>
+                    <p className="text-[10px] text-muted-foreground">A/C: <span className="text-foreground font-medium">{calBankAccounts[0].accNo}</span></p>
+                    <p className="text-[10px] text-muted-foreground">Branch: <span className="text-foreground font-medium">{calBankAccounts[0].branch}</span></p>
+                  </div>
+                )}
               </div>
             )}
           </div>
