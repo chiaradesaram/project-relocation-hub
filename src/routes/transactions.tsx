@@ -154,11 +154,11 @@ function Transactions() {
               <p className="text-[10px] text-muted-foreground truncate">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
                 <div className="mt-1 space-y-0.5">
-                  <p className="text-[9px] text-muted-foreground/80">
-                    <span className="text-muted-foreground/60">Created:</span> {tx.createdDate}
+                  <p className="text-[9px] text-foreground">
+                    <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
                   </p>
-                  <p className="text-[9px] text-muted-foreground/80">
-                    <span className="text-muted-foreground/60">Reflects on Portal:</span> {tx.reflectedDate}
+                  <p className="text-[9px] text-foreground">
+                    <span className="text-muted-foreground/70">Reflects on Portal:</span> {tx.reflectedDate}
                   </p>
                 </div>
               ) : (
