@@ -132,16 +132,14 @@ function Transactions() {
       {/* Transaction List */}
       <div className="px-4 mt-3 space-y-2">
         {filtered.map((tx, i) => (
-          <div key={i} className="glass-card p-3 flex items-center gap-3">
+          <div key={i} className="glass-card p-3 flex items-start gap-3">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center ${
+              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
                   ? "bg-warning/20"
-                  : tx.status === "Cancelled"
-                    ? "bg-destructive/20"
-                    : tx.positive
-                      ? "bg-success/20"
-                      : "bg-destructive/20"
+                  : tx.positive
+                    ? "bg-success/20"
+                    : "bg-muted/40"
               }`}
             >
               <StatusIcon status={tx.status} positive={tx.positive} />
@@ -156,11 +154,22 @@ function Transactions() {
               <p className="text-[10px] text-muted-foreground truncate">
                 {tx.kind} · {tx.subAccount}
               </p>
-              <p className="text-[9px] text-muted-foreground/70">{tx.date}</p>
+              {tx.status === "Pending" && tx.createdDate ? (
+                <div className="mt-1 space-y-0.5">
+                  <p className="text-[9px] text-muted-foreground/80">
+                    <span className="text-muted-foreground/60">Created:</span> {tx.createdDate}
+                  </p>
+                  <p className="text-[9px] text-muted-foreground/80">
+                    <span className="text-muted-foreground/60">Reflects on Portal:</span> {tx.reflectedDate}
+                  </p>
+                </div>
+              ) : (
+                <p className="text-[9px] text-muted-foreground/70">{tx.date}</p>
+              )}
             </div>
-            <div className="text-right">
+            <div className="text-right shrink-0">
               <p className="text-xs font-semibold text-foreground">{tx.value}</p>
-              <p className={`text-[10px] ${tx.positive ? "text-success" : "text-destructive"}`}>
+              <p className={`text-[10px] ${tx.positive ? "text-success" : "text-muted-foreground"}`}>
                 {tx.positive ? "+" : "−"} {tx.kind}
               </p>
             </div>
