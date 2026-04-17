@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
-import { Bell, BarChart2, Receipt, PieChart, X, ArrowUpRight, ArrowDownLeft, Gamepad2, ChevronRight, Coins, Eye, FileText } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { Bell, BarChart2, Receipt, PieChart, X, ArrowUpRight, ArrowDownLeft, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -116,9 +117,19 @@ function Dashboard() {
           <p className="text-[10px] text-muted-foreground/80">Good morning</p>
           <h1 className="text-base font-semibold text-foreground">CAL Online</h1>
         </div>
-        <button onClick={() => navigate({ to: "/profile" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
-          <Bell className="h-3.5 w-3.5 text-muted-foreground" />
-        </button>
+        <div className="flex items-center gap-1.5">
+          <Link
+            to="/help"
+            search={{ topic: "general" }}
+            className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+            aria-label="Help"
+          >
+            <HelpCircle className="h-3.5 w-3.5" />
+          </Link>
+          <button onClick={() => navigate({ to: "/profile" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
+            <Bell className="h-3.5 w-3.5 text-muted-foreground" />
+          </button>
+        </div>
       </div>
 
       <div className="mx-4 mt-1.5 rounded-2xl border border-primary/10 bg-card/80 p-4 backdrop-blur-md">
