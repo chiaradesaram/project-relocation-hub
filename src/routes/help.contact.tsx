@@ -1,20 +1,13 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { z } from "zod";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
-  ArrowLeft,
-  ChevronRight,
+  ChevronDown,
   CheckCircle2,
   Lightbulb,
   Paperclip,
-  UserCog,
-  TrendingUp,
-  Wallet,
-  Wrench,
-  AlertTriangle,
-  HelpCircle,
 } from "lucide-react";
 
 type CategoryId =
@@ -28,7 +21,6 @@ type CategoryId =
 interface Category {
   id: CategoryId;
   label: string;
-  icon: typeof UserCog;
   team: string;
   subs: { id: string; label: string; suggestions?: { q: string; a: string }[] }[];
 }
@@ -37,7 +29,6 @@ const CATEGORIES: Category[] = [
   {
     id: "account-opening",
     label: "Account Opening",
-    icon: UserCog,
     team: "Onboarding Team",
     subs: [
       {
@@ -56,7 +47,6 @@ const CATEGORIES: Category[] = [
   {
     id: "trading",
     label: "Trading Issues",
-    icon: TrendingUp,
     team: "Trading Desk",
     subs: [
       {
@@ -75,7 +65,6 @@ const CATEGORIES: Category[] = [
   {
     id: "deposits-withdrawals",
     label: "Deposits & Withdrawals",
-    icon: Wallet,
     team: "Payments Team",
     subs: [
       {
@@ -91,6 +80,7 @@ const CATEGORIES: Category[] = [
         label: "Withdrawal delay",
         suggestions: [
           { q: "How long do redemptions take?", a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days." },
+          { q: "Is there a daily withdrawal limit?", a: "Instant redemptions are capped at LKR 100,000 per transaction, up to 5 times a day." },
         ],
       },
       { id: "bank-change", label: "Bank details change" },
@@ -100,7 +90,6 @@ const CATEGORIES: Category[] = [
   {
     id: "technical",
     label: "Technical Issues",
-    icon: Wrench,
     team: "Tech Support",
     subs: [
       { id: "app-crashing", label: "App crashing" },
@@ -112,7 +101,6 @@ const CATEGORIES: Category[] = [
   {
     id: "complaints",
     label: "Complaints",
-    icon: AlertTriangle,
     team: "Compliance Team",
     subs: [
       { id: "service", label: "Service complaint" },
@@ -123,15 +111,19 @@ const CATEGORIES: Category[] = [
   {
     id: "other",
     label: "Other",
-    icon: HelpCircle,
     team: "Support Team",
     subs: [{ id: "other", label: "Other" }],
   },
 ];
 
 const formSchema = z.object({
-  subject: z.string().trim().min(3, "Add a short subject").max(120, "Keep subject under 120 characters"),
-  description: z.string().trim().min(10, "Please describe the issue (10+ chars)").max(2000, "Keep description under 2000 characters"),
+  categoryId: z.string().min(1, "Pick a category"),
+  subId: z.string().min(1, "Pick a sub-category"),
+  description: z
+    .string()
+    .trim()
+    .min(10, "Please describe the issue (10+ chars)")
+    .max(2000, "Keep description under 2000 characters"),
   amount: z.string().trim().max(20).optional(),
   date: z.string().trim().max(20).optional(),
   accountNumber: z.string().trim().max(40).optional(),
@@ -144,61 +136,55 @@ export const Route = createFileRoute("/help/contact")({
       { name: "description", content: "Get in touch with the CAL support team." },
     ],
   }),
-  component: ContactFlow,
+  component: ContactForm,
 });
 
-type Step = 1 | 2 | 3 | 4 | 5;
-
-function ContactFlow() {
-  const navigate = useNavigate();
-  const [step, setStep] = useState<Step>(1);
-  const [categoryId, setCategoryId] = useState<CategoryId | null>(null);
-  const [subId, setSubId] = useState<string | null>(null);
-  const [subject, setSubject] = useState("");
+function ContactForm() {
+  const [categoryId, setCategoryId] = useState<CategoryId | "">("");
+  const [subId, setSubId] = useState("");
+  const [showForm, setShowForm] = useState(false);
   const [description, setDescription] = useState("");
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState("");
   const [accountNumber, setAccountNumber] = useState("CAL-00012345");
   const [fileName, setFileName] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [submitted, setSubmitted] = useState(false);
   const [refId, setRefId] = useState("");
 
-  const category = useMemo(() => CATEGORIES.find((c) => c.id === categoryId) ?? null, [categoryId]);
-  const sub = useMemo(() => category?.subs.find((s) => s.id === subId) ?? null, [category, subId]);
+  const category = useMemo(
+    () => CATEGORIES.find((c) => c.id === categoryId) ?? null,
+    [categoryId],
+  );
+  const sub = useMemo(
+    () => category?.subs.find((s) => s.id === subId) ?? null,
+    [category, subId],
+  );
 
-  const needsAmount = categoryId === "deposits-withdrawals" && (subId === "deposit-not-reflected" || subId === "withdrawal-delay");
+  const suggestions = sub?.suggestions ?? [];
+  const hasSuggestions = suggestions.length > 0;
+
+  const needsAmount =
+    categoryId === "deposits-withdrawals" &&
+    (subId === "deposit-not-reflected" || subId === "withdrawal-delay");
   const needsDate = needsAmount;
   const needsAccount = categoryId === "deposits-withdrawals" || categoryId === "trading";
 
+  // Reset sub when category changes
   useEffect(() => {
-    const scrollEl = document.querySelector("[data-mobile-layout-scroll]") as HTMLElement | null;
-    scrollEl?.scrollTo({ top: 0, behavior: "auto" });
-    window.scrollTo({ top: 0, behavior: "auto" });
-  }, [step]);
+    setSubId("");
+    setShowForm(false);
+  }, [categoryId]);
 
-  function goBack() {
-    if (step === 1) {
-      window.history.back();
-      return;
-    }
-    setStep((step - 1) as Step);
-  }
-
-  function selectCategory(id: CategoryId) {
-    setCategoryId(id);
-    setSubId(null);
-    setStep(2);
-  }
-
-  function selectSub(id: string) {
-    setSubId(id);
-    const found = category?.subs.find((s) => s.id === id);
-    setStep(found?.suggestions?.length ? 3 : 4);
-  }
+  // Reset showForm when sub changes
+  useEffect(() => {
+    setShowForm(false);
+  }, [subId]);
 
   function submitForm() {
     const result = formSchema.safeParse({
-      subject,
+      categoryId,
+      subId,
       description,
       amount: needsAmount ? amount : undefined,
       date: needsDate ? date : undefined,
@@ -206,204 +192,275 @@ function ContactFlow() {
     });
 
     if (!result.success) {
-      const nextErrors: Record<string, string> = {};
-      result.error.issues.forEach((issue) => {
-        const key = issue.path[0]?.toString() ?? "form";
-        if (!nextErrors[key]) nextErrors[key] = issue.message;
+      const next: Record<string, string> = {};
+      result.error.issues.forEach((i) => {
+        const k = i.path[0]?.toString() ?? "form";
+        if (!next[k]) next[k] = i.message;
       });
-      setErrors(nextErrors);
+      setErrors(next);
       return;
     }
 
     setErrors({});
-    setRefId(`REQ-${Math.random().toString(36).slice(2, 8).toUpperCase()}${Math.floor(Math.random() * 90 + 10)}`);
-    setStep(5);
+    setRefId(
+      `REQ-${Math.random().toString(36).slice(2, 8).toUpperCase()}${Math.floor(
+        Math.random() * 90 + 10,
+      )}`,
+    );
+    setSubmitted(true);
   }
 
-  return (
-    <MobileLayout hideNav>
-      <PageHeader title="Contact us" showBack hideHelp />
-
-      <div className="mx-4 mt-1 mb-3">
-        <div className="flex items-center gap-1.5">
-          {[1, 2, 3, 4, 5].map((n) => (
-            <div key={n} className={`h-1 flex-1 rounded-full transition-colors ${n <= step ? "bg-primary" : "bg-muted/40"}`} />
-          ))}
-        </div>
-        <p className="mt-1.5 text-[10px] text-muted-foreground">Step {step} of 5</p>
-      </div>
-
-      {step > 1 && step < 5 && (
-        <button type="button" onClick={goBack} className="mx-4 mb-2 inline-flex items-center gap-1 text-[11px] text-muted-foreground hover:text-foreground">
-          <ArrowLeft className="h-3 w-3" /> Back
-        </button>
-      )}
-
-      {step === 1 && (
-        <div className="mx-4 pb-6">
-          <h2 className="text-sm font-semibold text-foreground">What do you need help with?</h2>
-          <p className="mb-3 text-[11px] text-muted-foreground">Pick the closest category.</p>
-          <div className="glass-card overflow-hidden divide-y divide-border/40">
-            {CATEGORIES.map(({ id, label, icon: Icon }) => (
-              <button key={id} type="button" onClick={() => selectCategory(id)} className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/30">
-                <Icon className="h-4 w-4 shrink-0 text-primary" />
-                <span className="flex-1 text-[12px] font-medium text-foreground">{label}</span>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {step === 2 && category && (
-        <div className="mx-4 pb-6">
-          <h2 className="text-sm font-semibold text-foreground">{category.label}</h2>
-          <p className="mb-3 text-[11px] text-muted-foreground">Choose what's closest.</p>
-          <div className="glass-card overflow-hidden divide-y divide-border/40">
-            {category.subs.map((item) => (
-              <button key={item.id} type="button" onClick={() => selectSub(item.id)} className="flex w-full items-center gap-3 px-3 py-3 text-left transition-colors hover:bg-muted/30">
-                <span className="flex-1 text-[12px] font-medium text-foreground">{item.label}</span>
-                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {step === 3 && sub?.suggestions && (
-        <div className="mx-4 pb-6">
-          <div className="mb-1 flex items-center gap-2">
-            <Lightbulb className="h-4 w-4 text-primary" />
-            <h2 className="text-sm font-semibold text-foreground">This might solve it instantly</h2>
-          </div>
-          <p className="mb-3 text-[11px] text-muted-foreground">Quick answers for "{sub.label}".</p>
-          <div className="glass-card overflow-hidden divide-y divide-border/40">
-            {sub.suggestions.map((item, i) => (
-              <div key={i} className="px-3 py-3">
-                <p className="text-[12px] font-medium text-foreground">{item.q}</p>
-                <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">{item.a}</p>
-              </div>
-            ))}
-          </div>
-          <div className="mt-4 grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setStep(1);
-                setCategoryId(null);
-                setSubId(null);
-                navigate({ to: "/help" });
-              }}
-              className="rounded-xl border border-border/40 bg-card/60 py-2.5 text-[12px] font-medium text-foreground transition-colors hover:bg-muted/30"
-            >
-              That solved it
-            </button>
-            <button type="button" onClick={() => setStep(4)} className="rounded-xl bg-primary py-2.5 text-[12px] font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              Still need help
-            </button>
-          </div>
-        </div>
-      )}
-
-      {step === 4 && category && sub && (
-        <div className="mx-4 pb-6">
-          <h2 className="text-sm font-semibold text-foreground">Tell us more</h2>
-          <p className="mb-3 text-[11px] text-muted-foreground">{category.label} · {sub.label}</p>
-
-          <div className="space-y-3">
-            <Field label="Subject" error={errors.subject}>
-              <input value={subject} onChange={(e) => setSubject(e.target.value)} maxLength={120} placeholder="Short summary" className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none" />
-            </Field>
-
-            {needsAccount && (
-              <Field label="Account number" error={errors.accountNumber}>
-                <input value={accountNumber} onChange={(e) => setAccountNumber(e.target.value)} maxLength={40} className="w-full bg-transparent text-[12px] text-foreground outline-none" />
-              </Field>
-            )}
-
-            {needsDate && (
-              <Field label="Date of request" error={errors.date}>
-                <input type="date" value={date} onChange={(e) => setDate(e.target.value)} className="w-full bg-transparent text-[12px] text-foreground outline-none" />
-              </Field>
-            )}
-
-            {needsAmount && (
-              <Field label="Amount (LKR)" error={errors.amount}>
-                <input inputMode="decimal" value={amount} onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))} placeholder="0.00" className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none" />
-              </Field>
-            )}
-
-            <Field label="Description" error={errors.description}>
-              <textarea value={description} onChange={(e) => setDescription(e.target.value)} maxLength={2000} rows={4} placeholder="What happened and what would you like us to do?" className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none" />
-            </Field>
-
-            <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
-              <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
-              <span className="flex-1 text-[11px] text-muted-foreground">{fileName ?? "Attach a file (optional)"}</span>
-              <input
-                type="file"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  if (file.size > 5 * 1024 * 1024) {
-                    setErrors((prev) => ({ ...prev, file: "Max file size 5 MB" }));
-                    return;
-                  }
-                  setErrors((prev) => {
-                    const { file: _file, ...rest } = prev;
-                    return rest;
-                  });
-                  setFileName(file.name);
-                }}
-              />
-            </label>
-            {errors.file && <p className="text-[10px] text-destructive">{errors.file}</p>}
-
-            <button type="button" onClick={submitForm} className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90">
-              Submit request
-            </button>
-          </div>
-        </div>
-      )}
-
-      {step === 5 && category && (
-        <div className="mx-4 pb-6">
+  // Confirmation screen
+  if (submitted && category) {
+    return (
+      <MobileLayout hideNav>
+        <PageHeader title="Request submitted" hideHelp />
+        <div className="mx-4 mt-2 pb-6">
           <div className="glass-card p-5 text-center">
             <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-success/15">
               <CheckCircle2 className="h-6 w-6 text-success" />
             </div>
-            <p className="text-sm font-semibold text-foreground">Request submitted</p>
-            <p className="mt-1 text-[11px] text-muted-foreground">
-              We've routed your request to our <span className="font-medium text-foreground">{category.team}</span>.
+            <p className="text-sm font-semibold text-foreground">We've got your request</p>
+            <p className="mt-1.5 text-[11px] text-muted-foreground">
+              We've routed it to our{" "}
+              <span className="font-medium text-foreground">{category.team}</span>.
             </p>
-            <p className="mt-1 text-[11px] text-muted-foreground">Expected response: within 2 business days.</p>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              Expected response: within 24 hours.
+            </p>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-muted/30 px-2.5 py-1">
               <span className="text-[10px] text-muted-foreground">Reference</span>
               <span className="text-[11px] font-mono font-medium text-foreground">{refId}</span>
             </div>
           </div>
 
-          <div className="mb-6 mt-4 grid grid-cols-2 gap-2">
-            <Link to="/help" className="rounded-xl border border-border/40 bg-card/60 py-2.5 text-center text-[12px] font-medium text-foreground transition-colors hover:bg-muted/30">
+          <div className="mt-4 grid grid-cols-2 gap-2">
+            <Link
+              to="/help"
+              className="rounded-xl border border-border/40 bg-card/60 py-2.5 text-center text-[12px] font-medium text-foreground transition-colors hover:bg-muted/30"
+            >
               Back to Help
             </Link>
-            <Link to="/" className="rounded-xl bg-primary py-2.5 text-center text-[12px] font-medium text-primary-foreground transition-colors hover:bg-primary/90">
+            <Link
+              to="/"
+              className="rounded-xl bg-primary py-2.5 text-center text-[12px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
               Go home
             </Link>
           </div>
         </div>
-      )}
+      </MobileLayout>
+    );
+  }
+
+  return (
+    <MobileLayout hideNav>
+      <PageHeader title="Contact us" showBack hideHelp />
+
+      <div className="mx-4 mt-1 pb-6">
+        <h2 className="text-sm font-semibold text-foreground">Tell us what's wrong</h2>
+        <p className="mb-4 text-[11px] text-muted-foreground">
+          Pick the closest match — we'll route your request to the right team.
+        </p>
+
+        <div className="space-y-3">
+          {/* Category */}
+          <Field label="Category" error={errors.categoryId}>
+            <SelectInput
+              value={categoryId}
+              onChange={(v) => setCategoryId(v as CategoryId | "")}
+              placeholder="Select a category"
+            >
+              {CATEGORIES.map((c) => (
+                <option key={c.id} value={c.id}>
+                  {c.label}
+                </option>
+              ))}
+            </SelectInput>
+          </Field>
+
+          {/* Sub-category — only after category */}
+          {category && (
+            <Field label="Sub-category" error={errors.subId}>
+              <SelectInput
+                value={subId}
+                onChange={setSubId}
+                placeholder="Select a sub-category"
+              >
+                {category.subs.map((s) => (
+                  <option key={s.id} value={s.id}>
+                    {s.label}
+                  </option>
+                ))}
+              </SelectInput>
+            </Field>
+          )}
+
+          {/* Smart suggestions — before form */}
+          {sub && hasSuggestions && !showForm && (
+            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
+              <div className="mb-2 flex items-center gap-1.5">
+                <Lightbulb className="h-3.5 w-3.5 text-primary" />
+                <p className="text-[11px] font-semibold text-foreground">
+                  This might solve it instantly
+                </p>
+              </div>
+              <div className="space-y-2">
+                {suggestions.map((s, i) => (
+                  <div key={i} className="rounded-lg bg-card/60 p-2.5">
+                    <p className="text-[11px] font-medium text-foreground">{s.q}</p>
+                    <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
+                      {s.a}
+                    </p>
+                  </div>
+                ))}
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowForm(true)}
+                className="mt-3 w-full rounded-lg bg-primary py-2 text-[11px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Still need help — continue
+              </button>
+            </div>
+          )}
+
+          {/* Form fields — shown when sub selected with no suggestions, or after "Still need help" */}
+          {sub && (showForm || !hasSuggestions) && (
+            <>
+              {needsAccount && (
+                <Field label="Account number" error={errors.accountNumber}>
+                  <input
+                    value={accountNumber}
+                    onChange={(e) => setAccountNumber(e.target.value)}
+                    maxLength={40}
+                    className="w-full bg-transparent text-[12px] text-foreground outline-none"
+                  />
+                </Field>
+              )}
+
+              {needsDate && (
+                <Field label="Date of request" error={errors.date}>
+                  <input
+                    type="date"
+                    value={date}
+                    onChange={(e) => setDate(e.target.value)}
+                    className="w-full bg-transparent text-[12px] text-foreground outline-none"
+                  />
+                </Field>
+              )}
+
+              {needsAmount && (
+                <Field label="Amount (LKR)" error={errors.amount}>
+                  <input
+                    inputMode="decimal"
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))}
+                    placeholder="0.00"
+                    className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+                  />
+                </Field>
+              )}
+
+              <Field label="Description" error={errors.description}>
+                <textarea
+                  value={description}
+                  onChange={(e) => setDescription(e.target.value)}
+                  maxLength={2000}
+                  rows={4}
+                  placeholder="What happened and what would you like us to do?"
+                  className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+                />
+              </Field>
+
+              <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
+                <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
+                <span className="flex-1 text-[11px] text-muted-foreground">
+                  {fileName ?? "Attach documents (optional)"}
+                </span>
+                <input
+                  type="file"
+                  className="hidden"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    if (!file) return;
+                    if (file.size > 5 * 1024 * 1024) {
+                      setErrors((p) => ({ ...p, file: "Max file size 5 MB" }));
+                      return;
+                    }
+                    setErrors((p) => {
+                      const { file: _f, ...rest } = p;
+                      return rest;
+                    });
+                    setFileName(file.name);
+                  }}
+                />
+              </label>
+              {errors.file && <p className="text-[10px] text-destructive">{errors.file}</p>}
+
+              <button
+                type="button"
+                onClick={submitForm}
+                className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+              >
+                Submit request
+              </button>
+            </>
+          )}
+        </div>
+      </div>
     </MobileLayout>
   );
 }
 
-function Field({ label, error, children }: { label: string; error?: string; children: React.ReactNode }) {
+function Field({
+  label,
+  error,
+  children,
+}: {
+  label: string;
+  error?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div>
-      <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">{label.toUpperCase()}</p>
-      <div className="rounded-xl border border-border/40 bg-card/60 px-3 py-2.5 backdrop-blur-md">{children}</div>
+      <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">
+        {label.toUpperCase()}
+      </p>
+      <div className="rounded-xl border border-border/40 bg-card/60 px-3 py-2.5 backdrop-blur-md">
+        {children}
+      </div>
       {error && <p className="mt-1 text-[10px] text-destructive">{error}</p>}
+    </div>
+  );
+}
+
+function SelectInput({
+  value,
+  onChange,
+  placeholder,
+  children,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+  placeholder: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative flex items-center">
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className={`w-full appearance-none bg-transparent pr-6 text-[12px] outline-none ${
+          value ? "text-foreground" : "text-muted-foreground"
+        }`}
+      >
+        <option value="" disabled>
+          {placeholder}
+        </option>
+        {children}
+      </select>
+      <ChevronDown className="pointer-events-none absolute right-0 h-3.5 w-3.5 text-muted-foreground" />
     </div>
   );
 }
