@@ -238,8 +238,8 @@ function Invest() {
           </select>
         </div>
 
-        {/* Deutsche Bank recommendation banner */}
-        {method !== "flip" && showDeutscheBanner && (
+        {/* Deutsche Bank tip — instant only */}
+        {method === "instant" && showDeutscheBanner && (
           <div className="flex items-start gap-2 p-3 bg-warning/10 rounded-xl border border-warning/20">
             <Info className="w-3.5 h-3.5 text-warning mt-0.5 shrink-0" />
             <p className="text-[11px] text-warning">💡 Tip: Pay via Deutsche Bank next time — no proof of payment needed!</p>
