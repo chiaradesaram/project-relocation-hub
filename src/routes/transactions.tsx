@@ -192,7 +192,7 @@ function Transactions() {
           </div>
         ))}
         {filtered.length === 0 && (
-          <p className="text-center text-xs text-muted-foreground py-8">No activity found</p>
+          <p className="text-center text-xs text-muted-foreground py-8">No transactions found</p>
         )}
       </div>
     </MobileLayout>
