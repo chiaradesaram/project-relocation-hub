@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useNavigate, notFound } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { findSubAccount } from "@/data/unitTrusts";
+import { findSubAccount, type ActivityEntry } from "@/data/unitTrusts";
 import {
   ArrowUpRight,
   ArrowDownLeft,
@@ -48,8 +48,8 @@ function SubAccountDetail() {
   const { sub } = Route.useLoaderData();
   const navigate = useNavigate();
 
-  const lastInvest = sub.activity.find((a) => a.type === "invest");
-  const lastRedeem = sub.activity.find((a) => a.type === "redeem");
+  const lastInvest = sub.activity.find((a: ActivityEntry) => a.type === "invest");
+  const lastRedeem = sub.activity.find((a: ActivityEntry) => a.type === "redeem");
 
   const hasGoal = !!sub.goalTarget;
   const progress = hasGoal
