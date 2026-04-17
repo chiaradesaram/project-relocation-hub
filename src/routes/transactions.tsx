@@ -74,13 +74,19 @@ function Transactions() {
 
   const subs = subFiltersByProduct[product];
 
-  const filtered = transactions.filter((tx) => {
-    if (product !== "All" && tx.product !== product) return false;
-    if (sub === "All") return true;
-    if (sub === "Pending") return tx.status === "Pending";
-    const allowedKinds = subToKinds[sub] ?? [];
-    return allowedKinds.includes(tx.kind);
-  });
+  const filtered = transactions
+    .filter((tx) => {
+      if (product !== "All" && tx.product !== product) return false;
+      if (sub === "All") return true;
+      if (sub === "Pending") return tx.status === "Pending";
+      const allowedKinds = subToKinds[sub] ?? [];
+      return allowedKinds.includes(tx.kind);
+    })
+    .sort((a, b) => {
+      if (a.status === "Pending" && b.status !== "Pending") return -1;
+      if (a.status !== "Pending" && b.status === "Pending") return 1;
+      return 0;
+    });
 
   return (
     <MobileLayout>
