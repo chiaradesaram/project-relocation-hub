@@ -39,14 +39,14 @@ function Invest() {
   const [showBankDetails, setShowBankDetails] = useState(false);
 
   const methods = [
-    { id: "instant" as const, icon: Zap, label: "Instant" },
+    { id: "instant" as const, icon: Zap, label: "Direct Invest" },
     { id: "bank" as const, icon: Building2, label: "Bank Transfer" },
     { id: "flip" as const, icon: ArrowLeftRight, label: "Flip" },
   ];
 
   const methodInfo: Record<InvestMethod, string> = {
-    instant: "Instant payment. Max LKR 150k per transfer — multiple allowed.",
-    bank: "Standard bank transfer. Any amount. Proof required. 1-2 business days.",
+    instant: "Direct Invest. Instant payment. Max LKR 150k per transfer — multiple allowed.",
+    bank: "Standard bank transfer. Any amount. Proof required unless paying to Deutsche Bank. 1-2 business days.",
     flip: "Move funds between CAL accounts instantly. No fees.",
   };
 
