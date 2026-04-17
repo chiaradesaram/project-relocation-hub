@@ -89,17 +89,23 @@ function HelpIndexPage() {
   const [query, setQuery] = useState(q ?? "");
   const [focused, setFocused] = useState(false);
   const [openKey, setOpenKey] = useState<string | null>(null);
+  const [activeTopic, setActiveTopic] = useState<FAQTopic | "all">("all");
 
   const trimmed = query.trim().toLowerCase();
   const isSearching = trimmed.length > 0;
   const showPopular = focused && !isSearching;
 
   const results = useMemo(() => {
-    if (!isSearching) return FAQS;
-    return FAQS.filter(
-      (f) => f.q.toLowerCase().includes(trimmed) || f.a.toLowerCase().includes(trimmed),
-    );
-  }, [trimmed, isSearching]);
+    if (isSearching) {
+      return FAQS.filter(
+        (f) => f.q.toLowerCase().includes(trimmed) || f.a.toLowerCase().includes(trimmed),
+      );
+    }
+    if (activeTopic === "all") {
+      return FAQS.filter((f) => f.featured);
+    }
+    return FAQS.filter((f) => f.topic === activeTopic);
+  }, [trimmed, isSearching, activeTopic]);
 
   return (
     <MobileLayout>
