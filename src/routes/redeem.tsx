@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Clock, Repeat, Info, ExternalLink, Edit2, Trash2 } from "lucide-react";
+import { Zap, Clock, Repeat, Info, Edit2, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/redeem")({
   component: Redeem,
