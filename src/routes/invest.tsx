@@ -315,7 +315,7 @@ function Invest() {
         </div>
       )}
 
-      {method === "bank" && (
+      {method === "bank" && !selectedPayTo.includes("Deutsche") && (
         <div className="mx-4 mt-3 glass-card p-3">
           <label className="text-[10px] text-muted-foreground">Proof of payment</label>
           <div className="mt-2 border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center gap-2">
