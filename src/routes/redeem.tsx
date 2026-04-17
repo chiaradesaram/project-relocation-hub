@@ -97,27 +97,6 @@ function Redeem() {
         </div>
       )}
 
-      {/* Amount — instant + normal only */}
-      {method !== "plan" && (
-        <div className="mx-4 mt-3 glass-card p-3">
-          <label className="text-[10px] font-semibold text-muted-foreground tracking-wider">Amount</label>
-          <div className="flex items-center gap-2 mt-1">
-            <span className="text-xs text-muted-foreground">LKR</span>
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="0.00"
-              className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
-            />
-          </div>
-          {overInstantLimit && (
-            <p className="mt-2 text-[10px] text-destructive">
-              Exceeds the daily instant limit of LKR {INSTANT_DAILY_LIMIT.toLocaleString()}. Use Normal redemption instead.
-            </p>
-          )}
-        </div>
-      )}
 
       {/* Fund & Account */}
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
@@ -187,6 +166,38 @@ function Redeem() {
           </select>
         </div>
       </div>
+
+      {/* Amount — instant + normal only, last because limit depends on sub account balance */}
+      {method !== "plan" && (
+        <div className="mx-4 mt-3 glass-card p-3">
+          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">AMOUNT</p>
+          <div className="flex items-center gap-2 mt-2">
+            <span className="text-xs text-muted-foreground">LKR</span>
+            <input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(e.target.value)}
+              placeholder="0.00"
+              className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
+            />
+          </div>
+          <p className="mt-2 text-[10px] text-muted-foreground">
+            {method === "instant"
+              ? `Max LKR ${Math.min(subAccountBalance, INSTANT_DAILY_LIMIT).toLocaleString()} per transaction · Available balance LKR ${subAccountBalance.toLocaleString()}`
+              : `Available balance LKR ${subAccountBalance.toLocaleString()}`}
+          </p>
+          {overInstantLimit && (
+            <p className="mt-1 text-[10px] text-destructive">
+              Exceeds the daily instant limit of LKR {INSTANT_DAILY_LIMIT.toLocaleString()}. Use Normal redemption instead.
+            </p>
+          )}
+          {overBalance && (
+            <p className="mt-1 text-[10px] text-destructive">
+              Exceeds available balance in this sub account.
+            </p>
+          )}
+        </div>
+      )}
 
       {/* Terms */}
       <div className="mx-4 mt-3">
