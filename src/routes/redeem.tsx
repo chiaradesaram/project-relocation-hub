@@ -40,7 +40,7 @@ function Redeem() {
   ];
 
   const methodInfo: Record<RedeemMethod, string> = {
-    instant: `Instant redemption credited to your bank account. Daily limit LKR ${INSTANT_DAILY_LIMIT.toLocaleString()}.`,
+    instant: `Instant redemption credited to your bank account. Daily limit LKR ${INSTANT_DAILY_LIMIT.toLocaleString()} per transaction — up to 5 times per day.`,
     normal: "Standard redemption. Settles in 1–3 business days. No daily limit.",
     plan: "Schedule recurring interest payouts from a sub account to your bank on a frequency you choose.",
   };
