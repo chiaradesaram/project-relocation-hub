@@ -14,6 +14,20 @@ import {
   Info,
 } from "lucide-react";
 
+const formatLKR = (n: number) => `LKR ${n.toLocaleString("en-LK")}`;
+const formatDate = (iso: string) =>
+  new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+  });
+const monthsBetween = (from: Date, to: Date) => {
+  const months =
+    (to.getFullYear() - from.getFullYear()) * 12 +
+    (to.getMonth() - from.getMonth());
+  return Math.max(months, 0);
+};
+
 export const Route = createFileRoute("/unit-trusts/$subAccountId")({
   loader: ({ params }) => {
     const sub = findSubAccount(params.subAccountId);
