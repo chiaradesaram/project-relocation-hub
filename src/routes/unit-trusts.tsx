@@ -1,9 +1,9 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
+import { funds } from "@/data/unitTrusts";
 import {
   ChevronRight,
   ChevronDown,
@@ -25,122 +25,11 @@ export const Route = createFileRoute("/unit-trusts")({
   component: UnitTrustPortfolio,
 });
 
-interface SubAccount {
-  id: string;
-  name: string;
-  value: string;
-  valueNum: number;
-  earnings30d: string;
-  dotColor: string;
-  goalTarget?: number;
-  goalLabel?: string;
-}
-
-interface Fund {
-  name: string;
-  description: string;
-  value: string;
-  earnings7d: string;
-  earnings30d: string;
-  earningsAll: string;
-  returnPct: string;
-  subAccounts: SubAccount[];
-}
-
-const initialFunds: Fund[] = [
-  {
-    name: "Fixed Income Fund",
-    description: "3 goals · Stable returns",
-    value: "LKR 1,200,000",
-    earnings7d: "+9,200",
-    earnings30d: "+38,400",
-    earningsAll: "+96,000",
-    returnPct: "+3.2%",
-    subAccounts: [
-      {
-        id: "fi-retirement",
-        name: "Retirement",
-        value: "LKR 700,000",
-        valueNum: 700000,
-        earnings30d: "+4,200",
-        dotColor: "oklch(0.6 0.2 260)",
-        goalTarget: 2000000,
-        goalLabel: "Retire at 55",
-      },
-      {
-        id: "fi-emergency",
-        name: "Emergency",
-        value: "LKR 350,000",
-        valueNum: 350000,
-        earnings30d: "+1,800",
-        dotColor: "oklch(0.55 0.25 290)",
-      },
-      {
-        id: "fi-general",
-        name: "General",
-        value: "LKR 150,000",
-        valueNum: 150000,
-        earnings30d: "+900",
-        dotColor: "oklch(0.65 0.18 155)",
-      },
-    ],
-  },
-  {
-    name: "High Yield Fund",
-    description: "2 goals · Higher risk",
-    value: "LKR 850,000",
-    earnings7d: "+12,400",
-    earnings30d: "+49,300",
-    earningsAll: "+112,500",
-    returnPct: "+5.8%",
-    subAccounts: [
-      {
-        id: "hy-growth",
-        name: "Growth",
-        value: "LKR 550,000",
-        valueNum: 550000,
-        earnings30d: "+32,100",
-        dotColor: "oklch(0.6 0.2 260)",
-        goalTarget: 1000000,
-        goalLabel: "First million",
-      },
-      {
-        id: "hy-general",
-        name: "General",
-        value: "LKR 300,000",
-        valueNum: 300000,
-        earnings30d: "+17,200",
-        dotColor: "oklch(0.65 0.18 155)",
-      },
-    ],
-  },
-  {
-    name: "Islamic Fund",
-    description: "1 goal · Sharia-compliant",
-    value: "LKR 400,000",
-    earnings7d: "+2,100",
-    earnings30d: "+8,400",
-    earningsAll: "+11,449",
-    returnPct: "+2.1%",
-    subAccounts: [
-      {
-        id: "is-general",
-        name: "General",
-        value: "LKR 400,000",
-        valueNum: 400000,
-        earnings30d: "+8,400",
-        dotColor: "oklch(0.65 0.18 155)",
-      },
-    ],
-  },
-];
-
 type GoalStep = "pick-fund" | "name-goal" | "set-target" | "done";
 
 function UnitTrustPortfolio() {
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState<string | null>(initialFunds[0].name);
-  const [funds] = useState<Fund[]>(initialFunds);
+  const [expanded, setExpanded] = useState<string | null>(funds[0].name);
 
   // Goal creation state
   const [goalSheetOpen, setGoalSheetOpen] = useState(false);
@@ -298,33 +187,43 @@ function UnitTrustPortfolio() {
                       : 0;
 
                     return (
-                      <div
+                      <Link
                         key={sub.id}
-                        className="rounded-xl bg-background/30 px-3 py-2.5"
+                        to="/unit-trusts/$subAccountId"
+                        params={{ subAccountId: sub.id }}
+                        className="block rounded-xl bg-background/30 px-3 py-2.5 transition hover:bg-muted/10"
                       >
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-2 min-w-0">
                             <div
-                              className="h-1.5 w-1.5 rounded-full"
+                              className="h-1.5 w-1.5 shrink-0 rounded-full"
                               style={{ backgroundColor: sub.dotColor }}
                             />
-                            <span className="text-xs font-medium text-foreground">
+                            <span className="text-xs font-medium text-foreground truncate">
                               {sub.name}
                             </span>
                             {hasGoal && (
-                              <span className="text-[9px] text-muted-foreground/70">
+                              <span className="text-[9px] text-muted-foreground/70 truncate">
                                 · {sub.goalLabel}
                               </span>
                             )}
                           </div>
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-1.5 shrink-0">
                             <span className="text-xs font-medium text-foreground">
                               {sub.value}
                             </span>
-                            <span className="text-[10px] font-medium text-success">
-                              {sub.earnings30d}
-                            </span>
+                            <ChevronRight className="h-3 w-3 text-muted-foreground/60" />
                           </div>
+                        </div>
+
+                        {/* Earnings pills */}
+                        <div className="mt-1.5 flex items-center gap-1">
+                          <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
+                            7d {sub.earnings7d}
+                          </span>
+                          <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
+                            30d {sub.earnings30d}
+                          </span>
                         </div>
 
                         {/* Goal progress bar */}
@@ -342,7 +241,7 @@ function UnitTrustPortfolio() {
                             </span>
                           </div>
                         )}
-                      </div>
+                      </Link>
                     );
                   })}
                 </div>
