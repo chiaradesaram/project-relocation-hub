@@ -1,7 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Info } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transactions")({
@@ -150,6 +151,23 @@ function Transactions() {
                 <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${statusStyles[tx.status]}`}>
                   {tx.status}
                 </span>
+                {tx.status === "Pending" && (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <button
+                        type="button"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-muted-foreground hover:text-foreground transition"
+                        aria-label="Pending info"
+                      >
+                        <Info className="w-3 h-3" />
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent side="top" className="w-60 text-[11px] leading-relaxed">
+                      Your investment takes approximately two working days to reflect on the portal.
+                    </PopoverContent>
+                  </Popover>
+                )}
               </div>
               <p className="text-[10px] text-muted-foreground truncate">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
