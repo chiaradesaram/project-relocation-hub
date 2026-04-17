@@ -27,12 +27,18 @@ function InvestSummary() {
   const navigate = useNavigate();
   const { method, amount, fund, account, bank } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
+  const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
   const isInstant = method === "instant";
   const amountNum = parseFloat(amount || "0") || 0;
   const serviceCharge = isInstant ? 50 : 0;
   const total = amountNum + serviceCharge;
-  const txDate = new Date().toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  const fmtDate = (d: Date) =>
+    d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
+  const today = new Date();
+  const txDate = fmtDate(today);
+  const creationDate = fmtDate(new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000));
+  const reflectedDate = fmtDate(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
 
   return (
     <MobileLayout>
