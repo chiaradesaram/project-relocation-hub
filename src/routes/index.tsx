@@ -176,7 +176,7 @@ function Dashboard() {
                     <p className="text-[13px] font-normal text-foreground">{item.name}</p>
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-[oklch(0.55_0.2_250)] px-3 py-1 text-[11px] font-medium text-white">
+                    <span className="rounded-full bg-[oklch(0.55_0.2_250)]/20 px-2 py-0.5 text-[10px] font-normal text-[oklch(0.75_0.15_250)]">
                       {item.status}
                     </span>
                   ) : (
