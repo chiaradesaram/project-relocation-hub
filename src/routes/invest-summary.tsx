@@ -85,6 +85,24 @@ function InvestSummary() {
             </div>
           )}
           <Row label="Transaction date" value={txDate} />
+          {!isInstant && (
+            <>
+              <RowWithInfo
+                label="Creation date"
+                value={creationDate}
+                open={openInfo === "creation"}
+                onToggle={() => setOpenInfo(openInfo === "creation" ? null : "creation")}
+                infoText="The date your investment becomes active."
+              />
+              <RowWithInfo
+                label="Reflected on Portal — by"
+                value={reflectedDate}
+                open={openInfo === "reflected"}
+                onToggle={() => setOpenInfo(openInfo === "reflected" ? null : "reflected")}
+                infoText="Your investment will appear in your CAL Online portfolio and mobile app by this date, once all processing is complete."
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -117,6 +135,37 @@ function Row({ label, value }: { label: string; value: string }) {
     <div className="flex items-center justify-between gap-2">
       <span className="text-[11px] text-muted-foreground">{label}</span>
       <span className="text-[11px] font-medium text-foreground text-right">{value}</span>
+    </div>
+  );
+}
+
+function RowWithInfo({
+  label,
+  value,
+  open,
+  onToggle,
+  infoText,
+}: {
+  label: string;
+  value: string;
+  open: boolean;
+  onToggle: () => void;
+  infoText: string;
+}) {
+  return (
+    <div>
+      <div className="flex items-center justify-between gap-2">
+        <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+          {label}
+          <button type="button" onClick={onToggle} aria-label={`About ${label}`}>
+            <Info className="w-3 h-3 text-muted-foreground" />
+          </button>
+        </span>
+        <span className="text-[11px] font-medium text-foreground text-right">{value}</span>
+      </div>
+      {open && (
+        <p className="mt-1 text-[10px] text-muted-foreground/80 leading-relaxed">{infoText}</p>
+      )}
     </div>
   );
 }
