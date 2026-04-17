@@ -24,6 +24,7 @@ import { Route as HelpRouteImport } from './routes/help'
 import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 
 const VstockRoute = VstockRouteImport.update({
@@ -101,6 +102,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UnitTrustsRoute,
+} as any)
 const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
   id: '/$subAccountId',
   path: '/$subAccountId',
@@ -124,6 +130,7 @@ export interface FileRoutesByFullPath {
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
+  '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -139,9 +146,9 @@ export interface FileRoutesByTo {
   '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
-  '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
+  '/unit-trusts': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -161,6 +168,7 @@ export interface FileRoutesById {
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
+  '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -181,6 +189,7 @@ export interface FileRouteTypes {
     | '/unit-trusts'
     | '/vstock'
     | '/unit-trusts/$subAccountId'
+    | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -196,9 +205,9 @@ export interface FileRouteTypes {
     | '/redeem'
     | '/requests'
     | '/transactions'
-    | '/unit-trusts'
     | '/vstock'
     | '/unit-trusts/$subAccountId'
+    | '/unit-trusts'
   id:
     | '__root__'
     | '/'
@@ -217,6 +226,7 @@ export interface FileRouteTypes {
     | '/unit-trusts'
     | '/vstock'
     | '/unit-trusts/$subAccountId'
+    | '/unit-trusts/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -344,6 +354,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/unit-trusts/': {
+      id: '/unit-trusts/'
+      path: '/'
+      fullPath: '/unit-trusts/'
+      preLoaderRoute: typeof UnitTrustsIndexRouteImport
+      parentRoute: typeof UnitTrustsRoute
+    }
     '/unit-trusts/$subAccountId': {
       id: '/unit-trusts/$subAccountId'
       path: '/$subAccountId'
@@ -356,10 +373,12 @@ declare module '@tanstack/react-router' {
 
 interface UnitTrustsRouteChildren {
   UnitTrustsSubAccountIdRoute: typeof UnitTrustsSubAccountIdRoute
+  UnitTrustsIndexRoute: typeof UnitTrustsIndexRoute
 }
 
 const UnitTrustsRouteChildren: UnitTrustsRouteChildren = {
   UnitTrustsSubAccountIdRoute: UnitTrustsSubAccountIdRoute,
+  UnitTrustsIndexRoute: UnitTrustsIndexRoute,
 }
 
 const UnitTrustsRouteWithChildren = UnitTrustsRoute._addFileChildren(
