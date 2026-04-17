@@ -253,13 +253,7 @@ function Invest() {
           </select>
         </div>
 
-        {/* Deutsche Bank tip — instant only */}
-        {method === "instant" && showDeutscheBanner && (
-          <div className="flex items-start gap-2 p-3 rounded-xl border" style={{ background: "color-mix(in oklch, var(--portfolio-pink) 12%, transparent)", borderColor: "color-mix(in oklch, var(--portfolio-pink) 30%, transparent)" }}>
-            <Lightbulb className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-pink)" }} />
-            <p className="text-[11px]" style={{ color: "var(--portfolio-pink)" }}>Tip: Pay via Deutsche Bank next time — no proof of payment needed!</p>
-          </div>
-        )}
+        {/* Deutsche Bank tip is only for Bank Transfer (Pay To), not Direct Invest */}
 
         {/* Bank transfer: Pay To account dropdown */}
         {method === "bank" && (
