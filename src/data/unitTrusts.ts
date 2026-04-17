@@ -24,6 +24,9 @@ export interface SubAccount {
   dotColor: string;
   goalTarget?: number;
   goalLabel?: string;
+  goalDeadline?: string; // ISO
+  units?: number;
+  navPerUnit?: number;
   createdAt: string; // ISO
   activity: ActivityEntry[];
 }
@@ -64,6 +67,9 @@ export const funds: Fund[] = [
         returnPct: "+3.4%",
         dotColor: "oklch(0.6 0.2 260)",
         goalTarget: 2000000,
+        goalDeadline: "2032-12-31",
+        units: 35420.18,
+        navPerUnit: 19.76,
         createdAt: "2022-08-12",
         activity: [
           { type: "invest", amount: 50000, date: "2026-04-02", method: "Standing order" },
@@ -85,6 +91,8 @@ export const funds: Fund[] = [
         earningsAllNum: 22400,
         returnPct: "+2.9%",
         dotColor: "oklch(0.55 0.25 290)",
+        units: 17820.45,
+        navPerUnit: 19.64,
         createdAt: "2023-03-04",
         activity: [
           { type: "invest", amount: 20000, date: "2026-03-30", method: "Standing order" },
@@ -105,6 +113,8 @@ export const funds: Fund[] = [
         earningsAllNum: 17600,
         returnPct: "+2.6%",
         dotColor: "oklch(0.65 0.18 155)",
+        units: 7640.12,
+        navPerUnit: 19.63,
         createdAt: "2023-06-21",
         activity: [
           { type: "invest", amount: 10000, date: "2026-04-09", method: "Bank transfer" },
@@ -137,6 +147,9 @@ export const funds: Fund[] = [
         dotColor: "oklch(0.6 0.2 260)",
         goalTarget: 1000000,
         goalLabel: "First million",
+        goalDeadline: "2027-06-30",
+        units: 22480.65,
+        navPerUnit: 24.47,
         createdAt: "2023-01-15",
         activity: [
           { type: "invest", amount: 75000, date: "2026-04-10", method: "Bank transfer" },
@@ -158,6 +171,8 @@ export const funds: Fund[] = [
         earningsAllNum: 39700,
         returnPct: "+5.4%",
         dotColor: "oklch(0.65 0.18 155)",
+        units: 12260.31,
+        navPerUnit: 24.47,
         createdAt: "2023-09-02",
         activity: [
           { type: "invest", amount: 30000, date: "2026-03-28", method: "Bank transfer" },
@@ -189,6 +204,8 @@ export const funds: Fund[] = [
         earningsAllNum: 11449,
         returnPct: "+2.1%",
         dotColor: "oklch(0.65 0.18 155)",
+        units: 20100.00,
+        navPerUnit: 19.90,
         createdAt: "2024-02-19",
         activity: [
           { type: "invest", amount: 50000, date: "2026-04-12", method: "Bank transfer" },
