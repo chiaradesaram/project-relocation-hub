@@ -412,6 +412,8 @@ function Invest() {
           {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Send Request"}
         </button>
       </div>
+
+      <HelpFAQ items={faqByMethod[method]} />
     </MobileLayout>
   );
 }
