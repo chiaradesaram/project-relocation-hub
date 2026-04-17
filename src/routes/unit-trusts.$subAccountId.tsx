@@ -336,15 +336,6 @@ function SubAccountDetail() {
           </div>
         </div>
 
-        <Link
-          to="/transactions"
-          className="mt-2 flex items-center justify-between rounded-xl border border-border/30 bg-card/40 px-4 py-2.5 transition hover:bg-muted/10"
-        >
-          <span className="text-xs font-medium text-foreground">
-            View all transactions
-          </span>
-          <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-        </Link>
       </section>
 
     </MobileLayout>
