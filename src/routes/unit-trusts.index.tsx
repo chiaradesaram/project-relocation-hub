@@ -221,10 +221,7 @@ function UnitTrustPortfolio() {
                             </span>
                           )}
                           <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
-                            7d {sub.earnings7d}
-                          </span>
-                          <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
-                            30d {sub.earnings30d}
+                            All {sub.earningsAll}
                           </span>
                         </div>
                       </Link>
