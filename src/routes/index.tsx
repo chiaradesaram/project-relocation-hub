@@ -158,69 +158,75 @@ function Dashboard() {
       </div>
 
       <div className="mx-4 mt-4">
-        <h3 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portfolio</h3>
-        <div className="divide-y divide-border/30 rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md">
-          {portfolioItems.map((item) => {
-            const Icon = item.icon;
-            return (
-              <button
-                key={item.name}
-                onClick={() => navigate({ to: item.path })}
-                className="flex w-full items-center gap-3 px-4 py-3.5 transition hover:bg-muted/10"
-              >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ backgroundColor: `${item.color}1a` }}>
-                  <Icon className="h-4 w-4" style={{ color: item.color }} />
-                </div>
-                <div className="min-w-0 flex-1 text-left">
-                  <p className="text-sm font-medium text-foreground">{item.name}</p>
-                </div>
-                {item.status ? (
-                  <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-medium text-foreground">
-                    {item.status}
-                  </span>
-                ) : (
-                  <div className="flex shrink-0 items-center gap-3 text-right">
-                    <p className="text-sm font-medium text-foreground">LKR {item.value}</p>
-                    <p className="text-xs font-medium text-success">{item.earnings30d}</p>
+        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden">
+          <h3 className="px-4 pt-3 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Portfolio</h3>
+          <div className="divide-y divide-border/30 border-t border-border/30">
+            {portfolioItems.map((item) => {
+              const Icon = item.icon;
+              return (
+                <button
+                  key={item.name}
+                  onClick={() => navigate({ to: item.path })}
+                  className="flex w-full items-center gap-3 px-4 py-3.5 transition hover:bg-muted/10"
+                >
+                  <div className="flex h-8 w-8 items-center justify-center rounded-full" style={{ backgroundColor: `${item.color}1a` }}>
+                    <Icon className="h-4 w-4" style={{ color: item.color }} />
                   </div>
-                )}
-                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-              </button>
-            );
-          })}
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-sm font-medium text-foreground">{item.name}</p>
+                  </div>
+                  {item.status ? (
+                    <span className="rounded-full bg-muted px-2.5 py-1 text-[11px] font-medium text-foreground">
+                      {item.status}
+                    </span>
+                  ) : (
+                    <div className="flex shrink-0 items-center gap-3 text-right">
+                      <p className="text-sm font-medium text-foreground">LKR {item.value}</p>
+                      <p className="text-xs font-medium text-success">{item.earnings30d}</p>
+                    </div>
+                  )}
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       <div className="mx-4 mt-4">
-        <div className="mb-2 flex items-center justify-between px-1">
-          <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Market Overview</h3>
-          <button onClick={() => navigate({ to: "/rates" })} className="text-[10px] font-medium text-primary">See All</button>
-        </div>
-        <div className="divide-y divide-border/30 rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md">
-          {marketData.map((item) => (
-            <div key={item.name} className="flex items-center justify-between px-4 py-3">
-              <p className="text-sm font-medium text-foreground">{item.name}</p>
-              <p className="text-sm text-foreground">{item.value}</p>
-              <p className={`text-xs font-medium ${item.positive ? "text-success" : "text-destructive"}`}>
-                {item.change}
-              </p>
-            </div>
-          ))}
+        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden">
+          <div className="flex items-center justify-between px-4 pt-3 pb-2">
+            <h3 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Market Overview</h3>
+            <button onClick={() => navigate({ to: "/rates" })} className="text-[10px] font-medium text-primary">See All</button>
+          </div>
+          <div className="divide-y divide-border/30 border-t border-border/30">
+            {marketData.map((item) => (
+              <div key={item.name} className="flex items-center justify-between px-4 py-3">
+                <p className="text-sm font-medium text-foreground">{item.name}</p>
+                <p className="text-sm text-foreground">{item.value}</p>
+                <p className={`text-xs font-medium ${item.positive ? "text-success" : "text-destructive"}`}>
+                  {item.change}
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
 
       <div className="mx-4 mt-4 mb-4">
-        <h3 className="mb-2 px-1 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick Actions</h3>
-        <div className="flex gap-2">
-          {[
-            { icon: Zap, label: "Invest Now", action: () => setShowActionPicker("invest") },
-            { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
-          ].map(({ icon: Icon, label, action }) => (
-            <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1.5 rounded-2xl border border-border/30 bg-card/60 p-3 backdrop-blur-md transition hover:bg-primary/5">
-              <Icon className="h-5 w-5 text-muted-foreground" />
-              <span className="text-[10px] font-medium text-foreground">{label}</span>
-            </button>
-          ))}
+        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md overflow-hidden p-3">
+          <h3 className="px-1 pb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">Quick Actions</h3>
+          <div className="flex gap-2">
+            {[
+              { icon: Zap, label: "Invest Now", action: () => setShowActionPicker("invest") },
+              { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
+            ].map(({ icon: Icon, label, action }) => (
+              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1.5 rounded-xl border border-border/30 bg-card/40 p-3 transition hover:bg-primary/5">
+                <Icon className="h-5 w-5 text-muted-foreground" />
+                <span className="text-[10px] font-medium text-foreground">{label}</span>
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </MobileLayout>
