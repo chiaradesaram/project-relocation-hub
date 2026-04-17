@@ -13,6 +13,7 @@ import { Route as VstockRouteImport } from './routes/vstock'
 import { Route as UnitTrustsRouteImport } from './routes/unit-trusts'
 import { Route as TransactionsRouteImport } from './routes/transactions'
 import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MoreRouteImport } from './routes/more'
@@ -42,6 +43,11 @@ const TransactionsRoute = TransactionsRouteImport.update({
 const RequestsRoute = RequestsRouteImport.update({
   id: '/requests',
   path: '/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedeemRoute = RedeemRouteImport.update({
+  id: '/redeem',
+  path: '/redeem',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RatesRoute = RatesRouteImport.update({
@@ -106,6 +112,7 @@ export interface FileRoutesByFullPath {
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
+  '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
   '/unit-trusts': typeof UnitTrustsRoute
@@ -122,6 +129,7 @@ export interface FileRoutesByTo {
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
+  '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
   '/unit-trusts': typeof UnitTrustsRoute
@@ -139,6 +147,7 @@ export interface FileRoutesById {
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
+  '/redeem': typeof RedeemRoute
   '/requests': typeof RequestsRoute
   '/transactions': typeof TransactionsRoute
   '/unit-trusts': typeof UnitTrustsRoute
@@ -157,6 +166,7 @@ export interface FileRouteTypes {
     | '/more'
     | '/profile'
     | '/rates'
+    | '/redeem'
     | '/requests'
     | '/transactions'
     | '/unit-trusts'
@@ -173,6 +183,7 @@ export interface FileRouteTypes {
     | '/more'
     | '/profile'
     | '/rates'
+    | '/redeem'
     | '/requests'
     | '/transactions'
     | '/unit-trusts'
@@ -189,6 +200,7 @@ export interface FileRouteTypes {
     | '/more'
     | '/profile'
     | '/rates'
+    | '/redeem'
     | '/requests'
     | '/transactions'
     | '/unit-trusts'
@@ -206,6 +218,7 @@ export interface RootRouteChildren {
   MoreRoute: typeof MoreRoute
   ProfileRoute: typeof ProfileRoute
   RatesRoute: typeof RatesRoute
+  RedeemRoute: typeof RedeemRoute
   RequestsRoute: typeof RequestsRoute
   TransactionsRoute: typeof TransactionsRoute
   UnitTrustsRoute: typeof UnitTrustsRoute
@@ -240,6 +253,13 @@ declare module '@tanstack/react-router' {
       path: '/requests'
       fullPath: '/requests'
       preLoaderRoute: typeof RequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redeem': {
+      id: '/redeem'
+      path: '/redeem'
+      fullPath: '/redeem'
+      preLoaderRoute: typeof RedeemRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/rates': {
@@ -326,6 +346,7 @@ const rootRouteChildren: RootRouteChildren = {
   MoreRoute: MoreRoute,
   ProfileRoute: ProfileRoute,
   RatesRoute: RatesRoute,
+  RedeemRoute: RedeemRoute,
   RequestsRoute: RequestsRoute,
   TransactionsRoute: TransactionsRoute,
   UnitTrustsRoute: UnitTrustsRoute,
@@ -334,3 +355,12 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
