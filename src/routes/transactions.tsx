@@ -151,9 +151,7 @@ function Transactions() {
                   {tx.status}
                 </span>
               </div>
-              <p className="text-[10px] text-muted-foreground truncate">
-                {tx.kind} · {tx.subAccount}
-              </p>
+              <p className="text-[10px] text-muted-foreground truncate">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
                 <div className="mt-1 space-y-0.5">
                   <p className="text-[9px] text-muted-foreground/80">
