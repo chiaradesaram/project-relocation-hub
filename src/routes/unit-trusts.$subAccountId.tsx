@@ -53,19 +53,6 @@ export const Route = createFileRoute("/unit-trusts/$subAccountId")({
   ),
 });
 
-const formatLKR = (n: number) => `LKR ${n.toLocaleString("en-LK")}`;
-const formatDate = (iso: string) =>
-  new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-const monthsBetween = (from: Date, to: Date) => {
-  const months =
-    (to.getFullYear() - from.getFullYear()) * 12 +
-    (to.getMonth() - from.getMonth());
-  return Math.max(months, 0);
-};
 
 function SubAccountDetail() {
   const { sub } = Route.useLoaderData();
@@ -111,49 +98,30 @@ function SubAccountDetail() {
         <p className="text-3xl font-bold tracking-tight text-foreground mt-2">
           {sub.value}
         </p>
-        <div className="mt-2 flex items-center justify-center gap-3 text-[11px]">
-          <span className="text-muted-foreground">
-            7d <span className="font-medium text-success">{sub.earnings7d}</span>
-          </span>
-          <span className="text-muted-foreground">
-            30d <span className="font-medium text-success">{sub.earnings30d}</span>
-          </span>
-          <span className="text-muted-foreground">
-            All <span className="font-medium text-success">{sub.earningsAll}</span>
-          </span>
-        </div>
       </div>
 
-      {/* Primary CTA + secondary actions */}
-      <div className="mx-4 mt-5 space-y-2">
+      {/* Invest + Redeem in one row */}
+      <div className="mx-4 mt-5 flex gap-2">
         <button
           onClick={() =>
             navigate({ to: "/invest", search: { product: "unit-trust" } })
           }
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 font-medium text-primary-foreground shadow-sm transition hover:opacity-90"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-primary py-3 font-medium text-primary-foreground shadow-sm transition hover:opacity-90"
         >
           <Plus className="h-4 w-4" />
-          <span className="text-sm">Add money to {sub.name}</span>
+          <span className="text-sm">Invest</span>
         </button>
-        <div className="flex gap-2">
-          <button
-            onClick={() =>
-              navigate({ to: "/redeem", search: { product: "unit-trust" } })
-            }
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
-          >
-            <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-foreground">Redeem</span>
-          </button>
-          <Link
-            to="/transactions"
-            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
-          >
-            <Calendar className="h-4 w-4 text-muted-foreground" />
-            <span className="text-xs font-medium text-foreground">History</span>
-          </Link>
-        </div>
+        <button
+          onClick={() =>
+            navigate({ to: "/redeem", search: { product: "unit-trust" } })
+          }
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-3 backdrop-blur-md transition hover:bg-muted/10"
+        >
+          <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
+          <span className="text-sm font-medium text-foreground">Redeem</span>
+        </button>
       </div>
+
 
       {/* Goal — promoted, richer */}
       {hasGoal && (
@@ -203,15 +171,6 @@ function SubAccountDetail() {
               </div>
             )}
 
-            <button
-              onClick={() =>
-                navigate({ to: "/invest", search: { product: "unit-trust" } })
-              }
-              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 py-2 text-xs font-medium text-primary transition hover:bg-primary/10"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Add to this goal
-            </button>
           </div>
         </section>
       )}
@@ -388,31 +347,6 @@ function SubAccountDetail() {
         </Link>
       </section>
 
-      {/* Account info */}
-      <section className="mx-4 mt-4 mb-8">
-        <div className="rounded-2xl border border-border/30 bg-card/40 p-4 space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">
-              Sub-account
-            </span>
-            <span className="text-[11px] font-medium text-foreground">
-              {sub.name}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">Fund</span>
-            <span className="text-[11px] font-medium text-foreground">
-              {sub.fundName}
-            </span>
-          </div>
-          <div className="flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">Opened</span>
-            <span className="text-[11px] font-medium text-foreground">
-              {formatDate(sub.createdAt)}
-            </span>
-          </div>
-        </div>
-      </section>
     </MobileLayout>
   );
 }
