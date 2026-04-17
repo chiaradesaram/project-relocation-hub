@@ -218,8 +218,8 @@ function UnitTrustPortfolio() {
         <button
           onClick={() =>
             navigate({
-              to: "/invest",
-              search: { product: "unit-trust", action: "redeem" },
+              to: "/redeem",
+              search: { product: "unit-trust" },
             })
           }
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"

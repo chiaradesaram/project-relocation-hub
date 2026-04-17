@@ -95,7 +95,11 @@ function Dashboard() {
                 key={param}
                 onClick={() => {
                   setShowActionPicker(null);
-                  navigate({ to: "/invest", search: { product: param, action: showActionPicker === "redeem" ? "redeem" : undefined } });
+                  if (showActionPicker === "redeem") {
+                    navigate({ to: "/redeem", search: { product: param } });
+                  } else {
+                    navigate({ to: "/invest", search: { product: param } });
+                  }
                 }}
                 className="mb-2 flex w-full items-center gap-3 rounded-xl bg-secondary p-4 transition hover:bg-muted/50"
               >

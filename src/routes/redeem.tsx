@@ -50,7 +50,7 @@ function Redeem() {
 
   return (
     <MobileLayout>
-      <PageHeader title="Redeem" showBack helpTopic="redeem" />
+      <PageHeader title="Redeem" showBack />
 
       {/* Method Selector */}
       <div className="mx-4 mt-2">
