@@ -224,7 +224,7 @@ function Redeem() {
       {/* Submit */}
       <div className="mx-4 mt-3 mb-6">
         <button
-          disabled={!acceptedTerms || overInstantLimit}
+          disabled={!acceptedTerms || overInstantLimit || overBalance}
           onClick={() => navigate({ to: "/transactions" })}
           className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
