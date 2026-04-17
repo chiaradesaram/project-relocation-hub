@@ -128,17 +128,6 @@ function Redeem() {
             <option value="">Select fund</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
           </select>
-          {selectedFund && (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/rates" })}
-              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium"
-              style={{ color: "var(--portfolio-blue)" }}
-            >
-              View fund rates
-              <ExternalLink className="w-2.5 h-2.5" />
-            </button>
-          )}
         </div>
         <div>
           <label className="text-[10px] text-muted-foreground">Sub Account</label>
