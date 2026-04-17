@@ -78,7 +78,7 @@ export const Route = createFileRoute("/help")({
 
 function HelpPage() {
   const { topic } = Route.useSearch();
-  const active: HelpTopic = topic && faqByTopic[topic] ? topic : "general";
+  const active: HelpTopic = topic && topic in faqByTopic ? topic : "general";
   const { title, intro, items } = faqByTopic[active];
   const [openIdx, setOpenIdx] = useState<number | null>(0);
 
