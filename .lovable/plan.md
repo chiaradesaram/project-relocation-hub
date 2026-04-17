@@ -1,59 +1,44 @@
 
+What I found
 
-# Plan: Migrate CAL Digital Dashboard to This Project
+- The click is wired up: each sub-account row already links to `/unit-trusts/$subAccountId`.
+- The detailed page also already exists in `src/routes/unit-trusts.$subAccountId.tsx`.
+- The real bug is routing structure: `src/routes/unit-trusts.tsx` is acting like the parent route for that detail page, but it does not render an `<Outlet />`.
+- So the URL can change to something like `/unit-trusts/fi-emergency`, while the detail screen never mounts. That makes it feel like “nothing happens”.
 
-## Summary
+Plan
 
-Your other project is a mobile-first financial dashboard app (CAL Digital) built with React Router v6 + Tailwind CSS v3. This project uses TanStack Start + Tailwind CSS v4. I'll recreate all 12 pages and 3 shared components, adapting the routing and styling to work with the current stack.
+1. Refactor `/unit-trusts` into a proper layout route
+   - Update `src/routes/unit-trusts.tsx` so it renders an `<Outlet />` instead of holding the portfolio screen directly.
 
-## What Gets Migrated
+2. Move the current portfolio screen into an index child route
+   - Create `src/routes/unit-trusts.index.tsx`.
+   - Move the existing Unit Trusts list UI there so `/unit-trusts` still shows the portfolio list.
 
-**Pages (12 total) -> TanStack Start route files:**
+3. Keep the detail page as the child route
+   - Leave `src/routes/unit-trusts.$subAccountId.tsx` as the detailed page for Emergency, Retirement, Growth, etc.
+   - Reuse the richer content already in that file: goal details, add money CTA, holdings, last invested date/amount, last redeemed date/amount.
 
-| Source page | New route file | URL |
-|---|---|---|
-| Dashboard.tsx | `src/routes/index.tsx` | `/` |
-| Invest.tsx | `src/routes/invest.tsx` | `/invest` |
-| Transactions.tsx | `src/routes/transactions.tsx` | `/transactions` |
-| Analytical.tsx | `src/routes/analytical.tsx` | `/analytical` |
-| More.tsx | `src/routes/more.tsx` | `/more` |
-| Rates.tsx | `src/routes/rates.tsx` | `/rates` |
-| Learn.tsx | `src/routes/learn.tsx` | `/learn` |
-| VStock.tsx | `src/routes/vstock.tsx` | `/vstock` |
-| BankAccounts.tsx | `src/routes/bank-accounts.tsx` | `/bank-accounts` |
-| Profile.tsx | `src/routes/profile.tsx` | `/profile` |
-| UnitTrustPortfolio.tsx | `src/routes/unit-trusts.tsx` | `/unit-trusts` |
-| Requests.tsx | `src/routes/requests.tsx` | `/requests` |
+4. Verify the navigation flow
+   - Tapping any sub-account row or chevron should open the matching detail page.
+   - The back button should return to the Unit Trusts list.
+   - `/unit-trusts` should still show the normal portfolio overview.
 
-**Shared components (3):**
-- `src/components/BottomNav.tsx` — mobile bottom navigation bar
-- `src/components/MobileLayout.tsx` — layout wrapper with bottom nav
-- `src/components/PageHeader.tsx` — back button + title header
+Technical details
 
-## Key Adaptations
+```text
+Current structure
+/unit-trusts                  -> portfolio page
+/unit-trusts/$subAccountId    -> child detail route
+Problem: parent route does not render <Outlet />
 
-1. **Routing**: Replace all `react-router-dom` imports (`useNavigate`, `useLocation`, `NavLink`) with TanStack Router equivalents (`Link`, `useNavigate`, `useLocation` from `@tanstack/react-router`).
+Fixed structure
+unit-trusts.tsx               -> layout route with <Outlet />
+unit-trusts.index.tsx         -> portfolio list page
+unit-trusts.$subAccountId.tsx -> full detail page
+```
 
-2. **Styling**: The original uses Tailwind v3 with HSL color variables. This project uses Tailwind v4 with oklch. I'll convert the dark theme colors (purple/pink gradient palette) to oklch format and add custom utility classes (`glass-card`, `gradient-primary`, `gradient-portfolio`, `text-gradient`, `nav-glass`) plus the custom `--success`, `--warning`, and `--portfolio-*` variables to `src/styles.css`.
+Expected result
 
-3. **Root layout**: Update `__root.tsx` to include the Inter font import and set the app title to "CAL Digital".
-
-4. **Mock data stays**: All portfolio values, fund data, transactions, etc. remain as hardcoded demo data — no backend needed.
-
-## Technical Details
-
-- **No new dependencies needed** — all required packages (lucide-react, recharts, etc.) are already installed.
-- The dark theme is the only theme (no light mode toggle in the original).
-- The original `App.css` is just Vite boilerplate and can be ignored.
-- `NavLink.tsx` from the source is a react-router-dom wrapper — not needed since TanStack Router's `Link` has built-in active state support.
-
-## Implementation Order
-
-1. Update `src/styles.css` with the dark theme colors and custom utility classes
-2. Update `__root.tsx` with Inter font and dark class
-3. Create shared components: `MobileLayout`, `BottomNav`, `PageHeader`
-4. Create all 12 route files with adapted code
-5. Verify the build compiles
-
-This will be a large set of file changes (~15 new/modified files). Shall I proceed?
-
+- Clicking Emergency / Retirement / other sub-accounts will actually open the detailed screen instead of seeming unresponsive.
+- This fixes the navigation bug without changing the URL structure you already wanted.
