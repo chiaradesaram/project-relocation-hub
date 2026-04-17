@@ -140,10 +140,13 @@ function Invest() {
       {method === "instant" && investType === "new" && (
         <div className="mx-4 mt-3 glass-card p-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-foreground">Set Recurring</span>
+            <span className="text-xs text-foreground flex items-center gap-2">
+              <Repeat className={`w-3.5 h-3.5 transition-colors ${isRecurring ? "text-success" : "text-muted-foreground"}`} />
+              Set Recurring
+            </span>
             <button
               onClick={() => setIsRecurring(!isRecurring)}
-              className={`w-9 h-5 rounded-full transition-all flex items-center ${isRecurring ? "bg-primary" : "bg-muted"}`}
+              className={`w-9 h-5 rounded-full transition-all flex items-center ${isRecurring ? "bg-success" : "bg-muted"}`}
             >
               <div className={`w-4 h-4 rounded-full bg-white shadow-md transition-transform ${isRecurring ? "translate-x-4" : "translate-x-0.5"}`} />
             </button>
