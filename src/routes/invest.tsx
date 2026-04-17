@@ -45,10 +45,13 @@ function Invest() {
   ];
 
   const methodInfo: Record<InvestMethod, string> = {
-    instant: "Direct Invest. Instant payment. Max LKR 150k per transfer — multiple allowed.",
+    instant: "Direct Invest by linking your bank account directly with the app. Max LKR 149,950 per transfer — multiple allowed.",
     bank: "Standard bank transfer. Any amount. Proof required unless paying to Deutsche Bank. 1-2 business days.",
     flip: "Move funds between CAL accounts instantly. No fees.",
   };
+
+  const [showJustpayInfo, setShowJustpayInfo] = useState(false);
+  const [showDeutscheDetails, setShowDeutscheDetails] = useState(false);
 
   const showDeutscheBanner = selectedBank && !selectedBank.includes("Deutsche");
 
