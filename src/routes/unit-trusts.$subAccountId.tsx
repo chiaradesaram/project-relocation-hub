@@ -9,6 +9,9 @@ import {
   Target,
   Calendar,
   ChevronRight,
+  Plus,
+  Wallet,
+  Info,
 } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/$subAccountId")({
@@ -43,6 +46,12 @@ const formatDate = (iso: string) =>
     month: "short",
     year: "numeric",
   });
+const monthsBetween = (from: Date, to: Date) => {
+  const months =
+    (to.getFullYear() - from.getFullYear()) * 12 +
+    (to.getMonth() - from.getMonth());
+  return Math.max(months, 0);
+};
 
 function SubAccountDetail() {
   const { sub } = Route.useLoaderData();
@@ -51,11 +60,24 @@ function SubAccountDetail() {
   const lastInvest = sub.activity.find((a: ActivityEntry) => a.type === "invest");
   const lastRedeem = sub.activity.find((a: ActivityEntry) => a.type === "redeem");
 
+  const totalInvested = sub.activity
+    .filter((a: ActivityEntry) => a.type === "invest")
+    .reduce((s: number, a: ActivityEntry) => s + a.amount, 0);
+  const totalRedeemed = sub.activity
+    .filter((a: ActivityEntry) => a.type === "redeem")
+    .reduce((s: number, a: ActivityEntry) => s + a.amount, 0);
+
   const hasGoal = !!sub.goalTarget;
   const progress = hasGoal
     ? Math.min((sub.valueNum / sub.goalTarget!) * 100, 100)
     : 0;
   const remaining = hasGoal ? Math.max(sub.goalTarget! - sub.valueNum, 0) : 0;
+  const monthsToGoal =
+    hasGoal && sub.goalDeadline
+      ? monthsBetween(new Date(), new Date(sub.goalDeadline))
+      : 0;
+  const monthlyNeeded =
+    hasGoal && monthsToGoal > 0 ? Math.ceil(remaining / monthsToGoal) : null;
 
   return (
     <MobileLayout>
@@ -88,27 +110,97 @@ function SubAccountDetail() {
         </div>
       </div>
 
-      {/* Quick actions */}
-      <div className="mx-4 mt-4 flex gap-2">
+      {/* Primary CTA + secondary actions */}
+      <div className="mx-4 mt-5 space-y-2">
         <button
           onClick={() =>
             navigate({ to: "/invest", search: { product: "unit-trust" } })
           }
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
+          className="flex w-full items-center justify-center gap-2 rounded-xl bg-primary py-3 font-medium text-primary-foreground shadow-sm transition hover:opacity-90"
         >
-          <ArrowUpRight className="h-4 w-4 text-success" />
-          <span className="text-xs font-medium text-foreground">Invest</span>
+          <Plus className="h-4 w-4" />
+          <span className="text-sm">Add money to {sub.name}</span>
         </button>
-        <button
-          onClick={() =>
-            navigate({ to: "/redeem", search: { product: "unit-trust" } })
-          }
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
-        >
-          <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
-          <span className="text-xs font-medium text-foreground">Redeem</span>
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() =>
+              navigate({ to: "/redeem", search: { product: "unit-trust" } })
+            }
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
+          >
+            <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs font-medium text-foreground">Redeem</span>
+          </button>
+          <Link
+            to="/transactions"
+            className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
+          >
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+            <span className="text-xs font-medium text-foreground">History</span>
+          </Link>
+        </div>
       </div>
+
+      {/* Goal — promoted, richer */}
+      {hasGoal && (
+        <section className="mx-4 mt-5">
+          <div className="mb-2 flex items-center gap-1.5">
+            <Target className="h-3.5 w-3.5 text-muted-foreground" />
+            <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+              Goal
+            </h2>
+          </div>
+          <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md p-4">
+            <div className="flex items-baseline justify-between">
+              <div>
+                <p className="text-sm font-medium text-foreground">
+                  {sub.goalLabel ?? `${sub.name} goal`}
+                </p>
+                <p className="text-[11px] text-muted-foreground">
+                  Target {formatLKR(sub.goalTarget!)}
+                  {sub.goalDeadline && ` · by ${formatDate(sub.goalDeadline)}`}
+                </p>
+              </div>
+              <p className="text-lg font-semibold text-primary">
+                {Math.round(progress)}%
+              </p>
+            </div>
+            <div className="mt-3 h-2 rounded-full bg-border/30 overflow-hidden">
+              <div
+                className="h-full rounded-full bg-primary transition-all duration-500"
+                style={{ width: `${progress}%` }}
+              />
+            </div>
+            <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+              <span>{sub.value}</span>
+              <span>{formatLKR(remaining)} to go</span>
+            </div>
+
+            {monthlyNeeded !== null && (
+              <div className="mt-3 rounded-xl bg-primary/10 border border-primary/20 px-3 py-2.5 flex items-start gap-2">
+                <Info className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
+                <p className="text-[11px] text-foreground/90 leading-relaxed">
+                  Add{" "}
+                  <span className="font-semibold text-primary">
+                    {formatLKR(monthlyNeeded)}
+                  </span>{" "}
+                  per month for {monthsToGoal} months to reach your goal.
+                </p>
+              </div>
+            )}
+
+            <button
+              onClick={() =>
+                navigate({ to: "/invest", search: { product: "unit-trust" } })
+              }
+              className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-primary/30 bg-primary/5 py-2 text-xs font-medium text-primary transition hover:bg-primary/10"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Add to this goal
+            </button>
+          </div>
+        </section>
+      )}
 
       {/* Performance card */}
       <section className="mx-4 mt-5">
@@ -156,39 +248,52 @@ function SubAccountDetail() {
         </div>
       </section>
 
-      {/* Goal */}
-      {hasGoal && (
-        <section className="mx-4 mt-4">
-          <div className="mb-2 flex items-center gap-1.5">
-            <Target className="h-3.5 w-3.5 text-muted-foreground" />
-            <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
-              Goal
-            </h2>
-          </div>
-          <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md p-4">
-            <div className="flex items-baseline justify-between">
-              <p className="text-sm font-medium text-foreground">
-                {sub.goalLabel}
-              </p>
-              <p className="text-xs font-semibold text-primary">
-                {Math.round(progress)}%
-              </p>
-            </div>
-            <div className="mt-2 h-1.5 rounded-full bg-border/30 overflow-hidden">
-              <div
-                className="h-full rounded-full bg-primary transition-all duration-500"
-                style={{ width: `${progress}%` }}
-              />
-            </div>
-            <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
-              <span>
-                {sub.value} of {formatLKR(sub.goalTarget!)}
+      {/* Holdings breakdown */}
+      <section className="mx-4 mt-4">
+        <div className="mb-2 flex items-center gap-1.5">
+          <Wallet className="h-3.5 w-3.5 text-muted-foreground" />
+          <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Holdings
+          </h2>
+        </div>
+        <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md p-4 space-y-2.5">
+          {sub.units !== undefined && (
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-muted-foreground">Units held</span>
+              <span className="text-xs font-medium text-foreground">
+                {sub.units.toLocaleString("en-LK", { maximumFractionDigits: 2 })}
               </span>
-              <span>{formatLKR(remaining)} to go</span>
             </div>
+          )}
+          {sub.navPerUnit !== undefined && (
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-muted-foreground">NAV / unit</span>
+              <span className="text-xs font-medium text-foreground">
+                LKR {sub.navPerUnit.toFixed(2)}
+              </span>
+            </div>
+          )}
+          <div className="border-t border-border/20" />
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] text-muted-foreground">Total invested</span>
+            <span className="text-xs font-medium text-foreground">
+              {formatLKR(totalInvested)}
+            </span>
           </div>
-        </section>
-      )}
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] text-muted-foreground">Total redeemed</span>
+            <span className="text-xs font-medium text-foreground">
+              {formatLKR(totalRedeemed)}
+            </span>
+          </div>
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] text-muted-foreground">Net contributed</span>
+            <span className="text-xs font-semibold text-foreground">
+              {formatLKR(totalInvested - totalRedeemed)}
+            </span>
+          </div>
+        </div>
+      </section>
 
       {/* Recent activity */}
       <section className="mx-4 mt-4">
