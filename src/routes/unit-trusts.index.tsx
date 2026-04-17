@@ -119,9 +119,9 @@ function UnitTrustPortfolio() {
         </button>
         <button
           onClick={openGoalSheet}
-          className="flex items-center justify-center gap-1.5 rounded-xl border border-border/30 bg-card/60 px-3.5 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
         >
-          <Target className="h-3.5 w-3.5 text-primary" />
+          <Target className="h-4 w-4 text-primary" />
           <span className="text-xs font-medium text-foreground">Goal</span>
         </button>
       </div>
