@@ -376,7 +376,7 @@ function Invest() {
           }}
           className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Invest Now"}
+          {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Send Request"}
         </button>
       </div>
     </MobileLayout>
