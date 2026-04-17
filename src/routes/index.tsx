@@ -118,19 +118,19 @@ function Dashboard() {
       </div>
 
       <div className="mx-4 mt-2 rounded-2xl border border-primary/15 bg-card/90 p-5 backdrop-blur-md">
-        <p className="text-xs uppercase tracking-wider text-muted-foreground">Total Portfolio</p>
+        <p className="text-[10px] uppercase tracking-wider text-muted-foreground/80">Total Portfolio</p>
         <div className="mt-2 flex items-center gap-4">
           <DonutChart items={portfolioItems} />
           <div className="min-w-0 flex-1">
-            <h2 className="text-2xl font-bold tracking-tight text-foreground">LKR 7,370,000</h2>
-            <p className="mt-1 text-xs">
+            <h2 className="text-xl font-semibold tracking-tight text-foreground">LKR 7,370,000</h2>
+            <p className="mt-1 text-[11px]">
               <span className="font-medium text-success">+7.8%</span>
               <span className="text-muted-foreground"> · LKR 662,000 all time</span>
             </p>
             <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
               {portfolioItems.map((item) => (
                 <div key={item.name} className="flex items-center gap-1">
-                  <div className="h-2 w-2 rounded-full" style={{ backgroundColor: item.color }} />
+                  <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.color }} />
                   <span className="text-[9px] text-muted-foreground">{item.name}</span>
                 </div>
               ))}
