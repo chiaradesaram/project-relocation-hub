@@ -189,8 +189,32 @@ function HelpIndexPage() {
         <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-1.5">
           {isSearching
             ? `${results.length} RESULT${results.length === 1 ? "" : "S"}`
-            : "FREQUENTLY ASKED"}
+            : activeTopic === "all"
+              ? "TOP QUESTIONS"
+              : "FREQUENTLY ASKED"}
         </p>
+
+        {!isSearching && (
+          <div className="flex gap-1.5 overflow-x-auto pb-2 mb-1.5 -mx-1 px-1 [&::-webkit-scrollbar]:hidden">
+            {TOPIC_PILLS.map((pill) => {
+              const active = activeTopic === pill.id;
+              return (
+                <button
+                  key={pill.id}
+                  type="button"
+                  onClick={() => setActiveTopic(pill.id)}
+                  className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-medium border transition-colors ${
+                    active
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card/40 text-foreground border-border/40 hover:bg-muted/30"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
         {results.length === 0 ? (
           <div className="glass-card p-4 text-center">
             <p className="text-xs text-foreground font-medium">No matching answers</p>
