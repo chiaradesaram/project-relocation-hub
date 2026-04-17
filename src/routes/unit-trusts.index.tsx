@@ -213,8 +213,13 @@ function UnitTrustPortfolio() {
                           </div>
                         </div>
 
-                        {/* Earnings pills */}
-                        <div className="mt-1.5 flex items-center gap-1">
+                        {/* Earnings + tiny goal indicator, right aligned */}
+                        <div className="mt-1.5 flex items-center justify-end gap-1">
+                          {hasGoal && (
+                            <span className="rounded-full bg-primary/10 px-1.5 py-px text-[9px] font-medium text-primary">
+                              {Math.round(progress)}% of goal
+                            </span>
+                          )}
                           <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
                             7d {sub.earnings7d}
                           </span>
@@ -222,22 +227,6 @@ function UnitTrustPortfolio() {
                             30d {sub.earnings30d}
                           </span>
                         </div>
-
-                        {/* Goal progress bar */}
-                        {hasGoal && (
-                          <div className="mt-2 flex items-center gap-2">
-                            <div className="flex-1 h-[3px] rounded-full bg-border/30 overflow-hidden">
-                              <div
-                                className="h-full rounded-full bg-primary/70 transition-all duration-500"
-                                style={{ width: `${progress}%` }}
-                              />
-                            </div>
-                            <span className="text-[9px] text-muted-foreground whitespace-nowrap">
-                              {Math.round(progress)}% of{" "}
-                              {formatLKR(sub.goalTarget!)}
-                            </span>
-                          </div>
-                        )}
                       </Link>
                     );
                   })}
