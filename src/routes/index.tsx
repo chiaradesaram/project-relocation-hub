@@ -22,7 +22,7 @@ const portfolioItems = [
   {
     name: "Treasuries", value: null, earnings30d: null,
     icon: Receipt, path: "/invest?product=treasuries", percentage: 42, color: "oklch(0.6 0.2 350)",
-    status: "Submitted" as string | null,
+    status: "Continue application" as string | null,
   },
 ];
 
@@ -176,7 +176,7 @@ function Dashboard() {
                     <p className="text-[13px] font-normal text-foreground">{item.name}</p>
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-muted/70 px-2 py-0.5 text-[9px] font-normal text-muted-foreground">
+                    <span className="rounded-full bg-[oklch(0.55_0.2_250)] px-3 py-1 text-[11px] font-medium text-white">
                       {item.status}
                     </span>
                   ) : (
