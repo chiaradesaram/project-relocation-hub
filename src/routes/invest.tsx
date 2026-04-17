@@ -53,7 +53,7 @@ function Invest() {
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [showDeutscheDetails, setShowDeutscheDetails] = useState(false);
 
-  const showDeutscheBanner = selectedBank && !selectedBank.includes("Deutsche");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
 
   return (
     <MobileLayout>
@@ -253,13 +253,7 @@ function Invest() {
           </select>
         </div>
 
-        {/* Deutsche Bank tip — instant only */}
-        {method === "instant" && showDeutscheBanner && (
-          <div className="flex items-start gap-2 p-3 rounded-xl border" style={{ background: "color-mix(in oklch, var(--portfolio-pink) 12%, transparent)", borderColor: "color-mix(in oklch, var(--portfolio-pink) 30%, transparent)" }}>
-            <Lightbulb className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-pink)" }} />
-            <p className="text-[11px]" style={{ color: "var(--portfolio-pink)" }}>Tip: Pay via Deutsche Bank next time — no proof of payment needed!</p>
-          </div>
-        )}
+        {/* Deutsche Bank tip is only for Bank Transfer (Pay To), not Direct Invest */}
 
         {/* Bank transfer: Pay To account dropdown */}
         {method === "bank" && (
@@ -346,9 +340,42 @@ function Invest() {
         </div>
       )}
 
+      {/* Terms & Conditions — direct invest and bank transfer only */}
+      {method !== "flip" && (
+        <div className="mx-4 mt-3">
+          <label className="flex items-start gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-0.5 w-3.5 h-3.5 rounded accent-primary"
+            />
+            <span className="text-[11px] text-muted-foreground">
+              I agree to the <a href="#" className="text-primary underline">Terms & Conditions</a>
+            </span>
+          </label>
+        </div>
+      )}
+
       {/* Submit */}
-      <div className="mx-4 mt-4 mb-6">
-        <button className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold">
+      <div className="mx-4 mt-3 mb-6">
+        <button
+          disabled={method !== "flip" && !acceptedTerms}
+          onClick={() => {
+            if (method === "flip") return;
+            navigate({
+              to: "/invest-summary",
+              search: {
+                method,
+                amount: amount || "0",
+                fund: selectedFund,
+                account: selectedAccount,
+                bank: method === "instant" ? selectedBank : selectedPayTo,
+              },
+            });
+          }}
+          className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Invest Now"}
         </button>
       </div>
