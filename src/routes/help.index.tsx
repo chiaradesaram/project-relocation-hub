@@ -16,30 +16,42 @@ import {
 
 type HelpTopic = "invest" | "rates" | "unit-trusts" | "transactions" | "account" | "general";
 
+type FAQTopic = Exclude<HelpTopic, "general">;
+
 interface FAQItem {
   q: string;
   a: string;
-  topic: Exclude<HelpTopic, "general">;
+  topic: FAQTopic;
+  featured?: boolean;
 }
 
 const FAQS: FAQItem[] = [
-  { topic: "invest", q: "How long does Direct Invest take?", a: "Funds are debited instantly via Justpay. Your investment reflects on the portal within 1 business day." },
+  { topic: "invest", q: "How long does Direct Invest take?", a: "Funds are debited instantly via Justpay. Your investment reflects on the portal within 1 business day.", featured: true },
   { topic: "invest", q: "Why is there a LKR 149,950 limit on Direct Invest?", a: "This is the per-transfer limit set by Justpay. You can make multiple transfers in a day." },
   { topic: "invest", q: "How long do bank transfers take?", a: "Typically 1–2 business days after we receive your proof of payment and funds clear." },
   { topic: "invest", q: "Can I cancel a recurring investment?", a: "Yes — manage or delete any recurring plan from the Recurring Investments tab at any time." },
   { topic: "invest", q: "What is Flip?", a: "Flip moves funds instantly between your CAL fund accounts with no fees and no bank involved." },
   { topic: "rates", q: "How often are rates updated?", a: "Unit prices and yields are published daily on every business day after market close." },
-  { topic: "rates", q: "What is NAV?", a: "Net Asset Value — the per-unit price of a fund, calculated daily from the underlying assets." },
+  { topic: "rates", q: "What is NAV?", a: "Net Asset Value — the per-unit price of a fund, calculated daily from the underlying assets.", featured: true },
   { topic: "rates", q: "Are past returns guaranteed?", a: "No. Historical yields are indicative only and do not guarantee future performance." },
   { topic: "unit-trusts", q: "What is a unit trust?", a: "A pooled investment vehicle where your money is combined with others and managed by CAL fund managers." },
-  { topic: "unit-trusts", q: "How do I redeem units?", a: "Tap Redeem on any holding. Settlement typically takes 1–3 business days depending on the fund." },
+  { topic: "unit-trusts", q: "How do I redeem units?", a: "Tap Redeem on any holding. Settlement typically takes 1–3 business days depending on the fund.", featured: true },
   { topic: "unit-trusts", q: "Are there exit fees?", a: "Most CAL funds have no exit fee. Specific terms are listed on each fund's detail page." },
-  { topic: "transactions", q: "Why is my transaction pending?", a: "Bank transfers and certain fund operations take 1–2 business days to settle and reflect as completed." },
+  { topic: "transactions", q: "Why is my transaction pending?", a: "Bank transfers and certain fund operations take 1–2 business days to settle and reflect as completed.", featured: true },
   { topic: "transactions", q: "Can I cancel a pending transaction?", a: "Direct Invest and Flip transactions cannot be cancelled once submitted. Contact support if you need help." },
   { topic: "transactions", q: "Where can I download a statement?", a: "Tap any transaction for details, or use Statements from More to download monthly summaries." },
   { topic: "account", q: "How do I update my profile?", a: "Go to Profile from the More menu to update your contact details and preferences." },
   { topic: "account", q: "Is my money safe?", a: "All investments are held in regulated CAL custody accounts and overseen by the SEC of Sri Lanka." },
-  { topic: "account", q: "How do I add a bank account?", a: "Go to Bank Accounts from the More menu and tap Add. New accounts are verified within 1 business day." },
+  { topic: "account", q: "How do I add a bank account?", a: "Go to Bank Accounts from the More menu and tap Add. New accounts are verified within 1 business day.", featured: true },
+];
+
+const TOPIC_PILLS: { id: FAQTopic | "all"; label: string }[] = [
+  { id: "all", label: "Top" },
+  { id: "invest", label: "Invest" },
+  { id: "rates", label: "Rates" },
+  { id: "unit-trusts", label: "Unit Trusts" },
+  { id: "transactions", label: "Transactions" },
+  { id: "account", label: "Account" },
 ];
 
 const POPULAR_SEARCHES = [
@@ -77,17 +89,23 @@ function HelpIndexPage() {
   const [query, setQuery] = useState(q ?? "");
   const [focused, setFocused] = useState(false);
   const [openKey, setOpenKey] = useState<string | null>(null);
+  const [activeTopic, setActiveTopic] = useState<FAQTopic | "all">("all");
 
   const trimmed = query.trim().toLowerCase();
   const isSearching = trimmed.length > 0;
   const showPopular = focused && !isSearching;
 
   const results = useMemo(() => {
-    if (!isSearching) return FAQS;
-    return FAQS.filter(
-      (f) => f.q.toLowerCase().includes(trimmed) || f.a.toLowerCase().includes(trimmed),
-    );
-  }, [trimmed, isSearching]);
+    if (isSearching) {
+      return FAQS.filter(
+        (f) => f.q.toLowerCase().includes(trimmed) || f.a.toLowerCase().includes(trimmed),
+      );
+    }
+    if (activeTopic === "all") {
+      return FAQS.filter((f) => f.featured);
+    }
+    return FAQS.filter((f) => f.topic === activeTopic);
+  }, [trimmed, isSearching, activeTopic]);
 
   return (
     <MobileLayout>
@@ -171,8 +189,32 @@ function HelpIndexPage() {
         <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-1.5">
           {isSearching
             ? `${results.length} RESULT${results.length === 1 ? "" : "S"}`
-            : "FREQUENTLY ASKED"}
+            : activeTopic === "all"
+              ? "TOP QUESTIONS"
+              : "FREQUENTLY ASKED"}
         </p>
+
+        {!isSearching && (
+          <div className="flex gap-1.5 overflow-x-auto pb-2 mb-1.5 -mx-1 px-1 [&::-webkit-scrollbar]:hidden">
+            {TOPIC_PILLS.map((pill) => {
+              const active = activeTopic === pill.id;
+              return (
+                <button
+                  key={pill.id}
+                  type="button"
+                  onClick={() => setActiveTopic(pill.id)}
+                  className={`shrink-0 rounded-full px-3 py-1 text-[11px] font-medium border transition-colors ${
+                    active
+                      ? "bg-primary text-primary-foreground border-primary"
+                      : "bg-card/40 text-foreground border-border/40 hover:bg-muted/30"
+                  }`}
+                >
+                  {pill.label}
+                </button>
+              );
+            })}
+          </div>
+        )}
         {results.length === 0 ? (
           <div className="glass-card p-4 text-center">
             <p className="text-xs text-foreground font-medium">No matching answers</p>
