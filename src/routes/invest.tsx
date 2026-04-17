@@ -340,9 +340,42 @@ function Invest() {
         </div>
       )}
 
+      {/* Terms & Conditions — direct invest and bank transfer only */}
+      {method !== "flip" && (
+        <div className="mx-4 mt-3">
+          <label className="flex items-start gap-2 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={acceptedTerms}
+              onChange={(e) => setAcceptedTerms(e.target.checked)}
+              className="mt-0.5 w-3.5 h-3.5 rounded accent-primary"
+            />
+            <span className="text-[11px] text-muted-foreground">
+              I agree to the <a href="#" className="text-primary underline">Terms & Conditions</a>
+            </span>
+          </label>
+        </div>
+      )}
+
       {/* Submit */}
-      <div className="mx-4 mt-4 mb-6">
-        <button className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold">
+      <div className="mx-4 mt-3 mb-6">
+        <button
+          disabled={method !== "flip" && !acceptedTerms}
+          onClick={() => {
+            if (method === "flip") return;
+            navigate({
+              to: "/invest-summary",
+              search: {
+                method,
+                amount: amount || "0",
+                fund: selectedFund,
+                account: selectedAccount,
+                bank: method === "instant" ? selectedBank : selectedPayTo,
+              },
+            });
+          }}
+          className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
+        >
           {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Invest Now"}
         </button>
       </div>
