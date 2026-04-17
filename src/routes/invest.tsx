@@ -262,6 +262,30 @@ function Invest() {
                 <option key={a.accNo}>{a.bank} — {a.accNo}</option>
               ))}
             </select>
+
+            {/* Deutsche prompt — show when Pay To isn't Deutsche */}
+            {!selectedPayTo.includes("Deutsche") && (
+              <div className="mt-2 p-3 rounded-xl border border-success/30" style={{ background: "color-mix(in oklch, var(--success) 12%, transparent)" }}>
+                <div className="flex items-start gap-2">
+                  <CheckCircle2 className="w-4 h-4 text-success mt-0.5 shrink-0" />
+                  <div className="flex-1">
+                    <p className="text-[11px] font-semibold text-success">Skip proof of payment</p>
+                    <p className="text-[10px] text-muted-foreground mt-0.5">Transfer to <span className="text-foreground font-medium">Deutsche Bank</span> for instant verification — no upload needed.</p>
+                    <div className="mt-2 p-2 rounded-lg bg-card/60 space-y-0.5">
+                      <p className="text-[10px] text-muted-foreground">Bank: <span className="text-foreground font-medium">Deutsche Bank</span></p>
+                      <p className="text-[10px] text-muted-foreground">A/C: <span className="text-foreground font-medium">{calBankAccounts[0].accNo}</span></p>
+                      <p className="text-[10px] text-muted-foreground">Branch: <span className="text-foreground font-medium">{calBankAccounts[0].branch}</span></p>
+                    </div>
+                    <button
+                      onClick={() => setSelectedPayTo(`${calBankAccounts[0].bank} — ${calBankAccounts[0].accNo}`)}
+                      className="mt-2 text-[10px] font-semibold text-success underline"
+                    >
+                      Use Deutsche Bank
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
