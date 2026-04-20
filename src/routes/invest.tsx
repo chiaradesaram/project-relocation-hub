@@ -19,6 +19,7 @@ const banks = ["Deutsche Bank", "Commercial Bank", "Sampath Bank", "HNB", "BOC"]
 const calBankAccounts = [
   { bank: "Deutsche Bank", accNo: "0012 3456 789", branch: "Colombo" },
   { bank: "Commercial Bank", accNo: "8001 2345 678", branch: "Colombo 07" },
+  { bank: "HNB", accNo: "7700 1234 567", branch: "Colombo 03" },
 ];
 
 const existingRecurring = [
