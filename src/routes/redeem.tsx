@@ -19,8 +19,8 @@ const subAccountBalances: Record<string, number> = {
   "Minor Account": 75000,
 };
 const userBankAccounts = [
-  { bank: "HNB", accNo: "0098 7654 321", deprecated: true },
-  { bank: "Deutsche Bank", accNo: "1122 3344 556" },
+  { bank: "Commercial Bank", accNo: "8001 2345 678" },
+  { bank: "HNB", accNo: "0098 7654 321" },
 ];
 
 const existingPlans = [
