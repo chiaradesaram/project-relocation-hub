@@ -83,9 +83,11 @@ function Invest() {
       </div>
 
       {/* Info */}
-      <div className="mx-4 mt-3 flex items-start gap-2 p-3 rounded-xl border-l-4" style={{ background: "oklch(0.22 0.04 280)", borderColor: "var(--portfolio-blue)" }}>
-        <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-blue)" }} />
-        <p className="text-[11px] text-white/90 leading-snug">{methodInfo[method]}</p>
+      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
+        <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
+          <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
+        </div>
+        <p className="text-[11px] text-white/90 leading-snug pt-1">{methodInfo[method]}</p>
       </div>
 
       {/* Investment Type Toggle — instant only */}
@@ -294,31 +296,38 @@ function Invest() {
 
             {/* HNB deprecation warning */}
             {selectedPayTo.startsWith("HNB") && (
-              <div className="mt-2 flex items-start gap-2 p-3 rounded-xl border-l-4" style={{ background: "oklch(0.28 0.08 25)", borderColor: "oklch(0.7 0.18 25)" }}>
-                <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "oklch(0.85 0.15 25)" }} />
-                <p className="text-[11px] leading-snug" style={{ color: "oklch(0.95 0.04 25)" }}>
-                  This HNB account will be removed after May. Please use the Deutsche Bank account instead.
-                </p>
+              <div className="mt-2 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.18 0.02 280))" }}>
+                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 40%, transparent)" }}>
+                  <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
+                </div>
+                <div className="pt-0.5">
+                  <p className="text-[11px] font-semibold text-white">Account closing soon</p>
+                  <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
+                    This HNB account will be removed after May. Please use the Deutsche Bank account instead.
+                  </p>
+                </div>
               </div>
             )}
 
             {/* Deutsche prompt — show when Pay To isn't Deutsche */}
             {!selectedPayTo.includes("Deutsche") && (
-              <div className="mt-2 p-3 rounded-xl border-l-4" style={{ background: "oklch(0.22 0.04 280)", borderColor: "var(--portfolio-blue)" }}>
+              <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
                 <button
                   type="button"
                   onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
-                  className="w-full flex items-start gap-2 text-left"
+                  className="w-full flex items-start gap-3 text-left p-3.5"
                 >
-                  <Lightbulb className="w-4 h-4 mt-0.5 shrink-0" style={{ color: "var(--portfolio-blue)" }} />
-                  <div className="flex-1">
-                    <p className="text-[11px] font-semibold text-white">Pay to Deutsche Bank — skip proof of payment</p>
-                    <p className="text-[10px] text-white/70 mt-0.5">Transfers to Deutsche Bank are auto-verified, no upload needed.</p>
+                  <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
+                    <Lightbulb className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
                   </div>
-                  <ChevronDown className={`w-4 h-4 mt-0.5 shrink-0 transition-transform text-white/70 ${showDeutscheDetails ? "rotate-180" : ""}`} />
+                  <div className="flex-1 pt-0.5">
+                    <p className="text-[11px] font-semibold text-white">Skip proof of payment</p>
+                    <p className="text-[10px] text-white/75 mt-0.5 leading-snug">Pay to Deutsche Bank — transfers are auto-verified, no upload needed.</p>
+                  </div>
+                  <ChevronDown className={`w-4 h-4 mt-1 shrink-0 transition-transform text-white/60 ${showDeutscheDetails ? "rotate-180" : ""}`} />
                 </button>
                 {showDeutscheDetails && (
-                  <div className="mt-2 ml-6 p-2 rounded-lg space-y-0.5" style={{ background: "oklch(0.16 0.03 280)" }}>
+                  <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.14 0.02 280)" }}>
                     <p className="text-[10px] text-white/60">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
                     <p className="text-[10px] text-white/60">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
                     <p className="text-[10px] text-white/60">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
