@@ -172,6 +172,14 @@ function Redeem() {
             ))}
             <option value="__add_bank">+ Add Bank Account</option>
           </select>
+          {selectedBank.startsWith("HNB") && (
+            <div className="mt-2 flex items-start gap-2 p-2.5 rounded-xl bg-destructive/10 border border-destructive/20">
+              <Info className="w-3.5 h-3.5 text-destructive mt-0.5 shrink-0" />
+              <p className="text-[10px] text-destructive">
+                This HNB account will be removed after May. Please use your Deutsche Bank account instead.
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
