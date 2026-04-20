@@ -303,7 +303,7 @@ function Invest() {
                 <div className="pt-0.5">
                   <p className="text-[11px] font-semibold text-white">Account closing soon</p>
                   <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
-                    This HNB account will be removed after May. Please use the Deutsche Bank account instead.
+                    This HNB account will be removed after May. For your next investment please use the Deutsche Bank account instead.
                   </p>
                 </div>
               </div>
