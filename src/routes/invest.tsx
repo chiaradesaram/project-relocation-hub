@@ -19,6 +19,7 @@ const banks = ["Deutsche Bank", "Commercial Bank", "Sampath Bank", "HNB", "BOC"]
 const calBankAccounts = [
   { bank: "Deutsche Bank", accNo: "0012 3456 789", branch: "Colombo" },
   { bank: "Commercial Bank", accNo: "8001 2345 678", branch: "Colombo 07" },
+  { bank: "HNB", accNo: "7700 1234 567", branch: "Colombo 03" },
 ];
 
 const existingRecurring = [
@@ -290,6 +291,16 @@ function Invest() {
                 );
               })}
             </select>
+
+            {/* HNB deprecation warning */}
+            {selectedPayTo.startsWith("HNB") && (
+              <div className="mt-2 flex items-start gap-2 p-2.5 rounded-xl bg-destructive/10 border border-destructive/20">
+                <Info className="w-3.5 h-3.5 text-destructive mt-0.5 shrink-0" />
+                <p className="text-[10px] text-destructive">
+                  This HNB account will be removed after May. Please use the Deutsche Bank account instead.
+                </p>
+              </div>
+            )}
 
             {/* Deutsche prompt — show when Pay To isn't Deutsche */}
             {!selectedPayTo.includes("Deutsche") && (
