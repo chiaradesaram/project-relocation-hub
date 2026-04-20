@@ -292,6 +292,16 @@ function Invest() {
               })}
             </select>
 
+            {/* HNB deprecation warning */}
+            {selectedPayTo.startsWith("HNB") && (
+              <div className="mt-2 flex items-start gap-2 p-2.5 rounded-xl bg-destructive/10 border border-destructive/20">
+                <Info className="w-3.5 h-3.5 text-destructive mt-0.5 shrink-0" />
+                <p className="text-[10px] text-destructive">
+                  This HNB account will be removed after May. Please use the Deutsche Bank account instead.
+                </p>
+              </div>
+            )}
+
             {/* Deutsche prompt — show when Pay To isn't Deutsche */}
             {!selectedPayTo.includes("Deutsche") && (
               <div className="mt-2 p-3 rounded-xl border" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 12%, transparent)", borderColor: "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)" }}>
