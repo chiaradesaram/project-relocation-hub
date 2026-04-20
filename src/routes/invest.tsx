@@ -83,9 +83,11 @@ function Invest() {
       </div>
 
       {/* Info */}
-      <div className="mx-4 mt-3 flex items-start gap-2 p-3 rounded-xl border-l-4" style={{ background: "oklch(0.22 0.04 280)", borderColor: "var(--portfolio-blue)" }}>
-        <Info className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-blue)" }} />
-        <p className="text-[11px] text-white/90 leading-snug">{methodInfo[method]}</p>
+      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
+        <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
+          <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
+        </div>
+        <p className="text-[11px] text-white/90 leading-snug pt-1">{methodInfo[method]}</p>
       </div>
 
       {/* Investment Type Toggle — instant only */}
