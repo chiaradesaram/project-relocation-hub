@@ -27,6 +27,8 @@ const existingRecurring = [
   { fund: "CAL Income Fund", amount: "10,000", frequency: "Weekly", nextDate: "Apr 21, 2026", account: "Joint Account" },
 ];
 
+const DIRECT_INVEST_LIMIT = 150000;
+
 function Invest() {
   const navigate = useNavigate();
   const [method, setMethod] = useState<InvestMethod>("instant");
