@@ -175,41 +175,23 @@ function Invest() {
         )}
       </div>
 
-      {/* Direct Invest: limit warning */}
-      {isDirectInvest && showLimitWarning && (
-        <div className="mx-4 mt-2 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.78 0.16 75) 18%, oklch(0.18 0.02 280))" }}>
-          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.78 0.16 75) 40%, transparent)" }}>
-            <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.96 0.08 75)" }} />
-          </div>
-          <div className="pt-0.5">
-            <p className="text-[11px] font-semibold text-white">Capped at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}</p>
-            <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
-              Direct Invest has a per-transfer limit. To invest more, send the same amount up to 3× in one go below.
-            </p>
-          </div>
-        </div>
-      )}
-
       {/* Direct Invest: repeat multiplier — shown when at the cap */}
       {isDirectInvest && atLimit && investType === "new" && (
         <div className="mx-4 mt-2 glass-card p-3">
-          <div className="flex items-center justify-between">
-            <div className="pr-2">
-              <p className="text-[11px] font-semibold text-foreground flex items-center gap-1.5">
-                <CopyPlus className="w-3.5 h-3.5 text-primary" />
-                Send the same amount up to 3× in one go
-                <button
-                  type="button"
-                  onClick={() => setShowRepeatInfo(!showRepeatInfo)}
-                  aria-label="Why is there a limit?"
-                  className="ml-0.5"
-                >
-                  <Info className="w-3 h-3 text-muted-foreground" />
-                </button>
-              </p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">One-off bundle — separate from any recurring plan.</p>
-            </div>
-            <div className="flex gap-1 bg-secondary rounded-lg p-1">
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[11px] font-semibold text-foreground flex items-center gap-1.5 min-w-0">
+              <CopyPlus className="w-3.5 h-3.5 text-primary shrink-0" />
+              <span className="truncate">Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transaction</span>
+              <button
+                type="button"
+                onClick={() => setShowRepeatInfo(!showRepeatInfo)}
+                aria-label="Why is there a limit?"
+                className="shrink-0"
+              >
+                <Info className="w-3 h-3 text-muted-foreground" />
+              </button>
+            </p>
+            <div className="flex gap-1 bg-secondary rounded-lg p-1 shrink-0">
               {[1, 2, 3].map((n) => (
                 <button
                   key={n}
