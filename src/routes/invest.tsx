@@ -184,7 +184,7 @@ function Invest() {
           <div className="pt-0.5">
             <p className="text-[11px] font-semibold text-white">Capped at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}</p>
             <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
-              Direct Invest has a per-transfer limit. To invest more, repeat this transfer up to 3× below.
+              Direct Invest has a per-transfer limit. To invest more, send the same amount up to 3× in one go below.
             </p>
           </div>
         </div>
