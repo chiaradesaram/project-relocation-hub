@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb } from "lucide-react";
+import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 
 export const Route = createFileRoute("/invest")({
@@ -60,6 +60,7 @@ function Invest() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [repeatCount, setRepeatCount] = useState(1);
   const [showLimitWarning, setShowLimitWarning] = useState(false);
+  const [showRepeatInfo, setShowRepeatInfo] = useState(false);
 
   const amountNum = parseFloat(amount || "0") || 0;
   const isDirectInvest = method === "instant";
@@ -183,7 +184,7 @@ function Invest() {
           <div className="pt-0.5">
             <p className="text-[11px] font-semibold text-white">Capped at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}</p>
             <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
-              Direct Invest has a per-transfer limit. To invest more, repeat this transfer up to 3× below.
+              Direct Invest has a per-transfer limit. To invest more, send the same amount up to 3× in one go below.
             </p>
           </div>
         </div>
@@ -193,12 +194,20 @@ function Invest() {
       {isDirectInvest && atLimit && investType === "new" && (
         <div className="mx-4 mt-2 glass-card p-3">
           <div className="flex items-center justify-between">
-            <div>
+            <div className="pr-2">
               <p className="text-[11px] font-semibold text-foreground flex items-center gap-1.5">
-                <Repeat className="w-3.5 h-3.5 text-primary" />
-                Repeat this transfer
+                <CopyPlus className="w-3.5 h-3.5 text-primary" />
+                Send the same amount up to 3× in one go
+                <button
+                  type="button"
+                  onClick={() => setShowRepeatInfo(!showRepeatInfo)}
+                  aria-label="Why is there a limit?"
+                  className="ml-0.5"
+                >
+                  <Info className="w-3 h-3 text-muted-foreground" />
+                </button>
               </p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">Send the same amount up to 3× in one go.</p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">One-off bundle — separate from any recurring plan.</p>
             </div>
             <div className="flex gap-1 bg-secondary rounded-lg p-1">
               {[1, 2, 3].map((n) => (
@@ -214,6 +223,11 @@ function Invest() {
               ))}
             </div>
           </div>
+          {showRepeatInfo && (
+            <p className="mt-2 text-[10px] text-muted-foreground bg-secondary/60 rounded-lg p-2 leading-snug">
+              Direct Invest uses a real-time bank rail (Justpay) that caps each transfer at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}. To invest more in one go, the app sends up to 3 back-to-back transfers of the same amount. For larger lump sums, use Bank Transfer instead.
+            </p>
+          )}
           {repeatCount > 1 && (
             <div className="mt-2.5 pt-2.5 border-t border-border/40 flex items-center justify-between">
               <span className="text-[10px] text-muted-foreground">Total investment</span>
