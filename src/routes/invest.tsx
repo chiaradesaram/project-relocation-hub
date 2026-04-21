@@ -59,7 +59,6 @@ function Invest() {
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [repeatCount, setRepeatCount] = useState(1);
-  const [showLimitWarning, setShowLimitWarning] = useState(false);
   const [showRepeatInfo, setShowRepeatInfo] = useState(false);
 
   const amountNum = parseFloat(amount || "0") || 0;
@@ -73,10 +72,8 @@ function Invest() {
       const n = parseFloat(sanitized || "0") || 0;
       if (n > DIRECT_INVEST_LIMIT) {
         setAmount(String(DIRECT_INVEST_LIMIT));
-        setShowLimitWarning(true);
         return;
       }
-      setShowLimitWarning(false);
     }
     setAmount(sanitized);
     if (parseFloat(sanitized || "0") < DIRECT_INVEST_LIMIT) setRepeatCount(1);
