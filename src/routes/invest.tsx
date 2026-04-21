@@ -486,12 +486,19 @@ function Invest() {
                 fund: selectedFund,
                 account: selectedAccount,
                 bank: method === "instant" ? selectedBank : selectedPayTo,
+                ...(isDirectInvest && repeatCount > 1 ? { repeat: repeatCount } : {}),
               },
             });
           }}
           className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          {method === "flip" ? "Flip Funds" : investType === "recurring" ? "Create Recurring Plan" : "Send Request"}
+          {method === "flip"
+            ? "Flip Funds"
+            : investType === "recurring"
+              ? "Create Recurring Plan"
+              : isDirectInvest && repeatCount > 1
+                ? `Send ${repeatCount} Transfers`
+                : "Send Request"}
         </button>
       </div>
     </MobileLayout>
