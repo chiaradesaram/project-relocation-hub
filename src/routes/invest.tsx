@@ -162,12 +162,69 @@ function Invest() {
             type="text"
             inputMode="decimal"
             value={formatAmountDisplay(amount)}
-            onChange={(e) => setAmount(sanitizeAmountInput(e.target.value))}
+            onChange={(e) => handleAmountChange(e.target.value)}
             placeholder="0.00"
             className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
           />
         </div>
+        {isDirectInvest && (
+          <p className="mt-1.5 text-[10px] text-muted-foreground">
+            Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
+          </p>
+        )}
       </div>
+
+      {/* Direct Invest: limit warning */}
+      {isDirectInvest && showLimitWarning && (
+        <div className="mx-4 mt-2 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.78 0.16 75) 18%, oklch(0.18 0.02 280))" }}>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.78 0.16 75) 40%, transparent)" }}>
+            <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.96 0.08 75)" }} />
+          </div>
+          <div className="pt-0.5">
+            <p className="text-[11px] font-semibold text-white">Capped at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}</p>
+            <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
+              Direct Invest has a per-transfer limit. To invest more, repeat this transfer up to 3× below.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Direct Invest: repeat multiplier — shown when at the cap */}
+      {isDirectInvest && atLimit && investType === "new" && (
+        <div className="mx-4 mt-2 glass-card p-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-[11px] font-semibold text-foreground flex items-center gap-1.5">
+                <Repeat className="w-3.5 h-3.5 text-primary" />
+                Repeat this transfer
+              </p>
+              <p className="text-[10px] text-muted-foreground mt-0.5">Send the same amount up to 3× in one go.</p>
+            </div>
+            <div className="flex gap-1 bg-secondary rounded-lg p-1">
+              {[1, 2, 3].map((n) => (
+                <button
+                  key={n}
+                  onClick={() => setRepeatCount(n)}
+                  className={`w-9 h-7 rounded-md text-[11px] font-semibold transition-all ${
+                    repeatCount === n ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground"
+                  }`}
+                >
+                  {n}×
+                </button>
+              ))}
+            </div>
+          </div>
+          {repeatCount > 1 && (
+            <div className="mt-2.5 pt-2.5 border-t border-border/40 flex items-center justify-between">
+              <span className="text-[10px] text-muted-foreground">Total investment</span>
+              <span className="text-xs font-semibold text-foreground">
+                LKR {(DIRECT_INVEST_LIMIT * repeatCount).toLocaleString()}
+                <span className="text-[10px] text-muted-foreground font-normal ml-1">({repeatCount} transfers)</span>
+              </span>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Recurring options */}
       {method === "instant" && investType === "new" && (
