@@ -58,6 +58,28 @@ function Invest() {
   const [showDeutscheDetails, setShowDeutscheDetails] = useState(false);
 
   const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [repeatCount, setRepeatCount] = useState(1);
+  const [showLimitWarning, setShowLimitWarning] = useState(false);
+
+  const amountNum = parseFloat(amount || "0") || 0;
+  const isDirectInvest = method === "instant";
+  const overLimit = isDirectInvest && amountNum > DIRECT_INVEST_LIMIT;
+  const atLimit = isDirectInvest && amountNum >= DIRECT_INVEST_LIMIT;
+
+  const handleAmountChange = (raw: string) => {
+    const sanitized = sanitizeAmountInput(raw);
+    if (isDirectInvest) {
+      const n = parseFloat(sanitized || "0") || 0;
+      if (n > DIRECT_INVEST_LIMIT) {
+        setAmount(String(DIRECT_INVEST_LIMIT));
+        setShowLimitWarning(true);
+        return;
+      }
+      setShowLimitWarning(false);
+    }
+    setAmount(sanitized);
+    if (parseFloat(sanitized || "0") < DIRECT_INVEST_LIMIT) setRepeatCount(1);
+  };
 
 
   return (
