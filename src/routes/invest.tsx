@@ -338,34 +338,37 @@ function Invest() {
       )}
 
       {/* Fund & Account */}
-      <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">FUND & ACCOUNT</p>
-        <div>
-          <label className="text-[12px] text-muted-foreground">Fund</label>
-          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-            <option value="">Select fund</option>
-            {funds.map((f) => <option key={f}>{f}</option>)}
-          </ModernSelect>
-          {selectedFund && (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/rates" })}
-              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium"
-              style={{ color: "var(--portfolio-blue)" }}
-            >
-              View fund rates
-              <ExternalLink className="w-2.5 h-2.5" />
-            </button>
-          )}
+      <FormSection title="Fund & Account">
+        <div className="form-field-inline divide-y divide-border/40">
+          <FormField
+            label="Which fund?"
+            action={
+              selectedFund ? (
+                <button
+                  type="button"
+                  onClick={() => navigate({ to: "/rates" })}
+                  className="inline-flex items-center gap-1 text-[12px] font-medium"
+                  style={{ color: "var(--portfolio-blue)" }}
+                >
+                  View rates
+                  <ExternalLink className="w-3 h-3" />
+                </button>
+              ) : undefined
+            }
+          >
+            <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
+              <option value="">Select your fund</option>
+              {funds.map((f) => <option key={f}>{f}</option>)}
+            </ModernSelect>
+          </FormField>
+          <FormField label="Sub Account">
+            <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
+              <option value="">Select account</option>
+              {accounts.map((a) => <option key={a}>{a}</option>)}
+            </ModernSelect>
+          </FormField>
         </div>
-        <div>
-          <label className="text-[12px] text-muted-foreground">Sub Account</label>
-          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-            <option value="">Select account</option>
-            {accounts.map((a) => <option key={a}>{a}</option>)}
-          </ModernSelect>
-        </div>
-      </div>
+      </FormSection>
 
       {/* Transfer Details */}
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
