@@ -212,25 +212,29 @@ function Invest() {
       )}
 
       {/* Amount Input */}
-      <div className="mx-4 mt-3 glass-card p-3">
-        <label className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">Amount</label>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs text-muted-foreground">LKR</span>
-          <input
-            type="text"
-            inputMode="decimal"
-            value={formatAmountDisplay(amount)}
-            onChange={(e) => handleAmountChange(e.target.value)}
-            placeholder="0.00"
-            className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
-          />
+      <section className="mx-4 mt-4">
+        <h2 className="px-1 mb-2 text-[15px] font-semibold text-foreground">
+          Investment Amount
+        </h2>
+        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
+          <div className="flex items-baseline gap-2">
+            <span className="text-[22px] font-medium text-muted-foreground">LKR</span>
+            <input
+              type="text"
+              inputMode="decimal"
+              value={formatAmountDisplay(amount)}
+              onChange={(e) => handleAmountChange(e.target.value)}
+              placeholder="0.00"
+              className="flex-1 bg-transparent text-[26px] font-semibold text-foreground placeholder:text-muted-foreground/60 outline-none"
+            />
+          </div>
+          {isDirectInvest && (
+            <p className="mt-2 text-[12px] text-muted-foreground">
+              Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
+            </p>
+          )}
         </div>
-        {isDirectInvest && (
-          <p className="mt-1.5 text-[12px] text-muted-foreground">
-            Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
-          </p>
-        )}
-      </div>
+      </section>
 
       {/* Direct Invest: repeat multiplier — shown when at the cap */}
       {isDirectInvest && atLimit && investType === "new" && (
