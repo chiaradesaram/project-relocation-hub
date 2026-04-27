@@ -32,7 +32,7 @@ function Profile() {
           </button>
         </div>
         <p className="text-sm font-semibold text-foreground mt-2">John Doe</p>
-        <p className="text-[11px] text-muted-foreground">Member since Jan 2024</p>
+        <p className="text-[12px] text-muted-foreground">Member since Jan 2024</p>
       </div>
 
       {/* Fields */}
@@ -40,7 +40,7 @@ function Profile() {
         {profileFields.map((field) => (
           <div key={field.label} className="flex items-center justify-between p-3.5">
             <div>
-              <p className="text-[10px] text-muted-foreground">{field.label}</p>
+              <p className="text-[12px] text-muted-foreground">{field.label}</p>
               <p className="text-xs font-medium text-foreground">{field.value}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />

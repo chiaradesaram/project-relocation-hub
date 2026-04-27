@@ -158,6 +158,34 @@
   }
 }
 
+/* ----- Form readability boost -----
+   Form pages were using very small 10–11px labels and inputs that are hard
+   to read on mobile. Bump anything inside a .glass-card form so labels,
+   inputs, selects and date pickers meet a more comfortable minimum size,
+   and lift label contrast slightly. Specific opt-out: any element that
+   explicitly sets its own text-* size keeps that size (Tailwind text-*
+   utilities use !important-equivalent specificity via cascade order, so
+   we use class-based selectors with low specificity). */
+@layer utilities {
+  .glass-card label {
+    font-size: 12px;
+    line-height: 1.25;
+    color: color-mix(in oklch, var(--muted-foreground) 100%, white 8%);
+    letter-spacing: 0.01em;
+  }
+  .glass-card input[type="text"],
+  .glass-card input[type="number"],
+  .glass-card input[type="email"],
+  .glass-card input[type="tel"],
+  .glass-card input[type="date"],
+  .glass-card input[type="time"],
+  .glass-card input[type="datetime-local"],
+  .glass-card textarea {
+    font-size: 13px;
+    line-height: 1.4;
+  }
+}
+
 @layer utilities {
   .glass-card {
     background-color: color-mix(in oklch, var(--card) 80%, transparent);

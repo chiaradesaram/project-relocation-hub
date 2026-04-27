@@ -84,42 +84,42 @@ function Redeem() {
       {/* Info */}
       <div className="mx-4 mt-3 flex items-start gap-2 p-3 bg-secondary/50 rounded-xl">
         <Info className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
-        <p className="text-[11px] text-muted-foreground">{methodInfo[method]}</p>
+        <p className="text-[12px] text-muted-foreground">{methodInfo[method]}</p>
       </div>
 
       {/* Existing Plans */}
       {method === "plan" && (
         <div className="mx-4 mt-3">
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">EXISTING PLANS</p>
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mb-2">EXISTING PLANS</p>
           {existingPlans.map((p, i) => (
             <div key={i} className="glass-card p-3 mb-2 flex items-center gap-3">
               <div className="flex-1">
                 <p className="text-xs font-medium text-foreground">{p.fund}</p>
-                <p className="text-[10px] text-muted-foreground">{p.account} · {p.frequency} · Next: {p.nextDate}</p>
-                <p className="text-[10px] text-muted-foreground">To: {p.bank}</p>
+                <p className="text-[12px] text-muted-foreground">{p.account} · {p.frequency} · Next: {p.nextDate}</p>
+                <p className="text-[12px] text-muted-foreground">To: {p.bank}</p>
               </div>
               <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
               <Trash2 className="w-3.5 h-3.5 text-destructive" />
             </div>
           ))}
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mt-4 mb-2">NEW PLAN</p>
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mt-4 mb-2">NEW PLAN</p>
         </div>
       )}
 
 
       {/* Fund & Account */}
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">FUND & ACCOUNT</p>
+        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">FUND & ACCOUNT</p>
         <div>
-          <label className="text-[10px] text-muted-foreground">Fund</label>
-          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <label className="text-[12px] text-muted-foreground">Fund</label>
+          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
             <option value="">Select fund</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
           </ModernSelect>
         </div>
         <div>
-          <label className="text-[10px] text-muted-foreground">Sub Account</label>
-          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <label className="text-[12px] text-muted-foreground">Sub Account</label>
+          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
             <option value="">Select account</option>
             {accounts.map((a) => <option key={a}>{a}</option>)}
           </ModernSelect>
@@ -129,13 +129,13 @@ function Redeem() {
       {/* Plan schedule */}
       {method === "plan" && (
         <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">SCHEDULE</p>
-          <p className="text-[10px] text-muted-foreground">
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">SCHEDULE</p>
+          <p className="text-[12px] text-muted-foreground">
             Interest accrued on the selected sub account will be redeemed and sent to your bank on each scheduled date.
           </p>
           <div>
-            <label className="text-[10px] text-muted-foreground">Frequency</label>
-            <ModernSelect value={planFrequency} onChange={(e) => setPlanFrequency(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+            <label className="text-[12px] text-muted-foreground">Frequency</label>
+            <ModernSelect value={planFrequency} onChange={(e) => setPlanFrequency(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
               <option>Weekly</option>
               <option>Bi-weekly</option>
               <option>Monthly</option>
@@ -143,17 +143,17 @@ function Redeem() {
             </ModernSelect>
           </div>
           <div>
-            <label className="text-[10px] text-muted-foreground">Start Date</label>
-            <input type="date" className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground outline-none" />
+            <label className="text-[12px] text-muted-foreground">Start Date</label>
+            <input type="date" className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground outline-none" />
           </div>
         </div>
       )}
 
       {/* Payment / Pay To */}
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">PAYMENT DETAILS</p>
+        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">PAYMENT DETAILS</p>
         <div>
-          <label className="text-[10px] text-muted-foreground">Pay to (Your Bank Account)</label>
+          <label className="text-[12px] text-muted-foreground">Pay to (Your Bank Account)</label>
           <ModernSelect
             value={selectedBank}
             onChange={(e) => {
@@ -163,7 +163,7 @@ function Redeem() {
                 setSelectedBank(e.target.value);
               }
             }}
-            className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none"
+            className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none"
           >
             <option value="">Select bank account</option>
             {userBankAccounts.map((a) => (
@@ -179,7 +179,7 @@ function Redeem() {
       {/* Amount — instant + normal only, last because limit depends on sub account balance */}
       {method !== "plan" && (
         <div className="mx-4 mt-3 glass-card p-3">
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">AMOUNT</p>
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">AMOUNT</p>
           <div className="flex items-center gap-2 mt-2">
             <span className="text-xs text-muted-foreground">LKR</span>
             <input
@@ -191,7 +191,7 @@ function Redeem() {
               className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
             />
           </div>
-          <p className="mt-2 text-[10px] text-muted-foreground">
+          <p className="mt-2 text-[12px] text-muted-foreground">
             {method === "instant"
               ? `Max LKR ${Math.min(subAccountBalance, INSTANT_DAILY_LIMIT).toLocaleString()} per transaction · Available balance LKR ${subAccountBalance.toLocaleString()}`
               : `Available balance LKR ${subAccountBalance.toLocaleString()}`}
@@ -218,7 +218,7 @@ function Redeem() {
             onChange={(e) => setAcceptedTerms(e.target.checked)}
             className="mt-0.5 w-3.5 h-3.5 rounded accent-primary"
           />
-          <span className="text-[11px] text-muted-foreground">
+          <span className="text-[12px] text-muted-foreground">
             I agree to the <a href="#" className="text-primary underline">Terms & Conditions</a>
           </span>
         </label>

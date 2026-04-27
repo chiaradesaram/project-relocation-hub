@@ -110,7 +110,7 @@ function Invest() {
         <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
           <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
         </div>
-        <p className="text-[11px] text-white/90 leading-snug pt-1">{methodInfo[method]}</p>
+        <p className="text-[12px] text-white/90 leading-snug pt-1">{methodInfo[method]}</p>
       </div>
 
       {/* Investment Type Toggle — instant only */}
@@ -142,24 +142,24 @@ function Invest() {
       {/* Recurring Plans List */}
       {method === "instant" && investType === "recurring" && (
         <div className="mx-4 mt-3">
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">EXISTING PLANS</p>
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mb-2">EXISTING PLANS</p>
           {existingRecurring.map((plan, i) => (
             <div key={i} className="glass-card p-3 mb-2 flex items-center gap-3">
               <div className="flex-1">
                 <p className="text-xs font-medium text-foreground">{plan.fund}</p>
-                <p className="text-[10px] text-muted-foreground">LKR {plan.amount} · {plan.frequency} · Next: {plan.nextDate}</p>
+                <p className="text-[12px] text-muted-foreground">LKR {plan.amount} · {plan.frequency} · Next: {plan.nextDate}</p>
               </div>
               <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
               <Trash2 className="w-3.5 h-3.5 text-destructive" />
             </div>
           ))}
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mt-4 mb-2">NEW RECURRING PLAN</p>
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mt-4 mb-2">NEW RECURRING PLAN</p>
         </div>
       )}
 
       {/* Amount Input */}
       <div className="mx-4 mt-3 glass-card p-3">
-        <label className="text-[10px] font-semibold text-muted-foreground tracking-wider">Amount</label>
+        <label className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">Amount</label>
         <div className="flex items-center gap-2 mt-1">
           <span className="text-xs text-muted-foreground">LKR</span>
           <input
@@ -172,7 +172,7 @@ function Invest() {
           />
         </div>
         {isDirectInvest && (
-          <p className="mt-1.5 text-[10px] text-muted-foreground">
+          <p className="mt-1.5 text-[12px] text-muted-foreground">
             Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
           </p>
         )}
@@ -182,7 +182,7 @@ function Invest() {
       {isDirectInvest && atLimit && investType === "new" && (
         <div className="mx-4 mt-2 glass-card p-3">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[11px] font-semibold text-foreground flex items-center gap-1.5 min-w-0">
+            <p className="text-[13px] font-semibold text-foreground flex items-center gap-1.5 min-w-0">
               <CopyPlus className="w-3.5 h-3.5 text-primary shrink-0" />
               <span className="truncate">Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transaction</span>
               <button
@@ -209,16 +209,16 @@ function Invest() {
             </div>
           </div>
           {showRepeatInfo && (
-            <p className="mt-2 text-[10px] text-muted-foreground bg-secondary/60 rounded-lg p-2 leading-snug">
+            <p className="mt-2 text-[12px] text-muted-foreground bg-secondary/60 rounded-lg p-2 leading-snug">
               Direct Invest uses a real-time bank rail (Justpay) that caps each transfer at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}. To invest more in one go, the app sends up to 3 back-to-back transfers of the same amount. For larger lump sums, use Bank Transfer instead.
             </p>
           )}
           {repeatCount > 1 && (
             <div className="mt-2.5 pt-2.5 border-t border-border/40 flex items-center justify-between">
-              <span className="text-[10px] text-muted-foreground">Total investment</span>
+              <span className="text-[12px] text-muted-foreground">Total investment</span>
               <span className="text-xs font-semibold text-foreground">
                 LKR {(DIRECT_INVEST_LIMIT * repeatCount).toLocaleString()}
-                <span className="text-[10px] text-muted-foreground font-normal ml-1">({repeatCount} transfers)</span>
+                <span className="text-[12px] text-muted-foreground font-normal ml-1">({repeatCount} transfers)</span>
               </span>
             </div>
           )}
@@ -243,8 +243,8 @@ function Invest() {
           {isRecurring && (
             <div className="mt-3 space-y-2">
               <div>
-                <label className="text-[10px] text-muted-foreground">Frequency</label>
-                <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-card rounded-lg p-2 text-[11px] text-foreground outline-none">
+                <label className="text-[12px] text-muted-foreground">Frequency</label>
+                <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-card rounded-lg p-2 text-[13px] text-foreground outline-none">
                   <option>Weekly</option>
                   <option>Bi-weekly</option>
                   <option>Monthly</option>
@@ -252,8 +252,8 @@ function Invest() {
                 </ModernSelect>
               </div>
               <div>
-                <label className="text-[10px] text-muted-foreground">Start Date</label>
-                <input type="date" className="w-full bg-card rounded-lg p-2 text-[11px] text-foreground outline-none" />
+                <label className="text-[12px] text-muted-foreground">Start Date</label>
+                <input type="date" className="w-full bg-card rounded-lg p-2 text-[13px] text-foreground outline-none" />
               </div>
             </div>
           )}
@@ -264,8 +264,8 @@ function Invest() {
       {method === "instant" && investType === "recurring" && (
         <div className="mx-4 mt-3 glass-card p-3 space-y-2">
           <div>
-            <label className="text-[10px] text-muted-foreground">Frequency</label>
-            <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-secondary rounded-lg p-2.5 text-[11px] text-foreground outline-none">
+            <label className="text-[12px] text-muted-foreground">Frequency</label>
+            <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-secondary rounded-lg p-2.5 text-[13px] text-foreground outline-none">
               <option>Weekly</option>
               <option>Bi-weekly</option>
               <option>Monthly</option>
@@ -273,18 +273,18 @@ function Invest() {
             </ModernSelect>
           </div>
           <div>
-            <label className="text-[10px] text-muted-foreground">Start Date</label>
-            <input type="date" className="w-full bg-secondary rounded-lg p-2.5 text-[11px] text-foreground outline-none" />
+            <label className="text-[12px] text-muted-foreground">Start Date</label>
+            <input type="date" className="w-full bg-secondary rounded-lg p-2.5 text-[13px] text-foreground outline-none" />
           </div>
         </div>
       )}
 
       {/* Fund & Account */}
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">FUND & ACCOUNT</p>
+        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">FUND & ACCOUNT</p>
         <div>
-          <label className="text-[10px] text-muted-foreground">Fund</label>
-          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <label className="text-[12px] text-muted-foreground">Fund</label>
+          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
             <option value="">Select fund</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
           </ModernSelect>
@@ -301,8 +301,8 @@ function Invest() {
           )}
         </div>
         <div>
-          <label className="text-[10px] text-muted-foreground">Sub Account</label>
-          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <label className="text-[12px] text-muted-foreground">Sub Account</label>
+          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
             <option value="">Select account</option>
             {accounts.map((a) => <option key={a}>{a}</option>)}
           </ModernSelect>
@@ -311,9 +311,9 @@ function Invest() {
 
       {/* Transfer Details */}
       <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">TRANSFER DETAILS</p>
+        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">TRANSFER DETAILS</p>
         <div>
-          <label className="text-[10px] text-muted-foreground flex items-center gap-1">
+          <label className="text-[12px] text-muted-foreground flex items-center gap-1">
             {method === "flip" ? "Transfer from" : "Pay from"}
             {method !== "flip" && (
               <button type="button" onClick={() => setShowJustpayInfo(!showJustpayInfo)} aria-label="About Pay from">
@@ -322,7 +322,7 @@ function Invest() {
             )}
           </label>
           {showJustpayInfo && method !== "flip" && (
-            <p className="mt-1 text-[10px] text-muted-foreground bg-secondary/60 rounded-lg p-2">
+            <p className="mt-1 text-[12px] text-muted-foreground bg-secondary/60 rounded-lg p-2">
               Accounts need to be verified using Justpay.
             </p>
           )}
@@ -335,7 +335,7 @@ function Invest() {
                 setSelectedBank(e.target.value);
               }
             }}
-            className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none"
+            className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none"
           >
             <option value="">{method === "flip" ? "Select fund" : "Select bank"}</option>
             {method === "flip"
@@ -356,13 +356,13 @@ function Invest() {
         {method === "bank" && (
           <div>
             <div className="flex items-center justify-between">
-              <label className="text-[10px] text-muted-foreground">Pay to (CAL Account)</label>
+              <label className="text-[12px] text-muted-foreground">Pay to (CAL Account)</label>
               <button onClick={() => setShowBankDetails(!showBankDetails)} className="text-[10px] text-primary font-medium flex items-center gap-0.5">
                 <ExternalLink className="w-3 h-3" />
                 Bank details
               </button>
             </div>
-            <ModernSelect value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+            <ModernSelect value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
               <option value="">Select CAL bank account</option>
               {calBankAccounts.map((a) => {
                 const isDeutsche = a.bank.includes("Deutsche");
@@ -381,8 +381,8 @@ function Invest() {
                   <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
                 </div>
                 <div className="pt-0.5">
-                  <p className="text-[11px] font-semibold text-white">Account closing soon</p>
-                  <p className="text-[10px] text-white/75 mt-0.5 leading-snug">
+                  <p className="text-[13px] font-semibold text-white">Account closing soon</p>
+                  <p className="text-[12px] text-white/80 mt-0.5 leading-snug">
                     This HNB account will be removed after May. For your next investment please use the Deutsche Bank account instead.
                   </p>
                 </div>
@@ -401,16 +401,16 @@ function Invest() {
                     <Lightbulb className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
                   </div>
                   <div className="flex-1 pt-0.5">
-                    <p className="text-[11px] font-semibold text-white">Skip proof of payment</p>
-                    <p className="text-[10px] text-white/75 mt-0.5 leading-snug">Pay to Deutsche Bank — transfers are auto-verified, no upload needed.</p>
+                    <p className="text-[13px] font-semibold text-white">Skip proof of payment</p>
+                    <p className="text-[12px] text-white/80 mt-0.5 leading-snug">Pay to Deutsche Bank — transfers are auto-verified, no upload needed.</p>
                   </div>
                   <ChevronDown className={`w-4 h-4 mt-1 shrink-0 transition-transform text-white/60 ${showDeutscheDetails ? "rotate-180" : ""}`} />
                 </button>
                 {showDeutscheDetails && (
                   <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.14 0.02 280)" }}>
-                    <p className="text-[10px] text-white/60">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
-                    <p className="text-[10px] text-white/60">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
-                    <p className="text-[10px] text-white/60">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
+                    <p className="text-[12px] text-white/70">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
+                    <p className="text-[12px] text-white/70">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
+                    <p className="text-[12px] text-white/70">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
                   </div>
                 )}
               </div>
@@ -427,7 +427,7 @@ function Invest() {
               <Building2 className="w-4 h-4 text-primary" />
               <div>
                 <p className="text-xs font-medium text-foreground">{a.bank}</p>
-                <p className="text-[10px] text-muted-foreground">A/C: {a.accNo} · {a.branch}</p>
+                <p className="text-[12px] text-muted-foreground">A/C: {a.accNo} · {a.branch}</p>
               </div>
             </div>
           ))}
@@ -436,8 +436,8 @@ function Invest() {
 
       {method === "flip" && (
         <div className="mx-4 mt-3 glass-card p-3">
-          <label className="text-[10px] text-muted-foreground">Transfer to</label>
-          <ModernSelect className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <label className="text-[12px] text-muted-foreground">Transfer to</label>
+          <ModernSelect className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
             <option>Select CAL account</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
           </ModernSelect>
@@ -446,10 +446,10 @@ function Invest() {
 
       {method === "bank" && !selectedPayTo.includes("Deutsche") && (
         <div className="mx-4 mt-3 glass-card p-3">
-          <label className="text-[10px] text-muted-foreground">Proof of payment</label>
+          <label className="text-[12px] text-muted-foreground">Proof of payment</label>
           <div className="mt-2 border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center gap-2">
             <Upload className="w-6 h-6 text-muted-foreground" />
-            <span className="text-[11px] text-muted-foreground">Tap to upload</span>
+            <span className="text-[12px] text-muted-foreground">Tap to upload</span>
           </div>
         </div>
       )}
@@ -464,7 +464,7 @@ function Invest() {
               onChange={(e) => setAcceptedTerms(e.target.checked)}
               className="mt-0.5 w-3.5 h-3.5 rounded accent-primary"
             />
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[12px] text-muted-foreground">
               I agree to the <a href="#" className="text-primary underline">Terms & Conditions</a>
             </span>
           </label>
