@@ -47,7 +47,6 @@ function extractOptions(children: React.ReactNode): {
     const labelText = typeof labelNode === "string" ? labelNode : "";
     // Treat option with no explicit value or empty value as the placeholder
     if (props.value === undefined || props.value === "") {
-      placeholder = typeof label === "string" ? label : undefined;
       placeholder = labelText || placeholder;
       return;
     }
