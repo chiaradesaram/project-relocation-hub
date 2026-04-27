@@ -135,35 +135,7 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
-  /* Modern Monzo-style native dropdowns across the app */
-  select {
-    appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    background-color: color-mix(in oklch, var(--card) 70%, transparent);
-    color: var(--foreground);
-    border: 1px solid color-mix(in oklch, var(--border) 60%, transparent);
-    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'></polyline></svg>");
-    background-repeat: no-repeat;
-    background-position: right 0.75rem center;
-    background-size: 0.7rem;
-    padding-right: 2rem !important;
-    transition: border-color 150ms ease, background-color 150ms ease;
-  }
-  select:hover {
-    border-color: color-mix(in oklch, var(--primary) 50%, transparent);
-  }
-  select:focus {
-    outline: none;
-    border-color: color-mix(in oklch, var(--primary) 80%, transparent);
-    background-color: color-mix(in oklch, var(--card) 85%, transparent);
-  }
-  select option {
-    background-color: var(--card);
-    color: var(--foreground);
-  }
-
-  /* Date inputs match the same modern look */
+  /* Date inputs match the modern look */
   input[type="date"],
   input[type="time"],
   input[type="datetime-local"] {
