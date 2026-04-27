@@ -448,7 +448,7 @@ function SelectInput({
 }) {
   return (
     <div className="relative flex items-center">
-      <select
+      <ModernSelect
         value={value}
         onChange={(e) => onChange(e.target.value)}
         className={`w-full appearance-none bg-transparent pr-6 text-[12px] outline-none ${
@@ -459,7 +459,7 @@ function SelectInput({
           {placeholder}
         </option>
         {children}
-      </select>
+      </ModernSelect>
       <ChevronDown className="pointer-events-none absolute right-0 h-3.5 w-3.5 text-muted-foreground" />
     </div>
   );

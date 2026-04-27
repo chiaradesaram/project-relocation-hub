@@ -143,9 +143,9 @@ const YieldCalculator = () => {
     <div className="mx-4 mt-3 glass-card p-4 space-y-3">
       <div>
         <label className="text-[10px] text-muted-foreground">Fund</label>
-        <select value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground outline-none">
+        <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground outline-none">
           {fundsData.map((f) => <option key={f.name}>{f.name}</option>)}
-        </select>
+        </ModernSelect>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div>

@@ -243,12 +243,12 @@ function Invest() {
             <div className="mt-3 space-y-2">
               <div>
                 <label className="text-[10px] text-muted-foreground">Frequency</label>
-                <select value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-card rounded-lg p-2 text-[11px] text-foreground outline-none">
+                <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-card rounded-lg p-2 text-[11px] text-foreground outline-none">
                   <option>Weekly</option>
                   <option>Bi-weekly</option>
                   <option>Monthly</option>
                   <option>Quarterly</option>
-                </select>
+                </ModernSelect>
               </div>
               <div>
                 <label className="text-[10px] text-muted-foreground">Start Date</label>
@@ -264,12 +264,12 @@ function Invest() {
         <div className="mx-4 mt-3 glass-card p-3 space-y-2">
           <div>
             <label className="text-[10px] text-muted-foreground">Frequency</label>
-            <select value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-secondary rounded-lg p-2.5 text-[11px] text-foreground outline-none">
+            <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-secondary rounded-lg p-2.5 text-[11px] text-foreground outline-none">
               <option>Weekly</option>
               <option>Bi-weekly</option>
               <option>Monthly</option>
               <option>Quarterly</option>
-            </select>
+            </ModernSelect>
           </div>
           <div>
             <label className="text-[10px] text-muted-foreground">Start Date</label>
@@ -283,10 +283,10 @@ function Invest() {
         <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">FUND & ACCOUNT</p>
         <div>
           <label className="text-[10px] text-muted-foreground">Fund</label>
-          <select value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
             <option value="">Select fund</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
-          </select>
+          </ModernSelect>
           {selectedFund && (
             <button
               type="button"
@@ -301,10 +301,10 @@ function Invest() {
         </div>
         <div>
           <label className="text-[10px] text-muted-foreground">Sub Account</label>
-          <select value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
             <option value="">Select account</option>
             {accounts.map((a) => <option key={a}>{a}</option>)}
-          </select>
+          </ModernSelect>
         </div>
       </div>
 
@@ -325,7 +325,7 @@ function Invest() {
               Accounts need to be verified using Justpay.
             </p>
           )}
-          <select
+          <ModernSelect
             value={selectedBank}
             onChange={(e) => {
               if (e.target.value === "__add_bank") {
@@ -346,7 +346,7 @@ function Invest() {
                 </>
               )
             }
-          </select>
+          </ModernSelect>
         </div>
 
         {/* Deutsche Bank tip is only for Bank Transfer (Pay To), not Direct Invest */}
@@ -361,7 +361,7 @@ function Invest() {
                 Bank details
               </button>
             </div>
-            <select value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+            <ModernSelect value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
               <option value="">Select CAL bank account</option>
               {calBankAccounts.map((a) => {
                 const isDeutsche = a.bank.includes("Deutsche");
@@ -371,7 +371,7 @@ function Invest() {
                   </option>
                 );
               })}
-            </select>
+            </ModernSelect>
 
             {/* HNB deprecation warning */}
             {selectedPayTo.startsWith("HNB") && (
@@ -436,10 +436,10 @@ function Invest() {
       {method === "flip" && (
         <div className="mx-4 mt-3 glass-card p-3">
           <label className="text-[10px] text-muted-foreground">Transfer to</label>
-          <select className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <ModernSelect className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
             <option>Select CAL account</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
-          </select>
+          </ModernSelect>
         </div>
       )}
 

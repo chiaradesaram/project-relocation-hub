@@ -111,17 +111,17 @@ function Redeem() {
         <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">FUND & ACCOUNT</p>
         <div>
           <label className="text-[10px] text-muted-foreground">Fund</label>
-          <select value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
             <option value="">Select fund</option>
             {funds.map((f) => <option key={f}>{f}</option>)}
-          </select>
+          </ModernSelect>
         </div>
         <div>
           <label className="text-[10px] text-muted-foreground">Sub Account</label>
-          <select value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
             <option value="">Select account</option>
             {accounts.map((a) => <option key={a}>{a}</option>)}
-          </select>
+          </ModernSelect>
         </div>
       </div>
 
@@ -134,12 +134,12 @@ function Redeem() {
           </p>
           <div>
             <label className="text-[10px] text-muted-foreground">Frequency</label>
-            <select value={planFrequency} onChange={(e) => setPlanFrequency(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
+            <ModernSelect value={planFrequency} onChange={(e) => setPlanFrequency(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground appearance-none outline-none">
               <option>Weekly</option>
               <option>Bi-weekly</option>
               <option>Monthly</option>
               <option>Quarterly</option>
-            </select>
+            </ModernSelect>
           </div>
           <div>
             <label className="text-[10px] text-muted-foreground">Start Date</label>
@@ -153,7 +153,7 @@ function Redeem() {
         <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">PAYMENT DETAILS</p>
         <div>
           <label className="text-[10px] text-muted-foreground">Pay to (Your Bank Account)</label>
-          <select
+          <ModernSelect
             value={selectedBank}
             onChange={(e) => {
               if (e.target.value === "__add_bank") {
@@ -171,7 +171,7 @@ function Redeem() {
               </option>
             ))}
             <option value="__add_bank">+ Add Bank Account</option>
-          </select>
+          </ModernSelect>
         </div>
       </div>
 
