@@ -218,14 +218,14 @@ function Invest() {
         </h2>
         <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
           <div className="flex items-baseline gap-2">
-            <span className="text-[16px] font-medium text-muted-foreground">LKR</span>
+            <span className="text-[13px] font-medium text-muted-foreground">LKR</span>
             <input
               type="text"
               inputMode="decimal"
               value={formatAmountDisplay(amount)}
               onChange={(e) => handleAmountChange(e.target.value)}
               placeholder="0.00"
-              className="flex-1 bg-transparent text-[28px] font-semibold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none"
+              className="flex-1 bg-transparent text-[20px] font-semibold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none"
             />
           </div>
           {isDirectInvest && (
