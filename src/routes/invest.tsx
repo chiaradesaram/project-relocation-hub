@@ -141,19 +141,72 @@ function Invest() {
 
       {/* Recurring Plans List */}
       {method === "instant" && investType === "recurring" && (
-        <div className="mx-4 mt-3">
-          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mb-2">EXISTING PLANS</p>
-          {existingRecurring.map((plan, i) => (
-            <div key={i} className="glass-card p-3 mb-2 flex items-center gap-3">
-              <div className="flex-1">
-                <p className="text-xs font-medium text-foreground">{plan.fund}</p>
-                <p className="text-[12px] text-muted-foreground">LKR {plan.amount} · {plan.frequency} · Next: {plan.nextDate}</p>
-              </div>
-              <Edit2 className="w-3.5 h-3.5 text-muted-foreground" />
-              <Trash2 className="w-3.5 h-3.5 text-destructive" />
-            </div>
-          ))}
-          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mt-4 mb-2">NEW RECURRING PLAN</p>
+        <div className="mx-4 mt-4">
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mb-3 px-1">Existing plans</p>
+          <div className="space-y-2.5">
+            {existingRecurring.map((plan, i) => {
+              const freq = plan.frequency.toLowerCase();
+              const isMonthly = freq === "monthly";
+              return (
+                <button
+                  key={i}
+                  type="button"
+                  className="group w-full glass-card p-4 text-left transition-all hover:border-primary/30 active:scale-[0.99]"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-baseline gap-2 flex-wrap">
+                        <span className="text-[18px] font-semibold text-foreground tracking-tight tabular-nums">
+                          LKR {plan.amount}
+                        </span>
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize ${
+                            isMonthly
+                              ? "text-[oklch(0.78_0.14_260)]"
+                              : "text-[oklch(0.78_0.14_155)]"
+                          }`}
+                          style={{
+                            background: isMonthly
+                              ? "color-mix(in oklch, var(--portfolio-blue) 22%, transparent)"
+                              : "color-mix(in oklch, var(--success) 22%, transparent)",
+                          }}
+                        >
+                          {plan.frequency}
+                        </span>
+                      </div>
+                      <p className="mt-1 text-[13px] text-muted-foreground truncate">{plan.fund}</p>
+                    </div>
+                    <div className="text-right shrink-0">
+                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground/80">Next</p>
+                      <p className="text-[13px] font-medium text-foreground mt-0.5">{plan.nextDate.replace(/, \d{4}$/, "")}</p>
+                    </div>
+                  </div>
+                  <div className="mt-3 pt-3 border-t border-border/40 flex items-center justify-between">
+                    <span className="text-[11px] text-muted-foreground">{plan.account}</span>
+                    <div className="flex items-center gap-1">
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card/80 transition-colors"
+                        aria-label="Edit plan"
+                      >
+                        <Edit2 className="w-3.5 h-3.5" />
+                      </span>
+                      <span
+                        role="button"
+                        tabIndex={0}
+                        className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
+                        aria-label="Delete plan"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </span>
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mt-6 mb-2 px-1">New recurring plan</p>
         </div>
       )}
 
