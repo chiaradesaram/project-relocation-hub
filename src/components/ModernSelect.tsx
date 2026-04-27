@@ -45,12 +45,15 @@ function extractOptions(children: React.ReactNode): {
     };
     const labelNode = props.children ?? "";
     const labelText = typeof labelNode === "string" ? labelNode : "";
-    // Treat option with no explicit value or empty value as the placeholder
-    if (props.value === undefined || props.value === "") {
+    // Empty-string value (e.g. <option value="">Select…</option>) is the placeholder
+    if (props.value === "") {
       placeholder = labelText || placeholder;
       return;
     }
-    options.push({ value: props.value, label: labelNode, disabled: props.disabled });
+    // If no value attribute is provided, fall back to the text label (matches HTML spec)
+    const value = props.value ?? labelText;
+    if (!value) return;
+    options.push({ value, label: labelNode, disabled: props.disabled });
   });
 
   return { options, placeholder };
