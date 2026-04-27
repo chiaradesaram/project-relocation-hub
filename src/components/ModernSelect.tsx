@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 type Option = { value: string; label: React.ReactNode; disabled?: boolean };
 
 interface ModernSelectProps {
-  value: string;
-  onChange: (e: { target: { value: string } }) => void;
+  value?: string;
+  onChange?: (e: { target: { value: string } }) => void;
   className?: string;
   contentClassName?: string;
   placeholder?: string;
@@ -43,13 +43,15 @@ function extractOptions(children: React.ReactNode): {
       children?: React.ReactNode;
       disabled?: boolean;
     };
-    const value = props.value ?? "";
-    const label = props.children ?? "";
-    if (value === "") {
+    const labelNode = props.children ?? "";
+    const labelText = typeof labelNode === "string" ? labelNode : "";
+    // Treat option with no explicit value or empty value as the placeholder
+    if (props.value === undefined || props.value === "") {
       placeholder = typeof label === "string" ? label : undefined;
+      placeholder = labelText || placeholder;
       return;
     }
-    options.push({ value, label, disabled: props.disabled });
+    options.push({ value: props.value, label: labelNode, disabled: props.disabled });
   });
 
   return { options, placeholder };
@@ -70,7 +72,7 @@ export function ModernSelect({
   return (
     <Select
       value={value || undefined}
-      onValueChange={(v) => onChange({ target: { value: v } })}
+      onValueChange={(v) => onChange?.({ target: { value: v } })}
       disabled={disabled}
     >
       <SelectTrigger
