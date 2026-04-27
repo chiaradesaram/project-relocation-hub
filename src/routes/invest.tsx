@@ -503,13 +503,16 @@ function Invest() {
       )}
 
       {method === "flip" && (
-        <div className="mx-4 mt-3 glass-card p-3">
-          <label className="text-[12px] text-muted-foreground">Transfer to</label>
-          <ModernSelect className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-            <option>Select CAL account</option>
-            {funds.map((f) => <option key={f}>{f}</option>)}
-          </ModernSelect>
-        </div>
+        <FormSection>
+          <div className="form-field-inline">
+            <FormField label="Transfer to">
+              <ModernSelect>
+                <option value="">Select CAL account</option>
+                {funds.map((f) => <option key={f}>{f}</option>)}
+              </ModernSelect>
+            </FormField>
+          </div>
+        </FormSection>
       )}
 
       {method === "bank" && !selectedPayTo.includes("Deutsche") && (
