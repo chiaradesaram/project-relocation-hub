@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, ArrowUpRight, ArrowDownLeft, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -160,14 +160,14 @@ function Dashboard() {
           onClick={() => setShowActionPicker("invest")}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
         >
-          <ArrowUpRight className="h-3.5 w-3.5 text-success" />
+          <Plus className="h-3.5 w-3.5 text-success" />
           <span className="text-[11px] font-normal text-foreground">Invest</span>
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
           className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
         >
-          <ArrowDownLeft className="h-3.5 w-3.5 text-muted-foreground" />
+          <Minus className="h-3.5 w-3.5 text-muted-foreground" />
           <span className="text-[11px] font-normal text-foreground">Redeem</span>
         </button>
       </div>
