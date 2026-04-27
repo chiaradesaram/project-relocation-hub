@@ -448,20 +448,17 @@ function SelectInput({
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative flex items-center">
+    <div className="flex items-center">
       <ModernSelect
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className={`w-full appearance-none bg-transparent pr-6 text-[12px] outline-none ${
+        placeholder={placeholder}
+        className={`w-full border-0 bg-transparent p-0 text-[12px] shadow-none ${
           value ? "text-foreground" : "text-muted-foreground"
         }`}
       >
-        <option value="" disabled>
-          {placeholder}
-        </option>
         {children}
       </ModernSelect>
-      <ChevronDown className="pointer-events-none absolute right-0 h-3.5 w-3.5 text-muted-foreground" />
     </div>
   );
 }
