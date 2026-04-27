@@ -132,21 +132,21 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-1.5 rounded-2xl border border-primary/10 bg-card/80 p-4 backdrop-blur-md">
-        <p className="text-[9px] uppercase tracking-wider text-muted-foreground/70">Total Portfolio</p>
+      <div className="mx-4 mt-1.5 rounded-2xl border border-border/30 bg-card p-4 backdrop-blur-md shadow-sm">
+        <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Total Portfolio</p>
         <div className="mt-1.5 flex items-center gap-3">
           <DonutChart items={portfolioItems} />
           <div className="min-w-0 flex-1">
             <h2 className="text-lg font-medium tracking-tight text-foreground">LKR 7,370,000</h2>
             <p className="mt-0.5 text-[11px]">
               <span className="font-normal text-success">+7.8%</span>
-              <span className="text-muted-foreground/80"> · LKR 662,000 all time</span>
+              <span className="text-muted-foreground"> · LKR 662,000 all time</span>
             </p>
             <div className="mt-1.5 flex flex-wrap gap-x-2.5 gap-y-0.5">
               {portfolioItems.map((item) => (
                 <div key={item.name} className="flex items-center gap-1">
                   <div className="h-1 w-1 rounded-full" style={{ backgroundColor: item.color }} />
-                  <span className="text-[9px] text-muted-foreground/80">{item.name}</span>
+                  <span className="text-[9px] text-muted-foreground">{item.name}</span>
                 </div>
               ))}
             </div>
@@ -158,7 +158,7 @@ function Dashboard() {
       <div className="mx-4 mt-2 flex gap-2">
         <button
           onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card border border-border/40 backdrop-blur-md py-2.5 transition hover:bg-muted/20 shadow-sm"
         >
           <span className="flex h-5 w-5 items-center justify-center rounded-full bg-success/15 ring-1 ring-success/30">
             <Plus className="h-3 w-3 text-success" strokeWidth={2.75} />
@@ -167,9 +167,9 @@ function Dashboard() {
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card border border-border/40 backdrop-blur-md py-2.5 transition hover:bg-muted/20 shadow-sm"
         >
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted/30 ring-1 ring-border/40">
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/30">
             <Minus className="h-3 w-3 text-foreground" strokeWidth={2.75} />
           </span>
           <span className="text-[11px] font-medium text-foreground">Redeem</span>
