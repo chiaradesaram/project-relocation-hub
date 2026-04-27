@@ -158,17 +158,21 @@ function Dashboard() {
       <div className="mx-4 mt-2 flex gap-2">
         <button
           onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
         >
-          <Plus className="h-3.5 w-3.5 text-success" />
-          <span className="text-[11px] font-normal text-foreground">Invest</span>
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-success/15 ring-1 ring-success/30">
+            <Plus className="h-3 w-3 text-success" strokeWidth={2.75} />
+          </span>
+          <span className="text-[11px] font-medium text-foreground">Invest</span>
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
+          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card/50 border border-border/20 backdrop-blur-md py-2 transition hover:bg-muted/10"
         >
-          <Minus className="h-3.5 w-3.5 text-muted-foreground" />
-          <span className="text-[11px] font-normal text-foreground">Redeem</span>
+          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-muted/30 ring-1 ring-border/40">
+            <Minus className="h-3 w-3 text-foreground" strokeWidth={2.75} />
+          </span>
+          <span className="text-[11px] font-medium text-foreground">Redeem</span>
         </button>
       </div>
 
