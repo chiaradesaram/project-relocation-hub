@@ -132,7 +132,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-1.5 rounded-2xl border border-border/30 bg-card p-4 backdrop-blur-md shadow-sm">
+      <div className="mx-4 mt-1.5 rounded-2xl border border-border/40 bg-foreground/[0.06] p-4 backdrop-blur-md shadow-sm">
         <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Total Portfolio</p>
         <div className="mt-1.5 flex items-center gap-3">
           <DonutChart items={portfolioItems} />
