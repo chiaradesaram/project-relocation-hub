@@ -18,7 +18,7 @@ function BankAccounts() {
     <MobileLayout>
       <PageHeader title="Bank Accounts" showBack />
 
-      <p className="px-4 mt-2 text-[11px] text-muted-foreground">
+      <p className="px-4 mt-2 text-[12px] text-muted-foreground">
         Manage your linked bank accounts for investments and redemptions.
       </p>
 
@@ -35,7 +35,7 @@ function BankAccounts() {
                   <span className="text-[8px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-medium">Primary</span>
                 )}
               </div>
-              <p className="text-[10px] text-muted-foreground">{acc.type} · {acc.accNo}</p>
+              <p className="text-[12px] text-muted-foreground">{acc.type} · {acc.accNo}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </div>

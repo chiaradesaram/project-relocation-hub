@@ -222,15 +222,15 @@ function ContactForm() {
               <CheckCircle2 className="h-6 w-6 text-success" />
             </div>
             <p className="text-sm font-semibold text-foreground">We've got your request</p>
-            <p className="mt-1.5 text-[11px] text-muted-foreground">
+            <p className="mt-1.5 text-[12px] text-muted-foreground">
               We've routed it to our{" "}
               <span className="font-medium text-foreground">{category.team}</span>.
             </p>
-            <p className="mt-1 text-[11px] text-muted-foreground">
+            <p className="mt-1 text-[12px] text-muted-foreground">
               Expected response: within 24 hours.
             </p>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-muted/30 px-2.5 py-1">
-              <span className="text-[10px] text-muted-foreground">Reference</span>
+              <span className="text-[12px] text-muted-foreground">Reference</span>
               <span className="text-[11px] font-mono font-medium text-foreground">{refId}</span>
             </div>
           </div>
@@ -260,7 +260,7 @@ function ContactForm() {
 
       <div className="mx-4 mt-1 pb-6">
         <h2 className="text-sm font-semibold text-foreground">Tell us what's wrong</h2>
-        <p className="mb-4 text-[11px] text-muted-foreground">
+        <p className="mb-4 text-[12px] text-muted-foreground">
           Pick the closest match — we'll route your request to the right team.
         </p>
 
@@ -302,14 +302,14 @@ function ContactForm() {
             <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
-                <p className="text-[11px] font-semibold text-foreground">
+                <p className="text-[13px] font-semibold text-foreground">
                   This might solve it instantly
                 </p>
               </div>
               <div className="space-y-2">
                 {suggestions.map((s, i) => (
                   <div key={i} className="rounded-lg bg-card/60 p-2.5">
-                    <p className="text-[11px] font-medium text-foreground">{s.q}</p>
+                    <p className="text-[13px] font-medium text-foreground">{s.q}</p>
                     <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
                       {s.a}
                     </p>
@@ -376,7 +376,7 @@ function ContactForm() {
 
               <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
                 <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="flex-1 text-[11px] text-muted-foreground">
+                <span className="flex-1 text-[12px] text-muted-foreground">
                   {fileName ?? "Attach documents (optional)"}
                 </span>
                 <input
