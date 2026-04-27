@@ -15,13 +15,13 @@ export function FormSection({
   className?: string;
 }) {
   return (
-    <section className={cn("mx-4 mt-6", className)}>
+    <section className={cn("mx-4 mt-5", className)}>
       {title && (
-        <h2 className="px-1 mb-2 text-[11px] font-semibold tracking-wider uppercase text-muted-foreground">
+        <h2 className="px-1 mb-2.5 text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
           {title}
         </h2>
       )}
-      <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 divide-y divide-border/40 overflow-hidden">
+      <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 divide-y divide-border/30 overflow-hidden">
         {children}
       </div>
     </section>
@@ -48,19 +48,19 @@ export function FormField({
   className?: string;
 }) {
   return (
-    <div className={cn("px-4 py-3", className)}>
-      <div className="flex items-center justify-between gap-3 mb-1.5">
-        <label className="text-[12px] font-medium text-muted-foreground leading-none">
+    <div className={cn("px-4 py-3.5", className)}>
+      <div className="flex items-center justify-between gap-3 mb-2">
+        <label className="text-[13px] font-medium text-foreground/90 leading-none">
           {label}
         </label>
         {action}
       </div>
-      {children}
+      <div className="text-[15px] leading-tight">{children}</div>
       {hint && !error && (
-        <p className="mt-1.5 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>
+        <p className="mt-2 text-[12px] text-muted-foreground/80 leading-snug">{hint}</p>
       )}
       {error && (
-        <p className="mt-1.5 text-[11px] text-destructive leading-snug">{error}</p>
+        <p className="mt-2 text-[12px] text-destructive leading-snug">{error}</p>
       )}
     </div>
   );
