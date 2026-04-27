@@ -197,14 +197,14 @@
     border: 0 !important;
     padding: 0 !important;
     height: auto !important;
-    font-size: 14px !important;
+    font-size: 15px !important;
     font-weight: 500 !important;
-    line-height: 1.2 !important;
+    line-height: 1.3 !important;
     color: var(--foreground) !important;
   }
   .form-field-inline [data-slot="select-trigger"][data-placeholder],
   .form-field-inline button[role="combobox"][data-placeholder] {
-    color: color-mix(in oklch, var(--muted-foreground) 80%, white 10%) !important;
+    color: color-mix(in oklch, var(--muted-foreground) 55%, transparent) !important;
     font-weight: 400 !important;
   }
   .form-field-inline input[type="text"],
@@ -215,14 +215,14 @@
     background: transparent !important;
     border: 0 !important;
     padding: 0 !important;
-    font-size: 14px !important;
-    line-height: 1.2 !important;
+    font-size: 15px !important;
+    line-height: 1.3 !important;
     font-weight: 500 !important;
     color: var(--foreground) !important;
     width: 100%;
   }
   .form-field-inline input::placeholder {
-    color: color-mix(in oklch, var(--muted-foreground) 80%, white 10%) !important;
+    color: color-mix(in oklch, var(--muted-foreground) 55%, transparent) !important;
     font-weight: 400 !important;
   }
 }
