@@ -55,7 +55,7 @@ export function FormField({
         </label>
         {action}
       </div>
-      <div className="text-[15px] leading-tight">{children}</div>
+      <div className="text-[14px] leading-tight">{children}</div>
       {hint && !error && (
         <p className="mt-2 text-[12px] text-muted-foreground/80 leading-snug">{hint}</p>
       )}
