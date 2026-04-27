@@ -212,24 +212,24 @@ function Invest() {
       )}
 
       {/* Amount Input */}
-      <section className="mx-4 mt-4">
-        <h2 className="px-1 mb-2 text-[11px] font-semibold tracking-wider uppercase text-muted-foreground">
-          Investment Amount
+      <section className="mx-4 mt-5">
+        <h2 className="px-1 mb-2.5 text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+          Amount
         </h2>
-        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-3.5">
-          <div className="flex items-baseline gap-1.5">
-            <span className="text-[14px] font-medium text-muted-foreground">LKR</span>
+        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
+          <div className="flex items-baseline gap-2">
+            <span className="text-[16px] font-medium text-muted-foreground">LKR</span>
             <input
               type="text"
               inputMode="decimal"
               value={formatAmountDisplay(amount)}
               onChange={(e) => handleAmountChange(e.target.value)}
               placeholder="0.00"
-              className="flex-1 bg-transparent text-[20px] font-semibold tracking-tight text-foreground placeholder:text-muted-foreground/50 outline-none tabular-nums"
+              className="flex-1 bg-transparent text-[28px] font-semibold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none"
             />
           </div>
           {isDirectInvest && (
-            <p className="mt-1.5 text-[11px] text-muted-foreground/80">
+            <p className="mt-2.5 text-[12px] text-muted-foreground/80">
               Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
             </p>
           )}
@@ -285,34 +285,45 @@ function Invest() {
 
       {/* Recurring options */}
       {method === "instant" && investType === "new" && (
-        <div className="mx-4 mt-3 glass-card p-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs text-foreground flex items-center gap-2">
-              <Repeat className={`w-3.5 h-3.5 transition-colors ${isRecurring ? "text-success" : "text-muted-foreground"}`} />
-              Set Recurring investments
-            </span>
+        <div className="mx-4 mt-3 rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 overflow-hidden">
+          <div className="flex items-center justify-between gap-3 px-4 py-3.5">
+            <div className="flex items-center gap-3 min-w-0">
+              <div
+                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors`}
+                style={{
+                  background: isRecurring
+                    ? "color-mix(in oklch, var(--success) 22%, transparent)"
+                    : "color-mix(in oklch, var(--muted-foreground) 14%, transparent)",
+                }}
+              >
+                <Repeat className={`w-4 h-4 ${isRecurring ? "text-success" : "text-muted-foreground"}`} />
+              </div>
+              <div className="min-w-0">
+                <p className="text-[14px] font-medium text-foreground leading-tight">Repeat this investment</p>
+                <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">Auto-invest on a schedule</p>
+              </div>
+            </div>
             <button
               onClick={() => setIsRecurring(!isRecurring)}
-              className={`w-9 h-5 rounded-full transition-all flex items-center ${isRecurring ? "bg-success" : "bg-muted"}`}
+              className={`w-11 h-6 rounded-full transition-all flex items-center shrink-0 ${isRecurring ? "bg-success" : "bg-muted"}`}
+              aria-label="Toggle recurring"
             >
-              <div className={`w-4 h-4 rounded-full bg-white shadow-md transition-transform ${isRecurring ? "translate-x-4" : "translate-x-0.5"}`} />
+              <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform ${isRecurring ? "translate-x-[22px]" : "translate-x-0.5"}`} />
             </button>
           </div>
           {isRecurring && (
-            <div className="mt-3 space-y-2">
-              <div>
-                <label className="text-[12px] text-muted-foreground">Frequency</label>
-                <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-card rounded-lg p-2 text-[13px] text-foreground outline-none">
+            <div className="form-field-inline border-t border-border/30 divide-y divide-border/30">
+              <FormField label="Frequency">
+                <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)}>
                   <option>Weekly</option>
                   <option>Bi-weekly</option>
                   <option>Monthly</option>
                   <option>Quarterly</option>
                 </ModernSelect>
-              </div>
-              <div>
-                <label className="text-[12px] text-muted-foreground">Start Date</label>
-                <input type="date" className="w-full bg-card rounded-lg p-2 text-[13px] text-foreground outline-none" />
-              </div>
+              </FormField>
+              <FormField label="Start date">
+                <input type="date" />
+              </FormField>
             </div>
           )}
         </div>
@@ -320,21 +331,21 @@ function Invest() {
 
       {/* Recurring setup for recurring tab */}
       {method === "instant" && investType === "recurring" && (
-        <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-          <div>
-            <label className="text-[12px] text-muted-foreground">Frequency</label>
-            <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)} className="w-full bg-secondary rounded-lg p-2.5 text-[13px] text-foreground outline-none">
-              <option>Weekly</option>
-              <option>Bi-weekly</option>
-              <option>Monthly</option>
-              <option>Quarterly</option>
-            </ModernSelect>
+        <FormSection title="Schedule">
+          <div className="form-field-inline divide-y divide-border/30">
+            <FormField label="Frequency">
+              <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)}>
+                <option>Weekly</option>
+                <option>Bi-weekly</option>
+                <option>Monthly</option>
+                <option>Quarterly</option>
+              </ModernSelect>
+            </FormField>
+            <FormField label="Start date">
+              <input type="date" />
+            </FormField>
           </div>
-          <div>
-            <label className="text-[12px] text-muted-foreground">Start Date</label>
-            <input type="date" className="w-full bg-secondary rounded-lg p-2.5 text-[13px] text-foreground outline-none" />
-          </div>
-        </div>
+        </FormSection>
       )}
 
       {/* Fund & Account */}
