@@ -132,15 +132,15 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-1.5 rounded-2xl border border-border/40 bg-foreground/[0.06] p-4 backdrop-blur-md shadow-sm">
+      <div className="mx-4 mt-1.5 rounded-2xl border border-primary/30 bg-primary/15 p-4 backdrop-blur-md shadow-sm">
         <p className="text-[9px] uppercase tracking-wider text-muted-foreground">Total Portfolio</p>
         <div className="mt-1.5 flex items-center gap-3">
           <DonutChart items={portfolioItems} />
           <div className="min-w-0 flex-1">
             <h2 className="text-lg font-medium tracking-tight text-foreground">LKR 7,370,000</h2>
-            <p className="mt-0.5 text-[11px]">
-              <span className="font-normal text-success">+7.8%</span>
-              <span className="text-muted-foreground"> · LKR 662,000 all time</span>
+            <p className="mt-0.5 text-[11px] text-success">
+              <span className="font-normal">+7.8%</span>
+              <span> · +662,000 LKR all time</span>
             </p>
             <div className="mt-1.5 flex flex-wrap gap-x-2.5 gap-y-0.5">
               {portfolioItems.map((item) => (
