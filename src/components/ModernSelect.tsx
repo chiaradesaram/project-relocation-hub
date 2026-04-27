@@ -79,7 +79,7 @@ export function ModernSelect({
     >
       <SelectTrigger
         className={cn(
-          "h-auto w-full rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[11px] font-normal text-foreground shadow-none backdrop-blur-md transition hover:border-primary/40 focus:ring-0 focus-visible:ring-0 data-[placeholder]:text-muted-foreground",
+          "h-auto w-full rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] font-normal text-foreground shadow-none backdrop-blur-md transition hover:border-primary/40 focus:ring-0 focus-visible:ring-0 data-[placeholder]:text-muted-foreground",
           className,
         )}
       >
@@ -96,7 +96,7 @@ export function ModernSelect({
             key={opt.value}
             value={opt.value}
             disabled={opt.disabled}
-            className="rounded-lg text-[12px] focus:bg-primary/15 focus:text-foreground"
+            className="rounded-lg text-[13px] py-2 focus:bg-primary/15 focus:text-foreground"
           >
             {opt.label}
           </SelectItem>
