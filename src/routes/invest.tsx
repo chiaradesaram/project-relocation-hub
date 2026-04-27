@@ -6,6 +6,7 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
+import { FormSection, FormField } from "@/components/FormField";
 
 export const Route = createFileRoute("/invest")({
   component: Invest,
@@ -211,25 +212,29 @@ function Invest() {
       )}
 
       {/* Amount Input */}
-      <div className="mx-4 mt-3 glass-card p-3">
-        <label className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">Amount</label>
-        <div className="flex items-center gap-2 mt-1">
-          <span className="text-xs text-muted-foreground">LKR</span>
-          <input
-            type="text"
-            inputMode="decimal"
-            value={formatAmountDisplay(amount)}
-            onChange={(e) => handleAmountChange(e.target.value)}
-            placeholder="0.00"
-            className="flex-1 bg-transparent text-base font-semibold text-foreground placeholder:text-muted-foreground outline-none"
-          />
+      <section className="mx-4 mt-4">
+        <h2 className="px-1 mb-2 text-[15px] font-semibold text-foreground">
+          Investment Amount
+        </h2>
+        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
+          <div className="flex items-baseline gap-2">
+            <span className="text-[22px] font-medium text-muted-foreground">LKR</span>
+            <input
+              type="text"
+              inputMode="decimal"
+              value={formatAmountDisplay(amount)}
+              onChange={(e) => handleAmountChange(e.target.value)}
+              placeholder="0.00"
+              className="flex-1 bg-transparent text-[26px] font-semibold text-foreground placeholder:text-muted-foreground/60 outline-none"
+            />
+          </div>
+          {isDirectInvest && (
+            <p className="mt-2 text-[12px] text-muted-foreground">
+              Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
+            </p>
+          )}
         </div>
-        {isDirectInvest && (
-          <p className="mt-1.5 text-[12px] text-muted-foreground">
-            Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
-          </p>
-        )}
-      </div>
+      </section>
 
       {/* Direct Invest: repeat multiplier — shown when at the cap */}
       {isDirectInvest && atLimit && investType === "new" && (
@@ -333,144 +338,154 @@ function Invest() {
       )}
 
       {/* Fund & Account */}
-      <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">FUND & ACCOUNT</p>
-        <div>
-          <label className="text-[12px] text-muted-foreground">Fund</label>
-          <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-            <option value="">Select fund</option>
-            {funds.map((f) => <option key={f}>{f}</option>)}
-          </ModernSelect>
-          {selectedFund && (
-            <button
-              type="button"
-              onClick={() => navigate({ to: "/rates" })}
-              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium"
-              style={{ color: "var(--portfolio-blue)" }}
-            >
-              View fund rates
-              <ExternalLink className="w-2.5 h-2.5" />
-            </button>
-          )}
-        </div>
-        <div>
-          <label className="text-[12px] text-muted-foreground">Sub Account</label>
-          <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-            <option value="">Select account</option>
-            {accounts.map((a) => <option key={a}>{a}</option>)}
-          </ModernSelect>
-        </div>
-      </div>
-
-      {/* Transfer Details */}
-      <div className="mx-4 mt-3 glass-card p-3 space-y-2">
-        <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase">TRANSFER DETAILS</p>
-        <div>
-          <label className="text-[12px] text-muted-foreground flex items-center gap-1">
-            {method === "flip" ? "Transfer from" : "Pay from"}
-            {method !== "flip" && (
-              <button type="button" onClick={() => setShowJustpayInfo(!showJustpayInfo)} aria-label="About Pay from">
-                <Info className="w-3 h-3 text-muted-foreground" />
-              </button>
-            )}
-          </label>
-          {showJustpayInfo && method !== "flip" && (
-            <p className="mt-1 text-[12px] text-muted-foreground bg-secondary/60 rounded-lg p-2">
-              Accounts need to be verified using Justpay.
-            </p>
-          )}
-          <ModernSelect
-            value={selectedBank}
-            onChange={(e) => {
-              if (e.target.value === "__add_bank") {
-                navigate({ to: "/bank-accounts" });
-              } else {
-                setSelectedBank(e.target.value);
-              }
-            }}
-            className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none"
-          >
-            <option value="">{method === "flip" ? "Select fund" : "Select bank"}</option>
-            {method === "flip"
-              ? funds.map((f) => <option key={f}>{f}</option>)
-              : (
-                <>
-                  {banks.map((b) => <option key={b}>{b}</option>)}
-                  <option value="__add_bank">+ Add Bank Account</option>
-                </>
-              )
-            }
-          </ModernSelect>
-        </div>
-
-        {/* Deutsche Bank tip is only for Bank Transfer (Pay To), not Direct Invest */}
-
-        {/* Bank transfer: Pay To account dropdown */}
-        {method === "bank" && (
-          <div>
-            <div className="flex items-center justify-between">
-              <label className="text-[12px] text-muted-foreground">Pay to (CAL Account)</label>
-              <button onClick={() => setShowBankDetails(!showBankDetails)} className="text-[10px] text-primary font-medium flex items-center gap-0.5">
-                <ExternalLink className="w-3 h-3" />
-                Bank details
-              </button>
-            </div>
-            <ModernSelect value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)} className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-              <option value="">Select CAL bank account</option>
-              {calBankAccounts.map((a) => {
-                const isDeutsche = a.bank.includes("Deutsche");
-                return (
-                  <option key={a.accNo} value={`${a.bank} — ${a.accNo}`}>
-                    {a.bank} — {a.accNo}{isDeutsche ? "  ✦ Recommended" : ""}
-                  </option>
-                );
-              })}
-            </ModernSelect>
-
-            {/* HNB deprecation warning */}
-            {selectedPayTo.startsWith("HNB") && (
-              <div className="mt-2 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.18 0.02 280))" }}>
-                <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 40%, transparent)" }}>
-                  <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
-                </div>
-                <div className="pt-0.5">
-                  <p className="text-[13px] font-semibold text-white">Account closing soon</p>
-                  <p className="text-[12px] text-white/80 mt-0.5 leading-snug">
-                    This HNB account will be removed after May. For your next investment please use the Deutsche Bank account instead.
-                  </p>
-                </div>
-              </div>
-            )}
-
-            {/* Deutsche prompt — show when Pay To isn't Deutsche */}
-            {!selectedPayTo.includes("Deutsche") && (
-              <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
+      <FormSection title="Fund & Account">
+        <div className="form-field-inline divide-y divide-border/40">
+          <FormField
+            label="Which fund?"
+            action={
+              selectedFund ? (
                 <button
                   type="button"
-                  onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
-                  className="w-full flex items-start gap-3 text-left p-3.5"
+                  onClick={() => navigate({ to: "/rates" })}
+                  className="inline-flex items-center gap-1 text-[12px] font-medium"
+                  style={{ color: "var(--portfolio-blue)" }}
                 >
-                  <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
-                    <Lightbulb className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
-                  </div>
-                  <div className="flex-1 pt-0.5">
-                    <p className="text-[13px] font-semibold text-white">Skip proof of payment</p>
-                    <p className="text-[12px] text-white/80 mt-0.5 leading-snug">Pay to Deutsche Bank — transfers are auto-verified, no upload needed.</p>
-                  </div>
-                  <ChevronDown className={`w-4 h-4 mt-1 shrink-0 transition-transform text-white/60 ${showDeutscheDetails ? "rotate-180" : ""}`} />
+                  View rates
+                  <ExternalLink className="w-3 h-3" />
                 </button>
-                {showDeutscheDetails && (
-                  <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.14 0.02 280)" }}>
-                    <p className="text-[12px] text-white/70">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
-                    <p className="text-[12px] text-white/70">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
-                    <p className="text-[12px] text-white/70">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
-                  </div>
-                )}
-              </div>
-            )}
+              ) : undefined
+            }
+          >
+            <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
+              <option value="">Select your fund</option>
+              {funds.map((f) => <option key={f}>{f}</option>)}
+            </ModernSelect>
+          </FormField>
+          <FormField label="Sub Account">
+            <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
+              <option value="">Select account</option>
+              {accounts.map((a) => <option key={a}>{a}</option>)}
+            </ModernSelect>
+          </FormField>
+        </div>
+      </FormSection>
+
+      {/* Transfer Details */}
+      <FormSection title="Transfer Details">
+        <div className="form-field-inline divide-y divide-border/40">
+          <FormField
+            label={method === "flip" ? "Transfer from" : "Pay from"}
+            hint={
+              showJustpayInfo && method !== "flip"
+                ? "Accounts need to be verified using Justpay."
+                : undefined
+            }
+            action={
+              method !== "flip" ? (
+                <button
+                  type="button"
+                  onClick={() => setShowJustpayInfo(!showJustpayInfo)}
+                  aria-label="About Pay from"
+                  className="text-muted-foreground hover:text-foreground"
+                >
+                  <Info className="w-4 h-4" />
+                </button>
+              ) : undefined
+            }
+          >
+            <ModernSelect
+              value={selectedBank}
+              onChange={(e) => {
+                if (e.target.value === "__add_bank") {
+                  navigate({ to: "/bank-accounts" });
+                } else {
+                  setSelectedBank(e.target.value);
+                }
+              }}
+            >
+              <option value="">{method === "flip" ? "Select your fund" : "Select your bank account"}</option>
+              {method === "flip"
+                ? funds.map((f) => <option key={f}>{f}</option>)
+                : (
+                  <>
+                    {banks.map((b) => <option key={b}>{b}</option>)}
+                    <option value="__add_bank">+ Add Bank Account</option>
+                  </>
+                )
+              }
+            </ModernSelect>
+          </FormField>
+
+          {method === "bank" && (
+            <FormField
+              label="Pay to"
+              action={
+                <button
+                  onClick={() => setShowBankDetails(!showBankDetails)}
+                  className="text-[12px] text-primary font-medium flex items-center gap-1"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  Bank details
+                </button>
+              }
+            >
+              <ModernSelect value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)}>
+                <option value="">Select CAL bank account</option>
+                {calBankAccounts.map((a) => {
+                  const isDeutsche = a.bank.includes("Deutsche");
+                  return (
+                    <option key={a.accNo} value={`${a.bank} — ${a.accNo}`}>
+                      {a.bank} — {a.accNo}{isDeutsche ? "  ✦ Recommended" : ""}
+                    </option>
+                  );
+                })}
+              </ModernSelect>
+            </FormField>
+          )}
+        </div>
+      </FormSection>
+
+      {/* Bank transfer: HNB closing notice */}
+      {method === "bank" && selectedPayTo.startsWith("HNB") && (
+        <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.18 0.02 280))" }}>
+          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 40%, transparent)" }}>
+            <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
           </div>
-        )}
-      </div>
+          <div className="pt-0.5">
+            <p className="text-[13px] font-semibold text-white">Account closing soon</p>
+            <p className="text-[12px] text-white/80 mt-0.5 leading-snug">
+              This HNB account will be removed after May. For your next investment please use the Deutsche Bank account instead.
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* Bank transfer: Deutsche prompt */}
+      {method === "bank" && !selectedPayTo.includes("Deutsche") && (
+        <div className="mx-4 mt-3 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
+          <button
+            type="button"
+            onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
+            className="w-full flex items-start gap-3 text-left p-3.5"
+          >
+            <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
+              <Lightbulb className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
+            </div>
+            <div className="flex-1 pt-0.5">
+              <p className="text-[13px] font-semibold text-white">Skip proof of payment</p>
+              <p className="text-[12px] text-white/80 mt-0.5 leading-snug">Pay to Deutsche Bank — transfers are auto-verified, no upload needed.</p>
+            </div>
+            <ChevronDown className={`w-4 h-4 mt-1 shrink-0 transition-transform text-white/60 ${showDeutscheDetails ? "rotate-180" : ""}`} />
+          </button>
+          {showDeutscheDetails && (
+            <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.14 0.02 280)" }}>
+              <p className="text-[12px] text-white/70">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
+              <p className="text-[12px] text-white/70">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
+              <p className="text-[12px] text-white/70">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Bank account details panel */}
       {method === "bank" && showBankDetails && (
@@ -488,13 +503,16 @@ function Invest() {
       )}
 
       {method === "flip" && (
-        <div className="mx-4 mt-3 glass-card p-3">
-          <label className="text-[12px] text-muted-foreground">Transfer to</label>
-          <ModernSelect className="mt-1 w-full bg-secondary rounded-xl p-2.5 text-[13px] text-foreground appearance-none outline-none">
-            <option>Select CAL account</option>
-            {funds.map((f) => <option key={f}>{f}</option>)}
-          </ModernSelect>
-        </div>
+        <FormSection>
+          <div className="form-field-inline">
+            <FormField label="Transfer to">
+              <ModernSelect>
+                <option value="">Select CAL account</option>
+                {funds.map((f) => <option key={f}>{f}</option>)}
+              </ModernSelect>
+            </FormField>
+          </div>
+        </FormSection>
       )}
 
       {method === "bank" && !selectedPayTo.includes("Deutsche") && (

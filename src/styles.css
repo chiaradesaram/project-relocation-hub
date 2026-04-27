@@ -186,6 +186,39 @@
   }
 }
 
+/* ----- FormField inline inputs -----
+   When a select / input lives inside the new FormField row, render it as a
+   borderless inline control (no inner box) so the only visible affordance is
+   the divider between rows. This matches the reference mockup. */
+@layer utilities {
+  .form-field-inline [data-slot="select-trigger"],
+  .form-field-inline button[role="combobox"] {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    height: auto !important;
+    font-size: 16px !important;
+    font-weight: 400 !important;
+    color: var(--foreground) !important;
+  }
+  .form-field-inline [data-slot="select-trigger"][data-placeholder],
+  .form-field-inline button[role="combobox"][data-placeholder] {
+    color: color-mix(in oklch, var(--muted-foreground) 100%, white 4%) !important;
+  }
+  .form-field-inline input[type="text"],
+  .form-field-inline input[type="number"],
+  .form-field-inline input[type="date"],
+  .form-field-inline input[type="email"],
+  .form-field-inline input[type="tel"] {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    font-size: 16px !important;
+    color: var(--foreground) !important;
+    width: 100%;
+  }
+}
+
 @layer utilities {
   .glass-card {
     background-color: color-mix(in oklch, var(--card) 80%, transparent);
