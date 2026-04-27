@@ -6,6 +6,7 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
+import { FormSection, FormField } from "@/components/FormField";
 
 export const Route = createFileRoute("/invest")({
   component: Invest,
