@@ -115,16 +115,21 @@ function Invest() {
       {/* Investment Type Toggle — instant only */}
       {method === "instant" && (
         <div className="mx-4 mt-3">
-          <div className="flex gap-1 rounded-xl p-1" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 22%, transparent)" }}>
+          <div className="flex gap-1 rounded-xl p-1 backdrop-blur-sm" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 12%, transparent)" }}>
             {(["new", "recurring"] as const).map((type) => (
               <button
                 key={type}
                 onClick={() => setInvestType(type)}
                 className={`flex-1 py-2 rounded-lg text-[11px] font-semibold transition-all ${
                   investType === type
-                    ? "bg-primary/40 text-foreground shadow-sm"
+                    ? "text-foreground shadow-sm"
                     : "text-muted-foreground"
                 }`}
+                style={
+                  investType === type
+                    ? { background: "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)" }
+                    : undefined
+                }
               >
                 {type === "new" ? "New Investment" : "Recurring Investments"}
               </button>
