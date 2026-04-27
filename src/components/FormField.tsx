@@ -17,7 +17,7 @@ export function FormSection({
   return (
     <section className={cn("mx-4 mt-6", className)}>
       {title && (
-        <h2 className="px-1 mb-2 text-[11px] font-semibold tracking-[0.12em] uppercase text-muted-foreground">
+        <h2 className="px-1 mb-2 text-[11px] font-semibold tracking-wider uppercase text-muted-foreground">
           {title}
         </h2>
       )}
@@ -48,19 +48,19 @@ export function FormField({
   className?: string;
 }) {
   return (
-    <div className={cn("p-4", className)}>
-      <div className="flex items-center justify-between gap-3 mb-2">
-        <label className="text-[15px] font-semibold text-foreground leading-none">
+    <div className={cn("px-4 py-3", className)}>
+      <div className="flex items-center justify-between gap-3 mb-1.5">
+        <label className="text-[12px] font-medium text-muted-foreground leading-none">
           {label}
         </label>
         {action}
       </div>
       {children}
       {hint && !error && (
-        <p className="mt-2 text-[12px] text-muted-foreground leading-snug">{hint}</p>
+        <p className="mt-1.5 text-[11px] text-muted-foreground/80 leading-snug">{hint}</p>
       )}
       {error && (
-        <p className="mt-2 text-[12px] text-destructive leading-snug">{error}</p>
+        <p className="mt-1.5 text-[11px] text-destructive leading-snug">{error}</p>
       )}
     </div>
   );

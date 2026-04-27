@@ -213,23 +213,23 @@ function Invest() {
 
       {/* Amount Input */}
       <section className="mx-4 mt-4">
-        <h2 className="px-1 mb-2 text-[15px] font-semibold text-foreground">
+        <h2 className="px-1 mb-2 text-[11px] font-semibold tracking-wider uppercase text-muted-foreground">
           Investment Amount
         </h2>
-        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[22px] font-medium text-muted-foreground">LKR</span>
+        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-3.5">
+          <div className="flex items-baseline gap-1.5">
+            <span className="text-[14px] font-medium text-muted-foreground">LKR</span>
             <input
               type="text"
               inputMode="decimal"
               value={formatAmountDisplay(amount)}
               onChange={(e) => handleAmountChange(e.target.value)}
               placeholder="0.00"
-              className="flex-1 bg-transparent text-[26px] font-semibold text-foreground placeholder:text-muted-foreground/60 outline-none"
+              className="flex-1 bg-transparent text-[20px] font-semibold tracking-tight text-foreground placeholder:text-muted-foreground/50 outline-none tabular-nums"
             />
           </div>
           {isDirectInvest && (
-            <p className="mt-2 text-[12px] text-muted-foreground">
+            <p className="mt-1.5 text-[11px] text-muted-foreground/80">
               Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
             </p>
           )}

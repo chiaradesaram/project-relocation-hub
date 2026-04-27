@@ -197,8 +197,8 @@
     border: 0 !important;
     padding: 0 !important;
     height: auto !important;
-    font-size: 16px !important;
-    font-weight: 400 !important;
+    font-size: 14px !important;
+    font-weight: 500 !important;
     color: var(--foreground) !important;
   }
   .form-field-inline [data-slot="select-trigger"][data-placeholder],
@@ -213,7 +213,7 @@
     background: transparent !important;
     border: 0 !important;
     padding: 0 !important;
-    font-size: 16px !important;
+    font-size: 14px !important;
     color: var(--foreground) !important;
     width: 100%;
   }
