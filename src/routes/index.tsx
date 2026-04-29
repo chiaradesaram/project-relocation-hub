@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -70,6 +70,8 @@ const DonutChart = ({ items }: { items: typeof portfolioItems }) => {
 function Dashboard() {
   const navigate = useNavigate();
   const [showActionPicker, setShowActionPicker] = useState<"invest" | "redeem" | null>(null);
+  // Demo flag — would come from user/account state in production
+  const [isFirstTimeInvestor, setIsFirstTimeInvestor] = useState(true);
 
   const productOptions = [
     { icon: PieChart, label: "Unit Trusts", param: "unit-trust" },
