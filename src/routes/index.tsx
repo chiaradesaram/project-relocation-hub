@@ -12,17 +12,17 @@ export const Route = createFileRoute("/")({
 const portfolioItems = [
   {
     name: "Unit Trusts", value: "2,450,000", earnings30d: "+10,500",
-    icon: PieChart, path: "/unit-trusts", percentage: 33, color: "oklch(0.6 0.2 260)",
+    icon: PieChart, path: "/unit-trusts", percentage: 30, color: "oklch(0.6 0.2 260)",
     status: null as string | null,
   },
   {
     name: "Equities", value: "1,820,000", earnings30d: "+22,750",
-    icon: BarChart2, path: "/invest?product=equities", percentage: 25, color: "oklch(0.55 0.25 290)",
+    icon: BarChart2, path: "/invest?product=equities", percentage: 30, color: "oklch(0.55 0.25 290)",
     status: null as string | null,
   },
   {
     name: "Treasuries", value: null, earnings30d: null,
-    icon: Receipt, path: "/invest?product=treasuries", percentage: 42, color: "oklch(0.6 0.2 350)",
+    icon: Receipt, path: "/invest?product=treasuries", percentage: 40, color: "oklch(0.6 0.2 350)",
     status: "In Approval" as string | null,
   },
 ];
