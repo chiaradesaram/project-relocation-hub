@@ -137,7 +137,7 @@ function Dashboard() {
       <div
         className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl p-4 shadow-sm"
         style={{
-          background: "oklch(0.22 0.06 285)",
+          background: "oklch(0.3 0.09 285)",
         }}
       >
         <div className="relative">
