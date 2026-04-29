@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -78,6 +78,16 @@ function Dashboard() {
     { icon: BarChart2, label: "Equities", param: "equities" },
     { icon: Receipt, label: "Treasuries", param: "treasuries" },
   ];
+
+  const WidgetMenu = () => (
+    <button
+      onClick={(e) => e.stopPropagation()}
+      className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground/60 hover:bg-muted/20 hover:text-foreground transition"
+      aria-label="More options"
+    >
+      <MoreHorizontal className="h-3.5 w-3.5" />
+    </button>
+  );
 
   return (
     <MobileLayout>
