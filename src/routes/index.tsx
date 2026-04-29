@@ -138,7 +138,7 @@ function Dashboard() {
         className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl p-4 shadow-sm"
         style={{
           background:
-            "radial-gradient(120% 90% at 100% 100%, oklch(0.4 0.16 290) 0%, oklch(0.22 0.06 285) 55%, oklch(0.18 0.04 280) 100%)",
+            "radial-gradient(85% 65% at 100% 100%, oklch(0.28 0.08 290) 0%, oklch(0.21 0.045 285) 48%, oklch(0.18 0.035 280) 100%)",
         }}
       >
         <div className="relative">
