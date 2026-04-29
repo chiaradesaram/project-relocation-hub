@@ -222,10 +222,10 @@ function Dashboard() {
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowActionPicker("invest")}
-                className="flex items-center gap-1 rounded-full bg-[oklch(0.6_0.2_290)] px-2.5 py-0.5 transition hover:brightness-110"
+                className="flex items-center gap-1 rounded-full bg-primary px-2.5 py-0.5 transition hover:brightness-110"
               >
-                <Plus className="h-2.5 w-2.5 text-white" strokeWidth={3.5} />
-                <span className="text-[10px] font-semibold text-white">Invest</span>
+                <Plus className="h-2.5 w-2.5 text-primary-foreground" strokeWidth={3.5} />
+                <span className="text-[10px] font-semibold text-primary-foreground">Invest</span>
               </button>
               <button
                 onClick={() => setShowActionPicker("redeem")}
@@ -275,7 +275,7 @@ function Dashboard() {
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
             <h3 className="text-[13px] font-medium text-muted-foreground">Market overview</h3>
             <div className="flex items-center gap-1">
-              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-[oklch(0.7_0.2_290)] hover:brightness-110 transition">View all</button>
+              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">View all</button>
               <WidgetMenu />
             </div>
           </div>
