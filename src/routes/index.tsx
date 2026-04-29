@@ -158,6 +158,38 @@ function Dashboard() {
 
       {/* Invest / Redeem pills */}
       <div className="mx-4 mt-2 flex gap-2">
+      </div>
+
+      {isFirstTimeInvestor && (
+        <div className="mx-4 mt-2.5">
+          <div className="relative overflow-hidden rounded-2xl border border-[oklch(0.6_0.2_290)]/40 bg-gradient-to-br from-[oklch(0.35_0.15_290)]/40 to-[oklch(0.25_0.12_260)]/30 backdrop-blur-md p-3.5">
+            <button
+              onClick={() => setIsFirstTimeInvestor(false)}
+              className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-background/30 text-muted-foreground hover:text-foreground transition"
+              aria-label="Dismiss"
+            >
+              <X className="h-3 w-3" />
+            </button>
+            <button
+              onClick={() => navigate({ to: "/get-started" })}
+              className="flex w-full items-center gap-3 text-left"
+            >
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/30 ring-1 ring-primary/40">
+                <Sparkles className="h-4 w-4 text-foreground" />
+              </span>
+              <div className="min-w-0 flex-1 pr-5">
+                <p className="text-[12px] font-semibold text-foreground leading-tight">New here? Let's get you started</p>
+                <p className="text-[10.5px] text-muted-foreground mt-0.5 leading-snug">
+                  Not sure what to invest in? Take a 30-second quiz to find a fund that fits you.
+                </p>
+              </div>
+              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+            </button>
+          </div>
+        </div>
+      )}
+
+      <div className="hidden">
         <button
           onClick={() => setShowActionPicker("invest")}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card border border-border/40 backdrop-blur-md py-2.5 transition hover:bg-muted/20 shadow-sm"
