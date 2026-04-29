@@ -176,7 +176,7 @@ function Dashboard() {
                   <div key={item.name} className="flex items-center gap-1.5">
                     <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.color }} />
                     <span className="text-[11px] text-white/80">
-                      {item.name} <span className="text-white/55">{item.percentage}%</span>
+                      {item.name === "Unit Trusts" ? "UT" : item.name === "Equities" ? "EQ" : "TR"} <span className="text-white/55">{item.percentage}%</span>
                     </span>
                   </div>
                 ))}
