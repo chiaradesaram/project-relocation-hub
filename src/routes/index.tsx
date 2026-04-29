@@ -220,10 +220,10 @@ function Dashboard() {
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowActionPicker("invest")}
-                className="flex items-center gap-1 rounded-full bg-[oklch(0.85_0.18_155)] px-2.5 py-0.5 transition hover:brightness-110"
+                className="flex items-center gap-1 rounded-full bg-[oklch(0.6_0.2_290)] px-2.5 py-0.5 transition hover:brightness-110"
               >
-                <Plus className="h-2.5 w-2.5 text-[oklch(0.2_0.06_285)]" strokeWidth={3.5} />
-                <span className="text-[10px] font-semibold text-[oklch(0.2_0.06_285)]">Invest</span>
+                <Plus className="h-2.5 w-2.5 text-white" strokeWidth={3.5} />
+                <span className="text-[10px] font-semibold text-white">Invest</span>
               </button>
               <button
                 onClick={() => setShowActionPicker("redeem")}
