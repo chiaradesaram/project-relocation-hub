@@ -23,7 +23,7 @@ const portfolioItems = [
   {
     name: "Treasuries", value: null, earnings30d: null,
     icon: Receipt, path: "/invest?product=treasuries", percentage: 42, color: "oklch(0.6 0.2 350)",
-    status: "In approval" as string | null,
+    status: "In Approval" as string | null,
   },
 ];
 
