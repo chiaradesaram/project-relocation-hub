@@ -188,7 +188,7 @@ function Dashboard() {
 
       {isFirstTimeInvestor && (
         <div className="mx-4 mt-3.5">
-          <div className="relative overflow-hidden rounded-2xl border border-[oklch(0.6_0.2_290)]/40 bg-gradient-to-br from-[oklch(0.35_0.15_290)]/40 to-[oklch(0.25_0.12_260)]/30 backdrop-blur-md p-3.5">
+          <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/15 backdrop-blur-md p-3.5">
             <button
               onClick={() => setIsFirstTimeInvestor(false)}
               className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-background/30 text-muted-foreground hover:text-foreground transition"
@@ -200,8 +200,8 @@ function Dashboard() {
               onClick={() => navigate({ to: "/get-started" })}
               className="flex w-full items-center gap-3 text-left"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/30 ring-1 ring-primary/40">
-                <Sparkles className="h-4 w-4 text-foreground" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary ring-1 ring-primary/60">
+                <Sparkles className="h-4 w-4 text-primary-foreground" />
               </span>
               <div className="min-w-0 flex-1 pr-5">
                 <p className="text-[12px] font-semibold text-foreground leading-tight">New here? Let's get you started</p>
@@ -222,10 +222,10 @@ function Dashboard() {
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowActionPicker("invest")}
-                className="flex items-center gap-1 rounded-full bg-[oklch(0.6_0.2_290)] px-2.5 py-0.5 transition hover:brightness-110"
+                className="flex items-center gap-1 rounded-full bg-primary px-2.5 py-0.5 transition hover:brightness-110"
               >
-                <Plus className="h-2.5 w-2.5 text-white" strokeWidth={3.5} />
-                <span className="text-[10px] font-semibold text-white">Invest</span>
+                <Plus className="h-2.5 w-2.5 text-primary-foreground" strokeWidth={3.5} />
+                <span className="text-[10px] font-semibold text-primary-foreground">Invest</span>
               </button>
               <button
                 onClick={() => setShowActionPicker("redeem")}
@@ -275,7 +275,7 @@ function Dashboard() {
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
             <h3 className="text-[13px] font-medium text-muted-foreground">Market overview</h3>
             <div className="flex items-center gap-1">
-              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-[oklch(0.7_0.2_290)] hover:brightness-110 transition">View all</button>
+              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">View all</button>
               <WidgetMenu />
             </div>
           </div>
