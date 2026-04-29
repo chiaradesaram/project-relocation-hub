@@ -181,22 +181,6 @@ function Dashboard() {
               </div>
             </div>
           </div>
-          <div className="mt-3 flex gap-2">
-            <button
-              onClick={() => setShowActionPicker("invest")}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[oklch(0.85_0.18_155)] py-1.5 transition hover:brightness-110"
-            >
-              <Plus className="h-3 w-3 text-[oklch(0.2_0.06_285)]" strokeWidth={3} />
-              <span className="text-[11px] font-semibold text-[oklch(0.2_0.06_285)]">Invest</span>
-            </button>
-            <button
-              onClick={() => setShowActionPicker("redeem")}
-              className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-white/15 py-1.5 transition hover:bg-white/25"
-            >
-              <Minus className="h-3 w-3 text-white" strokeWidth={3} />
-              <span className="text-[11px] font-semibold text-white">Redeem</span>
-            </button>
-          </div>
         </div>
       </div>
 
@@ -233,7 +217,23 @@ function Dashboard() {
         <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Portfolio</h3>
-            <WidgetMenu />
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setShowActionPicker("invest")}
+                className="flex items-center gap-1 rounded-full bg-[oklch(0.85_0.18_155)] px-2.5 py-0.5 transition hover:brightness-110"
+              >
+                <Plus className="h-2.5 w-2.5 text-[oklch(0.2_0.06_285)]" strokeWidth={3.5} />
+                <span className="text-[10px] font-semibold text-[oklch(0.2_0.06_285)]">Invest</span>
+              </button>
+              <button
+                onClick={() => setShowActionPicker("redeem")}
+                className="flex items-center gap-1 rounded-full bg-muted/40 px-2.5 py-0.5 transition hover:bg-muted/60"
+              >
+                <Minus className="h-2.5 w-2.5 text-foreground" strokeWidth={3.5} />
+                <span className="text-[10px] font-semibold text-foreground">Redeem</span>
+              </button>
+              <WidgetMenu />
+            </div>
           </div>
           <div className="divide-y divide-border/15 border-t border-border/15">
             {portfolioItems.map((item) => {
