@@ -185,7 +185,7 @@ function Dashboard() {
       </div>
 
       {isFirstTimeInvestor && (
-        <div className="mx-4 mt-2.5">
+        <div className="mx-4 mt-3.5">
           <div className="relative overflow-hidden rounded-2xl border border-[oklch(0.6_0.2_290)]/40 bg-gradient-to-br from-[oklch(0.35_0.15_290)]/40 to-[oklch(0.25_0.12_260)]/30 backdrop-blur-md p-3.5">
             <button
               onClick={() => setIsFirstTimeInvestor(false)}
@@ -213,8 +213,8 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="mx-4 mt-2.5">
-        <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
+      <div className="mx-4 mt-3.5">
+        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Portfolio</h3>
             <div className="flex items-center gap-1">
@@ -268,8 +268,8 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-2.5">
-        <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
+      <div className="mx-4 mt-3.5">
+        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Market Overview</h3>
             <div className="flex items-center gap-1">
@@ -291,8 +291,8 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="mx-4 mt-2.5 mb-3">
-        <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden p-2.5">
+      <div className="mx-4 mt-3.5 mb-3">
+        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-2.5">
           <div className="flex items-center justify-between px-1 pb-1.5">
             <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Quick Actions</h3>
             <WidgetMenu />
@@ -304,7 +304,7 @@ function Dashboard() {
               { icon: Eye, label: "Watchlist", action: () => navigate({ to: "/invest" }) },
               { icon: FileText, label: "Research", action: () => navigate({ to: "/learn" }) },
             ].map(({ icon: Icon, label, action }) => (
-              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-border/20 bg-card/30 px-1 py-2.5 transition hover:bg-primary/5">
+              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-border/40 bg-card/30 px-1 py-2.5 transition hover:bg-primary/5">
                 <Icon className="h-3.5 w-3.5 text-muted-foreground" />
                 <span className="text-[9.5px] font-normal text-foreground whitespace-nowrap">{label}</span>
               </button>
