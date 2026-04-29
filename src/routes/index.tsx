@@ -151,7 +151,15 @@ function Dashboard() {
         }}
       >
         <div className="relative">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-white/60">Total Portfolio Value</p>
+          <div className="flex items-center justify-between">
+            <p className="text-[10px] font-medium uppercase tracking-wider text-white/70">Total Portfolio Value</p>
+            <button
+              className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white transition"
+              aria-label="More options"
+            >
+              <MoreHorizontal className="h-3.5 w-3.5" />
+            </button>
+          </div>
           <div className="mt-2 flex items-center gap-3">
             <DonutChart items={portfolioItems} />
             <div className="min-w-0 flex-1">
@@ -172,6 +180,22 @@ function Dashboard() {
                 ))}
               </div>
             </div>
+          </div>
+          <div className="mt-3 flex gap-2">
+            <button
+              onClick={() => setShowActionPicker("invest")}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-[oklch(0.85_0.18_155)] py-1.5 transition hover:brightness-110"
+            >
+              <Plus className="h-3 w-3 text-[oklch(0.2_0.06_285)]" strokeWidth={3} />
+              <span className="text-[11px] font-semibold text-[oklch(0.2_0.06_285)]">Invest</span>
+            </button>
+            <button
+              onClick={() => setShowActionPicker("redeem")}
+              className="flex flex-1 items-center justify-center gap-1.5 rounded-full bg-white/15 py-1.5 transition hover:bg-white/25"
+            >
+              <Minus className="h-3 w-3 text-white" strokeWidth={3} />
+              <span className="text-[11px] font-semibold text-white">Redeem</span>
+            </button>
           </div>
         </div>
       </div>
@@ -205,31 +229,12 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Invest / Redeem pills */}
-      <div className="mx-4 mt-2 flex gap-2">
-        <button
-          onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card border border-border/40 backdrop-blur-md py-2.5 transition hover:bg-muted/20 shadow-sm"
-        >
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-success/15 ring-1 ring-success/30">
-            <Plus className="h-3 w-3 text-success" strokeWidth={2.75} />
-          </span>
-          <span className="text-[11px] font-medium text-foreground">Invest</span>
-        </button>
-        <button
-          onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card border border-border/40 backdrop-blur-md py-2.5 transition hover:bg-muted/20 shadow-sm"
-        >
-          <span className="flex h-5 w-5 items-center justify-center rounded-full bg-primary/15 ring-1 ring-primary/30">
-            <Minus className="h-3 w-3 text-foreground" strokeWidth={2.75} />
-          </span>
-          <span className="text-[11px] font-medium text-foreground">Redeem</span>
-        </button>
-      </div>
-
       <div className="mx-4 mt-2.5">
         <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
-          <h3 className="px-3.5 pt-2.5 pb-1.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Portfolio</h3>
+          <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
+            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Portfolio</h3>
+            <WidgetMenu />
+          </div>
           <div className="divide-y divide-border/15 border-t border-border/15">
             {portfolioItems.map((item) => {
               const Icon = item.icon;
@@ -266,8 +271,11 @@ function Dashboard() {
       <div className="mx-4 mt-2.5">
         <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-            <h3 className="text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Market Overview</h3>
-            <button onClick={() => navigate({ to: "/rates" })} className="text-[9px] font-normal text-primary/80">See All</button>
+            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Market Overview</h3>
+            <div className="flex items-center gap-1">
+              <button onClick={() => navigate({ to: "/rates" })} className="text-[10px] font-medium text-primary">See All</button>
+              <WidgetMenu />
+            </div>
           </div>
           <div className="divide-y divide-border/15 border-t border-border/15">
             {marketData.map((item) => (
@@ -285,7 +293,10 @@ function Dashboard() {
 
       <div className="mx-4 mt-2.5 mb-3">
         <div className="rounded-2xl border border-border/20 bg-card/50 backdrop-blur-md overflow-hidden p-2.5">
-          <h3 className="px-1 pb-1.5 text-[9px] font-medium uppercase tracking-wider text-muted-foreground/60">Quick Actions</h3>
+          <div className="flex items-center justify-between px-1 pb-1.5">
+            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Quick Actions</h3>
+            <WidgetMenu />
+          </div>
           <div className="flex gap-1.5">
             {[
               { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
