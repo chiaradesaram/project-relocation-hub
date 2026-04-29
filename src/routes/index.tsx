@@ -135,10 +135,10 @@ function Dashboard() {
       </div>
 
       <div
-        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl border border-white/10 p-4 shadow-lg"
+        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl p-4 shadow-sm"
         style={{
           background:
-            "radial-gradient(circle at 100% 100%, oklch(0.55 0.22 295) 0%, oklch(0.32 0.14 285) 45%, oklch(0.22 0.08 280) 80%)",
+            "radial-gradient(120% 90% at 100% 100%, oklch(0.4 0.16 290) 0%, oklch(0.22 0.06 285) 55%, oklch(0.18 0.04 280) 100%)",
         }}
       >
         <div className="relative">
