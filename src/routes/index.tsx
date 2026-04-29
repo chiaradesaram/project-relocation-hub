@@ -188,7 +188,7 @@ function Dashboard() {
 
       {isFirstTimeInvestor && (
         <div className="mx-4 mt-3.5">
-          <div className="relative overflow-hidden rounded-2xl border border-[oklch(0.6_0.2_290)]/40 bg-gradient-to-br from-[oklch(0.35_0.15_290)]/40 to-[oklch(0.25_0.12_260)]/30 backdrop-blur-md p-3.5">
+          <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/15 backdrop-blur-md p-3.5">
             <button
               onClick={() => setIsFirstTimeInvestor(false)}
               className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-background/30 text-muted-foreground hover:text-foreground transition"
@@ -200,8 +200,8 @@ function Dashboard() {
               onClick={() => navigate({ to: "/get-started" })}
               className="flex w-full items-center gap-3 text-left"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary/30 ring-1 ring-primary/40">
-                <Sparkles className="h-4 w-4 text-foreground" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary ring-1 ring-primary/60">
+                <Sparkles className="h-4 w-4 text-primary-foreground" />
               </span>
               <div className="min-w-0 flex-1 pr-5">
                 <p className="text-[12px] font-semibold text-foreground leading-tight">New here? Let's get you started</p>
