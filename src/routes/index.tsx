@@ -145,14 +145,14 @@ function Dashboard() {
       </div>
 
       <div
-        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl p-4 shadow-sm"
+        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-4 py-3 shadow-sm"
         style={{
           background: "oklch(0.3 0.09 285)",
         }}
       >
         <div className="relative">
           <div className="flex items-center justify-between">
-            <p className="text-[10px] font-medium uppercase tracking-wider text-white/70">Total Portfolio Value</p>
+            <p className="text-[11px] font-semibold uppercase tracking-wider text-white/80">Total Portfolio Value</p>
             <button
               className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white transition"
               aria-label="More options"
@@ -160,22 +160,22 @@ function Dashboard() {
               <MoreHorizontal className="h-3.5 w-3.5" />
             </button>
           </div>
-          <div className="mt-2 flex items-center gap-3">
+          <div className="mt-1.5 flex items-center gap-3">
             <DonutChart items={portfolioItems} />
             <div className="min-w-0 flex-1">
-              <h2 className="text-[22px] font-semibold tracking-tight text-white leading-none">
-                <span className="text-[13px] font-medium text-white/75 mr-1.5">LKR</span>
+              <h2 className="text-[26px] font-semibold tracking-tight text-white leading-none">
+                <span className="text-[14px] font-medium text-white/75 mr-1.5">LKR</span>
                 7,370,000
               </h2>
-              <p className="mt-1.5 text-[11px] text-[oklch(0.88_0.18_155)] font-medium">
+              <p className="mt-1.5 text-[12px] text-[oklch(0.88_0.18_155)] font-medium">
                 ↗ +662,000 (7.8%)
                 <span className="text-white/55 font-normal"> · All time</span>
               </p>
-              <div className="mt-2 flex flex-wrap gap-x-2.5 gap-y-0.5">
+              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
                 {portfolioItems.map((item) => (
-                  <div key={item.name} className="flex items-center gap-1">
-                    <div className="h-1 w-1 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-[9px] text-white/65">{item.name}</span>
+                  <div key={item.name} className="flex items-center gap-1.5">
+                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.color }} />
+                    <span className="text-[11px] text-white/80">{item.name}</span>
                   </div>
                 ))}
               </div>
