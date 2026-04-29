@@ -218,7 +218,7 @@ function Dashboard() {
       <div className="mx-4 mt-3.5">
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Portfolio</h3>
+            <h3 className="text-[13px] font-medium text-muted-foreground">Portfolio</h3>
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setShowActionPicker("invest")}
@@ -273,9 +273,9 @@ function Dashboard() {
       <div className="mx-4 mt-3.5">
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Market Overview</h3>
+            <h3 className="text-[13px] font-medium text-muted-foreground">Market overview</h3>
             <div className="flex items-center gap-1">
-              <button onClick={() => navigate({ to: "/rates" })} className="text-[10px] font-medium text-primary">See All</button>
+              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-[oklch(0.7_0.2_290)] hover:brightness-110 transition">View all</button>
               <WidgetMenu />
             </div>
           </div>
@@ -296,7 +296,7 @@ function Dashboard() {
       <div className="mx-4 mt-3.5 mb-3">
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-2.5">
           <div className="flex items-center justify-between px-1 pb-1.5">
-            <h3 className="text-[11px] font-semibold uppercase tracking-wider text-foreground/90">Quick Actions</h3>
+            <h3 className="text-[13px] font-medium text-muted-foreground">Quick actions</h3>
             <WidgetMenu />
           </div>
           <div className="flex gap-1.5">
