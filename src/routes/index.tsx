@@ -156,10 +156,6 @@ function Dashboard() {
         </div>
       </div>
 
-      {/* Invest / Redeem pills */}
-      <div className="mx-4 mt-2 flex gap-2">
-      </div>
-
       {isFirstTimeInvestor && (
         <div className="mx-4 mt-2.5">
           <div className="relative overflow-hidden rounded-2xl border border-[oklch(0.6_0.2_290)]/40 bg-gradient-to-br from-[oklch(0.35_0.15_290)]/40 to-[oklch(0.25_0.12_260)]/30 backdrop-blur-md p-3.5">
@@ -189,7 +185,8 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="hidden">
+      {/* Invest / Redeem pills */}
+      <div className="mx-4 mt-2 flex gap-2">
         <button
           onClick={() => setShowActionPicker("invest")}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card border border-border/40 backdrop-blur-md py-2.5 transition hover:bg-muted/20 shadow-sm"
