@@ -135,38 +135,30 @@ function Dashboard() {
       </div>
 
       <div
-        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl p-4 shadow-lg"
+        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl border border-white/10 p-4 shadow-lg"
         style={{
           background:
-            "linear-gradient(135deg, oklch(0.55 0.22 285) 0%, oklch(0.5 0.25 295) 55%, oklch(0.58 0.2 270) 100%)",
+            "radial-gradient(circle at 100% 100%, oklch(0.55 0.22 295) 0%, oklch(0.32 0.14 285) 45%, oklch(0.22 0.08 280) 80%)",
         }}
       >
-        <div
-          className="pointer-events-none absolute -right-10 -top-10 h-40 w-40 rounded-full opacity-40 blur-3xl"
-          style={{ background: "oklch(0.7 0.2 310)" }}
-        />
-        <div
-          className="pointer-events-none absolute -bottom-12 -left-8 h-32 w-32 rounded-full opacity-30 blur-3xl"
-          style={{ background: "oklch(0.6 0.22 250)" }}
-        />
         <div className="relative">
-          <p className="text-[10px] font-medium uppercase tracking-wider text-white/70">Total Portfolio Value</p>
+          <p className="text-[10px] font-medium uppercase tracking-wider text-white/60">Total Portfolio Value</p>
           <div className="mt-2 flex items-center gap-3">
             <DonutChart items={portfolioItems} />
             <div className="min-w-0 flex-1">
               <h2 className="text-[22px] font-semibold tracking-tight text-white leading-none">
-                <span className="text-[13px] font-medium text-white/70 mr-1.5">LKR</span>
+                <span className="text-[13px] font-medium text-white/75 mr-1.5">LKR</span>
                 7,370,000
               </h2>
-              <p className="mt-1.5 text-[11px] text-[oklch(0.85_0.18_155)]">
-                <span className="font-medium">↗ +662,000 (7.8%)</span>
-                <span className="text-white/60"> · All time</span>
+              <p className="mt-1.5 text-[11px] text-[oklch(0.88_0.18_155)] font-medium">
+                ↗ +662,000 (7.8%)
+                <span className="text-white/55 font-normal"> · All time</span>
               </p>
               <div className="mt-2 flex flex-wrap gap-x-2.5 gap-y-0.5">
                 {portfolioItems.map((item) => (
                   <div key={item.name} className="flex items-center gap-1">
                     <div className="h-1 w-1 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-[9px] text-white/70">{item.name}</span>
+                    <span className="text-[9px] text-white/65">{item.name}</span>
                   </div>
                 ))}
               </div>
