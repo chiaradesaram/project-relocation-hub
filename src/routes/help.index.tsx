@@ -220,7 +220,7 @@ function HelpIndexPage() {
           <div className="mx-4 mb-5">
             {/* Topic filter pills */}
             <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
-              {[{ id: "all" as const, label: "All" }, ...TOPIC_SECTIONS].map(({ id, label }) => (
+              {[{ id: "all" as const, label: "Suggested" }, ...TOPIC_SECTIONS].map(({ id, label }) => (
                 <button
                   key={id}
                   type="button"
