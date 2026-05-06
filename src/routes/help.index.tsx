@@ -79,6 +79,7 @@ function HelpIndexPage() {
   const [query, setQuery] = useState(q ?? "");
   const [openKey, setOpenKey] = useState<string | null>(null);
   const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
+  const [activeTopic, setActiveTopic] = useState<FAQTopic | "all">("all");
 
   const trimmed = query.trim().toLowerCase();
   const isSearching = trimmed.length > 0;
@@ -217,10 +218,28 @@ function HelpIndexPage() {
 
           {/* Suggested FAQs by topic */}
           <div className="mx-4 mb-5">
+            {/* Topic filter pills */}
+            <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
+              {[{ id: "all" as const, label: "All" }, ...TOPIC_SECTIONS].map(({ id, label }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => setActiveTopic(id as FAQTopic | "all")}
+                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-[12px] font-medium transition-colors ${
+                    activeTopic === id
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-card/60 border border-border/40 text-muted-foreground hover:text-foreground"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
             <div className="rounded-2xl border border-border/40 bg-card/60 overflow-hidden">
               <p className="text-[14px] font-semibold text-foreground px-4 pt-4 pb-2">Suggested FAQs</p>
               <div className="divide-y divide-border/30">
-                {TOPIC_SECTIONS.map(({ id, label }) => {
+                {TOPIC_SECTIONS.filter(({ id }) => activeTopic === "all" || activeTopic === id).map(({ id, label }) => {
                   const isExpanded = expandedTopics.has(id);
                   const topicFaqs = FAQS.filter((f) => f.topic === id);
                   return (
