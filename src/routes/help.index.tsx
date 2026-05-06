@@ -208,7 +208,7 @@ function HelpIndexPage() {
                     to={to}
                     className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/20 transition-colors"
                   >
-                    <Zap className="w-4 h-4 text-amber-400 shrink-0" />
+                    <Zap className="w-4 h-4 text-sky-400 shrink-0" />
                     <span className="text-[13px] font-medium text-primary flex-1">{label}</span>
                   </Link>
                 ))}
