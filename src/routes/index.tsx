@@ -185,6 +185,21 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      <div
+        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-5 pt-5 pb-4 shadow-sm"
+        style={{
+          background: "linear-gradient(160deg, oklch(0.35 0.12 285), oklch(0.25 0.08 285))",
+        }}
+      >
+        <p className="text-[11px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
+        <h2 className="mt-2 text-center text-[32px] font-bold tracking-tight text-white leading-none">
+          LKR 7,370,000
+        </h2>
+        <p className="mt-1.5 text-center text-[12px] text-[oklch(0.88_0.18_155)] font-medium">
+          +LKR 662,000 · 7.8%
+          <span className="text-white/45 font-normal"> for month</span>
+        </p>
+      </div>
 
       {isFirstTimeInvestor && (
         <div className="mx-4 mt-2">
