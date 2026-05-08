@@ -33,40 +33,6 @@ const marketData = [
   { name: "91-Day T-Bill", value: "9.85%", change: "+0.05%", positive: true },
 ];
 
-const DonutChart = ({ items }: { items: typeof portfolioItems }) => {
-  const total = items.reduce((s, i) => s + i.percentage, 0);
-  let cumulative = 0;
-  const r = 36, cx = 50, cy = 50, strokeW = 8;
-  const circumference = 2 * Math.PI * r;
-  const gap = 3;
-
-  return (
-    <svg viewBox="0 0 100 100" className="w-20 h-20">
-      {items.map((item, i) => {
-        const fraction = item.percentage / total;
-        const dashLen = Math.max(0, fraction * circumference - gap);
-        const dashOffset = -(cumulative / total) * circumference - gap / 2;
-        cumulative += item.percentage;
-        return (
-          <circle
-            key={i}
-            cx={cx}
-            cy={cy}
-            r={r}
-            fill="none"
-            stroke={item.color}
-            strokeWidth={strokeW}
-            strokeDasharray={`${dashLen} ${circumference - dashLen}`}
-            strokeDashoffset={dashOffset}
-            strokeLinecap="round"
-            transform={`rotate(-90 ${cx} ${cy})`}
-          />
-        );
-      })}
-    </svg>
-  );
-};
-
 function Dashboard() {
   const navigate = useNavigate();
   const [showActionPicker, setShowActionPicker] = useState<"invest" | "redeem" | null>(null);
