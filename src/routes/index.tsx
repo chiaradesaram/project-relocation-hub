@@ -33,40 +33,6 @@ const marketData = [
   { name: "91-Day T-Bill", value: "9.85%", change: "+0.05%", positive: true },
 ];
 
-const DonutChart = ({ items }: { items: typeof portfolioItems }) => {
-  const total = items.reduce((s, i) => s + i.percentage, 0);
-  let cumulative = 0;
-  const r = 36, cx = 50, cy = 50, strokeW = 8;
-  const circumference = 2 * Math.PI * r;
-  const gap = 3;
-
-  return (
-    <svg viewBox="0 0 100 100" className="w-20 h-20">
-      {items.map((item, i) => {
-        const fraction = item.percentage / total;
-        const dashLen = Math.max(0, fraction * circumference - gap);
-        const dashOffset = -(cumulative / total) * circumference - gap / 2;
-        cumulative += item.percentage;
-        return (
-          <circle
-            key={i}
-            cx={cx}
-            cy={cy}
-            r={r}
-            fill="none"
-            stroke={item.color}
-            strokeWidth={strokeW}
-            strokeDasharray={`${dashLen} ${circumference - dashLen}`}
-            strokeDashoffset={dashOffset}
-            strokeLinecap="round"
-            transform={`rotate(-90 ${cx} ${cy})`}
-          />
-        );
-      })}
-    </svg>
-  );
-};
-
 function Dashboard() {
   const navigate = useNavigate();
   const [showActionPicker, setShowActionPicker] = useState<"invest" | "redeem" | null>(null);
@@ -145,45 +111,19 @@ function Dashboard() {
       </div>
 
       <div
-        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-4 py-3 shadow-sm"
+        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-5 pt-5 pb-4 shadow-sm"
         style={{
-          background: "oklch(0.3 0.09 285)",
+          background: "linear-gradient(160deg, oklch(0.35 0.12 285), oklch(0.25 0.08 285))",
         }}
       >
-        <div className="relative">
-          <div className="flex items-center justify-between">
-            <p className="text-[9px] font-semibold uppercase tracking-wider text-white/70">Total Portfolio Value</p>
-            <button
-              className="flex h-6 w-6 items-center justify-center rounded-full text-white/60 hover:bg-white/10 hover:text-white transition"
-              aria-label="More options"
-            >
-              <MoreHorizontal className="h-3.5 w-3.5" />
-            </button>
-          </div>
-          <div className="mt-1.5 flex items-center gap-3">
-            <DonutChart items={portfolioItems} />
-            <div className="min-w-0 flex-1">
-              <h2 className="text-[20px] font-semibold tracking-tight text-white leading-none">
-                <span className="text-[11px] font-medium text-white/75 mr-1.5">LKR</span>
-                7,370,000
-              </h2>
-              <p className="mt-1.5 text-[12px] text-[oklch(0.88_0.18_155)] font-medium">
-                ↗ +662,000 (7.8%)
-                <span className="text-white/55 font-normal"> · All time</span>
-              </p>
-              <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5">
-                {portfolioItems.map((item) => (
-                  <div key={item.name} className="flex items-center gap-1.5">
-                    <div className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: item.color }} />
-                    <span className="text-[11px] text-white/80">
-                      {item.name === "Unit Trusts" ? "UT" : item.name === "Equities" ? "EQ" : "TR"} <span className="text-white/55">{item.percentage}%</span>
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
+        <p className="text-[11px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
+        <h2 className="mt-2 text-center text-[32px] font-bold tracking-tight text-white leading-none">
+          LKR 7,370,000
+        </h2>
+        <p className="mt-1.5 text-center text-[12px] text-[oklch(0.88_0.18_155)] font-medium">
+          +LKR 662,000 · 7.8%
+          <span className="text-white/45 font-normal"> for month</span>
+        </p>
       </div>
 
       {isFirstTimeInvestor && (
