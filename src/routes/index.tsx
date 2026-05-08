@@ -187,7 +187,7 @@ function Dashboard() {
       </div>
 
       {isFirstTimeInvestor && (
-        <div className="mx-4 mt-3.5">
+        <div className="mx-4 mt-2">
           <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/15 backdrop-blur-md p-3.5">
             <button
               onClick={() => setIsFirstTimeInvestor(false)}
@@ -215,54 +215,65 @@ function Dashboard() {
         </div>
       )}
 
+      {/* Invest / Redeem buttons under hero */}
+      <div className="mx-4 mt-2.5 flex gap-2">
+        <button
+          onClick={() => setShowActionPicker("invest")}
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 transition hover:brightness-110"
+        >
+          <Plus className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
+          <span className="text-[12px] font-semibold text-primary-foreground">Invest</span>
+        </button>
+        <button
+          onClick={() => setShowActionPicker("redeem")}
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-muted/40 py-2.5 transition hover:bg-muted/60"
+        >
+          <Minus className="h-3.5 w-3.5 text-foreground" strokeWidth={3} />
+          <span className="text-[12px] font-semibold text-foreground">Redeem</span>
+        </button>
+      </div>
+
+      {/* Portfolio card – purple style */}
       <div className="mx-4 mt-3.5">
-        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
-          <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-            <h3 className="text-[13px] font-medium text-muted-foreground">Portfolio</h3>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setShowActionPicker("invest")}
-                className="flex items-center gap-1 rounded-full bg-primary px-2.5 py-0.5 transition hover:brightness-110"
-              >
-                <Plus className="h-2.5 w-2.5 text-primary-foreground" strokeWidth={3.5} />
-                <span className="text-[10px] font-semibold text-primary-foreground">Invest</span>
-              </button>
-              <button
-                onClick={() => setShowActionPicker("redeem")}
-                className="flex items-center gap-1 rounded-full bg-muted/40 px-2.5 py-0.5 transition hover:bg-muted/60"
-              >
-                <Minus className="h-2.5 w-2.5 text-foreground" strokeWidth={3.5} />
-                <span className="text-[10px] font-semibold text-foreground">Redeem</span>
-              </button>
-              <WidgetMenu />
-            </div>
+        <div
+          className="rounded-2xl overflow-hidden p-3.5"
+          style={{ background: "oklch(0.45 0.18 285)" }}
+        >
+          <div className="flex items-center justify-between pb-2.5">
+            <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
+            <WidgetMenu />
           </div>
-          <div className="divide-y divide-border/15 border-t border-border/15">
+          <div className="flex flex-col gap-2">
             {portfolioItems.map((item) => {
               const Icon = item.icon;
               return (
                 <button
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
-                  className="flex w-full items-center gap-2.5 px-3.5 py-2 transition hover:bg-muted/10"
+                  className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
+                  style={{ background: "oklch(0.50 0.16 285)" }}
                 >
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full" style={{ backgroundColor: `${item.color}1a` }}>
-                    <Icon className="h-3 w-3" style={{ color: item.color }} />
+                  <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
+                    <Icon className="h-4 w-4 text-white" />
                   </div>
-                  <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[13px] font-normal text-foreground">{item.name}</p>
+                  <div className="min-w-0 flex-1 text-left leading-tight">
+                    <p className="text-[13px] font-semibold text-white">{item.name}</p>
+                    <p className="text-[11px] text-white/55 mt-0.5">
+                      {item.value ? `LKR ${item.value}` : "Pending"}
+                      {item.earnings30d && (
+                        <span className="ml-1.5 text-[oklch(0.88_0.18_155)] font-medium">{item.earnings30d}</span>
+                      )}
+                    </p>
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-[oklch(0.55_0.2_250)]/20 px-2 py-0.5 text-[10px] font-normal text-[oklch(0.75_0.15_250)]">
+                    <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-white/70">
                       {item.status}
                     </span>
                   ) : (
-                    <div className="flex shrink-0 items-center gap-2 text-right">
-                      <p className="text-[12px] font-normal text-foreground">LKR {item.value}</p>
-                      <p className="text-[10px] font-normal text-success">{item.earnings30d}</p>
+                    <div className="shrink-0 text-right">
+                      <p className="text-[15px] font-semibold text-white">{item.percentage}%</p>
                     </div>
                   )}
-                  <ChevronRight className="h-3 w-3 shrink-0 text-muted-foreground/50" />
                 </button>
               );
             })}
