@@ -36,6 +36,10 @@ export const Route = createRootRoute({
       { property: "og:description", content: "CAL Digital - Investment Dashboard" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
+      { name: "twitter:title", content: "CAL Digital" },
+      { name: "twitter:description", content: "CAL Digital - Investment Dashboard" },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/521414f8-65c2-4a03-9b0d-64a32bd59f5f/id-preview-8d9a4c79--e397c0e2-00f4-4f57-9ad3-81d68dca3bdc.lovable.app-1778236396291.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/521414f8-65c2-4a03-9b0d-64a32bd59f5f/id-preview-8d9a4c79--e397c0e2-00f4-4f57-9ad3-81d68dca3bdc.lovable.app-1778236396291.png" },
     ],
     links: [
       {
