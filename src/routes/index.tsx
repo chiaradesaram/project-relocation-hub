@@ -90,22 +90,36 @@ function Dashboard() {
         </div>
       )}
 
-      <div className="flex items-center justify-between px-4 pt-3 pb-1.5">
-        <div>
-          <p className="text-[10px] text-muted-foreground/80">Good morning</p>
-          <h1 className="text-base font-semibold text-foreground">CAL Online</h1>
-        </div>
-        <div className="flex items-center gap-1.5">
+      <div className="flex items-center justify-between px-4 pt-4 pb-2">
+        <button
+          onClick={() => navigate({ to: "/profile" })}
+          className="flex items-center gap-2.5 -ml-1 pr-2 py-1 rounded-full transition hover:bg-muted/30"
+          aria-label="Profile"
+        >
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-[oklch(0.55_0.22_290)] text-[12px] font-semibold text-primary-foreground">
+            CO
+          </span>
+          <span className="flex flex-col items-start leading-tight">
+            <span className="text-[10.5px] text-muted-foreground/80">Good morning</span>
+            <span className="text-[13.5px] font-semibold text-foreground -mt-0.5">CAL Online</span>
+          </span>
+        </button>
+        <div className="flex items-center -mr-1">
           <Link
             to="/help"
             search={{ topic: "general" }}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary text-muted-foreground hover:text-foreground transition-colors"
+            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
             aria-label="Help"
           >
-            <HelpCircle className="h-3.5 w-3.5" />
+            <HelpCircle className="h-[18px] w-[18px]" />
           </Link>
-          <button onClick={() => navigate({ to: "/notifications" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary" aria-label="Notifications">
-            <Bell className="h-3.5 w-3.5 text-muted-foreground" />
+          <button
+            onClick={() => navigate({ to: "/notifications" })}
+            className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
+            aria-label="Notifications"
+          >
+            <Bell className="h-[18px] w-[18px]" />
+            <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-primary ring-2 ring-background" />
           </button>
         </div>
       </div>
@@ -198,22 +212,20 @@ function Dashboard() {
                   </div>
                   <div className="min-w-0 flex-1 text-left">
                     <p className="text-[13px] font-semibold text-white leading-tight">{item.name}</p>
+                    {item.earnings30d && (
+                      <p className="text-[11px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5 leading-tight">
+                        {item.earnings30d}
+                      </p>
+                    )}
                   </div>
                   {item.status ? (
                     <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-white/70">
                       {item.status}
                     </span>
                   ) : (
-                    <div className="shrink-0 text-right leading-tight">
-                      <p className="text-[13px] font-semibold text-white">
-                        {item.value ? `LKR ${item.value}` : "Pending"}
-                      </p>
-                      {item.earnings30d && (
-                        <p className="text-[11px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5">
-                          {item.earnings30d}
-                        </p>
-                      )}
-                    </div>
+                    <p className="shrink-0 text-[13px] font-semibold text-white">
+                      {item.value ? `LKR ${item.value}` : "Pending"}
+                    </p>
                   )}
                 </button>
               );
