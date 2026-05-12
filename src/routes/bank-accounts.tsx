@@ -1,7 +1,19 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Building2, Plus, Trash2 } from "lucide-react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/bank-accounts")({
   component: BankAccounts,
@@ -22,9 +34,8 @@ const productPillClass: Record<string, string> = {
 function BankAccounts() {
   const [accounts, setAccounts] = useState(initialBankAccounts);
 
-  const removeAccount = (accNo: string) => {
+  const removeAccount = (accNo: string) =>
     setAccounts((prev) => prev.filter((a) => a.accNo !== accNo));
-  };
 
   return (
     <MobileLayout>
