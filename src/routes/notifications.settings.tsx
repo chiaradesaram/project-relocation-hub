@@ -5,7 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import { Switch } from "@/components/ui/switch";
 import { Bell, TrendingUp, Receipt, Megaphone, ShieldAlert, Mail, Smartphone, MessageSquare } from "lucide-react";
 
-export const Route = createFileRoute("/notifications")({
+export const Route = createFileRoute("/notifications/settings")({
   component: NotificationPreferences,
 });
 

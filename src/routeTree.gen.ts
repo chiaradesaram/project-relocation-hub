@@ -16,7 +16,6 @@ import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
@@ -29,6 +28,7 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
+import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
 const VstockRoute = VstockRouteImport.update({
@@ -64,11 +64,6 @@ const RatesRoute = RatesRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreRoute = MoreRouteImport.update({
@@ -131,6 +126,11 @@ const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
   path: '/$subAccountId',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
+  id: '/notifications/settings',
+  path: '/notifications/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpContactRoute = HelpContactRouteImport.update({
   id: '/contact',
   path: '/contact',
@@ -147,7 +147,6 @@ export interface FileRoutesByFullPath {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
-  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -156,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
+  '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
@@ -169,7 +169,6 @@ export interface FileRoutesByTo {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
-  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -177,6 +176,7 @@ export interface FileRoutesByTo {
   '/transactions': typeof TransactionsRoute
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
+  '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
@@ -192,7 +192,6 @@ export interface FileRoutesById {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
-  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -201,6 +200,7 @@ export interface FileRoutesById {
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
+  '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
@@ -217,7 +217,6 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
-    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -226,6 +225,7 @@ export interface FileRouteTypes {
     | '/unit-trusts'
     | '/vstock'
     | '/help/contact'
+    | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/unit-trusts/'
@@ -239,7 +239,6 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
-    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -247,6 +246,7 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/vstock'
     | '/help/contact'
+    | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help'
     | '/unit-trusts'
@@ -261,7 +261,6 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
-    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -270,6 +269,7 @@ export interface FileRouteTypes {
     | '/unit-trusts'
     | '/vstock'
     | '/help/contact'
+    | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/unit-trusts/'
@@ -285,7 +285,6 @@ export interface RootRouteChildren {
   InvestSummaryRoute: typeof InvestSummaryRoute
   LearnRoute: typeof LearnRoute
   MoreRoute: typeof MoreRoute
-  NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   RatesRoute: typeof RatesRoute
   RedeemRoute: typeof RedeemRoute
@@ -293,6 +292,7 @@ export interface RootRouteChildren {
   TransactionsRoute: typeof TransactionsRoute
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
+  NotificationsSettingsRoute: typeof NotificationsSettingsRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -344,13 +344,6 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more': {
@@ -437,6 +430,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/notifications/settings': {
+      id: '/notifications/settings'
+      path: '/notifications/settings'
+      fullPath: '/notifications/settings'
+      preLoaderRoute: typeof NotificationsSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help/contact': {
       id: '/help/contact'
       path: '/contact'
@@ -483,7 +483,6 @@ const rootRouteChildren: RootRouteChildren = {
   InvestSummaryRoute: InvestSummaryRoute,
   LearnRoute: LearnRoute,
   MoreRoute: MoreRoute,
-  NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   RatesRoute: RatesRoute,
   RedeemRoute: RedeemRoute,
@@ -491,7 +490,17 @@ const rootRouteChildren: RootRouteChildren = {
   TransactionsRoute: TransactionsRoute,
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
+  NotificationsSettingsRoute: NotificationsSettingsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
