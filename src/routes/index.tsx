@@ -104,7 +104,7 @@ function Dashboard() {
           >
             <HelpCircle className="h-3.5 w-3.5" />
           </Link>
-          <button onClick={() => navigate({ to: "/profile" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
+          <button onClick={() => navigate({ to: "/notifications" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary" aria-label="Notifications">
             <Bell className="h-3.5 w-3.5 text-muted-foreground" />
           </button>
         </div>

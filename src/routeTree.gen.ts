@@ -16,6 +16,7 @@ import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
@@ -63,6 +64,11 @@ const RatesRoute = RatesRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NotificationsRoute = NotificationsRouteImport.update({
+  id: '/notifications',
+  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreRoute = MoreRouteImport.update({
@@ -141,6 +147,7 @@ export interface FileRoutesByFullPath {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -162,6 +169,7 @@ export interface FileRoutesByTo {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -184,6 +192,7 @@ export interface FileRoutesById {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
+  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -208,6 +217,7 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
+    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -229,6 +239,7 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
+    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -250,6 +261,7 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
+    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -273,6 +285,7 @@ export interface RootRouteChildren {
   InvestSummaryRoute: typeof InvestSummaryRoute
   LearnRoute: typeof LearnRoute
   MoreRoute: typeof MoreRoute
+  NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   RatesRoute: typeof RatesRoute
   RedeemRoute: typeof RedeemRoute
@@ -331,6 +344,13 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/notifications': {
+      id: '/notifications'
+      path: '/notifications'
+      fullPath: '/notifications'
+      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more': {
@@ -463,6 +483,7 @@ const rootRouteChildren: RootRouteChildren = {
   InvestSummaryRoute: InvestSummaryRoute,
   LearnRoute: LearnRoute,
   MoreRoute: MoreRoute,
+  NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   RatesRoute: RatesRoute,
   RedeemRoute: RedeemRoute,
