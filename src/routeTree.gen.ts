@@ -26,6 +26,7 @@ import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
+import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
@@ -116,6 +117,11 @@ const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
+  id: '/notifications/',
+  path: '/notifications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpIndexRoute = HelpIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -158,6 +164,7 @@ export interface FileRoutesByFullPath {
   '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -179,6 +186,7 @@ export interface FileRoutesByTo {
   '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
+  '/notifications': typeof NotificationsIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesById {
@@ -203,6 +211,7 @@ export interface FileRoutesById {
   '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRouteTypes {
@@ -228,6 +237,7 @@ export interface FileRouteTypes {
     | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help/'
+    | '/notifications/'
     | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -249,6 +259,7 @@ export interface FileRouteTypes {
     | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help'
+    | '/notifications'
     | '/unit-trusts'
   id:
     | '__root__'
@@ -272,6 +283,7 @@ export interface FileRouteTypes {
     | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help/'
+    | '/notifications/'
     | '/unit-trusts/'
   fileRoutesById: FileRoutesById
 }
@@ -293,6 +305,7 @@ export interface RootRouteChildren {
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
   NotificationsSettingsRoute: typeof NotificationsSettingsRoute
+  NotificationsIndexRoute: typeof NotificationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -416,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsIndexRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/notifications/': {
+      id: '/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications/'
+      preLoaderRoute: typeof NotificationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help/': {
       id: '/help/'
       path: '/'
@@ -491,7 +511,17 @@ const rootRouteChildren: RootRouteChildren = {
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
   NotificationsSettingsRoute: NotificationsSettingsRoute,
+  NotificationsIndexRoute: NotificationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
