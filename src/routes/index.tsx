@@ -104,7 +104,7 @@ function Dashboard() {
           >
             <HelpCircle className="h-3.5 w-3.5" />
           </Link>
-          <button onClick={() => navigate({ to: "/profile" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary">
+          <button onClick={() => navigate({ to: "/notifications" })} className="flex h-8 w-8 items-center justify-center rounded-full bg-secondary" aria-label="Notifications">
             <Bell className="h-3.5 w-3.5 text-muted-foreground" />
           </button>
         </div>
@@ -196,19 +196,24 @@ function Dashboard() {
                   <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
                     <Icon className="h-4 w-4 text-white" />
                   </div>
-                  <div className="min-w-0 flex-1 text-left leading-tight">
-                    <p className="text-[13px] font-semibold text-white">{item.name}</p>
-                    <p className="text-[12px] text-white/85 mt-0.5">
-                      {item.value ? `LKR ${item.value}` : "Pending"}
-                      {item.earnings30d && (
-                        <span className="ml-1.5 text-[oklch(0.88_0.18_155)] font-medium">{item.earnings30d}</span>
-                      )}
-                    </p>
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-[13px] font-semibold text-white leading-tight">{item.name}</p>
                   </div>
-                  {item.status && (
+                  {item.status ? (
                     <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-white/70">
                       {item.status}
                     </span>
+                  ) : (
+                    <div className="shrink-0 text-right leading-tight">
+                      <p className="text-[13px] font-semibold text-white">
+                        {item.value ? `LKR ${item.value}` : "Pending"}
+                      </p>
+                      {item.earnings30d && (
+                        <p className="text-[11px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5">
+                          {item.earnings30d}
+                        </p>
+                      )}
+                    </div>
                   )}
                 </button>
               );
