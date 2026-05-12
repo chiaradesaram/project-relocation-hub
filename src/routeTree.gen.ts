@@ -30,6 +30,7 @@ import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
+import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
 import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
@@ -138,6 +139,11 @@ const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
   path: '/$subAccountId',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
+  id: '/settings/privacy',
+  path: '/settings/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
   id: '/notifications/settings',
   path: '/notifications/settings',
@@ -168,6 +174,7 @@ export interface FileRoutesByFullPath {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
@@ -191,6 +198,7 @@ export interface FileRoutesByTo {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
   '/notifications': typeof NotificationsIndexRoute
@@ -217,6 +225,7 @@ export interface FileRoutesById {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
@@ -244,6 +253,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
@@ -267,6 +277,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help'
     | '/notifications'
@@ -292,6 +303,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
@@ -317,6 +329,7 @@ export interface RootRouteChildren {
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
   NotificationsSettingsRoute: typeof NotificationsSettingsRoute
+  SettingsPrivacyRoute: typeof SettingsPrivacyRoute
   NotificationsIndexRoute: typeof NotificationsIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
 }
@@ -470,6 +483,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/settings/privacy': {
+      id: '/settings/privacy'
+      path: '/settings/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof SettingsPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications/settings': {
       id: '/notifications/settings'
       path: '/notifications/settings'
@@ -531,6 +551,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
   NotificationsSettingsRoute: NotificationsSettingsRoute,
+  SettingsPrivacyRoute: SettingsPrivacyRoute,
   NotificationsIndexRoute: NotificationsIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
 }
