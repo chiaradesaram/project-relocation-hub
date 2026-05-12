@@ -58,22 +58,20 @@ function BankAccounts() {
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-foreground truncate">{acc.bank}</p>
                   <p className="text-[11px] text-muted-foreground/80 truncate">{acc.branch} branch</p>
-                  <p className="text-[13px] text-muted-foreground mt-1 font-mono tracking-wide">{acc.accNo}</p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5 font-mono tracking-wide">{acc.accNo}</p>
                 </div>
               </div>
-              <span className={`shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
-                {acc.product}
-              </span>
-            </div>
-            <div className="mt-3 pt-3 border-t border-white/5 flex justify-end">
-              <AlertDialog>
+              <div className="flex items-center gap-1.5 shrink-0">
+                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
+                  {acc.product}
+                </span>
+                <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
-                    className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground hover:text-destructive transition-colors"
+                    className="p-1.5 rounded-md text-muted-foreground/70 hover:text-destructive hover:bg-destructive/10 transition-colors"
                     aria-label={`Remove ${acc.bank} account`}
                   >
                     <Trash2 className="w-3.5 h-3.5" />
-                    Remove
                   </button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -88,7 +86,8 @@ function BankAccounts() {
                     <AlertDialogAction onClick={() => removeAccount(acc.accNo)}>Remove</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
-              </AlertDialog>
+                </AlertDialog>
+              </div>
             </div>
           </div>
         ))}
