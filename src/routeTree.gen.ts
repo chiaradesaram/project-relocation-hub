@@ -16,7 +16,6 @@ import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as NotificationsRouteImport } from './routes/notifications'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
@@ -27,8 +26,10 @@ import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
+import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
+import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
 const VstockRoute = VstockRouteImport.update({
@@ -64,11 +65,6 @@ const RatesRoute = RatesRouteImport.update({
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NotificationsRoute = NotificationsRouteImport.update({
-  id: '/notifications',
-  path: '/notifications',
   getParentRoute: () => rootRouteImport,
 } as any)
 const MoreRoute = MoreRouteImport.update({
@@ -121,6 +117,11 @@ const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
+  id: '/notifications/',
+  path: '/notifications/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const HelpIndexRoute = HelpIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -130,6 +131,11 @@ const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
   id: '/$subAccountId',
   path: '/$subAccountId',
   getParentRoute: () => UnitTrustsRoute,
+} as any)
+const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
+  id: '/notifications/settings',
+  path: '/notifications/settings',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const HelpContactRoute = HelpContactRouteImport.update({
   id: '/contact',
@@ -147,7 +153,6 @@ export interface FileRoutesByFullPath {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
-  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -156,8 +161,10 @@ export interface FileRoutesByFullPath {
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
+  '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -169,7 +176,6 @@ export interface FileRoutesByTo {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
-  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -177,8 +183,10 @@ export interface FileRoutesByTo {
   '/transactions': typeof TransactionsRoute
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
+  '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
+  '/notifications': typeof NotificationsIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesById {
@@ -192,7 +200,6 @@ export interface FileRoutesById {
   '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
-  '/notifications': typeof NotificationsRoute
   '/profile': typeof ProfileRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -201,8 +208,10 @@ export interface FileRoutesById {
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
+  '/notifications/settings': typeof NotificationsSettingsRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
+  '/notifications/': typeof NotificationsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRouteTypes {
@@ -217,7 +226,6 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
-    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -226,8 +234,10 @@ export interface FileRouteTypes {
     | '/unit-trusts'
     | '/vstock'
     | '/help/contact'
+    | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help/'
+    | '/notifications/'
     | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -239,7 +249,6 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
-    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -247,8 +256,10 @@ export interface FileRouteTypes {
     | '/transactions'
     | '/vstock'
     | '/help/contact'
+    | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help'
+    | '/notifications'
     | '/unit-trusts'
   id:
     | '__root__'
@@ -261,7 +272,6 @@ export interface FileRouteTypes {
     | '/invest-summary'
     | '/learn'
     | '/more'
-    | '/notifications'
     | '/profile'
     | '/rates'
     | '/redeem'
@@ -270,8 +280,10 @@ export interface FileRouteTypes {
     | '/unit-trusts'
     | '/vstock'
     | '/help/contact'
+    | '/notifications/settings'
     | '/unit-trusts/$subAccountId'
     | '/help/'
+    | '/notifications/'
     | '/unit-trusts/'
   fileRoutesById: FileRoutesById
 }
@@ -285,7 +297,6 @@ export interface RootRouteChildren {
   InvestSummaryRoute: typeof InvestSummaryRoute
   LearnRoute: typeof LearnRoute
   MoreRoute: typeof MoreRoute
-  NotificationsRoute: typeof NotificationsRoute
   ProfileRoute: typeof ProfileRoute
   RatesRoute: typeof RatesRoute
   RedeemRoute: typeof RedeemRoute
@@ -293,6 +304,8 @@ export interface RootRouteChildren {
   TransactionsRoute: typeof TransactionsRoute
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
+  NotificationsSettingsRoute: typeof NotificationsSettingsRoute
+  NotificationsIndexRoute: typeof NotificationsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -344,13 +357,6 @@ declare module '@tanstack/react-router' {
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/notifications': {
-      id: '/notifications'
-      path: '/notifications'
-      fullPath: '/notifications'
-      preLoaderRoute: typeof NotificationsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/more': {
@@ -423,6 +429,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsIndexRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/notifications/': {
+      id: '/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications/'
+      preLoaderRoute: typeof NotificationsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/help/': {
       id: '/help/'
       path: '/'
@@ -436,6 +449,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/unit-trusts/$subAccountId'
       preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
       parentRoute: typeof UnitTrustsRoute
+    }
+    '/notifications/settings': {
+      id: '/notifications/settings'
+      path: '/notifications/settings'
+      fullPath: '/notifications/settings'
+      preLoaderRoute: typeof NotificationsSettingsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/help/contact': {
       id: '/help/contact'
@@ -483,7 +503,6 @@ const rootRouteChildren: RootRouteChildren = {
   InvestSummaryRoute: InvestSummaryRoute,
   LearnRoute: LearnRoute,
   MoreRoute: MoreRoute,
-  NotificationsRoute: NotificationsRoute,
   ProfileRoute: ProfileRoute,
   RatesRoute: RatesRoute,
   RedeemRoute: RedeemRoute,
@@ -491,6 +510,8 @@ const rootRouteChildren: RootRouteChildren = {
   TransactionsRoute: TransactionsRoute,
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
+  NotificationsSettingsRoute: NotificationsSettingsRoute,
+  NotificationsIndexRoute: NotificationsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
