@@ -198,21 +198,17 @@ function Dashboard() {
                   </div>
                   <div className="min-w-0 flex-1 text-left leading-tight">
                     <p className="text-[13px] font-semibold text-white">{item.name}</p>
-                    <p className="text-[11px] text-white/55 mt-0.5">
+                    <p className="text-[12px] text-white/85 mt-0.5">
                       {item.value ? `LKR ${item.value}` : "Pending"}
                       {item.earnings30d && (
                         <span className="ml-1.5 text-[oklch(0.88_0.18_155)] font-medium">{item.earnings30d}</span>
                       )}
                     </p>
                   </div>
-                  {item.status ? (
+                  {item.status && (
                     <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-white/70">
                       {item.status}
                     </span>
-                  ) : (
-                    <div className="shrink-0 text-right">
-                      <p className="text-[15px] font-semibold text-white">{item.percentage}%</p>
-                    </div>
                   )}
                 </button>
               );
