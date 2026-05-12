@@ -20,9 +20,9 @@ export const Route = createFileRoute("/bank-accounts")({
 });
 
 const initialBankAccounts = [
-  { bank: "Commercial Bank", accNo: "8001234521", product: "Unit Trusts", primary: true },
-  { bank: "Sampath Bank", accNo: "1100568832", product: "Equities", primary: false },
-  { bank: "HNB", accNo: "0452201209", product: "Treasuries", primary: false },
+  { bank: "Commercial Bank", accNo: "8001234521", product: "Unit Trusts" },
+  { bank: "Sampath Bank", accNo: "1100568832", product: "Equities" },
+  { bank: "HNB", accNo: "0452201209", product: "Treasuries" },
 ];
 
 const productPillClass: Record<string, string> = {
@@ -48,23 +48,21 @@ function BankAccounts() {
       <div className="px-4 mt-3 space-y-2">
         {accounts.map((acc) => (
           <div key={acc.accNo} className="glass-card p-4">
-            <div className="flex items-start gap-3">
-              <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
-                <Building2 className="w-5 h-5 text-primary" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <p className="text-xs font-semibold text-foreground">{acc.bank}</p>
-                  {acc.primary && (
-                    <span className="text-[8px] bg-primary/20 text-primary px-1.5 py-0.5 rounded-full font-medium">Primary</span>
-                  )}
+            <div className="flex items-start justify-between gap-3">
+              <div className="flex items-start gap-3 min-w-0 flex-1">
+                <div className="w-10 h-10 rounded-xl bg-primary/20 flex items-center justify-center shrink-0">
+                  <Building2 className="w-5 h-5 text-primary" />
                 </div>
-                <p className="text-[12px] text-muted-foreground mt-0.5 font-mono tracking-wide">{acc.accNo}</p>
-                <span className={`inline-flex items-center mt-2 px-2 py-0.5 rounded-full text-[10px] font-medium ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground truncate">{acc.bank}</p>
+                  <p className="text-[13px] text-muted-foreground mt-1 font-mono tracking-wide">{acc.accNo}</p>
+                </div>
+              </div>
+              <div className="flex flex-col items-end gap-3 shrink-0">
+                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
                   {acc.product}
                 </span>
-              </div>
-              <AlertDialog>
+                <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
                     className="p-2 -m-2 text-muted-foreground hover:text-destructive transition-colors"
@@ -85,7 +83,8 @@ function BankAccounts() {
                     <AlertDialogAction onClick={() => removeAccount(acc.accNo)}>Remove</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
-              </AlertDialog>
+                </AlertDialog>
+              </div>
             </div>
           </div>
         ))}
