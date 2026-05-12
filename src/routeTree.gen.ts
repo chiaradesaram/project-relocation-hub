@@ -26,6 +26,7 @@ import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
+import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
@@ -117,6 +118,11 @@ const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
   id: '/notifications/',
   path: '/notifications/',
@@ -165,6 +171,7 @@ export interface FileRoutesByFullPath {
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -187,6 +194,7 @@ export interface FileRoutesByTo {
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
   '/notifications': typeof NotificationsIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesById {
@@ -212,6 +220,7 @@ export interface FileRoutesById {
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRouteTypes {
@@ -238,6 +247,7 @@ export interface FileRouteTypes {
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
+    | '/settings/'
     | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -260,6 +270,7 @@ export interface FileRouteTypes {
     | '/unit-trusts/$subAccountId'
     | '/help'
     | '/notifications'
+    | '/settings'
     | '/unit-trusts'
   id:
     | '__root__'
@@ -284,6 +295,7 @@ export interface FileRouteTypes {
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
+    | '/settings/'
     | '/unit-trusts/'
   fileRoutesById: FileRoutesById
 }
@@ -306,6 +318,7 @@ export interface RootRouteChildren {
   VstockRoute: typeof VstockRoute
   NotificationsSettingsRoute: typeof NotificationsSettingsRoute
   NotificationsIndexRoute: typeof NotificationsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -429,6 +442,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsIndexRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications/': {
       id: '/notifications/'
       path: '/notifications'
@@ -512,7 +532,17 @@ const rootRouteChildren: RootRouteChildren = {
   VstockRoute: VstockRoute,
   NotificationsSettingsRoute: NotificationsSettingsRoute,
   NotificationsIndexRoute: NotificationsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
