@@ -60,7 +60,7 @@ function NotificationPreferences() {
 
   return (
     <MobileLayout>
-      <PageHeader title="Notifications" showBack />
+      <PageHeader title="Notification settings" showBack />
       <p className="mx-4 mt-1 text-[12px] text-muted-foreground">
         Choose what you want to hear about and how we reach you.
       </p>
