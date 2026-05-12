@@ -31,6 +31,7 @@ import { Route as NotificationsIndexRouteImport } from './routes/notifications.i
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
+import { Route as SettingsLegalRouteImport } from './routes/settings.legal'
 import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
@@ -144,6 +145,11 @@ const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
   path: '/settings/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SettingsLegalRoute = SettingsLegalRouteImport.update({
+  id: '/settings/legal',
+  path: '/settings/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
   id: '/notifications/settings',
   path: '/notifications/settings',
@@ -174,6 +180,7 @@ export interface FileRoutesByFullPath {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
@@ -198,6 +205,7 @@ export interface FileRoutesByTo {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
@@ -225,6 +233,7 @@ export interface FileRoutesById {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
@@ -253,6 +262,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/legal'
     | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help/'
@@ -277,6 +287,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/legal'
     | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help'
@@ -303,6 +314,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/legal'
     | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help/'
@@ -329,6 +341,7 @@ export interface RootRouteChildren {
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
   NotificationsSettingsRoute: typeof NotificationsSettingsRoute
+  SettingsLegalRoute: typeof SettingsLegalRoute
   SettingsPrivacyRoute: typeof SettingsPrivacyRoute
   NotificationsIndexRoute: typeof NotificationsIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
@@ -490,6 +503,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsPrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/settings/legal': {
+      id: '/settings/legal'
+      path: '/settings/legal'
+      fullPath: '/settings/legal'
+      preLoaderRoute: typeof SettingsLegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications/settings': {
       id: '/notifications/settings'
       path: '/notifications/settings'
@@ -551,6 +571,7 @@ const rootRouteChildren: RootRouteChildren = {
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
   NotificationsSettingsRoute: NotificationsSettingsRoute,
+  SettingsLegalRoute: SettingsLegalRoute,
   SettingsPrivacyRoute: SettingsPrivacyRoute,
   NotificationsIndexRoute: NotificationsIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
