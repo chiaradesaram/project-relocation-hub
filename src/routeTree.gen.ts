@@ -26,9 +26,12 @@ import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
+import { Route as SettingsIndexRouteImport } from './routes/settings.index'
 import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
+import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
+import { Route as SettingsLegalRouteImport } from './routes/settings.legal'
 import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
@@ -117,6 +120,11 @@ const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
   path: '/',
   getParentRoute: () => UnitTrustsRoute,
 } as any)
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
   id: '/notifications/',
   path: '/notifications/',
@@ -131,6 +139,16 @@ const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
   id: '/$subAccountId',
   path: '/$subAccountId',
   getParentRoute: () => UnitTrustsRoute,
+} as any)
+const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
+  id: '/settings/privacy',
+  path: '/settings/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsLegalRoute = SettingsLegalRouteImport.update({
+  id: '/settings/legal',
+  path: '/settings/legal',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
   id: '/notifications/settings',
@@ -162,9 +180,12 @@ export interface FileRoutesByFullPath {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/legal': typeof SettingsLegalRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesByTo {
@@ -184,9 +205,12 @@ export interface FileRoutesByTo {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/legal': typeof SettingsLegalRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
   '/notifications': typeof NotificationsIndexRoute
+  '/settings': typeof SettingsIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
 }
 export interface FileRoutesById {
@@ -209,9 +233,12 @@ export interface FileRoutesById {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/settings/legal': typeof SettingsLegalRoute
+  '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
+  '/settings/': typeof SettingsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
 export interface FileRouteTypes {
@@ -235,9 +262,12 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/legal'
+    | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
+    | '/settings/'
     | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -257,9 +287,12 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/legal'
+    | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help'
     | '/notifications'
+    | '/settings'
     | '/unit-trusts'
   id:
     | '__root__'
@@ -281,9 +314,12 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/settings/legal'
+    | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
+    | '/settings/'
     | '/unit-trusts/'
   fileRoutesById: FileRoutesById
 }
@@ -305,7 +341,10 @@ export interface RootRouteChildren {
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
   NotificationsSettingsRoute: typeof NotificationsSettingsRoute
+  SettingsLegalRoute: typeof SettingsLegalRoute
+  SettingsPrivacyRoute: typeof SettingsPrivacyRoute
   NotificationsIndexRoute: typeof NotificationsIndexRoute
+  SettingsIndexRoute: typeof SettingsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -429,6 +468,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UnitTrustsIndexRouteImport
       parentRoute: typeof UnitTrustsRoute
     }
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/notifications/': {
       id: '/notifications/'
       path: '/notifications'
@@ -449,6 +495,20 @@ declare module '@tanstack/react-router' {
       fullPath: '/unit-trusts/$subAccountId'
       preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
       parentRoute: typeof UnitTrustsRoute
+    }
+    '/settings/privacy': {
+      id: '/settings/privacy'
+      path: '/settings/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof SettingsPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/legal': {
+      id: '/settings/legal'
+      path: '/settings/legal'
+      fullPath: '/settings/legal'
+      preLoaderRoute: typeof SettingsLegalRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/notifications/settings': {
       id: '/notifications/settings'
@@ -511,7 +571,10 @@ const rootRouteChildren: RootRouteChildren = {
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,
   NotificationsSettingsRoute: NotificationsSettingsRoute,
+  SettingsLegalRoute: SettingsLegalRoute,
+  SettingsPrivacyRoute: SettingsPrivacyRoute,
   NotificationsIndexRoute: NotificationsIndexRoute,
+  SettingsIndexRoute: SettingsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

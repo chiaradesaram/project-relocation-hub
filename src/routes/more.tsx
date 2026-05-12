@@ -36,7 +36,7 @@ const sections = [
     title: "ACCOUNT",
     items: [
       { icon: Building2, label: "Bank Accounts", path: "/bank-accounts" },
-      { icon: Settings, label: "App Settings", path: "/more", subtitle: "Notifications, terms & preferences" },
+      { icon: Settings, label: "Settings", path: "/settings", subtitle: "Notifications, privacy & legal" },
     ],
   },
   {
