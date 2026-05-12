@@ -20,15 +20,17 @@ export const Route = createFileRoute("/bank-accounts")({
 });
 
 const initialBankAccounts = [
-  { bank: "Commercial Bank", accNo: "8001234521", product: "Unit Trusts" },
-  { bank: "Sampath Bank", accNo: "1100568832", product: "Equities" },
-  { bank: "HNB", accNo: "0452201209", product: "Treasuries" },
+  { bank: "Commercial Bank", branch: "Colombo 03", accNo: "8001234521", product: "Unit Trusts" },
+  { bank: "Sampath Bank", branch: "Nugegoda", accNo: "1100568832", product: "Equities" },
+  { bank: "HNB", branch: "Kandy", accNo: "0452201209", product: "Treasuries" },
 ];
 
 const productPillClass: Record<string, string> = {
-  "Unit Trusts": "bg-primary/15 text-primary",
-  Equities: "bg-[oklch(0.78_0.16_200)]/15 text-[oklch(0.78_0.16_200)]",
-  Treasuries: "bg-[oklch(0.85_0.16_85)]/15 text-[oklch(0.85_0.16_85)]",
+  "Unit Trusts": "bg-primary/25 text-primary ring-1 ring-primary/30",
+  Equities:
+    "bg-[oklch(0.72_0.14_200)]/25 text-[oklch(0.85_0.14_200)] ring-1 ring-[oklch(0.72_0.14_200)]/40",
+  Treasuries:
+    "bg-[oklch(0.7_0.2_350)]/25 text-[oklch(0.85_0.18_350)] ring-1 ring-[oklch(0.7_0.2_350)]/40",
 };
 
 function BankAccounts() {
@@ -55,20 +57,23 @@ function BankAccounts() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-foreground truncate">{acc.bank}</p>
+                  <p className="text-[11px] text-muted-foreground/80 truncate">{acc.branch} branch</p>
                   <p className="text-[13px] text-muted-foreground mt-1 font-mono tracking-wide">{acc.accNo}</p>
                 </div>
               </div>
-              <div className="flex flex-col items-end gap-3 shrink-0">
-                <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
-                  {acc.product}
-                </span>
-                <AlertDialog>
+              <span className={`shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
+                {acc.product}
+              </span>
+            </div>
+            <div className="mt-3 pt-3 border-t border-white/5 flex justify-end">
+              <AlertDialog>
                 <AlertDialogTrigger asChild>
                   <button
-                    className="p-2 -m-2 text-muted-foreground hover:text-destructive transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[11px] font-medium text-muted-foreground hover:text-destructive transition-colors"
                     aria-label={`Remove ${acc.bank} account`}
                   >
-                    <Trash2 className="w-4 h-4" />
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Remove
                   </button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
@@ -83,8 +88,7 @@ function BankAccounts() {
                     <AlertDialogAction onClick={() => removeAccount(acc.accNo)}>Remove</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
-                </AlertDialog>
-              </div>
+              </AlertDialog>
             </div>
           </div>
         ))}
