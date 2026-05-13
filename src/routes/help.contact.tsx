@@ -5,25 +5,56 @@ import { z } from "zod";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
-  ChevronDown,
   CheckCircle2,
   Lightbulb,
   Paperclip,
+  ChevronRight,
+  AlertTriangle,
+  CreditCard,
+  UserCog,
+  FileText,
+  Stamp,
+  ClipboardList,
+  Compass,
 } from "lucide-react";
 
 type CategoryId =
   | "account-opening"
+  | "account-profile"
   | "trading"
-  | "deposits-withdrawals"
+  | "investments-withdrawals"
+  | "statements-documents"
   | "technical"
-  | "complaints"
+  | "feedback"
   | "other";
+
+type SpecialForm = "nic" | "deactivate";
+type IconCmp = typeof CreditCard;
+
+interface QuickLink {
+  label: string;
+  to: string;
+  description: string;
+  icon: IconCmp;
+}
+
+interface Sub {
+  id: string;
+  label: string;
+  suggestions?: { q: string; a: string }[];
+  quickLinks?: QuickLink[];
+  specialForm?: SpecialForm;
+  /** Hide the "Continue to ticket" path; sub is resolved via quick links/FAQ alone. */
+  resolveOnly?: boolean;
+}
 
 interface Category {
   id: CategoryId;
   label: string;
   team: string;
-  subs: { id: string; label: string; suggestions?: { q: string; a: string }[] }[];
+  /** When true, ask the user which product (UT / Equity / Treasury) the issue relates to. */
+  requiresProduct?: boolean;
+  subs: Sub[];
 }
 
 const CATEGORIES: Category[] = [
@@ -33,15 +64,88 @@ const CATEGORIES: Category[] = [
     team: "Onboarding Team",
     subs: [
       {
-        id: "kyc-pending",
-        label: "KYC pending",
+        id: "track-application",
+        label: "Track my application",
         suggestions: [
-          { q: "How long does KYC take?", a: "Most KYCs complete within 1 business day after document upload." },
-          { q: "What documents are required?", a: "NIC/Passport, proof of address, and a recent bank statement." },
+          {
+            q: "How long does account opening take?",
+            a: "Most applications are reviewed within 1–2 business days. During high volumes and around public holidays, it can take a few extra days.",
+          },
+          {
+            q: "When should I raise a ticket?",
+            a: "If your application has been pending for more than 4 working days, raise a ticket and we'll chase it up for you.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Open application tracker",
+            to: "/get-started",
+            description: "See your current stage and what's pending",
+            icon: Compass,
+          },
         ],
       },
       { id: "doc-rejected", label: "Document rejected" },
-      { id: "status", label: "Status update" },
+      { id: "other", label: "Other" },
+    ],
+  },
+  {
+    id: "account-profile",
+    label: "Account & Profile",
+    team: "Account Services",
+    subs: [
+      {
+        id: "update-bank",
+        label: "Update bank account",
+        suggestions: [
+          {
+            q: "Can I add or remove a bank account myself?",
+            a: "Yes — you can add or remove linked bank accounts directly from the Bank Accounts page. Changes go live after a quick verification.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Manage bank accounts",
+            to: "/bank-accounts",
+            description: "Add, remove or update your linked bank accounts",
+            icon: CreditCard,
+          },
+        ],
+      },
+      {
+        id: "change-contact",
+        label: "Change phone or email",
+        suggestions: [
+          {
+            q: "How do I change my phone or email?",
+            a: "Update your contact details from your Profile. We'll send an OTP to confirm the change.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Open profile",
+            to: "/profile",
+            description: "Edit your phone number, email and personal details",
+            icon: UserCog,
+          },
+        ],
+      },
+      {
+        id: "update-nic",
+        label: "Update NIC",
+        specialForm: "nic",
+        suggestions: [
+          {
+            q: "What do I need to update my NIC?",
+            a: "Front and back images of your new NIC, the new NIC number, issue date, and the name as printed on the card.",
+          },
+        ],
+      },
+      {
+        id: "deactivate",
+        label: "Deactivate account",
+        specialForm: "deactivate",
+      },
       { id: "other", label: "Other" },
     ],
   },
@@ -64,13 +168,14 @@ const CATEGORIES: Category[] = [
     ],
   },
   {
-    id: "deposits-withdrawals",
-    label: "Deposits & Withdrawals",
+    id: "investments-withdrawals",
+    label: "Investments & Withdrawals",
     team: "Payments Team",
+    requiresProduct: true,
     subs: [
       {
-        id: "deposit-not-reflected",
-        label: "Deposit not reflected",
+        id: "investment-not-reflected",
+        label: "Investment not reflected",
         suggestions: [
           { q: "How long do bank transfers take?", a: "1–2 business days after we receive your proof of payment and funds clear." },
           { q: "What proof is accepted?", a: "A clear screenshot or PDF of the receipt showing reference, amount and date." },
@@ -78,13 +183,73 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "withdrawal-delay",
-        label: "Withdrawal delay",
+        label: "Withdrawal / redemption delay",
         suggestions: [
           { q: "How long do redemptions take?", a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days." },
           { q: "Is there a daily withdrawal limit?", a: "Instant redemptions are capped at LKR 100,000 per transaction, up to 5 times a day." },
         ],
       },
-      { id: "bank-change", label: "Bank details change" },
+      {
+        id: "redemption-plan",
+        label: "Redemption plan issue",
+        suggestions: [
+          { q: "Can I edit a scheduled redemption?", a: "Yes — open the plan from your portfolio and tap Edit. Changes apply from the next cycle." },
+        ],
+      },
+      {
+        id: "creation-plan",
+        label: "Creation plan issue",
+        suggestions: [
+          { q: "Why didn't my creation plan execute?", a: "Most often it's due to insufficient balance on the cycle date. The plan retries automatically the next business day." },
+        ],
+      },
+      { id: "other", label: "Other" },
+    ],
+  },
+  {
+    id: "statements-documents",
+    label: "Statements & Documents",
+    team: "Account Services",
+    subs: [
+      {
+        id: "account-statement",
+        label: "Account statement",
+        resolveOnly: true,
+        quickLinks: [
+          {
+            label: "Request account statement",
+            to: "/requests",
+            description: "Get a detailed statement for any period",
+            icon: FileText,
+          },
+        ],
+      },
+      {
+        id: "balance-visa",
+        label: "Balance confirmation (Visa)",
+        resolveOnly: true,
+        quickLinks: [
+          {
+            label: "Request balance confirmation",
+            to: "/requests",
+            description: "For visa or travel documentation",
+            icon: ClipboardList,
+          },
+        ],
+      },
+      {
+        id: "balance-ird",
+        label: "Balance confirmation (IRD / Tax)",
+        resolveOnly: true,
+        quickLinks: [
+          {
+            label: "Request balance confirmation",
+            to: "/requests",
+            description: "Official letter for tax filing",
+            icon: Stamp,
+          },
+        ],
+      },
       { id: "other", label: "Other" },
     ],
   },
@@ -100,12 +265,13 @@ const CATEGORIES: Category[] = [
     ],
   },
   {
-    id: "complaints",
-    label: "Complaints",
-    team: "Compliance Team",
+    id: "feedback",
+    label: "Feedback & Suggestions",
+    team: "Product Team",
     subs: [
-      { id: "service", label: "Service complaint" },
-      { id: "staff", label: "Staff complaint" },
+      { id: "app-feedback", label: "App feedback" },
+      { id: "feature-suggestion", label: "Feature suggestion" },
+      { id: "service-feedback", label: "Service feedback" },
       { id: "other", label: "Other" },
     ],
   },
@@ -117,17 +283,43 @@ const CATEGORIES: Category[] = [
   },
 ];
 
-const formSchema = z.object({
+const PRODUCTS = [
+  { id: "unit-trusts", label: "Unit Trusts" },
+  { id: "equities", label: "Equities" },
+  { id: "treasuries", label: "Treasuries" },
+] as const;
+
+const baseSchema = z.object({
   categoryId: z.string().min(1, "Pick a category"),
   subId: z.string().min(1, "Pick a sub-category"),
+});
+
+const ticketSchema = baseSchema.extend({
   description: z
     .string()
     .trim()
     .min(10, "Please describe the issue (10+ chars)")
     .max(2000, "Keep description under 2000 characters"),
-  amount: z.string().trim().max(20).optional(),
-  date: z.string().trim().max(20).optional(),
-  accountNumber: z.string().trim().max(40).optional(),
+  product: z.string().trim().max(40).optional(),
+});
+
+const nicSchema = baseSchema.extend({
+  nicNumber: z
+    .string()
+    .trim()
+    .min(10, "Enter your new NIC number")
+    .max(20, "NIC number too long")
+    .regex(/^[0-9A-Za-z]+$/, "Letters and numbers only"),
+  nicName: z.string().trim().min(2, "Enter the name on NIC").max(120),
+  issueDate: z.string().trim().min(1, "Enter the issue date"),
+  description: z.string().trim().max(2000).optional(),
+});
+
+const deactivateSchema = baseSchema.extend({
+  confirm: z.literal("DEACTIVATE", {
+    errorMap: () => ({ message: 'Type "DEACTIVATE" to confirm' }),
+  }),
+  reason: z.string().trim().min(10, "Tell us why so we can improve").max(2000),
 });
 
 export const Route = createFileRoute("/help/contact")({
@@ -143,11 +335,23 @@ export const Route = createFileRoute("/help/contact")({
 function ContactForm() {
   const [categoryId, setCategoryId] = useState<CategoryId | "">("");
   const [subId, setSubId] = useState("");
+  const [productId, setProductId] = useState("");
   const [showForm, setShowForm] = useState(false);
+
   const [description, setDescription] = useState("");
-  const [amount, setAmount] = useState("");
-  const [date, setDate] = useState("");
   const [accountNumber, setAccountNumber] = useState("CAL-00012345");
+
+  // NIC form state
+  const [nicNumber, setNicNumber] = useState("");
+  const [nicName, setNicName] = useState("");
+  const [issueDate, setIssueDate] = useState("");
+  const [nicFrontName, setNicFrontName] = useState<string | null>(null);
+  const [nicBackName, setNicBackName] = useState<string | null>(null);
+
+  // Deactivate state
+  const [deactivateConfirm, setDeactivateConfirm] = useState("");
+  const [deactivateReason, setDeactivateReason] = useState("");
+
   const [fileName, setFileName] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [submitted, setSubmitted] = useState(false);
@@ -163,34 +367,63 @@ function ContactForm() {
   );
 
   const suggestions = sub?.suggestions ?? [];
+  const quickLinks = sub?.quickLinks ?? [];
   const hasSuggestions = suggestions.length > 0;
+  const hasQuickLinks = quickLinks.length > 0;
+  const specialForm = sub?.specialForm;
+  const resolveOnly = !!sub?.resolveOnly;
+  const needsAccount = categoryId === "trading" || categoryId === "investments-withdrawals";
+  const needsProduct = !!category?.requiresProduct;
 
-  const needsAmount =
-    categoryId === "deposits-withdrawals" &&
-    (subId === "deposit-not-reflected" || subId === "withdrawal-delay");
-  const needsDate = needsAmount;
-  const needsAccount = categoryId === "deposits-withdrawals" || categoryId === "trading";
-
-  // Reset sub when category changes
   useEffect(() => {
     setSubId("");
+    setProductId("");
     setShowForm(false);
   }, [categoryId]);
 
-  // Reset showForm when sub changes
   useEffect(() => {
     setShowForm(false);
   }, [subId]);
 
   function submitForm() {
-    const result = formSchema.safeParse({
-      categoryId,
-      subId,
-      description,
-      amount: needsAmount ? amount : undefined,
-      date: needsDate ? date : undefined,
-      accountNumber: needsAccount ? accountNumber : undefined,
-    });
+    let result;
+    if (specialForm === "nic") {
+      result = nicSchema.safeParse({
+        categoryId,
+        subId,
+        nicNumber,
+        nicName,
+        issueDate,
+        description,
+      });
+    } else if (specialForm === "deactivate") {
+      result = deactivateSchema.safeParse({
+        categoryId,
+        subId,
+        confirm: deactivateConfirm,
+        reason: deactivateReason,
+      });
+    } else {
+      result = ticketSchema.safeParse({
+        categoryId,
+        subId,
+        description,
+        product: needsProduct ? productId : undefined,
+      });
+      if (result.success && needsProduct && !productId) {
+        setErrors({ product: "Pick a product" });
+        return;
+      }
+    }
+
+    if (specialForm === "nic" && (!nicFrontName || !nicBackName)) {
+      setErrors((p) => ({
+        ...p,
+        nicFront: nicFrontName ? "" : "Upload front of NIC",
+        nicBack: nicBackName ? "" : "Upload back of NIC",
+      }));
+      return;
+    }
 
     if (!result.success) {
       const next: Record<string, string> = {};
@@ -211,7 +444,6 @@ function ContactForm() {
     setSubmitted(true);
   }
 
-  // Confirmation screen
   if (submitted && category) {
     return (
       <MobileLayout hideNav>
@@ -254,6 +486,8 @@ function ContactForm() {
     );
   }
 
+  const isDeactivate = specialForm === "deactivate";
+
   return (
     <MobileLayout hideNav>
       <PageHeader title="Contact us" showBack hideHelp />
@@ -265,7 +499,6 @@ function ContactForm() {
         </p>
 
         <div className="space-y-3">
-          {/* Category */}
           <Field label="Category" error={errors.categoryId}>
             <SelectInput
               value={categoryId}
@@ -280,14 +513,9 @@ function ContactForm() {
             </SelectInput>
           </Field>
 
-          {/* Sub-category — only after category */}
           {category && (
             <Field label="Sub-category" error={errors.subId}>
-              <SelectInput
-                value={subId}
-                onChange={setSubId}
-                placeholder="Select a sub-category"
-              >
+              <SelectInput value={subId} onChange={setSubId} placeholder="Select a sub-category">
                 {category.subs.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.label}
@@ -297,9 +525,48 @@ function ContactForm() {
             </Field>
           )}
 
-          {/* Smart suggestions — before form */}
-          {sub && hasSuggestions && !showForm && (
-            <div className="rounded-xl border border-primary/20 bg-primary/5 p-3">
+          {sub && needsProduct && (
+            <Field label="Which product?" error={errors.product}>
+              <SelectInput value={productId} onChange={setProductId} placeholder="Select a product">
+                {PRODUCTS.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.label}
+                  </option>
+                ))}
+              </SelectInput>
+            </Field>
+          )}
+
+          {/* Quick links */}
+          {sub && hasQuickLinks && (!showForm || resolveOnly) && (
+            <div className="space-y-2">
+              {quickLinks.map((q) => {
+                const Icon = q.icon;
+                return (
+                  <Link
+                    key={q.to + q.label}
+                    to={q.to}
+                    className="flex items-center gap-3 rounded-xl border border-primary/25 bg-primary/10 p-3 transition-colors hover:bg-primary/15"
+                  >
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/20">
+                      <Icon className="h-4 w-4 text-primary" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[13px] font-semibold text-foreground">{q.label}</p>
+                      <p className="text-[10px] leading-relaxed text-muted-foreground">
+                        {q.description}
+                      </p>
+                    </div>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </Link>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Smart suggestions */}
+          {sub && hasSuggestions && (!showForm || resolveOnly) && (
+            <div className="rounded-xl border border-border/40 bg-card/60 p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
                 <p className="text-[13px] font-semibold text-foreground">
@@ -308,7 +575,7 @@ function ContactForm() {
               </div>
               <div className="space-y-2">
                 {suggestions.map((s, i) => (
-                  <div key={i} className="rounded-lg bg-card/60 p-2.5">
+                  <div key={i} className="rounded-lg bg-muted/20 p-2.5">
                     <p className="text-[13px] font-medium text-foreground">{s.q}</p>
                     <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
                       {s.a}
@@ -316,101 +583,280 @@ function ContactForm() {
                   </div>
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={() => setShowForm(true)}
-                className="mt-3 w-full rounded-lg bg-primary py-2 text-[11px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                Still need help — continue
-              </button>
             </div>
           )}
 
-          {/* Form fields — shown when sub selected with no suggestions, or after "Still need help" */}
-          {sub && (showForm || !hasSuggestions) && (
+          {/* Continue to ticket */}
+          {sub && !resolveOnly && !showForm && (hasSuggestions || hasQuickLinks) && (
+            <button
+              type="button"
+              onClick={() => setShowForm(true)}
+              className="w-full rounded-xl bg-primary py-2.5 text-[12px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+            >
+              Still need help — continue to ticket
+            </button>
+          )}
+
+          {/* Form */}
+          {sub && !resolveOnly && (showForm || (!hasSuggestions && !hasQuickLinks)) && (
             <>
-              {needsAccount && (
-                <Field label="Account number" error={errors.accountNumber}>
-                  <input
-                    value={accountNumber}
-                    onChange={(e) => setAccountNumber(e.target.value)}
-                    maxLength={40}
-                    className="w-full bg-transparent text-[12px] text-foreground outline-none"
-                  />
-                </Field>
-              )}
-
-              {needsDate && (
-                <Field label="Date of request" error={errors.date}>
-                  <input
-                    type="date"
-                    value={date}
-                    onChange={(e) => setDate(e.target.value)}
-                    className="w-full bg-transparent text-[12px] text-foreground outline-none"
-                  />
-                </Field>
-              )}
-
-              {needsAmount && (
-                <Field label="Amount (LKR)" error={errors.amount}>
-                  <input
-                    inputMode="decimal"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value.replace(/[^\d.]/g, ""))}
-                    placeholder="0.00"
-                    className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
-                  />
-                </Field>
-              )}
-
-              <Field label="Description" error={errors.description}>
-                <textarea
-                  value={description}
-                  onChange={(e) => setDescription(e.target.value)}
-                  maxLength={2000}
-                  rows={4}
-                  placeholder="What happened and what would you like us to do?"
-                  className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+              {isDeactivate ? (
+                <DeactivateForm
+                  confirm={deactivateConfirm}
+                  setConfirm={setDeactivateConfirm}
+                  reason={deactivateReason}
+                  setReason={setDeactivateReason}
+                  errors={errors}
+                  onSubmit={submitForm}
                 />
-              </Field>
+              ) : specialForm === "nic" ? (
+                <>
+                  <Field label="Name on NIC" error={errors.nicName}>
+                    <input
+                      value={nicName}
+                      onChange={(e) => setNicName(e.target.value)}
+                      maxLength={120}
+                      placeholder="As printed on the card"
+                      className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+                    />
+                  </Field>
+                  <Field label="New NIC number" error={errors.nicNumber}>
+                    <input
+                      value={nicNumber}
+                      onChange={(e) => setNicNumber(e.target.value.replace(/[^0-9A-Za-z]/g, ""))}
+                      maxLength={20}
+                      placeholder="e.g. 200012345678"
+                      className="w-full bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+                    />
+                  </Field>
+                  <Field label="Issue date" error={errors.issueDate}>
+                    <input
+                      type="date"
+                      value={issueDate}
+                      onChange={(e) => setIssueDate(e.target.value)}
+                      className="w-full bg-transparent text-[12px] text-foreground outline-none"
+                    />
+                  </Field>
 
-              <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
-                <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="flex-1 text-[12px] text-muted-foreground">
-                  {fileName ?? "Attach documents (optional)"}
-                </span>
-                <input
-                  type="file"
-                  className="hidden"
-                  onChange={(e) => {
-                    const file = e.target.files?.[0];
-                    if (!file) return;
-                    if (file.size > 5 * 1024 * 1024) {
-                      setErrors((p) => ({ ...p, file: "Max file size 5 MB" }));
-                      return;
-                    }
-                    setErrors((p) => {
-                      const { file: _f, ...rest } = p;
-                      return rest;
-                    });
-                    setFileName(file.name);
-                  }}
-                />
-              </label>
-              {errors.file && <p className="text-[10px] text-destructive">{errors.file}</p>}
+                  <NicUpload
+                    label="NIC front image"
+                    fileName={nicFrontName}
+                    error={errors.nicFront}
+                    onFile={(name) => {
+                      setNicFrontName(name);
+                      setErrors((p) => ({ ...p, nicFront: "" }));
+                    }}
+                  />
+                  <NicUpload
+                    label="NIC back image"
+                    fileName={nicBackName}
+                    error={errors.nicBack}
+                    onFile={(name) => {
+                      setNicBackName(name);
+                      setErrors((p) => ({ ...p, nicBack: "" }));
+                    }}
+                  />
 
-              <button
-                type="button"
-                onClick={submitForm}
-                className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-              >
-                Submit request
-              </button>
+                  <Field label="Notes (optional)" error={errors.description}>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      maxLength={2000}
+                      rows={3}
+                      placeholder="Anything we should know?"
+                      className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+                    />
+                  </Field>
+
+                  <button
+                    type="button"
+                    onClick={submitForm}
+                    className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                  >
+                    Submit NIC update
+                  </button>
+                </>
+              ) : (
+                <>
+                  {needsAccount && (
+                    <Field label="Account number" error={errors.accountNumber}>
+                      <input
+                        value={accountNumber}
+                        onChange={(e) => setAccountNumber(e.target.value)}
+                        maxLength={40}
+                        className="w-full bg-transparent text-[12px] text-foreground outline-none"
+                      />
+                    </Field>
+                  )}
+
+                  <Field label="Description" error={errors.description}>
+                    <textarea
+                      value={description}
+                      onChange={(e) => setDescription(e.target.value)}
+                      maxLength={2000}
+                      rows={4}
+                      placeholder="What happened and what would you like us to do?"
+                      className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+                    />
+                  </Field>
+
+                  <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
+                    <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
+                    <span className="flex-1 text-[12px] text-muted-foreground">
+                      {fileName ?? "Attach documents (optional)"}
+                    </span>
+                    <input
+                      type="file"
+                      className="hidden"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (!file) return;
+                        if (file.size > 5 * 1024 * 1024) {
+                          setErrors((p) => ({ ...p, file: "Max file size 5 MB" }));
+                          return;
+                        }
+                        setErrors((p) => {
+                          const { file: _f, ...rest } = p;
+                          return rest;
+                        });
+                        setFileName(file.name);
+                      }}
+                    />
+                  </label>
+                  {errors.file && <p className="text-[10px] text-destructive">{errors.file}</p>}
+
+                  <button
+                    type="button"
+                    onClick={submitForm}
+                    className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+                  >
+                    Submit request
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>
       </div>
     </MobileLayout>
+  );
+}
+
+function DeactivateForm({
+  confirm,
+  setConfirm,
+  reason,
+  setReason,
+  errors,
+  onSubmit,
+}: {
+  confirm: string;
+  setConfirm: (v: string) => void;
+  reason: string;
+  setReason: (v: string) => void;
+  errors: Record<string, string>;
+  onSubmit: () => void;
+}) {
+  return (
+    <>
+      <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3">
+        <div className="mb-2 flex items-center gap-1.5">
+          <AlertTriangle className="h-4 w-4 text-destructive" />
+          <p className="text-[13px] font-semibold text-foreground">
+            This is permanent — please read first
+          </p>
+        </div>
+        <ul className="ml-4 list-disc space-y-1 text-[11px] leading-relaxed text-muted-foreground">
+          <li>You'll lose access to your portfolio, statements and order history.</li>
+          <li>All open holdings must be redeemed and funds withdrawn before we can deactivate.</li>
+          <li>Recurring creation and redemption plans will be cancelled.</li>
+          <li>Re-opening an account later requires a fresh KYC.</li>
+        </ul>
+      </div>
+
+      <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+        <p className="text-[12px] font-medium text-foreground">Before you go…</p>
+        <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">
+          If something specific is bothering you, we'd love a chance to fix it. Many things —
+          notification noise, KYC issues, withdrawal speed — can be resolved in minutes.
+        </p>
+        <Link
+          to="/settings/notifications"
+          className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
+        >
+          Manage notifications instead
+          <ChevronRight className="h-3 w-3" />
+        </Link>
+      </div>
+
+      <Field label="Why are you leaving?" error={errors.reason}>
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          maxLength={2000}
+          rows={3}
+          placeholder="Help us improve — what made you decide to leave?"
+          className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+        />
+      </Field>
+
+      <Field label='Type "DEACTIVATE" to confirm' error={errors.confirm}>
+        <input
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value.toUpperCase())}
+          maxLength={20}
+          placeholder="DEACTIVATE"
+          className="w-full bg-transparent text-[12px] font-mono tracking-wider text-foreground placeholder:text-muted-foreground outline-none"
+        />
+      </Field>
+
+      <button
+        type="button"
+        onClick={onSubmit}
+        disabled={confirm !== "DEACTIVATE"}
+        className="w-full rounded-xl bg-destructive py-3 text-[13px] font-medium text-destructive-foreground transition-colors hover:bg-destructive/90 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        Submit deactivation request
+      </button>
+    </>
+  );
+}
+
+function NicUpload({
+  label,
+  fileName,
+  error,
+  onFile,
+}: {
+  label: string;
+  fileName: string | null;
+  error?: string;
+  onFile: (name: string) => void;
+}) {
+  return (
+    <div>
+      <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">
+        {label.toUpperCase()}
+      </p>
+      <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
+        <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
+        <span className="flex-1 text-[12px] text-muted-foreground">
+          {fileName ?? "Tap to upload (JPG / PNG, max 5 MB)"}
+        </span>
+        <input
+          type="file"
+          accept="image/*"
+          className="hidden"
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            if (file.size > 5 * 1024 * 1024) return;
+            onFile(file.name);
+          }}
+        />
+      </label>
+      {error && <p className="mt-1 text-[10px] text-destructive">{error}</p>}
+    </div>
   );
 }
 
