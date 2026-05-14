@@ -69,32 +69,32 @@
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.13 0.04 285);
+  --background: oklch(0.15 0.035 285);
   --foreground: oklch(0.97 0 0);
 
-  --card: oklch(0.21 0.055 285);
+  --card: oklch(0.245 0.045 285);
   --card-foreground: oklch(0.97 0 0);
 
-  --popover: oklch(0.18 0.05 285);
+  --popover: oklch(0.22 0.045 285);
   --popover-foreground: oklch(0.97 0 0);
 
-  --primary: oklch(0.6 0.2 290);
+  --primary: oklch(0.64 0.2 290);
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.22 0.04 285);
+  --secondary: oklch(0.26 0.04 285);
   --secondary-foreground: oklch(0.97 0 0);
 
-  --muted: oklch(0.25 0.04 285);
-  --muted-foreground: oklch(0.74 0.02 285);
+  --muted: oklch(0.28 0.04 285);
+  --muted-foreground: oklch(0.82 0.02 285);
 
-  --accent: oklch(0.55 0.25 290);
+  --accent: oklch(0.6 0.23 290);
   --accent-foreground: oklch(1 0 0);
 
   --destructive: oklch(0.57 0.22 25);
   --destructive-foreground: oklch(1 0 0);
 
-  --border: oklch(0.28 0.04 285);
-  --input: oklch(0.22 0.04 285);
+  --border: oklch(0.34 0.04 285);
+  --input: oklch(0.26 0.04 285);
   --ring: oklch(0.55 0.25 290);
 
   --success: oklch(0.7 0.18 155);
