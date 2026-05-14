@@ -15,11 +15,16 @@ import {
   Stamp,
   ClipboardList,
   Compass,
+  BookOpen,
+  TrendingUp,
+  Landmark,
+  PiggyBank,
 } from "lucide-react";
 
 type CategoryId =
   | "account-opening"
   | "account-profile"
+  | "product-info"
   | "investments-withdrawals"
   | "statements-documents"
   | "technical"
@@ -142,6 +147,112 @@ const CATEGORIES: Category[] = [
         specialForm: "deactivate",
       },
       { id: "other", label: "Other" },
+    ],
+  },
+  {
+    id: "product-info",
+    label: "Learn about a product",
+    team: "Education Team",
+    subs: [
+      {
+        id: "unit-trusts",
+        label: "Unit Trusts",
+        resolveOnly: true,
+        suggestions: [
+          {
+            q: "What is a unit trust?",
+            a: "A pooled fund managed by professionals — your money is invested across many securities, so you get diversification without picking individual stocks or bonds.",
+          },
+          {
+            q: "How are returns paid?",
+            a: "Most CAL unit trusts reinvest daily, so your unit price grows. You realise gains when you redeem units.",
+          },
+          {
+            q: "What are the fees?",
+            a: "A management fee is built into the daily NAV — there are no hidden entry, exit or transaction fees on the app.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Browse unit trust funds",
+            to: "/unit-trusts",
+            description: "See live NAVs, historical returns and fund factsheets",
+            icon: PiggyBank,
+          },
+          {
+            label: "Unit trust guides",
+            to: "/learn",
+            description: "Beginner explainers and how-to videos",
+            icon: BookOpen,
+          },
+        ],
+      },
+      {
+        id: "equities",
+        label: "Equities",
+        resolveOnly: true,
+        suggestions: [
+          {
+            q: "How do I buy or sell shares?",
+            a: "Place orders through CAL Online (vStock). Orders are routed to the CSE during market hours (9:30am–2:30pm, Mon–Fri).",
+          },
+          {
+            q: "When do trades settle?",
+            a: "CSE follows T+3 settlement — funds and shares move three business days after the trade date.",
+          },
+          {
+            q: "Are there brokerage fees?",
+            a: "Yes, standard CSE brokerage and statutory levies apply on every trade. Full breakdown is shown on the order confirmation.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Open equities (vStock)",
+            to: "/vstock",
+            description: "Place orders, see holdings and watchlists",
+            icon: TrendingUp,
+          },
+          {
+            label: "Equity learning hub",
+            to: "/learn",
+            description: "Market basics, order types and analysis tips",
+            icon: BookOpen,
+          },
+        ],
+      },
+      {
+        id: "treasuries",
+        label: "Treasuries",
+        resolveOnly: true,
+        suggestions: [
+          {
+            q: "What are Treasury Bills and Bonds?",
+            a: "Government-issued debt instruments — T-Bills mature within a year, T-Bonds run longer. Backed by the Government of Sri Lanka, considered the safest LKR investment.",
+          },
+          {
+            q: "Is the interest taxed?",
+            a: "Yes, withholding tax applies at source. The yield shown on the app is gross of WHT.",
+          },
+          {
+            q: "Can I sell before maturity?",
+            a: "Yes — CAL can buy back your holding at the prevailing market rate. The settlement amount may differ from face value.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "View treasury rates",
+            to: "/rates",
+            description: "Latest T-Bill and T-Bond yields",
+            icon: Landmark,
+          },
+          {
+            label: "Treasury guides",
+            to: "/learn",
+            description: "How treasuries work and who they're for",
+            icon: BookOpen,
+          },
+        ],
+      },
     ],
   },
   {
