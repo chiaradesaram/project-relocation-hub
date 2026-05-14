@@ -739,21 +739,6 @@ function DeactivateForm({
 }) {
   return (
     <>
-      <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3">
-        <div className="mb-2 flex items-center gap-1.5">
-          <AlertTriangle className="h-4 w-4 text-destructive" />
-          <p className="text-[13px] font-semibold text-foreground">
-            This is permanent — please read first
-          </p>
-        </div>
-        <ul className="ml-4 list-disc space-y-1 text-[11px] leading-relaxed text-muted-foreground">
-          <li>You'll lose access to your portfolio, statements and order history.</li>
-          <li>All open holdings must be redeemed and funds withdrawn before we can deactivate.</li>
-          <li>Recurring creation and redemption plans will be cancelled.</li>
-          <li>Re-opening an account later requires a fresh KYC.</li>
-        </ul>
-      </div>
-
       <div className="rounded-xl border border-border/40 bg-card/60 p-3">
         <p className="text-[12px] font-medium text-foreground">Before you go…</p>
         <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">
