@@ -9,7 +9,6 @@ import {
   Lightbulb,
   Paperclip,
   ChevronRight,
-  AlertTriangle,
   CreditCard,
   UserCog,
   FileText,
@@ -21,7 +20,6 @@ import {
 type CategoryId =
   | "account-opening"
   | "account-profile"
-  | "trading"
   | "investments-withdrawals"
   | "statements-documents"
   | "technical"
@@ -46,6 +44,8 @@ interface Sub {
   specialForm?: SpecialForm;
   /** Hide the "Continue to ticket" path; sub is resolved via quick links/FAQ alone. */
   resolveOnly?: boolean;
+  /** Skip the product picker even if the parent category requires it. */
+  skipProduct?: boolean;
 }
 
 interface Category {
@@ -115,12 +115,7 @@ const CATEGORIES: Category[] = [
       {
         id: "change-contact",
         label: "Change phone or email",
-        suggestions: [
-          {
-            q: "How do I change my phone or email?",
-            a: "Update your contact details from your Profile. We'll send an OTP to confirm the change.",
-          },
-        ],
+        resolveOnly: true,
         quickLinks: [
           {
             label: "Open profile",
@@ -150,24 +145,6 @@ const CATEGORIES: Category[] = [
     ],
   },
   {
-    id: "trading",
-    label: "Trading Issues",
-    team: "Trading Desk",
-    subs: [
-      {
-        id: "order-failed",
-        label: "Order failed",
-        suggestions: [
-          { q: "Why did my order fail?", a: "Common reasons: insufficient balance, market closed, or limit price out of range." },
-          { q: "Will I be charged for a failed order?", a: "No. Failed orders are not charged and any reserved funds are released within minutes." },
-        ],
-      },
-      { id: "wrong-price", label: "Wrong price or units" },
-      { id: "cancellation", label: "Cancellation request" },
-      { id: "other", label: "Other" },
-    ],
-  },
-  {
     id: "investments-withdrawals",
     label: "Investments & Withdrawals",
     team: "Payments Team",
@@ -192,6 +169,7 @@ const CATEGORIES: Category[] = [
       {
         id: "redemption-plan",
         label: "Redemption plan issue",
+        skipProduct: true,
         suggestions: [
           { q: "Can I edit a scheduled redemption?", a: "Yes — open the plan from your portfolio and tap Edit. Changes apply from the next cycle." },
         ],
@@ -199,6 +177,7 @@ const CATEGORIES: Category[] = [
       {
         id: "creation-plan",
         label: "Creation plan issue",
+        skipProduct: true,
         suggestions: [
           { q: "Why didn't my creation plan execute?", a: "Most often it's due to insufficient balance on the cycle date. The plan retries automatically the next business day." },
         ],
@@ -372,8 +351,8 @@ function ContactForm() {
   const hasQuickLinks = quickLinks.length > 0;
   const specialForm = sub?.specialForm;
   const resolveOnly = !!sub?.resolveOnly;
-  const needsAccount = categoryId === "trading" || categoryId === "investments-withdrawals";
-  const needsProduct = !!category?.requiresProduct;
+  const needsAccount = categoryId === "investments-withdrawals";
+  const needsProduct = !!category?.requiresProduct && !sub?.skipProduct;
 
   useEffect(() => {
     setSubId("");
@@ -759,21 +738,6 @@ function DeactivateForm({
 }) {
   return (
     <>
-      <div className="rounded-xl border border-destructive/30 bg-destructive/10 p-3">
-        <div className="mb-2 flex items-center gap-1.5">
-          <AlertTriangle className="h-4 w-4 text-destructive" />
-          <p className="text-[13px] font-semibold text-foreground">
-            This is permanent — please read first
-          </p>
-        </div>
-        <ul className="ml-4 list-disc space-y-1 text-[11px] leading-relaxed text-muted-foreground">
-          <li>You'll lose access to your portfolio, statements and order history.</li>
-          <li>All open holdings must be redeemed and funds withdrawn before we can deactivate.</li>
-          <li>Recurring creation and redemption plans will be cancelled.</li>
-          <li>Re-opening an account later requires a fresh KYC.</li>
-        </ul>
-      </div>
-
       <div className="rounded-xl border border-border/40 bg-card/60 p-3">
         <p className="text-[12px] font-medium text-foreground">Before you go…</p>
         <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">
