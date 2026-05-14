@@ -15,11 +15,16 @@ import {
   Stamp,
   ClipboardList,
   Compass,
+  BookOpen,
+  TrendingUp,
+  Landmark,
+  PiggyBank,
 } from "lucide-react";
 
 type CategoryId =
   | "account-opening"
   | "account-profile"
+  | "product-info"
   | "investments-withdrawals"
   | "statements-documents"
   | "technical"
