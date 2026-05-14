@@ -9,7 +9,6 @@ import {
   Lightbulb,
   Paperclip,
   ChevronRight,
-  AlertTriangle,
   CreditCard,
   UserCog,
   FileText,
