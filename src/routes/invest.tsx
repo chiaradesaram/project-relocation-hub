@@ -93,13 +93,13 @@ function Invest() {
             <button
               key={id}
               onClick={() => setMethod(id)}
-              className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-[11px] font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[13px] font-semibold transition-all ${
                 method === id
                   ? "gradient-primary text-primary-foreground shadow-lg"
                   : "text-muted-foreground hover:text-foreground"
               }`}
             >
-              <Icon className="w-3.5 h-3.5" />
+              <Icon className="w-4 h-4" />
               {label}
             </button>
           ))}
@@ -122,7 +122,7 @@ function Invest() {
               <button
                 key={type}
                 onClick={() => setInvestType(type)}
-                className={`flex-1 py-2 rounded-lg text-[11px] font-semibold transition-all ${
+                className={`flex-1 py-2 rounded-lg text-[12px] font-medium transition-all ${
                   investType === type
                     ? "text-foreground shadow-sm"
                     : "text-muted-foreground"
