@@ -60,9 +60,6 @@ function NotificationPreferences() {
   return (
     <MobileLayout>
       <PageHeader title="Notification settings" showBack />
-      <p className="mx-4 mt-1 text-[12px] text-muted-foreground">
-        Choose what you want to hear about and how we reach you.
-      </p>
       <Section title="What to notify me about" items={categories} onToggle={toggle(setCategories)} />
       <Section title="How to reach me" items={channels} onToggle={toggle(setChannels)} />
       <div className="h-6" />
