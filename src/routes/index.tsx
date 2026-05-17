@@ -453,7 +453,7 @@ function Dashboard() {
       {/* Rates to watch */}
       {isVisible("rates") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3 pb-3.5">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3 pb-3">
             <div className="flex items-center justify-between px-1 pb-2">
               <h3 className="text-[13px] font-medium text-muted-foreground">Rates to watch</h3>
               <div className="flex items-center gap-1">
@@ -466,7 +466,7 @@ function Dashboard() {
                 <WidgetMenu widget="rates" />
               </div>
             </div>
-            <div className="flex gap-2 overflow-x-auto -mx-3 px-3 pb-1 scrollbar-hide">
+            <div className="flex gap-2 overflow-x-auto -mx-3 px-3 pb-0.5 scrollbar-hide">
               {trackedRates
                 .map((id) => RATE_CATALOG.find((r) => r.id === id))
                 .filter((r): r is (typeof RATE_CATALOG)[number] => !!r)
@@ -474,19 +474,19 @@ function Dashboard() {
                   <button
                     key={r.id}
                     onClick={() => navigate({ to: "/rates" })}
-                    className="shrink-0 w-[88px] h-[88px] rounded-xl border border-border/40 bg-card/60 p-2 flex flex-col items-center justify-center text-center transition hover:bg-primary/10 hover:border-primary/40"
+                    className="shrink-0 w-[88px] rounded-xl border border-primary/20 bg-primary/10 px-1 py-2 flex flex-col items-center justify-center text-center gap-1 transition hover:bg-primary/20 hover:border-primary/40"
                   >
                     <p className="text-[10px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
-                    <p className="mt-1 text-[18px] font-bold text-foreground leading-none tracking-tight">{r.rate}</p>
+                    <p className="text-[16px] font-bold text-primary leading-none tracking-tight">{r.rate}</p>
                   </button>
                 ))}
               <button
                 onClick={() => setEditingRates(true)}
-                className="shrink-0 flex w-[88px] h-[88px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
+                className="shrink-0 flex w-[88px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
                 aria-label="Add rate to track"
               >
                 <Plus className="h-4 w-4" />
-                <span className="text-[10px] font-medium">Add rate</span>
+                <span className="text-[10px] font-medium">Add</span>
               </button>
             </div>
           </div>
