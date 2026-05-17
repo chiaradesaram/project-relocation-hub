@@ -453,20 +453,20 @@ function Dashboard() {
       {/* Rates to watch */}
       {isVisible("rates") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3 pb-3">
-            <div className="flex items-center justify-between px-1 pb-2">
-              <h3 className="text-[13px] font-medium text-muted-foreground">Rates to watch</h3>
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.22 0.04 285)" }}>
+            <div className="flex items-center justify-between pb-2.5">
+              <h3 className="text-[15px] font-semibold text-white">Rates to watch</h3>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setEditingRates(true)}
-                  className="text-[12px] font-medium text-primary hover:brightness-110 transition"
+                  className="text-[12px] font-medium text-[oklch(0.78_0.16_295)] hover:brightness-110 transition"
                 >
                   Edit
                 </button>
-                <WidgetMenu widget="rates" />
+                <WidgetMenu widget="rates" tone="light" />
               </div>
             </div>
-            <div className="flex gap-2 overflow-x-auto -mx-3 px-3 pb-0.5 scrollbar-hide">
+            <div className="flex flex-col gap-2">
               {trackedRates
                 .map((id) => RATE_CATALOG.find((r) => r.id === id))
                 .filter((r): r is (typeof RATE_CATALOG)[number] => !!r)
@@ -474,19 +474,22 @@ function Dashboard() {
                   <button
                     key={r.id}
                     onClick={() => navigate({ to: "/rates" })}
-                    className="shrink-0 w-[88px] rounded-xl border border-primary/20 bg-primary/10 px-1 py-2 flex flex-col items-center justify-center text-center gap-1 transition hover:bg-primary/20 hover:border-primary/40"
+                    className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
                   >
-                    <p className="text-[10px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
-                    <p className="text-[16px] font-bold text-primary leading-none tracking-tight">{r.rate}</p>
+                    <div className="min-w-0 flex-1 text-left">
+                      <p className="text-[13.5px] font-semibold text-white leading-tight truncate">{r.short}</p>
+                      <p className="text-[11px] text-white/55 mt-0.5">{r.tenor}</p>
+                    </div>
+                    <p className="text-[14px] font-semibold text-white tabular-nums">{r.rate}</p>
                   </button>
                 ))}
               <button
                 onClick={() => setEditingRates(true)}
-                className="shrink-0 flex w-[88px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
+                className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-white/15 py-2 text-white/60 transition hover:bg-white/5 hover:text-white"
                 aria-label="Add rate to track"
               >
-                <Plus className="h-4 w-4" />
-                <span className="text-[10px] font-medium">Add</span>
+                <Plus className="h-3.5 w-3.5" />
+                <span className="text-[12px] font-medium">Add rate</span>
               </button>
             </div>
           </div>
