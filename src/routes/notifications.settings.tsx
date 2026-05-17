@@ -9,14 +9,13 @@ export const Route = createFileRoute("/notifications/settings")({
   component: NotificationPreferences,
 });
 
-type Pref = { id: string; label: string; description: string; icon: React.ComponentType<{ className?: string }>; enabled: boolean };
+type Pref = { id: string; label: string; description: string; icon: React.ComponentType<{ className?: string }>; enabled: boolean; disabled?: boolean };
 
 const initialCategories: Pref[] = [
-  { id: "portfolio", label: "Portfolio updates", description: "Daily summary of your portfolio performance", icon: TrendingUp, enabled: true },
-  { id: "transactions", label: "Transactions", description: "Confirmations for invest, redeem and dividends", icon: Receipt, enabled: true },
+  { id: "transactions", label: "Account Activity", description: "Receive notifications about your investments and withdrawals", icon: Receipt, enabled: true },
   { id: "market", label: "Market alerts", description: "Major moves on ASPI, S&P SL20 and your watchlist", icon: Bell, enabled: false },
   { id: "promotions", label: "Promotions & news", description: "New funds, IPOs and CAL product offers", icon: Megaphone, enabled: false },
-  { id: "security", label: "Security alerts", description: "Login attempts and account changes (recommended)", icon: ShieldAlert, enabled: true },
+  { id: "security", label: "Security alerts", description: "Login attempts and account changes (recommended)", icon: ShieldAlert, enabled: true, disabled: true },
 ];
 
 const initialChannels: Pref[] = [
@@ -50,7 +49,7 @@ function NotificationPreferences() {
                 <p className="text-[13px] font-semibold text-foreground leading-tight">{item.label}</p>
                 <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{item.description}</p>
               </div>
-              <Switch checked={item.enabled} onCheckedChange={(v) => onToggle(item.id, v)} />
+              <Switch checked={item.enabled} disabled={item.disabled} onCheckedChange={(v) => onToggle(item.id, v)} />
             </div>
           );
         })}
