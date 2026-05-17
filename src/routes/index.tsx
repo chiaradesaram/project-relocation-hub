@@ -223,7 +223,7 @@ function Dashboard() {
       <div
         className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-5 pt-5 pb-4 shadow-sm"
         style={{
-          background: "linear-gradient(160deg, oklch(0.35 0.12 285), oklch(0.25 0.08 285))",
+          background: "oklch(0.28 0.10 285)",
         }}
       >
         <p className="text-[11px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
@@ -288,7 +288,7 @@ function Dashboard() {
       <div className="mx-4 mt-3.5">
         <div
           className="rounded-2xl overflow-hidden p-3.5"
-          style={{ background: "oklch(0.32 0.14 285)" }}
+          style={{ background: "oklch(0.26 0.12 285)" }}
         >
           <div className="flex items-center justify-between pb-2.5">
             <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
@@ -302,7 +302,7 @@ function Dashboard() {
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
                   className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
-                  style={{ background: "oklch(0.40 0.14 285)" }}
+                  style={{ background: "oklch(0.34 0.12 285)" }}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
                     <Icon className="h-4 w-4 text-white" />
