@@ -91,15 +91,15 @@ function NotificationsInbox() {
               <p className="px-1 pb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{group}</p>
               <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
                 {groupItems.map((n) => {
-                  const { icon: Icon, tint } = ICONS[n.type];
+                  const { icon: Icon, bg, color } = ICONS[n.type];
                   return (
                     <button
                       key={n.id}
                       onClick={() => setItems((prev) => prev.map((x) => (x.id === n.id ? { ...x, unread: false } : x)))}
                       className="flex w-full items-start gap-3 p-3.5 text-left transition hover:bg-muted/20"
                     >
-                      <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full" style={{ backgroundColor: tint }}>
-                        <Icon className="h-4 w-4 text-white" />
+                      <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${bg}`}>
+                        <Icon className={`h-3.5 w-3.5 ${color}`} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-2">
