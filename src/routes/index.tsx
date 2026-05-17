@@ -53,6 +53,19 @@ const RATE_CATALOG: { id: string; name: string; short: string; rate: string; ten
 const DEFAULT_RATES = ["fiof", "tbill91", "cmm"];
 const RATES_KEY = "dashboard.trackedRates.v1";
 
+const QUICK_ACTION_CATALOG: { id: string; label: string; icon: typeof Gamepad2; to: string }[] = [
+  { id: "vstock",     label: "VStock",     icon: Gamepad2,   to: "/vstock" },
+  { id: "dividends",  label: "Dividends",  icon: Coins,      to: "/transactions" },
+  { id: "watchlist",  label: "Watchlist",  icon: Eye,        to: "/invest" },
+  { id: "research",   label: "Research",   icon: FileText,   to: "/learn" },
+  { id: "learn",      label: "Learn",      icon: Sparkles,   to: "/learn" },
+  { id: "help",       label: "Help",       icon: HelpCircle, to: "/help" },
+  { id: "rates",      label: "Rates",      icon: TrendingUp, to: "/invest" },
+  { id: "txns",       label: "Activity",   icon: Receipt,    to: "/transactions" },
+];
+const DEFAULT_QUICK_ACTIONS = ["vstock", "dividends", "watchlist", "research"];
+const QUICK_KEY = "dashboard.quickActions.v1";
+
 const recentTransactions = [
   { id: "t1", kind: "invest" as const, name: "CAL Income Fund",   sub: "Today, 10:42",   amount: "-LKR 250,000" },
   { id: "t2", kind: "redeem" as const, name: "Money Market Fund", sub: "Yesterday",      amount: "+LKR 75,000"  },
@@ -79,6 +92,8 @@ function Dashboard() {
   const [customizing, setCustomizing] = useState(false);
   const [trackedRates, setTrackedRates] = useState<string[]>(DEFAULT_RATES);
   const [editingRates, setEditingRates] = useState(false);
+  const [quickActions, setQuickActions] = useState<string[]>(DEFAULT_QUICK_ACTIONS);
+  const [editingQuick, setEditingQuick] = useState(false);
 
   useEffect(() => {
     try {
@@ -86,6 +101,8 @@ function Dashboard() {
       if (raw) setHidden(new Set(JSON.parse(raw)));
       const r = typeof window !== "undefined" ? window.localStorage.getItem(RATES_KEY) : null;
       if (r) setTrackedRates(JSON.parse(r));
+      const q = typeof window !== "undefined" ? window.localStorage.getItem(QUICK_KEY) : null;
+      if (q) setQuickActions(JSON.parse(q));
     } catch {}
   }, []);
 
@@ -106,6 +123,15 @@ function Dashboard() {
   const toggleRate = (id: string) => {
     if (trackedRates.includes(id)) persistRates(trackedRates.filter((x) => x !== id));
     else persistRates([...trackedRates, id]);
+  };
+
+  const persistQuick = (next: string[]) => {
+    setQuickActions(next);
+    try { window.localStorage.setItem(QUICK_KEY, JSON.stringify(next)); } catch {}
+  };
+  const toggleQuick = (id: string) => {
+    if (quickActions.includes(id)) persistQuick(quickActions.filter((x) => x !== id));
+    else persistQuick([...quickActions, id]);
   };
 
   const productOptions = [
