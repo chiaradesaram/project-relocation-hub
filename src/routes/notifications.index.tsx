@@ -20,12 +20,12 @@ interface Notif {
   unread: boolean;
 }
 
-const ICONS: Record<NotifType, { icon: React.ComponentType<{ className?: string }>; tint: string }> = {
-  portfolio: { icon: TrendingUp, tint: "oklch(0.6 0.2 260)" },
-  transactions: { icon: Receipt, tint: "oklch(0.6 0.2 350)" },
-  market: { icon: Bell, tint: "oklch(0.55 0.25 290)" },
-  promotions: { icon: Megaphone, tint: "oklch(0.7 0.18 70)" },
-  security: { icon: ShieldAlert, tint: "oklch(0.6 0.2 25)" },
+const ICONS: Record<NotifType, { icon: React.ComponentType<{ className?: string }>; bg: string; color: string }> = {
+  portfolio: { icon: TrendingUp, bg: "bg-primary/10", color: "text-primary" },
+  transactions: { icon: Receipt, bg: "bg-muted", color: "text-muted-foreground" },
+  market: { icon: Bell, bg: "bg-muted", color: "text-muted-foreground" },
+  promotions: { icon: Megaphone, bg: "bg-muted", color: "text-muted-foreground" },
+  security: { icon: ShieldAlert, bg: "bg-destructive/10", color: "text-destructive" },
 };
 
 const seed: Notif[] = [
