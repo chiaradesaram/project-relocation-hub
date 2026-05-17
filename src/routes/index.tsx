@@ -1,9 +1,15 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal, EyeOff, Settings2, TrendingUp, TrendingDown } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/")({
   component: Dashboard,
@@ -33,11 +39,48 @@ const marketData = [
   { name: "91-Day T-Bill", value: "9.85%", change: "+0.05%", positive: true },
 ];
 
+const watchlist = [
+  { symbol: "JKH", price: "325.50", change: "+2.4%", positive: true },
+  { symbol: "COMB", price: "142.00", change: "+1.8%", positive: true },
+  { symbol: "HNB", price: "268.75", change: "-0.5%", positive: false },
+];
+
+const aspiSeries = [12620, 12690, 12655, 12780, 12845];
+
+type WidgetKey = "aspi" | "portfolio" | "watchlist" | "market" | "quick";
+const ALL_WIDGETS: { key: WidgetKey; label: string }[] = [
+  { key: "aspi", label: "ASPI snapshot" },
+  { key: "portfolio", label: "Portfolio" },
+  { key: "watchlist", label: "Watchlist" },
+  { key: "market", label: "Market overview" },
+  { key: "quick", label: "Quick actions" },
+];
+const STORAGE_KEY = "dashboard.hiddenWidgets.v1";
+
 function Dashboard() {
   const navigate = useNavigate();
   const [showActionPicker, setShowActionPicker] = useState<"invest" | "redeem" | null>(null);
   // Demo flag — would come from user/account state in production
   const [isFirstTimeInvestor, setIsFirstTimeInvestor] = useState(true);
+  const [hidden, setHidden] = useState<Set<WidgetKey>>(new Set());
+  const [customizing, setCustomizing] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
+      if (raw) setHidden(new Set(JSON.parse(raw)));
+    } catch {}
+  }, []);
+
+  const persist = (next: Set<WidgetKey>) => {
+    setHidden(new Set(next));
+    try {
+      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(next)));
+    } catch {}
+  };
+  const hideWidget = (k: WidgetKey) => { const n = new Set(hidden); n.add(k); persist(n); };
+  const showWidget = (k: WidgetKey) => { const n = new Set(hidden); n.delete(k); persist(n); };
+  const isVisible = (k: WidgetKey) => !hidden.has(k);
 
   const productOptions = [
     { icon: PieChart, label: "Unit Trusts", param: "unit-trust" },
@@ -45,15 +88,42 @@ function Dashboard() {
     { icon: Receipt, label: "Treasuries", param: "treasuries" },
   ];
 
-  const WidgetMenu = () => (
-    <button
-      onClick={(e) => e.stopPropagation()}
-      className="flex h-6 w-6 items-center justify-center rounded-full text-muted-foreground/60 hover:bg-muted/20 hover:text-foreground transition"
-      aria-label="More options"
-    >
-      <MoreHorizontal className="h-3.5 w-3.5" />
-    </button>
+  const WidgetMenu = ({ widget, tone = "muted" }: { widget: WidgetKey; tone?: "muted" | "light" }) => (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <button
+          onClick={(e) => e.stopPropagation()}
+          className={`flex h-6 w-6 items-center justify-center rounded-full transition ${
+            tone === "light"
+              ? "text-white/60 hover:bg-white/10 hover:text-white"
+              : "text-muted-foreground/60 hover:bg-muted/20 hover:text-foreground"
+          }`}
+          aria-label="Widget options"
+        >
+          <MoreHorizontal className="h-3.5 w-3.5" />
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end" className="w-44">
+        <DropdownMenuItem onClick={() => hideWidget(widget)} className="text-xs">
+          <EyeOff className="mr-2 h-3.5 w-3.5" /> Hide widget
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setCustomizing(true)} className="text-xs">
+          <Settings2 className="mr-2 h-3.5 w-3.5" /> Customize dashboard
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
+
+  // ASPI sparkline geometry
+  const sparkW = 96, sparkH = 32;
+  const sMin = Math.min(...aspiSeries), sMax = Math.max(...aspiSeries);
+  const sRange = sMax - sMin || 1;
+  const sparkPoints = aspiSeries.map((v, i) => {
+    const x = (i / (aspiSeries.length - 1)) * sparkW;
+    const y = sparkH - ((v - sMin) / sRange) * sparkH;
+    return `${x.toFixed(1)},${y.toFixed(1)}`;
+  }).join(" ");
+  const aspiPositive = aspiSeries[aspiSeries.length - 1] >= aspiSeries[0];
 
   return (
     <MobileLayout>
@@ -187,7 +257,60 @@ function Dashboard() {
         </button>
       </div>
 
+      {/* ASPI snapshot */}
+      {isVisible("aspi") && (
+        <div className="mx-4 mt-3.5">
+          <button
+            onClick={() => navigate({ to: "/rates" })}
+            className="w-full text-left rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-medium text-muted-foreground">ASPI</span>
+                <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
+                  {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                  +1.2%
+                </span>
+              </div>
+              <div onClick={(e) => e.stopPropagation()}>
+                <WidgetMenu widget="aspi" />
+              </div>
+            </div>
+            <div className="flex items-end justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[20px] font-bold text-foreground leading-none">12,845.32</p>
+                <p className="text-[10.5px] text-muted-foreground mt-1.5">
+                  Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
+                </p>
+                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
+              </div>
+              <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
+                <defs>
+                  <linearGradient id="aspiGrad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0.35" />
+                    <stop offset="100%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <polygon
+                  points={`0,${sparkH} ${sparkPoints} ${sparkW},${sparkH}`}
+                  fill="url(#aspiGrad)"
+                />
+                <polyline
+                  points={sparkPoints}
+                  fill="none"
+                  stroke={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"}
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+      )}
+
       {/* Portfolio card – purple style */}
+      {isVisible("portfolio") && (
       <div className="mx-4 mt-3.5">
         <div
           className="rounded-2xl overflow-hidden p-3.5"
@@ -195,7 +318,7 @@ function Dashboard() {
         >
           <div className="flex items-center justify-between pb-2.5">
             <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
-            <WidgetMenu />
+            <WidgetMenu widget="portfolio" tone="light" />
           </div>
           <div className="flex flex-col gap-2">
             {portfolioItems.map((item) => {
@@ -233,14 +356,59 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      )}
 
+      {/* Watchlist */}
+      {isVisible("watchlist") && (
+        <div className="mx-4 mt-3.5">
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.22 0.04 285)" }}>
+            <div className="flex items-center justify-between pb-2.5">
+              <h3 className="text-[15px] font-semibold text-white">Watchlist</h3>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => navigate({ to: "/invest" })}
+                  className="text-[12px] font-medium text-[oklch(0.78_0.16_295)] hover:brightness-110 transition"
+                >
+                  Manage
+                </button>
+                <WidgetMenu widget="watchlist" tone="light" />
+              </div>
+            </div>
+            <div className="flex flex-col gap-2">
+              {watchlist.map((s) => (
+                <button
+                  key={s.symbol}
+                  onClick={() => navigate({ to: "/invest" })}
+                  className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
+                >
+                  <div
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[11px] font-bold text-[oklch(0.85_0.12_295)]"
+                    style={{ background: "oklch(0.32 0.10 285)" }}
+                  >
+                    {s.symbol.slice(0, 2)}
+                  </div>
+                  <div className="min-w-0 flex-1 text-left">
+                    <p className="text-[13.5px] font-semibold text-white leading-tight">{s.symbol}</p>
+                    <p className="text-[11px] text-white/55 mt-0.5">LKR {s.price}</p>
+                  </div>
+                  <p className={`text-[13px] font-semibold ${s.positive ? "text-[oklch(0.85_0.18_155)]" : "text-[oklch(0.72_0.20_25)]"}`}>
+                    {s.change}
+                  </p>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {isVisible("market") && (
       <div className="mx-4 mt-3.5">
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
             <h3 className="text-[13px] font-medium text-muted-foreground">Market overview</h3>
             <div className="flex items-center gap-1">
               <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">View all</button>
-              <WidgetMenu />
+              <WidgetMenu widget="market" />
             </div>
           </div>
           <div className="divide-y divide-border/15 border-t border-border/15">
@@ -256,12 +424,14 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      )}
 
+      {isVisible("quick") && (
       <div className="mx-4 mt-3.5 mb-3">
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-2.5">
           <div className="flex items-center justify-between px-1 pb-1.5">
             <h3 className="text-[13px] font-medium text-muted-foreground">Quick actions</h3>
-            <WidgetMenu />
+            <WidgetMenu widget="quick" />
           </div>
           <div className="flex gap-1.5">
             {[
@@ -278,6 +448,54 @@ function Dashboard() {
           </div>
         </div>
       </div>
+      )}
+
+      {/* Customize entry */}
+      <div className="mx-4 mt-2 mb-4 flex justify-center">
+        <button
+          onClick={() => setCustomizing(true)}
+          className="flex items-center gap-1.5 rounded-full bg-muted/30 px-3 py-1.5 text-[11px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
+        >
+          <Settings2 className="h-3 w-3" />
+          Customize dashboard
+        </button>
+      </div>
+
+      {customizing && (
+        <div className="fixed inset-0 z-50 flex items-end">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setCustomizing(false)} />
+          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-foreground">Customize dashboard</h3>
+              <button onClick={() => setCustomizing(false)} className="rounded-full bg-secondary p-1">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mb-3 text-[11.5px] text-muted-foreground">Choose which widgets appear on your dashboard.</p>
+            <div className="flex flex-col gap-2">
+              {ALL_WIDGETS.map((w) => {
+                const visible = !hidden.has(w.key);
+                return (
+                  <button
+                    key={w.key}
+                    onClick={() => (visible ? hideWidget(w.key) : showWidget(w.key))}
+                    className="flex w-full items-center justify-between rounded-xl bg-secondary px-4 py-3 transition hover:bg-muted/50"
+                  >
+                    <span className="text-sm font-medium text-foreground">{w.label}</span>
+                    <span
+                      className={`relative h-5 w-9 rounded-full transition ${visible ? "bg-primary" : "bg-muted"}`}
+                    >
+                      <span
+                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${visible ? "left-[18px]" : "left-0.5"}`}
+                      />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </MobileLayout>
   );
 }
