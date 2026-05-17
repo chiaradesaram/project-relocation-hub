@@ -448,20 +448,20 @@ function Dashboard() {
                   <button
                     key={r.id}
                     onClick={() => navigate({ to: "/rates" })}
-                    className="shrink-0 w-[130px] rounded-xl border border-border/40 bg-card/40 px-3 py-2.5 text-left transition hover:bg-primary/5"
+                    className="shrink-0 w-[104px] h-[104px] rounded-xl border border-border/40 bg-card/60 p-3 flex flex-col items-center justify-center text-center transition hover:bg-primary/10 hover:border-primary/40"
                   >
-                    <p className="text-[10px] text-muted-foreground truncate">{r.short}</p>
-                    <p className="mt-1 text-[16px] font-bold text-foreground leading-none">{r.rate}</p>
-                    <p className="mt-1 text-[9.5px] text-muted-foreground/80">{r.tenor}</p>
+                    <p className="text-[10.5px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
+                    <p className="mt-1.5 text-[20px] font-bold text-foreground leading-none tracking-tight">{r.rate}</p>
+                    <p className="mt-1.5 text-[9px] uppercase tracking-wider text-muted-foreground/70">{r.tenor}</p>
                   </button>
                 ))}
               <button
                 onClick={() => setEditingRates(true)}
-                className="shrink-0 flex w-[130px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 px-3 py-2.5 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground"
+                className="shrink-0 flex w-[104px] h-[104px] flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
                 aria-label="Add rate to track"
               >
-                <Plus className="h-4 w-4" />
-                <span className="text-[10px] font-medium">Add rate</span>
+                <Plus className="h-5 w-5" />
+                <span className="text-[10.5px] font-medium">Add rate</span>
               </button>
             </div>
           </div>
@@ -480,7 +480,7 @@ function Dashboard() {
               </div>
             </div>
             <div className="divide-y divide-border/15 border-t border-border/15">
-              {recentTransactions.map((t) => {
+              {recentTransactions.slice(0, 2).map((t) => {
                 const isInvest = t.kind === "invest";
                 const Icon = isInvest ? ArrowUpRight : ArrowDownLeft;
                 return (
