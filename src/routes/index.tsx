@@ -448,11 +448,10 @@ function Dashboard() {
                   <button
                     key={r.id}
                     onClick={() => navigate({ to: "/rates" })}
-                    className="shrink-0 w-[104px] h-[104px] rounded-xl border border-border/40 bg-card/60 p-3 flex flex-col items-center justify-center text-center transition hover:bg-primary/10 hover:border-primary/40"
+                    className="shrink-0 w-[88px] h-[88px] rounded-xl border border-border/40 bg-card/60 p-2 flex flex-col items-center justify-center text-center transition hover:bg-primary/10 hover:border-primary/40"
                   >
-                    <p className="text-[10.5px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
-                    <p className="mt-1.5 text-[20px] font-bold text-foreground leading-none tracking-tight">{r.rate}</p>
-                    <p className="mt-1.5 text-[9px] uppercase tracking-wider text-muted-foreground/70">{r.tenor}</p>
+                    <p className="text-[10px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
+                    <p className="mt-1 text-[18px] font-bold text-foreground leading-none tracking-tight">{r.rate}</p>
                   </button>
                 ))}
               <button
