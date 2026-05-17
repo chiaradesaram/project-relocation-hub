@@ -24,7 +24,7 @@ const PageHeader = ({
   const topic: HelpTopic = helpTopic ?? "general";
   return (
     <div className="sticky top-0 bg-background/80 backdrop-blur-lg z-30">
-      <div className="flex items-center px-4 pt-3 pb-1 min-h-[44px]">
+      <div className="flex items-center px-4 pt-3 pb-3 min-h-[44px]">
         {/* Left */}
         <div className="flex items-center w-[72px] shrink-0">
           {showBack ? (
