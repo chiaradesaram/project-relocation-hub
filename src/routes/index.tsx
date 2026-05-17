@@ -283,58 +283,6 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* ASPI snapshot */}
-      {isVisible("aspi") && (
-        <div className="mx-4 mt-3.5">
-          <button
-            onClick={() => navigate({ to: "/rates" })}
-            className="w-full text-left rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-medium text-muted-foreground">ASPI</span>
-                <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
-                  {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                  +1.2%
-                </span>
-              </div>
-              <div onClick={(e) => e.stopPropagation()}>
-                <WidgetMenu widget="aspi" />
-              </div>
-            </div>
-            <div className="flex items-end justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[20px] font-bold text-foreground leading-none">12,845.32</p>
-                <p className="text-[10.5px] text-muted-foreground mt-1.5">
-                  Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
-                </p>
-                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
-              </div>
-              <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
-                <defs>
-                  <linearGradient id="aspiGrad" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0.35" />
-                    <stop offset="100%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <polygon
-                  points={`0,${sparkH} ${sparkPoints} ${sparkW},${sparkH}`}
-                  fill="url(#aspiGrad)"
-                />
-                <polyline
-                  points={sparkPoints}
-                  fill="none"
-                  stroke={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"}
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-          </button>
-        </div>
-      )}
-
       {/* Portfolio card – purple style */}
       {isVisible("portfolio") && (
       <div className="mx-4 mt-3.5">
