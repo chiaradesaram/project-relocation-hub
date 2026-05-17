@@ -14,7 +14,7 @@ type Pref = { id: string; label: string; description: string; icon: React.Compon
 const initialCategories: Pref[] = [
   { id: "transactions", label: "Account Activity", description: "Receive notifications about your investments and withdrawals", icon: Receipt, enabled: true },
   { id: "market", label: "Market alerts", description: "Major moves on ASPI, S&P SL20 and your watchlist", icon: Bell, enabled: false },
-  { id: "promotions", label: "Promotions & news", description: "New funds, IPOs and CAL product offers", icon: Megaphone, enabled: false },
+  { id: "promotions", label: "Promotions & news", description: "Hear about new funds, CAL products, features and more", icon: Megaphone, enabled: false },
   { id: "security", label: "Security alerts", description: "Login attempts and account changes (recommended)", icon: ShieldAlert, enabled: true, disabled: true },
 ];
 
