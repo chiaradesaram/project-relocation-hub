@@ -302,7 +302,7 @@ function Dashboard() {
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
                   className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
-                  style={{ background: "oklch(0.40 0.14 285)" }}
+                  style={{ background: "oklch(0.34 0.12 285)" }}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
                     <Icon className="h-4 w-4 text-white" />
