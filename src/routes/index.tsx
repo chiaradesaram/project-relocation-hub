@@ -456,11 +456,11 @@ function Dashboard() {
                 ))}
               <button
                 onClick={() => setEditingRates(true)}
-                className="shrink-0 flex w-[104px] h-[104px] flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
+                className="shrink-0 flex w-[88px] h-[88px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
                 aria-label="Add rate to track"
               >
-                <Plus className="h-5 w-5" />
-                <span className="text-[10.5px] font-medium">Add rate</span>
+                <Plus className="h-4 w-4" />
+                <span className="text-[10px] font-medium">Add rate</span>
               </button>
             </div>
           </div>
