@@ -41,7 +41,7 @@ const PageHeader = ({
         </div>
 
         {/* Center title */}
-        <h1 className="flex-1 text-center text-[20px] font-bold text-foreground tracking-tight leading-tight truncate">
+        <h1 className="flex-1 text-center text-[17px] font-semibold text-foreground tracking-tight leading-tight truncate">
           {title}
         </h1>
 
