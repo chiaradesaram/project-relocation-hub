@@ -53,6 +53,19 @@ const RATE_CATALOG: { id: string; name: string; short: string; rate: string; ten
 const DEFAULT_RATES = ["fiof", "tbill91", "cmm"];
 const RATES_KEY = "dashboard.trackedRates.v1";
 
+const QUICK_ACTION_CATALOG: { id: string; label: string; icon: typeof Gamepad2; to: string }[] = [
+  { id: "vstock",     label: "VStock",     icon: Gamepad2,   to: "/vstock" },
+  { id: "dividends",  label: "Dividends",  icon: Coins,      to: "/transactions" },
+  { id: "watchlist",  label: "Watchlist",  icon: Eye,        to: "/invest" },
+  { id: "research",   label: "Research",   icon: FileText,   to: "/learn" },
+  { id: "learn",      label: "Learn",      icon: Sparkles,   to: "/learn" },
+  { id: "help",       label: "Help",       icon: HelpCircle, to: "/help" },
+  { id: "rates",      label: "Rates",      icon: TrendingUp, to: "/invest" },
+  { id: "txns",       label: "Activity",   icon: Receipt,    to: "/transactions" },
+];
+const DEFAULT_QUICK_ACTIONS = ["vstock", "dividends", "watchlist", "research"];
+const QUICK_KEY = "dashboard.quickActions.v1";
+
 const recentTransactions = [
   { id: "t1", kind: "invest" as const, name: "CAL Income Fund",   sub: "Today, 10:42",   amount: "-LKR 250,000" },
   { id: "t2", kind: "redeem" as const, name: "Money Market Fund", sub: "Yesterday",      amount: "+LKR 75,000"  },
@@ -79,6 +92,8 @@ function Dashboard() {
   const [customizing, setCustomizing] = useState(false);
   const [trackedRates, setTrackedRates] = useState<string[]>(DEFAULT_RATES);
   const [editingRates, setEditingRates] = useState(false);
+  const [quickActions, setQuickActions] = useState<string[]>(DEFAULT_QUICK_ACTIONS);
+  const [editingQuick, setEditingQuick] = useState(false);
 
   useEffect(() => {
     try {
@@ -86,6 +101,8 @@ function Dashboard() {
       if (raw) setHidden(new Set(JSON.parse(raw)));
       const r = typeof window !== "undefined" ? window.localStorage.getItem(RATES_KEY) : null;
       if (r) setTrackedRates(JSON.parse(r));
+      const q = typeof window !== "undefined" ? window.localStorage.getItem(QUICK_KEY) : null;
+      if (q) setQuickActions(JSON.parse(q));
     } catch {}
   }, []);
 
@@ -106,6 +123,15 @@ function Dashboard() {
   const toggleRate = (id: string) => {
     if (trackedRates.includes(id)) persistRates(trackedRates.filter((x) => x !== id));
     else persistRates([...trackedRates, id]);
+  };
+
+  const persistQuick = (next: string[]) => {
+    setQuickActions(next);
+    try { window.localStorage.setItem(QUICK_KEY, JSON.stringify(next)); } catch {}
+  };
+  const toggleQuick = (id: string) => {
+    if (quickActions.includes(id)) persistQuick(quickActions.filter((x) => x !== id));
+    else persistQuick([...quickActions, id]);
   };
 
   const productOptions = [
@@ -515,20 +541,40 @@ function Dashboard() {
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-2.5">
           <div className="flex items-center justify-between px-1 pb-1.5">
             <h3 className="text-[13px] font-medium text-muted-foreground">Quick actions</h3>
-            <WidgetMenu widget="quick" />
-          </div>
-          <div className="flex gap-1.5">
-            {[
-              { icon: Gamepad2, label: "VStock", action: () => navigate({ to: "/vstock" }) },
-              { icon: Coins, label: "Dividends", action: () => navigate({ to: "/transactions" }) },
-              { icon: Eye, label: "Watchlist", action: () => navigate({ to: "/invest" }) },
-              { icon: FileText, label: "Research", action: () => navigate({ to: "/learn" }) },
-            ].map(({ icon: Icon, label, action }) => (
-              <button key={label} onClick={action} className="flex flex-1 flex-col items-center gap-1 rounded-xl border border-border/40 bg-card/30 px-1 py-2.5 transition hover:bg-primary/5">
-                <Icon className="h-3.5 w-3.5 text-muted-foreground" />
-                <span className="text-[9.5px] font-normal text-foreground whitespace-nowrap">{label}</span>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setEditingQuick(true)}
+                className="rounded-full p-1 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
+                aria-label="Customize quick actions"
+              >
+                <Settings2 className="h-3.5 w-3.5" />
               </button>
-            ))}
+              <WidgetMenu widget="quick" />
+            </div>
+          </div>
+          <div className="grid grid-cols-4 gap-1.5">
+            {quickActions
+              .map((id) => QUICK_ACTION_CATALOG.find((a) => a.id === id))
+              .filter((a): a is (typeof QUICK_ACTION_CATALOG)[number] => Boolean(a))
+              .map(({ id, icon: Icon, label, to }) => (
+                <button
+                  key={id}
+                  onClick={() => navigate({ to })}
+                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-1 py-3 transition hover:bg-primary/20 hover:border-primary/40"
+                >
+                  <Icon className="h-4 w-4 text-primary" />
+                  <span className="text-[10px] font-medium text-foreground whitespace-nowrap">{label}</span>
+                </button>
+              ))}
+            {quickActions.length < 8 && (
+              <button
+                onClick={() => setEditingQuick(true)}
+                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-primary/40 hover:bg-primary/5"
+              >
+                <Plus className="h-4 w-4 text-muted-foreground" />
+                <span className="text-[10px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
+              </button>
+            )}
           </div>
         </div>
       </div>
@@ -572,6 +618,48 @@ function Dashboard() {
                       <span
                         className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${visible ? "left-[18px]" : "left-0.5"}`}
                       />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingQuick && (
+        <div className="fixed inset-0 z-50 flex items-end">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingQuick(false)} />
+          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up max-h-[80vh] overflow-y-auto">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-foreground">Quick actions</h3>
+              <button onClick={() => setEditingQuick(false)} className="rounded-full bg-secondary p-1">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mb-3 text-[11.5px] text-muted-foreground">Pick the shortcuts you want on your dashboard.</p>
+            <div className="grid grid-cols-2 gap-2">
+              {QUICK_ACTION_CATALOG.map((a) => {
+                const on = quickActions.includes(a.id);
+                const Icon = a.icon;
+                return (
+                  <button
+                    key={a.id}
+                    onClick={() => toggleQuick(a.id)}
+                    className={`flex items-center gap-2.5 rounded-xl px-3 py-3 transition ${
+                      on ? "bg-primary/15 ring-1 ring-primary/40" : "bg-secondary hover:bg-muted/50"
+                    }`}
+                  >
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${on ? "bg-primary/20 text-primary" : "bg-muted/50 text-muted-foreground"}`}>
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="flex-1 text-left text-sm font-medium text-foreground">{a.label}</span>
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center rounded-full ${
+                        on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-transparent"
+                      }`}
+                    >
+                      <Check className="h-3 w-3" />
                     </span>
                   </button>
                 );
