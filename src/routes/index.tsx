@@ -627,6 +627,48 @@ function Dashboard() {
         </div>
       )}
 
+      {editingQuick && (
+        <div className="fixed inset-0 z-50 flex items-end">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingQuick(false)} />
+          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up max-h-[80vh] overflow-y-auto">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-foreground">Quick actions</h3>
+              <button onClick={() => setEditingQuick(false)} className="rounded-full bg-secondary p-1">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mb-3 text-[11.5px] text-muted-foreground">Pick the shortcuts you want on your dashboard.</p>
+            <div className="grid grid-cols-2 gap-2">
+              {QUICK_ACTION_CATALOG.map((a) => {
+                const on = quickActions.includes(a.id);
+                const Icon = a.icon;
+                return (
+                  <button
+                    key={a.id}
+                    onClick={() => toggleQuick(a.id)}
+                    className={`flex items-center gap-2.5 rounded-xl px-3 py-3 transition ${
+                      on ? "bg-primary/15 ring-1 ring-primary/40" : "bg-secondary hover:bg-muted/50"
+                    }`}
+                  >
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${on ? "bg-primary/20 text-primary" : "bg-muted/50 text-muted-foreground"}`}>
+                      <Icon className="h-4 w-4" />
+                    </span>
+                    <span className="flex-1 text-left text-sm font-medium text-foreground">{a.label}</span>
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center rounded-full ${
+                        on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-transparent"
+                      }`}
+                    >
+                      <Check className="h-3 w-3" />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
       {editingRates && (
         <div className="fixed inset-0 z-50 flex items-end">
           <div className="absolute inset-0 bg-black/60" onClick={() => setEditingRates(false)} />
