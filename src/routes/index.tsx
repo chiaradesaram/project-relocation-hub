@@ -581,6 +581,47 @@ function Dashboard() {
           </div>
         </div>
       )}
+
+      {editingRates && (
+        <div className="fixed inset-0 z-50 flex items-end">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingRates(false)} />
+          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up max-h-[80vh] overflow-y-auto">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-foreground">Track rates</h3>
+              <button onClick={() => setEditingRates(false)} className="rounded-full bg-secondary p-1">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mb-3 text-[11.5px] text-muted-foreground">Pick the product rates you want to see on your dashboard.</p>
+            <div className="flex flex-col gap-2">
+              {RATE_CATALOG.map((r) => {
+                const on = trackedRates.includes(r.id);
+                return (
+                  <button
+                    key={r.id}
+                    onClick={() => toggleRate(r.id)}
+                    className={`flex w-full items-center justify-between rounded-xl px-4 py-3 transition ${
+                      on ? "bg-primary/15 ring-1 ring-primary/40" : "bg-secondary hover:bg-muted/50"
+                    }`}
+                  >
+                    <div className="min-w-0 text-left">
+                      <p className="text-sm font-medium text-foreground truncate">{r.name}</p>
+                      <p className="text-[10.5px] text-muted-foreground mt-0.5">{r.tenor} · {r.rate}</p>
+                    </div>
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center rounded-full ${
+                        on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-transparent"
+                      }`}
+                    >
+                      <Check className="h-3 w-3" />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
     </MobileLayout>
   );
 }
