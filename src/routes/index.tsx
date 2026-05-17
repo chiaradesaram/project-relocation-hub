@@ -288,7 +288,7 @@ function Dashboard() {
       <div className="mx-4 mt-3.5">
         <div
           className="rounded-2xl overflow-hidden p-3.5"
-          style={{ background: "oklch(0.32 0.14 285)" }}
+          style={{ background: "oklch(0.26 0.12 285)" }}
         >
           <div className="flex items-center justify-between pb-2.5">
             <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
