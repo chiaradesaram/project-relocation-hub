@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal, EyeOff, Settings2, TrendingUp, TrendingDown } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal, EyeOff, Settings2, TrendingUp, TrendingDown, ArrowDownLeft, ArrowUpRight, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,12 +33,6 @@ const portfolioItems = [
   },
 ];
 
-const marketData = [
-  { name: "ASPI", value: "12,845.32", change: "+1.2%", positive: true },
-  { name: "S&P SL20", value: "4,231.10", change: "-0.3%", positive: false },
-  { name: "91-Day T-Bill", value: "9.85%", change: "+0.05%", positive: true },
-];
-
 const watchlist = [
   { symbol: "JKH", price: "325.50", change: "+2.4%", positive: true },
   { symbol: "COMB", price: "142.00", change: "+1.8%", positive: true },
@@ -47,12 +41,31 @@ const watchlist = [
 
 const aspiSeries = [12620, 12690, 12655, 12780, 12845];
 
-type WidgetKey = "aspi" | "portfolio" | "watchlist" | "market" | "quick";
+const RATE_CATALOG: { id: string; name: string; short: string; rate: string; tenor: string }[] = [
+  { id: "fiof",   name: "Fixed Income Opportunity Fund", short: "FI Opportunity", rate: "11.25%", tenor: "30d yield" },
+  { id: "tbill91",name: "91-Day Treasury Bill",          short: "91-Day T-Bill",  rate: "9.85%",  tenor: "Latest auction" },
+  { id: "tbill364",name:"364-Day Treasury Bill",         short: "364-Day T-Bill", rate: "10.45%", tenor: "Latest auction" },
+  { id: "cmm",    name: "CAL Money Market Fund",         short: "Money Market",   rate: "8.95%",  tenor: "30d yield" },
+  { id: "cif",    name: "CAL Income Fund",               short: "Income Fund",    rate: "9.85%",  tenor: "30d yield" },
+  { id: "cbf",    name: "CAL Balanced Fund",             short: "Balanced Fund",  rate: "9.20%",  tenor: "30d yield" },
+  { id: "cgf",    name: "CAL Growth Fund",               short: "Growth Fund",    rate: "12.50%", tenor: "30d yield" },
+];
+const DEFAULT_RATES = ["fiof", "tbill91", "cmm"];
+const RATES_KEY = "dashboard.trackedRates.v1";
+
+const recentTransactions = [
+  { id: "t1", kind: "invest" as const, name: "CAL Income Fund",   sub: "Today, 10:42",   amount: "-LKR 250,000" },
+  { id: "t2", kind: "redeem" as const, name: "Money Market Fund", sub: "Yesterday",      amount: "+LKR 75,000"  },
+  { id: "t3", kind: "invest" as const, name: "91-Day T-Bill",     sub: "May 14",         amount: "-LKR 500,000" },
+];
+
+type WidgetKey = "portfolio" | "watchlist" | "aspi" | "rates" | "transactions" | "quick";
 const ALL_WIDGETS: { key: WidgetKey; label: string }[] = [
-  { key: "aspi", label: "ASPI snapshot" },
   { key: "portfolio", label: "Portfolio" },
   { key: "watchlist", label: "Watchlist" },
-  { key: "market", label: "Market overview" },
+  { key: "aspi", label: "ASPI snapshot" },
+  { key: "rates", label: "Rates to watch" },
+  { key: "transactions", label: "Latest transactions" },
   { key: "quick", label: "Quick actions" },
 ];
 const STORAGE_KEY = "dashboard.hiddenWidgets.v1";
@@ -64,11 +77,15 @@ function Dashboard() {
   const [isFirstTimeInvestor, setIsFirstTimeInvestor] = useState(true);
   const [hidden, setHidden] = useState<Set<WidgetKey>>(new Set());
   const [customizing, setCustomizing] = useState(false);
+  const [trackedRates, setTrackedRates] = useState<string[]>(DEFAULT_RATES);
+  const [editingRates, setEditingRates] = useState(false);
 
   useEffect(() => {
     try {
       const raw = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
       if (raw) setHidden(new Set(JSON.parse(raw)));
+      const r = typeof window !== "undefined" ? window.localStorage.getItem(RATES_KEY) : null;
+      if (r) setTrackedRates(JSON.parse(r));
     } catch {}
   }, []);
 
@@ -81,6 +98,15 @@ function Dashboard() {
   const hideWidget = (k: WidgetKey) => { const n = new Set(hidden); n.add(k); persist(n); };
   const showWidget = (k: WidgetKey) => { const n = new Set(hidden); n.delete(k); persist(n); };
   const isVisible = (k: WidgetKey) => !hidden.has(k);
+
+  const persistRates = (next: string[]) => {
+    setTrackedRates(next);
+    try { window.localStorage.setItem(RATES_KEY, JSON.stringify(next)); } catch {}
+  };
+  const toggleRate = (id: string) => {
+    if (trackedRates.includes(id)) persistRates(trackedRates.filter((x) => x !== id));
+    else persistRates([...trackedRates, id]);
+  };
 
   const productOptions = [
     { icon: PieChart, label: "Unit Trusts", param: "unit-trust" },
