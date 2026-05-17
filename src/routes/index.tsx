@@ -288,7 +288,7 @@ function Dashboard() {
       <div className="mx-4 mt-3.5">
         <div
           className="rounded-2xl overflow-hidden p-3.5"
-          style={{ background: "oklch(0.45 0.18 285)" }}
+          style={{ background: "oklch(0.32 0.14 285)" }}
         >
           <div className="flex items-center justify-between pb-2.5">
             <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
@@ -302,7 +302,7 @@ function Dashboard() {
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
                   className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
-                  style={{ background: "oklch(0.50 0.16 285)" }}
+                  style={{ background: "oklch(0.40 0.14 285)" }}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
                     <Icon className="h-4 w-4 text-white" />
@@ -448,20 +448,19 @@ function Dashboard() {
                   <button
                     key={r.id}
                     onClick={() => navigate({ to: "/rates" })}
-                    className="shrink-0 w-[104px] h-[104px] rounded-xl border border-border/40 bg-card/60 p-3 flex flex-col items-center justify-center text-center transition hover:bg-primary/10 hover:border-primary/40"
+                    className="shrink-0 w-[88px] h-[88px] rounded-xl border border-border/40 bg-card/60 p-2 flex flex-col items-center justify-center text-center transition hover:bg-primary/10 hover:border-primary/40"
                   >
-                    <p className="text-[10.5px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
-                    <p className="mt-1.5 text-[20px] font-bold text-foreground leading-none tracking-tight">{r.rate}</p>
-                    <p className="mt-1.5 text-[9px] uppercase tracking-wider text-muted-foreground/70">{r.tenor}</p>
+                    <p className="text-[10px] font-medium text-muted-foreground leading-tight line-clamp-2">{r.short}</p>
+                    <p className="mt-1 text-[18px] font-bold text-foreground leading-none tracking-tight">{r.rate}</p>
                   </button>
                 ))}
               <button
                 onClick={() => setEditingRates(true)}
-                className="shrink-0 flex w-[104px] h-[104px] flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
+                className="shrink-0 flex w-[88px] h-[88px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground hover:border-primary/40"
                 aria-label="Add rate to track"
               >
-                <Plus className="h-5 w-5" />
-                <span className="text-[10.5px] font-medium">Add rate</span>
+                <Plus className="h-4 w-4" />
+                <span className="text-[10px] font-medium">Add rate</span>
               </button>
             </div>
           </div>
