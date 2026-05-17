@@ -223,7 +223,7 @@ function Dashboard() {
       <div
         className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-5 pt-5 pb-4 shadow-sm"
         style={{
-          background: "linear-gradient(160deg, oklch(0.35 0.12 285), oklch(0.25 0.08 285))",
+          background: "oklch(0.28 0.10 285)",
         }}
       >
         <p className="text-[11px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
