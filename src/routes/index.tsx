@@ -375,29 +375,140 @@ function Dashboard() {
         </div>
       )}
 
-      {isVisible("market") && (
-      <div className="mx-4 mt-3.5">
-        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
-          <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-            <h3 className="text-[13px] font-medium text-muted-foreground">Market overview</h3>
-            <div className="flex items-center gap-1">
-              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">View all</button>
-              <WidgetMenu widget="market" />
+      {/* ASPI snapshot */}
+      {isVisible("aspi") && (
+        <div className="mx-4 mt-3.5">
+          <button
+            onClick={() => navigate({ to: "/rates" })}
+            className="w-full text-left rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-medium text-muted-foreground">ASPI</span>
+                <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
+                  {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                  +1.2%
+                </span>
+              </div>
+              <div onClick={(e) => e.stopPropagation()}>
+                <WidgetMenu widget="aspi" />
+              </div>
+            </div>
+            <div className="flex items-end justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[20px] font-bold text-foreground leading-none">12,845.32</p>
+                <p className="text-[10.5px] text-muted-foreground mt-1.5">
+                  Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
+                </p>
+                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
+              </div>
+              <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
+                <defs>
+                  <linearGradient id="aspiGrad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0.35" />
+                    <stop offset="100%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <polygon points={`0,${sparkH} ${sparkPoints} ${sparkW},${sparkH}`} fill="url(#aspiGrad)" />
+                <polyline
+                  points={sparkPoints}
+                  fill="none"
+                  stroke={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"}
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* Rates to watch */}
+      {isVisible("rates") && (
+        <div className="mx-4 mt-3.5">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3 pb-3.5">
+            <div className="flex items-center justify-between px-1 pb-2">
+              <h3 className="text-[13px] font-medium text-muted-foreground">Rates to watch</h3>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setEditingRates(true)}
+                  className="text-[12px] font-medium text-primary hover:brightness-110 transition"
+                >
+                  Edit
+                </button>
+                <WidgetMenu widget="rates" />
+              </div>
+            </div>
+            <div className="flex gap-2 overflow-x-auto -mx-3 px-3 pb-1 scrollbar-hide">
+              {trackedRates
+                .map((id) => RATE_CATALOG.find((r) => r.id === id))
+                .filter((r): r is (typeof RATE_CATALOG)[number] => !!r)
+                .map((r) => (
+                  <button
+                    key={r.id}
+                    onClick={() => navigate({ to: "/rates" })}
+                    className="shrink-0 w-[130px] rounded-xl border border-border/40 bg-card/40 px-3 py-2.5 text-left transition hover:bg-primary/5"
+                  >
+                    <p className="text-[10px] text-muted-foreground truncate">{r.short}</p>
+                    <p className="mt-1 text-[16px] font-bold text-foreground leading-none">{r.rate}</p>
+                    <p className="mt-1 text-[9.5px] text-muted-foreground/80">{r.tenor}</p>
+                  </button>
+                ))}
+              <button
+                onClick={() => setEditingRates(true)}
+                className="shrink-0 flex w-[130px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 px-3 py-2.5 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground"
+                aria-label="Add rate to track"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="text-[10px] font-medium">Add rate</span>
+              </button>
             </div>
           </div>
-          <div className="divide-y divide-border/15 border-t border-border/15">
-            {marketData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between px-3.5 py-1.5">
-                <p className="text-[12px] font-normal text-foreground">{item.name}</p>
-                <p className="text-[12px] font-normal text-muted-foreground">{item.value}</p>
-                <p className={`text-[10px] font-normal ${item.positive ? "text-success" : "text-destructive"}`}>
-                  {item.change}
-                </p>
+        </div>
+      )}
+
+      {/* Latest transactions */}
+      {isVisible("transactions") && (
+        <div className="mx-4 mt-3.5">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
+            <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
+              <h3 className="text-[13px] font-medium text-muted-foreground">Latest transactions</h3>
+              <div className="flex items-center gap-1">
+                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">See all</button>
+                <WidgetMenu widget="transactions" />
               </div>
-            ))}
+            </div>
+            <div className="divide-y divide-border/15 border-t border-border/15">
+              {recentTransactions.map((t) => {
+                const isInvest = t.kind === "invest";
+                const Icon = isInvest ? ArrowUpRight : ArrowDownLeft;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => navigate({ to: "/transactions" })}
+                    className="flex w-full items-center gap-3 px-3.5 py-2.5 transition hover:bg-primary/5"
+                  >
+                    <span
+                      className={`flex h-8 w-8 items-center justify-center rounded-full ${
+                        isInvest ? "bg-primary/15 text-primary" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
+                      }`}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </span>
+                    <div className="min-w-0 flex-1 text-left">
+                      <p className="text-[12.5px] font-medium text-foreground leading-tight truncate">{t.name}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{t.sub}</p>
+                    </div>
+                    <p className={`text-[12.5px] font-semibold ${isInvest ? "text-foreground" : "text-[oklch(0.78_0.18_155)]"}`}>
+                      {t.amount}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
       )}
 
       {isVisible("quick") && (
