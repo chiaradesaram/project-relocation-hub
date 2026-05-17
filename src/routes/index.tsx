@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal, EyeOff, Settings2, TrendingUp, TrendingDown } from "lucide-react";
+import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal, EyeOff, Settings2, TrendingUp, TrendingDown, ArrowDownLeft, ArrowUpRight, Check } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -33,12 +33,6 @@ const portfolioItems = [
   },
 ];
 
-const marketData = [
-  { name: "ASPI", value: "12,845.32", change: "+1.2%", positive: true },
-  { name: "S&P SL20", value: "4,231.10", change: "-0.3%", positive: false },
-  { name: "91-Day T-Bill", value: "9.85%", change: "+0.05%", positive: true },
-];
-
 const watchlist = [
   { symbol: "JKH", price: "325.50", change: "+2.4%", positive: true },
   { symbol: "COMB", price: "142.00", change: "+1.8%", positive: true },
@@ -47,12 +41,31 @@ const watchlist = [
 
 const aspiSeries = [12620, 12690, 12655, 12780, 12845];
 
-type WidgetKey = "aspi" | "portfolio" | "watchlist" | "market" | "quick";
+const RATE_CATALOG: { id: string; name: string; short: string; rate: string; tenor: string }[] = [
+  { id: "fiof",   name: "Fixed Income Opportunity Fund", short: "FI Opportunity", rate: "11.25%", tenor: "30d yield" },
+  { id: "tbill91",name: "91-Day Treasury Bill",          short: "91-Day T-Bill",  rate: "9.85%",  tenor: "Latest auction" },
+  { id: "tbill364",name:"364-Day Treasury Bill",         short: "364-Day T-Bill", rate: "10.45%", tenor: "Latest auction" },
+  { id: "cmm",    name: "CAL Money Market Fund",         short: "Money Market",   rate: "8.95%",  tenor: "30d yield" },
+  { id: "cif",    name: "CAL Income Fund",               short: "Income Fund",    rate: "9.85%",  tenor: "30d yield" },
+  { id: "cbf",    name: "CAL Balanced Fund",             short: "Balanced Fund",  rate: "9.20%",  tenor: "30d yield" },
+  { id: "cgf",    name: "CAL Growth Fund",               short: "Growth Fund",    rate: "12.50%", tenor: "30d yield" },
+];
+const DEFAULT_RATES = ["fiof", "tbill91", "cmm"];
+const RATES_KEY = "dashboard.trackedRates.v1";
+
+const recentTransactions = [
+  { id: "t1", kind: "invest" as const, name: "CAL Income Fund",   sub: "Today, 10:42",   amount: "-LKR 250,000" },
+  { id: "t2", kind: "redeem" as const, name: "Money Market Fund", sub: "Yesterday",      amount: "+LKR 75,000"  },
+  { id: "t3", kind: "invest" as const, name: "91-Day T-Bill",     sub: "May 14",         amount: "-LKR 500,000" },
+];
+
+type WidgetKey = "portfolio" | "watchlist" | "aspi" | "rates" | "transactions" | "quick";
 const ALL_WIDGETS: { key: WidgetKey; label: string }[] = [
-  { key: "aspi", label: "ASPI snapshot" },
   { key: "portfolio", label: "Portfolio" },
   { key: "watchlist", label: "Watchlist" },
-  { key: "market", label: "Market overview" },
+  { key: "aspi", label: "ASPI snapshot" },
+  { key: "rates", label: "Rates to watch" },
+  { key: "transactions", label: "Latest transactions" },
   { key: "quick", label: "Quick actions" },
 ];
 const STORAGE_KEY = "dashboard.hiddenWidgets.v1";
@@ -64,11 +77,15 @@ function Dashboard() {
   const [isFirstTimeInvestor, setIsFirstTimeInvestor] = useState(true);
   const [hidden, setHidden] = useState<Set<WidgetKey>>(new Set());
   const [customizing, setCustomizing] = useState(false);
+  const [trackedRates, setTrackedRates] = useState<string[]>(DEFAULT_RATES);
+  const [editingRates, setEditingRates] = useState(false);
 
   useEffect(() => {
     try {
       const raw = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
       if (raw) setHidden(new Set(JSON.parse(raw)));
+      const r = typeof window !== "undefined" ? window.localStorage.getItem(RATES_KEY) : null;
+      if (r) setTrackedRates(JSON.parse(r));
     } catch {}
   }, []);
 
@@ -81,6 +98,15 @@ function Dashboard() {
   const hideWidget = (k: WidgetKey) => { const n = new Set(hidden); n.add(k); persist(n); };
   const showWidget = (k: WidgetKey) => { const n = new Set(hidden); n.delete(k); persist(n); };
   const isVisible = (k: WidgetKey) => !hidden.has(k);
+
+  const persistRates = (next: string[]) => {
+    setTrackedRates(next);
+    try { window.localStorage.setItem(RATES_KEY, JSON.stringify(next)); } catch {}
+  };
+  const toggleRate = (id: string) => {
+    if (trackedRates.includes(id)) persistRates(trackedRates.filter((x) => x !== id));
+    else persistRates([...trackedRates, id]);
+  };
 
   const productOptions = [
     { icon: PieChart, label: "Unit Trusts", param: "unit-trust" },
@@ -257,58 +283,6 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* ASPI snapshot */}
-      {isVisible("aspi") && (
-        <div className="mx-4 mt-3.5">
-          <button
-            onClick={() => navigate({ to: "/rates" })}
-            className="w-full text-left rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-[11px] font-medium text-muted-foreground">ASPI</span>
-                <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
-                  {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                  +1.2%
-                </span>
-              </div>
-              <div onClick={(e) => e.stopPropagation()}>
-                <WidgetMenu widget="aspi" />
-              </div>
-            </div>
-            <div className="flex items-end justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[20px] font-bold text-foreground leading-none">12,845.32</p>
-                <p className="text-[10.5px] text-muted-foreground mt-1.5">
-                  Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
-                </p>
-                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
-              </div>
-              <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
-                <defs>
-                  <linearGradient id="aspiGrad" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0.35" />
-                    <stop offset="100%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <polygon
-                  points={`0,${sparkH} ${sparkPoints} ${sparkW},${sparkH}`}
-                  fill="url(#aspiGrad)"
-                />
-                <polyline
-                  points={sparkPoints}
-                  fill="none"
-                  stroke={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"}
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-          </button>
-        </div>
-      )}
-
       {/* Portfolio card – purple style */}
       {isVisible("portfolio") && (
       <div className="mx-4 mt-3.5">
@@ -401,29 +375,140 @@ function Dashboard() {
         </div>
       )}
 
-      {isVisible("market") && (
-      <div className="mx-4 mt-3.5">
-        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
-          <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-            <h3 className="text-[13px] font-medium text-muted-foreground">Market overview</h3>
-            <div className="flex items-center gap-1">
-              <button onClick={() => navigate({ to: "/rates" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">View all</button>
-              <WidgetMenu widget="market" />
+      {/* ASPI snapshot */}
+      {isVisible("aspi") && (
+        <div className="mx-4 mt-3.5">
+          <button
+            onClick={() => navigate({ to: "/rates" })}
+            className="w-full text-left rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
+          >
+            <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] font-medium text-muted-foreground">ASPI</span>
+                <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
+                  {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
+                  +1.2%
+                </span>
+              </div>
+              <div onClick={(e) => e.stopPropagation()}>
+                <WidgetMenu widget="aspi" />
+              </div>
+            </div>
+            <div className="flex items-end justify-between gap-3">
+              <div className="min-w-0">
+                <p className="text-[20px] font-bold text-foreground leading-none">12,845.32</p>
+                <p className="text-[10.5px] text-muted-foreground mt-1.5">
+                  Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
+                </p>
+                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
+              </div>
+              <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
+                <defs>
+                  <linearGradient id="aspiGrad" x1="0" x2="0" y1="0" y2="1">
+                    <stop offset="0%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0.35" />
+                    <stop offset="100%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0" />
+                  </linearGradient>
+                </defs>
+                <polygon points={`0,${sparkH} ${sparkPoints} ${sparkW},${sparkH}`} fill="url(#aspiGrad)" />
+                <polyline
+                  points={sparkPoints}
+                  fill="none"
+                  stroke={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"}
+                  strokeWidth="1.5"
+                  strokeLinejoin="round"
+                  strokeLinecap="round"
+                />
+              </svg>
+            </div>
+          </button>
+        </div>
+      )}
+
+      {/* Rates to watch */}
+      {isVisible("rates") && (
+        <div className="mx-4 mt-3.5">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3 pb-3.5">
+            <div className="flex items-center justify-between px-1 pb-2">
+              <h3 className="text-[13px] font-medium text-muted-foreground">Rates to watch</h3>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => setEditingRates(true)}
+                  className="text-[12px] font-medium text-primary hover:brightness-110 transition"
+                >
+                  Edit
+                </button>
+                <WidgetMenu widget="rates" />
+              </div>
+            </div>
+            <div className="flex gap-2 overflow-x-auto -mx-3 px-3 pb-1 scrollbar-hide">
+              {trackedRates
+                .map((id) => RATE_CATALOG.find((r) => r.id === id))
+                .filter((r): r is (typeof RATE_CATALOG)[number] => !!r)
+                .map((r) => (
+                  <button
+                    key={r.id}
+                    onClick={() => navigate({ to: "/rates" })}
+                    className="shrink-0 w-[130px] rounded-xl border border-border/40 bg-card/40 px-3 py-2.5 text-left transition hover:bg-primary/5"
+                  >
+                    <p className="text-[10px] text-muted-foreground truncate">{r.short}</p>
+                    <p className="mt-1 text-[16px] font-bold text-foreground leading-none">{r.rate}</p>
+                    <p className="mt-1 text-[9.5px] text-muted-foreground/80">{r.tenor}</p>
+                  </button>
+                ))}
+              <button
+                onClick={() => setEditingRates(true)}
+                className="shrink-0 flex w-[130px] flex-col items-center justify-center gap-1 rounded-xl border border-dashed border-border/60 bg-card/20 px-3 py-2.5 text-muted-foreground transition hover:bg-primary/5 hover:text-foreground"
+                aria-label="Add rate to track"
+              >
+                <Plus className="h-4 w-4" />
+                <span className="text-[10px] font-medium">Add rate</span>
+              </button>
             </div>
           </div>
-          <div className="divide-y divide-border/15 border-t border-border/15">
-            {marketData.map((item) => (
-              <div key={item.name} className="flex items-center justify-between px-3.5 py-1.5">
-                <p className="text-[12px] font-normal text-foreground">{item.name}</p>
-                <p className="text-[12px] font-normal text-muted-foreground">{item.value}</p>
-                <p className={`text-[10px] font-normal ${item.positive ? "text-success" : "text-destructive"}`}>
-                  {item.change}
-                </p>
+        </div>
+      )}
+
+      {/* Latest transactions */}
+      {isVisible("transactions") && (
+        <div className="mx-4 mt-3.5">
+          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
+            <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
+              <h3 className="text-[13px] font-medium text-muted-foreground">Latest transactions</h3>
+              <div className="flex items-center gap-1">
+                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">See all</button>
+                <WidgetMenu widget="transactions" />
               </div>
-            ))}
+            </div>
+            <div className="divide-y divide-border/15 border-t border-border/15">
+              {recentTransactions.map((t) => {
+                const isInvest = t.kind === "invest";
+                const Icon = isInvest ? ArrowUpRight : ArrowDownLeft;
+                return (
+                  <button
+                    key={t.id}
+                    onClick={() => navigate({ to: "/transactions" })}
+                    className="flex w-full items-center gap-3 px-3.5 py-2.5 transition hover:bg-primary/5"
+                  >
+                    <span
+                      className={`flex h-8 w-8 items-center justify-center rounded-full ${
+                        isInvest ? "bg-primary/15 text-primary" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
+                      }`}
+                    >
+                      <Icon className="h-3.5 w-3.5" />
+                    </span>
+                    <div className="min-w-0 flex-1 text-left">
+                      <p className="text-[12.5px] font-medium text-foreground leading-tight truncate">{t.name}</p>
+                      <p className="text-[10px] text-muted-foreground mt-0.5">{t.sub}</p>
+                    </div>
+                    <p className={`text-[12.5px] font-semibold ${isInvest ? "text-foreground" : "text-[oklch(0.78_0.18_155)]"}`}>
+                      {t.amount}
+                    </p>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
-      </div>
       )}
 
       {isVisible("quick") && (
@@ -488,6 +573,47 @@ function Dashboard() {
                       <span
                         className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${visible ? "left-[18px]" : "left-0.5"}`}
                       />
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {editingRates && (
+        <div className="fixed inset-0 z-50 flex items-end">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingRates(false)} />
+          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up max-h-[80vh] overflow-y-auto">
+            <div className="mb-4 flex items-center justify-between">
+              <h3 className="text-base font-semibold text-foreground">Track rates</h3>
+              <button onClick={() => setEditingRates(false)} className="rounded-full bg-secondary p-1">
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <p className="mb-3 text-[11.5px] text-muted-foreground">Pick the product rates you want to see on your dashboard.</p>
+            <div className="flex flex-col gap-2">
+              {RATE_CATALOG.map((r) => {
+                const on = trackedRates.includes(r.id);
+                return (
+                  <button
+                    key={r.id}
+                    onClick={() => toggleRate(r.id)}
+                    className={`flex w-full items-center justify-between rounded-xl px-4 py-3 transition ${
+                      on ? "bg-primary/15 ring-1 ring-primary/40" : "bg-secondary hover:bg-muted/50"
+                    }`}
+                  >
+                    <div className="min-w-0 text-left">
+                      <p className="text-sm font-medium text-foreground truncate">{r.name}</p>
+                      <p className="text-[10.5px] text-muted-foreground mt-0.5">{r.tenor} · {r.rate}</p>
+                    </div>
+                    <span
+                      className={`flex h-5 w-5 items-center justify-center rounded-full ${
+                        on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-transparent"
+                      }`}
+                    >
+                      <Check className="h-3 w-3" />
                     </span>
                   </button>
                 );
