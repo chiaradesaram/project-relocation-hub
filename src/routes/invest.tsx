@@ -389,7 +389,7 @@ function Invest() {
             <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
               <option value="">Select your fund</option>
               {funds.map((f) => (
-                <option key={f} value={f} textValue={f}>
+                <option key={f} value={f} data-textvalue={f}>
                   <span className="flex items-center gap-2">
                     {f}
                     {method === "bank" && f === defaultFund && (
@@ -406,7 +406,7 @@ function Invest() {
             <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
               <option value="">Select account</option>
               {accounts.map((a) => (
-                <option key={a} value={a} textValue={a}>
+                <option key={a} value={a} data-textvalue={a}>
                   <span className="flex items-center gap-2">
                     {a}
                     {method === "bank" && a === defaultSubAccount && (
