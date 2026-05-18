@@ -402,7 +402,7 @@ function Invest() {
                   {f}
                 </option>
               ))}
-              <option value="__add_fund" data-pill="Add Fund">Explore new fund</option>
+              <option value="__add_fund" data-action="Add Fund">Islamic Money Market Fund</option>
             </ModernSelect>
           </FormField>
           <FormField
@@ -541,7 +541,7 @@ function Invest() {
                 ? (
                   <>
                     {funds.map((f) => <option key={f} value={f}>{f}</option>)}
-                    <option value="__add_fund" data-pill="Add Fund">Explore new fund</option>
+                    <option value="__add_fund" data-action="Add Fund">Islamic Money Market Fund</option>
                   </>
                 )
                 : (
@@ -651,7 +651,7 @@ function Invest() {
               >
                 <option value="">Select CAL account</option>
                 {funds.map((f) => <option key={f} value={f}>{f}</option>)}
-                <option value="__add_fund" data-pill="Add Fund">Explore new fund</option>
+                <option value="__add_fund" data-action="Add Fund">Islamic Money Market Fund</option>
               </ModernSelect>
             </FormField>
           </div>
