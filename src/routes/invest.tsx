@@ -63,6 +63,11 @@ function Invest() {
   const [repeatCount, setRepeatCount] = useState(1);
   const [showRepeatInfo, setShowRepeatInfo] = useState(false);
 
+  // Bank transfer fallback defaults — used if the in-app request fails to be raised
+  const [defaultFund, setDefaultFund] = useState(funds[0]);
+  const [defaultSubAccount, setDefaultSubAccount] = useState(accounts[0]);
+  const [showDefaultInfo, setShowDefaultInfo] = useState(false);
+
   const amountNum = parseFloat(amount || "0") || 0;
   const isDirectInvest = method === "instant";
   const overLimit = isDirectInvest && amountNum > DIRECT_INVEST_LIMIT;
