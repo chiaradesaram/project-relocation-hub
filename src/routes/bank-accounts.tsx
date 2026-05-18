@@ -2,8 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Building2, Plus, Trash2, Info } from "lucide-react";
-import { ModernSelect } from "@/components/ModernSelect";
+import { Building2, Plus, Trash2 } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -20,22 +19,17 @@ export const Route = createFileRoute("/bank-accounts")({
   component: BankAccounts,
 });
 
-const funds = ["CAL Growth Fund", "CAL Income Fund", "CAL Balanced Fund", "CAL Money Market Fund"];
-const subAccounts = ["Main Account", "Joint Account", "Minor Account"];
-
 type BankAccount = {
   bank: string;
   branch: string;
   accNo: string;
   product: string;
-  defaultFund: string;
-  defaultSubAccount: string;
 };
 
 const initialBankAccounts: BankAccount[] = [
-  { bank: "Commercial Bank", branch: "Colombo 03", accNo: "8001234521", product: "Unit Trusts", defaultFund: funds[0], defaultSubAccount: subAccounts[0] },
-  { bank: "Sampath Bank", branch: "Nugegoda", accNo: "1100568832", product: "Equities", defaultFund: funds[1], defaultSubAccount: subAccounts[0] },
-  { bank: "HNB", branch: "Kandy", accNo: "0452201209", product: "Treasuries", defaultFund: funds[0], defaultSubAccount: subAccounts[1] },
+  { bank: "Commercial Bank", branch: "Colombo 03", accNo: "8001234521", product: "Unit Trusts" },
+  { bank: "Sampath Bank", branch: "Nugegoda", accNo: "1100568832", product: "Equities" },
+  { bank: "HNB", branch: "Kandy", accNo: "0452201209", product: "Treasuries" },
 ];
 
 const productPillClass: Record<string, string> = {
@@ -52,9 +46,6 @@ function BankAccounts() {
   const removeAccount = (accNo: string) =>
     setAccounts((prev) => prev.filter((a) => a.accNo !== accNo));
 
-  const updateAccount = (accNo: string, patch: Partial<BankAccount>) =>
-    setAccounts((prev) => prev.map((a) => (a.accNo === accNo ? { ...a, ...patch } : a)));
-
   return (
     <MobileLayout>
       <PageHeader title="Bank Accounts" showBack />
@@ -62,16 +53,6 @@ function BankAccounts() {
       <p className="px-4 mt-2 text-[12px] text-muted-foreground">
         Manage your linked bank accounts for investments and redemptions.
       </p>
-
-      {/* Fallback allocation explainer */}
-      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
-        <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
-          <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
-        </div>
-        <p className="text-[12px] text-white/85 leading-snug pt-0.5">
-          Each account has a <span className="text-white font-medium">default fund &amp; sub account</span>. If a transfer arrives without a matching in-app request, funds are allocated here. Manual reconciliation may add 1–2 business days.
-        </p>
-      </div>
 
       <div className="px-4 mt-3 space-y-2">
         {accounts.map((acc) => (
@@ -115,35 +96,6 @@ function BankAccounts() {
                 </AlertDialog>
               </div>
             </div>
-
-            {/* Per-account fallback defaults */}
-            {acc.product === "Unit Trusts" && (
-              <div className="mt-3 pt-3 border-t border-border/40">
-                <p className="text-[10px] font-semibold tracking-[0.1em] uppercase text-muted-foreground/70 mb-2">
-                  Default allocation
-                </p>
-                <div className="grid grid-cols-2 gap-2">
-                  <div>
-                    <label className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">Fund</label>
-                    <ModernSelect
-                      value={acc.defaultFund}
-                      onChange={(e) => updateAccount(acc.accNo, { defaultFund: e.target.value })}
-                    >
-                      {funds.map((f) => <option key={f}>{f}</option>)}
-                    </ModernSelect>
-                  </div>
-                  <div>
-                    <label className="text-[10px] text-muted-foreground/70 uppercase tracking-wider">Sub account</label>
-                    <ModernSelect
-                      value={acc.defaultSubAccount}
-                      onChange={(e) => updateAccount(acc.accNo, { defaultSubAccount: e.target.value })}
-                    >
-                      {subAccounts.map((s) => <option key={s}>{s}</option>)}
-                    </ModernSelect>
-                  </div>
-                </div>
-              </div>
-            )}
           </div>
         ))}
       </div>
