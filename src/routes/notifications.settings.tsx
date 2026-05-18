@@ -3,7 +3,7 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Switch } from "@/components/ui/switch";
-import { Bell, TrendingUp, Receipt, Megaphone, ShieldAlert, Mail, Smartphone, MessageSquare } from "lucide-react";
+import { Bell, TrendingUp, Receipt, Megaphone, ShieldAlert, Mail, Smartphone, MessageSquare, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/notifications/settings")({
   component: NotificationPreferences,
@@ -12,8 +12,9 @@ export const Route = createFileRoute("/notifications/settings")({
 type Pref = { id: string; label: string; description: string; icon: React.ComponentType<{ className?: string }>; enabled: boolean; disabled?: boolean };
 
 const initialCategories: Pref[] = [
-  { id: "transactions", label: "Account Activity", description: "Receive notifications about your investments and withdrawals", icon: Receipt, enabled: true },
+  { id: "transactions", label: "Account Activity and Insight", description: "Receive notifications about your investments and withdrawals", icon: Receipt, enabled: true },
   { id: "market", label: "Market alerts", description: "Major moves on ASPI, S&P SL20 and your watchlist", icon: Bell, enabled: false },
+  { id: "research", label: "Research", description: "Fund research, market insights and analyst reports", icon: BookOpen, enabled: false },
   { id: "promotions", label: "Promotions & news", description: "Hear about new funds, CAL products, features and more", icon: Megaphone, enabled: false },
   { id: "security", label: "Security alerts", description: "Login attempts and account changes (recommended)", icon: ShieldAlert, enabled: true, disabled: true },
 ];
