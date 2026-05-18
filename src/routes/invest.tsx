@@ -410,7 +410,7 @@ function Invest() {
                   <span className="flex items-center gap-2">
                     {a}
                     {method === "bank" && a === defaultSubAccount && (
-                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/15 text-primary">Default</span>
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-red-500 text-white">Default</span>
                     )}
                   </span>
                 </option>
