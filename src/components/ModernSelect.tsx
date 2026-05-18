@@ -93,7 +93,7 @@ export function ModernSelect({
           contentClassName,
         )}
       >
-        {options.map((opt) => (
+      {options.map((opt) => (
           <SelectItem
             key={opt.value}
             value={opt.value}
@@ -105,6 +105,11 @@ export function ModernSelect({
               {opt.pill && (
                 <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/25 text-primary border border-primary/20">
                   {opt.pill}
+                </span>
+              )}
+              {opt.action && (
+                <span className="px-2 py-0.5 rounded-md text-[10px] font-semibold bg-primary text-primary-foreground shadow-sm">
+                  {opt.action}
                 </span>
               )}
             </span>
