@@ -16,7 +16,7 @@ import { cn } from "@/lib/utils";
  * Works with the existing onChange={(e) => ...e.target.value...} pattern.
  */
 
-type Option = { value: string; label: React.ReactNode; textValue?: string; disabled?: boolean };
+type Option = { value: string; label: string; pill?: string; disabled?: boolean };
 
 interface ModernSelectProps {
   value?: string;
@@ -42,7 +42,7 @@ function extractOptions(children: React.ReactNode): {
       value?: string;
       children?: React.ReactNode;
       disabled?: boolean;
-      "data-textvalue"?: string;
+      "data-pill"?: string;
     };
     const labelNode = props.children ?? "";
     const labelText = typeof labelNode === "string" ? labelNode : "";
@@ -54,7 +54,7 @@ function extractOptions(children: React.ReactNode): {
     // If no value attribute is provided, fall back to the text label (matches HTML spec)
     const value = props.value ?? labelText;
     if (!value) return;
-    options.push({ value, label: labelNode, textValue: props["data-textvalue"], disabled: props.disabled });
+    options.push({ value, label: labelText, pill: props["data-pill"], disabled: props.disabled });
   });
 
   return { options, placeholder };
