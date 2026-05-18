@@ -67,11 +67,6 @@ function Invest() {
   const [defaultFund, setDefaultFund] = useState(funds[0]);
   const [defaultSubAccount, setDefaultSubAccount] = useState(accounts[0]);
   const [showDefaultInfo, setShowDefaultInfo] = useState(false);
-  const canSetDefault =
-    method === "bank" &&
-    !!selectedFund &&
-    !!selectedAccount &&
-    (selectedFund !== defaultFund || selectedAccount !== defaultSubAccount);
 
   const amountNum = parseFloat(amount || "0") || 0;
   const isDirectInvest = method === "instant";
@@ -364,75 +359,96 @@ function Invest() {
           <FormField
             label="Which fund?"
             action={
-              selectedFund ? (
-                <button
-                  type="button"
-                  onClick={() => navigate({ to: "/rates" })}
-                  className="inline-flex items-center gap-1 text-[12px] font-medium"
-                  style={{ color: "var(--portfolio-blue)" }}
-                >
-                  View rates
-                  <ExternalLink className="w-3 h-3" />
-                </button>
-              ) : undefined
+              <div className="flex items-center gap-2">
+                {method === "bank" && selectedFund && (
+                  <button
+                    type="button"
+                    onClick={() => setDefaultFund(selectedFund)}
+                    aria-label={selectedFund === defaultFund ? "Current default fund" : "Set as default fund"}
+                    title={selectedFund === defaultFund ? "Default fund" : "Set as default"}
+                    className="text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    <Star
+                      className="w-3.5 h-3.5"
+                      style={
+                        selectedFund === defaultFund
+                          ? { color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }
+                          : undefined
+                      }
+                    />
+                  </button>
+                )}
+                {selectedFund && (
+                  <button
+                    type="button"
+                    onClick={() => navigate({ to: "/rates" })}
+                    className="inline-flex items-center gap-1 text-[12px] font-medium"
+                    style={{ color: "var(--portfolio-blue)" }}
+                  >
+                    View rates
+                    <ExternalLink className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
             }
           >
             <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
               <option value="">Select your fund</option>
               {funds.map((f) => (
                 <option key={f} value={f}>
-                  {f}{f === defaultFund ? "  ★ Default" : ""}
+                  {f}{f === defaultFund ? "  ★" : ""}
                 </option>
               ))}
             </ModernSelect>
           </FormField>
-          <FormField label="Sub Account">
+          <FormField
+            label="Sub Account"
+            action={
+              method === "bank" && selectedAccount ? (
+                <button
+                  type="button"
+                  onClick={() => setDefaultSubAccount(selectedAccount)}
+                  aria-label={selectedAccount === defaultSubAccount ? "Current default sub account" : "Set as default sub account"}
+                  title={selectedAccount === defaultSubAccount ? "Default sub account" : "Set as default"}
+                  className="text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  <Star
+                    className="w-3.5 h-3.5"
+                    style={
+                      selectedAccount === defaultSubAccount
+                        ? { color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }
+                        : undefined
+                    }
+                  />
+                </button>
+              ) : undefined
+            }
+          >
             <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
               <option value="">Select account</option>
               {accounts.map((a) => (
                 <option key={a} value={a}>
-                  {a}{a === defaultSubAccount ? "  ★ Default" : ""}
+                  {a}{a === defaultSubAccount ? "  ★" : ""}
                 </option>
               ))}
             </ModernSelect>
           </FormField>
         </div>
 
-        {/* Default fallback — Bank Transfer only */}
+        {/* Subtle default explainer — Bank Transfer only */}
         {method === "bank" && (
-          <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 10%, oklch(0.18 0.02 280))" }}>
-            <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
-              <div className="flex items-center gap-2 min-w-0">
-                <Star className="w-3.5 h-3.5 shrink-0" style={{ color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }} />
-                <p className="text-[12px] text-white/85 truncate">
-                  Default: <span className="text-white font-medium">{defaultFund}</span> · <span className="text-white font-medium">{defaultSubAccount}</span>
-                </p>
-                <button
-                  type="button"
-                  onClick={() => setShowDefaultInfo(!showDefaultInfo)}
-                  aria-label="Why a default?"
-                  className="text-white/60 hover:text-white shrink-0"
-                >
-                  <Info className="w-3.5 h-3.5" />
-                </button>
-              </div>
-              {canSetDefault && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setDefaultFund(selectedFund);
-                    setDefaultSubAccount(selectedAccount);
-                  }}
-                  className="text-[11px] font-semibold text-white px-2.5 py-1 rounded-full shrink-0"
-                  style={{ background: "color-mix(in oklch, var(--portfolio-blue) 45%, transparent)" }}
-                >
-                  Set current as default
-                </button>
-              )}
-            </div>
+          <div className="mt-2 px-1">
+            <button
+              type="button"
+              onClick={() => setShowDefaultInfo(!showDefaultInfo)}
+              className="inline-flex items-center gap-1 text-[11px] text-muted-foreground/80 hover:text-foreground transition-colors"
+            >
+              <Star className="w-3 h-3" style={{ color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }} />
+              <span>marks your default · why?</span>
+            </button>
             {showDefaultInfo && (
-              <p className="px-3.5 pb-3 text-[12px] text-white/75 leading-snug">
-                If a bank transfer reaches us without a matching in-app request, we'll allocate it to this fund and sub account so your money still gets invested. Manual reconciliation may add 1–2 business days.
+              <p className="mt-1.5 text-[12px] text-muted-foreground leading-snug">
+                If a transfer arrives without a matching in-app request, we allocate it to your default fund and sub account. Manual reconciliation may add 1–2 business days. Tap the ★ next to a selected fund or sub account to make it your default.
               </p>
             )}
           </div>
