@@ -389,8 +389,13 @@ function Invest() {
             <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
               <option value="">Select your fund</option>
               {funds.map((f) => (
-                <option key={f} value={f}>
-                  {f}{method === "bank" && f === defaultFund ? "  • Default" : ""}
+                <option key={f} value={f} textValue={f}>
+                  <span className="flex items-center gap-2">
+                    {f}
+                    {method === "bank" && f === defaultFund && (
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/15 text-primary">Default</span>
+                    )}
+                  </span>
                 </option>
               ))}
             </ModernSelect>
@@ -401,8 +406,13 @@ function Invest() {
             <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
               <option value="">Select account</option>
               {accounts.map((a) => (
-                <option key={a} value={a}>
-                  {a}{method === "bank" && a === defaultSubAccount ? "  • Default" : ""}
+                <option key={a} value={a} textValue={a}>
+                  <span className="flex items-center gap-2">
+                    {a}
+                    {method === "bank" && a === defaultSubAccount && (
+                      <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/15 text-primary">Default</span>
+                    )}
+                  </span>
                 </option>
               ))}
             </ModernSelect>
