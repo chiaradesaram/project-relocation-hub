@@ -97,6 +97,7 @@ export function ModernSelect({
             key={opt.value}
             value={opt.value}
             disabled={opt.disabled}
+            textValue={opt.textValue ?? opt.value}
             className="rounded-lg text-[13px] py-2 focus:bg-primary/15 focus:text-foreground"
           >
             {opt.label}
