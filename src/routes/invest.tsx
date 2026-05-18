@@ -386,13 +386,23 @@ function Invest() {
               </div>
             }
           >
-            <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
+            <ModernSelect
+              value={selectedFund}
+              onChange={(e) => {
+                if (e.target.value === "__add_fund") {
+                  navigate({ to: "/rates" });
+                } else {
+                  setSelectedFund(e.target.value);
+                }
+              }}
+            >
               <option value="">Select your fund</option>
               {funds.map((f) => (
                 <option key={f} value={f} data-pill={method === "bank" && f === defaultFund ? "Default" : undefined}>
                   {f}
                 </option>
               ))}
+              <option value="__add_fund" data-pill="Add Fund">Explore new fund</option>
             </ModernSelect>
           </FormField>
           <FormField
@@ -526,7 +536,12 @@ function Invest() {
             >
               <option value="">{method === "flip" ? "Select your fund" : "Select your bank account"}</option>
               {method === "flip"
-                ? funds.map((f) => <option key={f}>{f}</option>)
+                ? (
+                  <>
+                    {funds.map((f) => <option key={f} value={f}>{f}</option>)}
+                    <option value="__add_fund" data-pill="Add Fund">Explore new fund</option>
+                  </>
+                )
                 : (
                   <>
                     {banks.map((b) => <option key={b}>{b}</option>)}
@@ -627,9 +642,14 @@ function Invest() {
         <FormSection>
           <div className="form-field-inline">
             <FormField label="Transfer to">
-              <ModernSelect>
+              <ModernSelect
+                onChange={(e) => {
+                  if (e.target.value === "__add_fund") navigate({ to: "/rates" });
+                }}
+              >
                 <option value="">Select CAL account</option>
-                {funds.map((f) => <option key={f}>{f}</option>)}
+                {funds.map((f) => <option key={f} value={f}>{f}</option>)}
+                <option value="__add_fund" data-pill="Add Fund">Explore new fund</option>
               </ModernSelect>
             </FormField>
           </div>
