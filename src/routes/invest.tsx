@@ -411,15 +411,7 @@ function Invest() {
 
         {/* Set default action — Bank Transfer only */}
         {method === "bank" && (
-          <div className="mt-2 px-1 flex items-center justify-end gap-1.5">
-            <button
-              type="button"
-              onClick={() => setShowDefaultInfo(!showDefaultInfo)}
-              aria-label="Why set a default?"
-              className="text-muted-foreground/80 hover:text-foreground transition-colors"
-            >
-              <Info className="w-3.5 h-3.5" />
-            </button>
+          <div className="px-4 py-3 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={() => {
@@ -427,15 +419,23 @@ function Invest() {
                 setDraftDefaultSubAccount(defaultSubAccount);
                 setDefaultModalOpen(true);
               }}
-              className="text-[12px] font-medium"
+              className="text-[12px] font-medium leading-none"
               style={{ color: "var(--portfolio-blue)" }}
             >
               Set default
             </button>
+            <button
+              type="button"
+              onClick={() => setShowDefaultInfo(!showDefaultInfo)}
+              aria-label="Why set a default?"
+              className="text-muted-foreground/70 hover:text-foreground transition-colors leading-none"
+            >
+              <Info className="w-3.5 h-3.5" />
+            </button>
           </div>
         )}
         {method === "bank" && showDefaultInfo && (
-          <p className="mt-1.5 px-1 text-[12px] text-muted-foreground leading-snug">
+          <p className="px-4 pb-3 -mt-1 text-[12px] text-muted-foreground leading-snug">
             If a transfer arrives without a matching in-app request, we allocate it to your default fund and sub account. Manual reconciliation may add 1–2 business days.
           </p>
         )}
