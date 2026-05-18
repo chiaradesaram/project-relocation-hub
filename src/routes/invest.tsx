@@ -4,9 +4,18 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus, Star } from "lucide-react";
+import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import { FormSection, FormField } from "@/components/FormField";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/invest")({
   component: Invest,
@@ -67,6 +76,9 @@ function Invest() {
   const [defaultFund, setDefaultFund] = useState(funds[0]);
   const [defaultSubAccount, setDefaultSubAccount] = useState(accounts[0]);
   const [showDefaultInfo, setShowDefaultInfo] = useState(false);
+  const [defaultModalOpen, setDefaultModalOpen] = useState(false);
+  const [draftDefaultFund, setDraftDefaultFund] = useState(defaultFund);
+  const [draftDefaultSubAccount, setDraftDefaultSubAccount] = useState(defaultSubAccount);
 
   const amountNum = parseFloat(amount || "0") || 0;
   const isDirectInvest = method === "instant";
@@ -360,24 +372,6 @@ function Invest() {
             label="Which fund?"
             action={
               <div className="flex items-center gap-2">
-                {method === "bank" && selectedFund && (
-                  <button
-                    type="button"
-                    onClick={() => setDefaultFund(selectedFund)}
-                    aria-label={selectedFund === defaultFund ? "Current default fund" : "Set as default fund"}
-                    title={selectedFund === defaultFund ? "Default fund" : "Set as default"}
-                    className="text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <Star
-                      className="w-3.5 h-3.5"
-                      style={
-                        selectedFund === defaultFund
-                          ? { color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }
-                          : undefined
-                      }
-                    />
-                  </button>
-                )}
                 {selectedFund && (
                   <button
                     type="button"
@@ -396,64 +390,106 @@ function Invest() {
               <option value="">Select your fund</option>
               {funds.map((f) => (
                 <option key={f} value={f}>
-                  {f}{f === defaultFund ? "  ★" : ""}
+                  {f}{method === "bank" && f === defaultFund ? "  • Default" : ""}
                 </option>
               ))}
             </ModernSelect>
           </FormField>
           <FormField
             label="Sub Account"
-            action={
-              method === "bank" && selectedAccount ? (
-                <button
-                  type="button"
-                  onClick={() => setDefaultSubAccount(selectedAccount)}
-                  aria-label={selectedAccount === defaultSubAccount ? "Current default sub account" : "Set as default sub account"}
-                  title={selectedAccount === defaultSubAccount ? "Default sub account" : "Set as default"}
-                  className="text-muted-foreground hover:text-foreground transition-colors"
-                >
-                  <Star
-                    className="w-3.5 h-3.5"
-                    style={
-                      selectedAccount === defaultSubAccount
-                        ? { color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }
-                        : undefined
-                    }
-                  />
-                </button>
-              ) : undefined
-            }
           >
             <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
               <option value="">Select account</option>
               {accounts.map((a) => (
                 <option key={a} value={a}>
-                  {a}{a === defaultSubAccount ? "  ★" : ""}
+                  {a}{method === "bank" && a === defaultSubAccount ? "  • Default" : ""}
                 </option>
               ))}
             </ModernSelect>
           </FormField>
         </div>
 
-        {/* Subtle default explainer — Bank Transfer only */}
+        {/* Set default action — Bank Transfer only */}
         {method === "bank" && (
-          <div className="mt-2 px-1">
+          <div className="mt-2 px-1 flex items-center justify-end gap-1.5">
             <button
               type="button"
               onClick={() => setShowDefaultInfo(!showDefaultInfo)}
-              className="inline-flex items-center gap-1 text-[11px] text-muted-foreground/80 hover:text-foreground transition-colors"
+              aria-label="Why set a default?"
+              className="text-muted-foreground/80 hover:text-foreground transition-colors"
             >
-              <Star className="w-3 h-3" style={{ color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }} />
-              <span>marks your default · why?</span>
+              <Info className="w-3.5 h-3.5" />
             </button>
-            {showDefaultInfo && (
-              <p className="mt-1.5 text-[12px] text-muted-foreground leading-snug">
-                If a transfer arrives without a matching in-app request, we allocate it to your default fund and sub account. Manual reconciliation may add 1–2 business days. Tap the ★ next to a selected fund or sub account to make it your default.
-              </p>
-            )}
+            <button
+              type="button"
+              onClick={() => {
+                setDraftDefaultFund(defaultFund);
+                setDraftDefaultSubAccount(defaultSubAccount);
+                setDefaultModalOpen(true);
+              }}
+              className="text-[12px] font-medium"
+              style={{ color: "var(--portfolio-blue)" }}
+            >
+              Set default
+            </button>
           </div>
         )}
+        {method === "bank" && showDefaultInfo && (
+          <p className="mt-1.5 px-1 text-[12px] text-muted-foreground leading-snug">
+            If a transfer arrives without a matching in-app request, we allocate it to your default fund and sub account. Manual reconciliation may add 1–2 business days.
+          </p>
+        )}
       </FormSection>
+
+      {/* Set default modal */}
+      <Dialog open={defaultModalOpen} onOpenChange={setDefaultModalOpen}>
+        <DialogContent className="max-w-sm rounded-2xl">
+          <DialogHeader>
+            <DialogTitle>Set default</DialogTitle>
+            <DialogDescription>
+              Used when a bank transfer arrives without a matching request. Manual reconciliation may add 1–2 business days.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            <div>
+              <label className="text-[11px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
+                Default fund
+              </label>
+              <div className="mt-1.5">
+                <ModernSelect value={draftDefaultFund} onChange={(e) => setDraftDefaultFund(e.target.value)}>
+                  {funds.map((f) => (
+                    <option key={f} value={f}>{f}</option>
+                  ))}
+                </ModernSelect>
+              </div>
+            </div>
+            <div>
+              <label className="text-[11px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
+                Default sub account
+              </label>
+              <div className="mt-1.5">
+                <ModernSelect value={draftDefaultSubAccount} onChange={(e) => setDraftDefaultSubAccount(e.target.value)}>
+                  {accounts.map((a) => (
+                    <option key={a} value={a}>{a}</option>
+                  ))}
+                </ModernSelect>
+              </div>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setDefaultModalOpen(false)}>Cancel</Button>
+            <Button
+              onClick={() => {
+                setDefaultFund(draftDefaultFund);
+                setDefaultSubAccount(draftDefaultSubAccount);
+                setDefaultModalOpen(false);
+              }}
+            >
+              Save
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {/* Transfer Details */}
       <FormSection title="Transfer Details">
