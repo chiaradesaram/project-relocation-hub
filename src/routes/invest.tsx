@@ -529,6 +529,8 @@ function Invest() {
               onChange={(e) => {
                 if (e.target.value === "__add_bank") {
                   navigate({ to: "/bank-accounts" });
+                } else if (e.target.value === "__add_fund") {
+                  navigate({ to: "/rates" });
                 } else {
                   setSelectedBank(e.target.value);
                 }
