@@ -42,7 +42,7 @@ function extractOptions(children: React.ReactNode): {
       value?: string;
       children?: React.ReactNode;
       disabled?: boolean;
-      textValue?: string;
+      "data-textvalue"?: string;
     };
     const labelNode = props.children ?? "";
     const labelText = typeof labelNode === "string" ? labelNode : "";
@@ -54,7 +54,7 @@ function extractOptions(children: React.ReactNode): {
     // If no value attribute is provided, fall back to the text label (matches HTML spec)
     const value = props.value ?? labelText;
     if (!value) return;
-    options.push({ value, label: labelNode, textValue: props.textValue, disabled: props.disabled });
+    options.push({ value, label: labelNode, textValue: props["data-textvalue"], disabled: props.disabled });
   });
 
   return { options, placeholder };
