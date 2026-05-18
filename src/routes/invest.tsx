@@ -63,11 +63,6 @@ function Invest() {
   const [repeatCount, setRepeatCount] = useState(1);
   const [showRepeatInfo, setShowRepeatInfo] = useState(false);
 
-  // Bank transfer fallback defaults — used if the in-app request fails to be raised
-  const [defaultFund, setDefaultFund] = useState(funds[0]);
-  const [defaultSubAccount, setDefaultSubAccount] = useState(accounts[0]);
-  const [showDefaultInfo, setShowDefaultInfo] = useState(false);
-
   const amountNum = parseFloat(amount || "0") || 0;
   const isDirectInvest = method === "instant";
   const overLimit = isDirectInvest && amountNum > DIRECT_INVEST_LIMIT;
@@ -460,48 +455,6 @@ function Invest() {
           )}
         </div>
       </FormSection>
-
-      {/* Bank transfer: fallback default allocation */}
-      {method === "bank" && (
-        <>
-          <FormSection title="Fallback default allocation">
-            <div className="form-field-inline divide-y divide-border/40">
-              <FormField
-                label="Default fund"
-                action={
-                  <button
-                    type="button"
-                    onClick={() => setShowDefaultInfo(!showDefaultInfo)}
-                    aria-label="About fallback default allocation"
-                    className="text-muted-foreground hover:text-foreground"
-                  >
-                    <Info className="w-4 h-4" />
-                  </button>
-                }
-              >
-                <ModernSelect value={defaultFund} onChange={(e) => setDefaultFund(e.target.value)}>
-                  {funds.map((f) => <option key={f}>{f}</option>)}
-                </ModernSelect>
-              </FormField>
-              <FormField label="Default sub account">
-                <ModernSelect value={defaultSubAccount} onChange={(e) => setDefaultSubAccount(e.target.value)}>
-                  {accounts.map((a) => <option key={a}>{a}</option>)}
-                </ModernSelect>
-              </FormField>
-            </div>
-          </FormSection>
-          {showDefaultInfo && (
-            <div className="mx-4 mt-2 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 12%, oklch(0.18 0.02 280))" }}>
-              <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 32%, transparent)" }}>
-                <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
-              </div>
-              <p className="text-[12px] text-white/85 leading-snug pt-1">
-                If your transfer arrives but no in-app request is raised (e.g. app issue or missed proof upload), funds will be allocated to this default fund and sub account. Allocation may be delayed by 1–2 business days while we reconcile manually.
-              </p>
-            </div>
-          )}
-        </>
-      )}
 
       {/* Bank transfer: HNB closing notice */}
       {method === "bank" && selectedPayTo.startsWith("HNB") && (
