@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
+import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus, Star } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import { FormSection, FormField } from "@/components/FormField";
 
@@ -62,6 +62,16 @@ function Invest() {
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [repeatCount, setRepeatCount] = useState(1);
   const [showRepeatInfo, setShowRepeatInfo] = useState(false);
+
+  // Fallback default fund + sub account for unmatched bank transfers
+  const [defaultFund, setDefaultFund] = useState(funds[0]);
+  const [defaultSubAccount, setDefaultSubAccount] = useState(accounts[0]);
+  const [showDefaultInfo, setShowDefaultInfo] = useState(false);
+  const canSetDefault =
+    method === "bank" &&
+    !!selectedFund &&
+    !!selectedAccount &&
+    (selectedFund !== defaultFund || selectedAccount !== defaultSubAccount);
 
   const amountNum = parseFloat(amount || "0") || 0;
   const isDirectInvest = method === "instant";
@@ -369,16 +379,64 @@ function Invest() {
           >
             <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)}>
               <option value="">Select your fund</option>
-              {funds.map((f) => <option key={f}>{f}</option>)}
+              {funds.map((f) => (
+                <option key={f} value={f}>
+                  {f}{f === defaultFund ? "  ★ Default" : ""}
+                </option>
+              ))}
             </ModernSelect>
           </FormField>
           <FormField label="Sub Account">
             <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
               <option value="">Select account</option>
-              {accounts.map((a) => <option key={a}>{a}</option>)}
+              {accounts.map((a) => (
+                <option key={a} value={a}>
+                  {a}{a === defaultSubAccount ? "  ★ Default" : ""}
+                </option>
+              ))}
             </ModernSelect>
           </FormField>
         </div>
+
+        {/* Default fallback — Bank Transfer only */}
+        {method === "bank" && (
+          <div className="mt-2 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 10%, oklch(0.18 0.02 280))" }}>
+            <div className="flex items-center justify-between gap-3 px-3.5 py-2.5">
+              <div className="flex items-center gap-2 min-w-0">
+                <Star className="w-3.5 h-3.5 shrink-0" style={{ color: "oklch(0.85 0.14 85)", fill: "oklch(0.85 0.14 85)" }} />
+                <p className="text-[12px] text-white/85 truncate">
+                  Default: <span className="text-white font-medium">{defaultFund}</span> · <span className="text-white font-medium">{defaultSubAccount}</span>
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setShowDefaultInfo(!showDefaultInfo)}
+                  aria-label="Why a default?"
+                  className="text-white/60 hover:text-white shrink-0"
+                >
+                  <Info className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              {canSetDefault && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setDefaultFund(selectedFund);
+                    setDefaultSubAccount(selectedAccount);
+                  }}
+                  className="text-[11px] font-semibold text-white px-2.5 py-1 rounded-full shrink-0"
+                  style={{ background: "color-mix(in oklch, var(--portfolio-blue) 45%, transparent)" }}
+                >
+                  Set current as default
+                </button>
+              )}
+            </div>
+            {showDefaultInfo && (
+              <p className="px-3.5 pb-3 text-[12px] text-white/75 leading-snug">
+                If a bank transfer reaches us without a matching in-app request, we'll allocate it to this fund and sub account so your money still gets invested. Manual reconciliation may add 1–2 business days.
+              </p>
+            )}
+          </div>
+        )}
       </FormSection>
 
       {/* Transfer Details */}
