@@ -97,10 +97,16 @@ export function ModernSelect({
             key={opt.value}
             value={opt.value}
             disabled={opt.disabled}
-            textValue={opt.textValue ?? opt.value}
             className="rounded-lg text-[13px] py-2 focus:bg-primary/15 focus:text-foreground"
           >
-            {opt.label}
+            <span className="flex items-center gap-2">
+              {opt.label}
+              {opt.pill && (
+                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-primary/15 text-primary">
+                  {opt.pill}
+                </span>
+              )}
+            </span>
           </SelectItem>
         ))}
       </SelectContent>
