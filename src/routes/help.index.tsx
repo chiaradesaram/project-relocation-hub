@@ -224,6 +224,22 @@ function HelpIndexPage() {
             </div>
           ) : (
             <>
+              {/* Quick links */}
+              <div className="mx-5 mb-6 grid grid-cols-2 gap-3">
+                {QUICK_LINKS.map(({ label, to, icon: Icon }) => (
+                  <Link
+                    key={label}
+                    to={to}
+                    className="flex items-center gap-3 rounded-2xl border border-border/40 bg-card/40 p-3.5 hover:bg-card/60 transition-colors"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4 text-primary" />
+                    </div>
+                    <span className="text-[13px] font-medium text-foreground leading-snug">{label}</span>
+                  </Link>
+                ))}
+              </div>
+
               {/* Explore all topics */}
               <div className="mx-5 mb-6">
                 <p className="text-[14px] font-medium text-foreground mb-3">Explore all topics</p>
