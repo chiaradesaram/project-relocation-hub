@@ -6,11 +6,13 @@ import {
   ChevronDown,
   ChevronRight,
   FileText,
-  Building2,
   TrendingUp,
   Repeat,
   MessageCircle,
-  Zap,
+  Shield,
+  Wallet,
+  ArrowUpRight,
+  ArrowDownLeft,
   X,
   ArrowLeft,
 } from "lucide-react";
@@ -45,19 +47,54 @@ const FAQS: FAQItem[] = [
   { topic: "account", q: "How do I add a bank account?", a: "Go to Bank Accounts from the More menu and tap Add. New accounts are verified within 1 business day.", featured: true },
 ];
 
-const QUICK_LINKS = [
-  { icon: FileText, label: "Download a statement", to: "/transactions" as const },
-  { icon: Building2, label: "Add a bank account", to: "/bank-accounts" as const },
-  { icon: TrendingUp, label: "See fund rates", to: "/rates" as const },
-  { icon: Repeat, label: "Set a recurring invest", to: "/invest" as const },
+const TOPIC_SECTIONS: {
+  id: FAQTopic;
+  label: string;
+  description: string;
+  icon: typeof FileText;
+}[] = [
+  {
+    id: "invest",
+    label: "Investing",
+    description: "Direct Invest, recurring plans and Flip.",
+    icon: TrendingUp,
+  },
+  {
+    id: "transactions",
+    label: "Transactions",
+    description: "Pending transfers, statements and history.",
+    icon: Repeat,
+  },
+  {
+    id: "unit-trusts",
+    label: "Unit Trusts",
+    description: "Holdings, redemptions and fees.",
+    icon: Wallet,
+  },
+  {
+    id: "rates",
+    label: "Rates & NAV",
+    description: "Daily yields and unit prices.",
+    icon: FileText,
+  },
+  {
+    id: "account",
+    label: "Account & Security",
+    description: "Profile, bank accounts and safety.",
+    icon: Shield,
+  },
 ];
 
-const TOPIC_SECTIONS: { id: FAQTopic; label: string }[] = [
-  { id: "invest", label: "Investing" },
-  { id: "rates", label: "Rates & NAV" },
-  { id: "unit-trusts", label: "Unit Trusts" },
-  { id: "transactions", label: "Transactions" },
-  { id: "account", label: "Account & Security" },
+const RECENT_TXNS: {
+  name: string;
+  meta: string;
+  amount: string;
+  sub: string;
+  direction: "in" | "out";
+}[] = [
+  { name: "CAL Income Fund", meta: "Invested · 28 May", amount: "LKR 50,000", sub: "Direct Invest", direction: "out" },
+  { name: "CAL Quantitative Fund", meta: "Redeemed · 24 May", amount: "LKR 25,000", sub: "Instant", direction: "in" },
+  { name: "CAL Balanced Fund", meta: "Invested · 20 May", amount: "LKR 10,000", sub: "Recurring", direction: "out" },
 ];
 
 export const Route = createFileRoute("/help/")({
@@ -78,8 +115,7 @@ function HelpIndexPage() {
   const { q } = Route.useSearch();
   const [query, setQuery] = useState(q ?? "");
   const [openKey, setOpenKey] = useState<string | null>(null);
-  const [expandedTopics, setExpandedTopics] = useState<Set<string>>(new Set());
-  const [activeTopic, setActiveTopic] = useState<FAQTopic | "all">("all");
+  const [selectedTopic, setSelectedTopic] = useState<FAQTopic | null>(null);
 
   const trimmed = query.trim().toLowerCase();
   const isSearching = trimmed.length > 0;
@@ -91,21 +127,20 @@ function HelpIndexPage() {
     );
   }, [trimmed, isSearching]);
 
-  const toggleTopic = (id: string) => {
-    setExpandedTopics((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) next.delete(id);
-      else next.add(id);
-      return next;
-    });
-  };
+  const currentTopic = selectedTopic
+    ? TOPIC_SECTIONS.find((t) => t.id === selectedTopic) ?? null
+    : null;
+  const topicFaqs = selectedTopic ? FAQS.filter((f) => f.topic === selectedTopic) : [];
 
   return (
     <MobileLayout>
-      {/* Back button */}
+      {/* Top bar */}
       <div className="sticky top-0 bg-background/80 backdrop-blur-lg z-30 px-4 pt-3 pb-1">
         <button
-          onClick={() => window.history.back()}
+          onClick={() => {
+            if (selectedTopic) setSelectedTopic(null);
+            else window.history.back();
+          }}
           className="flex items-center justify-center w-9 h-9 -ml-2 rounded-full text-foreground hover:bg-muted/40 transition-colors"
           aria-label="Back"
         >
@@ -113,208 +148,228 @@ function HelpIndexPage() {
         </button>
       </div>
 
-      {/* Hero heading */}
-      <div className="px-4 pt-4 pb-6 text-center">
-        <h1 className="text-[24px] font-bold text-foreground leading-tight">
-          Hi, how can we help<br />you today?
-        </h1>
-      </div>
-
-      {/* Search bar */}
-      <div className="mx-4 mb-6">
-        <div className="flex items-center gap-2.5 rounded-2xl border border-border/40 bg-card/60 px-4 py-3 backdrop-blur-md">
-          <Search className="w-4.5 h-4.5 text-muted-foreground shrink-0" />
-          <input
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search or ask a question"
-            className="flex-1 bg-transparent text-[13px] text-foreground placeholder:text-muted-foreground outline-none"
-          />
-          {query && (
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              className="text-muted-foreground hover:text-foreground"
-              aria-label="Clear search"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          )}
-        </div>
-      </div>
-
-      {/* Search results */}
-      {isSearching ? (
-        <div className="mx-4 mb-6">
-          <p className="text-[11px] font-medium text-muted-foreground mb-2">
-            {searchResults.length} result{searchResults.length === 1 ? "" : "s"}
-          </p>
-          {searchResults.length === 0 ? (
-            <div className="rounded-2xl border border-border/40 bg-card/60 p-5 text-center">
-              <p className="text-sm text-foreground font-medium">No matching answers</p>
-              <p className="text-[12px] text-muted-foreground mt-1">
-                Try a different keyword or contact us below.
-              </p>
-            </div>
-          ) : (
-            <div className="rounded-2xl border border-border/40 bg-card/60 overflow-hidden divide-y divide-border/30">
-              {searchResults.map((item, i) => {
-                const key = `search-${i}`;
-                const isOpen = openKey === key;
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => setOpenKey(isOpen ? null : key)}
-                    className="w-full text-left px-4 py-3.5 flex flex-col gap-1.5 transition-colors hover:bg-muted/20"
-                  >
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-[13px] font-medium text-foreground">{item.q}</span>
-                      <ChevronDown
-                        className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
-                      />
-                    </div>
-                    {isOpen && (
-                      <p className="text-[12px] text-muted-foreground leading-relaxed pr-6">{item.a}</p>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
-          )}
-        </div>
+      {currentTopic ? (
+        <TopicView
+          topic={currentTopic}
+          faqs={topicFaqs}
+          openKey={openKey}
+          setOpenKey={setOpenKey}
+        />
       ) : (
         <>
-          {/* Chat with us CTA */}
-          <div className="mx-4 mb-5">
-            <p className="text-[13px] font-semibold text-muted-foreground mb-2">Continue conversation</p>
-            <Link
-              to="/help/contact"
-              className="flex items-center justify-center gap-2 w-full rounded-2xl bg-primary py-3.5 text-primary-foreground font-semibold text-[15px] hover:brightness-110 transition"
-            >
-              <MessageCircle className="w-4.5 h-4.5" />
-              Chat with us
-            </Link>
+          {/* Hero heading */}
+          <div className="px-5 pt-2 pb-5">
+            <h1 className="text-[28px] font-bold text-foreground leading-tight tracking-tight">
+              Hi, how can we help?
+            </h1>
           </div>
 
-          {/* Quick links */}
-          <div className="mx-4 mb-5">
-            <div className="rounded-2xl border border-border/40 bg-card/60 overflow-hidden">
-              <p className="text-[14px] font-semibold text-foreground px-4 pt-4 pb-2">Quick links</p>
-              <div className="divide-y divide-border/30">
-                {QUICK_LINKS.map(({ label, to }) => (
-                  <Link
-                    key={label}
-                    to={to}
-                    className="flex items-center gap-3 px-4 py-3.5 hover:bg-muted/20 transition-colors"
-                  >
-                    <Zap className="w-4 h-4 text-sky-400 shrink-0" />
-                    <span className="text-[13px] font-medium text-primary flex-1">{label}</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </div>
-
-          {/* Suggested FAQs by topic */}
-          <div className="mx-4 mb-5">
-            {/* Topic filter pills */}
-            <div className="flex gap-2 overflow-x-auto pb-3 scrollbar-hide">
-              {[{ id: "all" as const, label: "Suggested" }, ...TOPIC_SECTIONS].map(({ id, label }) => (
+          {/* Search bar */}
+          <div className="mx-5 mb-6">
+            <div className="flex items-center gap-3 rounded-full border border-border/50 bg-card/40 px-5 py-3.5">
+              <Search className="w-4 h-4 text-muted-foreground shrink-0" />
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Search help articles"
+                className="flex-1 bg-transparent text-[14px] text-foreground placeholder:text-muted-foreground outline-none"
+              />
+              {query && (
                 <button
-                  key={id}
                   type="button"
-                  onClick={() => setActiveTopic(id as FAQTopic | "all")}
-                  className={`shrink-0 rounded-full px-3.5 py-1.5 text-[12px] font-medium transition-colors ${
-                    activeTopic === id
-                      ? "bg-primary text-primary-foreground"
-                      : "bg-card/60 border border-border/40 text-muted-foreground hover:text-foreground"
-                  }`}
+                  onClick={() => setQuery("")}
+                  className="text-muted-foreground hover:text-foreground"
+                  aria-label="Clear search"
                 >
-                  {label}
+                  <X className="w-4 h-4" />
                 </button>
-              ))}
-            </div>
-
-            <div className="rounded-2xl border border-border/40 bg-card/60 overflow-hidden">
-              <p className="text-[14px] font-semibold text-foreground px-4 pt-4 pb-2">Suggested FAQs</p>
-              <div className="divide-y divide-border/30">
-                {TOPIC_SECTIONS.filter(({ id }) => activeTopic === "all" || activeTopic === id).map(({ id, label }) => {
-                  const isExpanded = expandedTopics.has(id);
-                  const topicFaqs = FAQS.filter((f) => f.topic === id);
-                  return (
-                    <div key={id}>
-                      <button
-                        type="button"
-                        onClick={() => toggleTopic(id)}
-                        className="w-full flex items-center justify-between px-4 py-3.5 hover:bg-muted/20 transition-colors"
-                      >
-                        <span className="text-[13px] font-medium text-foreground">{label}</span>
-                        <ChevronDown
-                          className={`w-4 h-4 text-muted-foreground transition-transform ${isExpanded ? "rotate-180" : ""}`}
-                        />
-                      </button>
-                      {isExpanded && (
-                        <div className="bg-muted/10 divide-y divide-border/20">
-                          {topicFaqs.map((item, i) => {
-                            const key = `${id}-${i}`;
-                            const isOpen = openKey === key;
-                            return (
-                              <button
-                                key={key}
-                                type="button"
-                                onClick={() => setOpenKey(isOpen ? null : key)}
-                                className="w-full text-left px-5 py-3 flex flex-col gap-1 transition-colors hover:bg-muted/20"
-                              >
-                                <div className="flex items-center justify-between gap-2">
-                                  <span className="text-[12px] font-medium text-foreground/90">{item.q}</span>
-                                  <ChevronDown
-                                    className={`w-3.5 h-3.5 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
-                                  />
-                                </div>
-                                {isOpen && (
-                                  <p className="text-[11px] text-muted-foreground leading-relaxed pr-5 pt-0.5">{item.a}</p>
-                                )}
-                              </button>
-                            );
-                          })}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              )}
             </div>
           </div>
+
+          {isSearching ? (
+            <div className="mx-5 mb-6">
+              <p className="text-[12px] font-medium text-muted-foreground mb-2">
+                {searchResults.length} result{searchResults.length === 1 ? "" : "s"}
+              </p>
+              {searchResults.length === 0 ? (
+                <div className="rounded-2xl border border-border/40 bg-card/40 p-5 text-center">
+                  <p className="text-sm text-foreground font-medium">No matching answers</p>
+                  <p className="text-[12px] text-muted-foreground mt-1">
+                    Try a different keyword or contact us below.
+                  </p>
+                </div>
+              ) : (
+                <div className="divide-y divide-border/30">
+                  {searchResults.map((item, i) => {
+                    const key = `search-${i}`;
+                    const isOpen = openKey === key;
+                    return (
+                      <button
+                        key={key}
+                        type="button"
+                        onClick={() => setOpenKey(isOpen ? null : key)}
+                        className="w-full text-left py-3.5 flex flex-col gap-1.5"
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="text-[14px] font-medium text-foreground">{item.q}</span>
+                          <ChevronDown
+                            className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                          />
+                        </div>
+                        {isOpen && (
+                          <p className="text-[13px] text-muted-foreground leading-relaxed pr-6">{item.a}</p>
+                        )}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ) : (
+            <>
+              {/* Recent transactions */}
+              <div className="mx-5 mb-7">
+                <div className="flex items-center justify-between mb-3">
+                  <p className="text-[14px] font-medium text-foreground">
+                    Need help with a recent transaction?
+                  </p>
+                  <Link to="/transactions" className="text-[13px] font-medium text-primary">
+                    View all
+                  </Link>
+                </div>
+                <div className="h-px bg-border/40 mb-1" />
+                <div className="divide-y divide-border/30">
+                  {RECENT_TXNS.map((t, i) => (
+                    <Link
+                      key={i}
+                      to="/transactions"
+                      className="flex items-center gap-3.5 py-4"
+                    >
+                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center shrink-0">
+                        {t.direction === "out" ? (
+                          <ArrowUpRight className="w-4.5 h-4.5 text-foreground" />
+                        ) : (
+                          <ArrowDownLeft className="w-4.5 h-4.5 text-foreground" />
+                        )}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[14px] font-semibold text-foreground truncate">{t.name}</p>
+                        <p className="text-[12px] text-muted-foreground truncate">{t.meta}</p>
+                      </div>
+                      <div className="text-right">
+                        <p className="text-[14px] font-semibold text-foreground">{t.amount}</p>
+                        <p className="text-[12px] text-muted-foreground">{t.sub}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Explore all topics */}
+              <div className="mx-5 mb-6">
+                <p className="text-[14px] font-medium text-foreground mb-3">Explore all topics</p>
+                <div className="h-px bg-border/40 mb-1" />
+                <div className="divide-y divide-border/30">
+                  {TOPIC_SECTIONS.map(({ id, label, description, icon: Icon }) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => {
+                        setSelectedTopic(id);
+                        setOpenKey(null);
+                      }}
+                      className="w-full flex items-center gap-3.5 py-4 text-left"
+                    >
+                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center shrink-0">
+                        <Icon className="w-4.5 h-4.5 text-foreground" />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[14px] font-semibold text-foreground">{label}</p>
+                        <p className="text-[12px] text-muted-foreground leading-snug">{description}</p>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </>
+          )}
         </>
       )}
 
       {/* Still need help */}
-      <div className="mx-4 mt-2 mb-6">
+      <div className="mx-5 mt-2 mb-8">
         <Link
           to="/help/contact"
-          className="block rounded-2xl border border-border/40 bg-card/60 p-4 hover:bg-muted/20 transition-colors"
+          className="block rounded-2xl border border-border/40 bg-card/40 p-4 hover:bg-card/60 transition-colors"
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-              <MessageCircle className="w-5 h-5 text-primary" />
+              <MessageCircle className="w-4.5 h-4.5 text-primary" />
             </div>
             <div className="flex-1">
-              <p className="text-[13px] font-semibold text-foreground">Still need help?</p>
-              <p className="text-[11px] text-muted-foreground">
-                Send us a message — we usually reply within 2 business days.
-              </p>
+              <p className="text-[14px] font-semibold text-foreground">Contact us</p>
+              <p className="text-[12px] text-muted-foreground">Usually replies in 2 business days.</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </div>
         </Link>
-        <p className="text-[11px] text-muted-foreground text-center mt-2.5">
-          or email{" "}
-          <a href="mailto:support@cal.lk" className="text-primary underline-offset-2 hover:underline">
-            support@cal.lk
-          </a>
-        </p>
       </div>
     </MobileLayout>
+  );
+}
+
+function TopicView({
+  topic,
+  faqs,
+  openKey,
+  setOpenKey,
+}: {
+  topic: { id: FAQTopic; label: string; description: string; icon: typeof FileText };
+  faqs: FAQItem[];
+  openKey: string | null;
+  setOpenKey: (k: string | null) => void;
+}) {
+  const Icon = topic.icon;
+  return (
+    <>
+      <div className="px-5 pt-2 pb-5">
+        <div className="w-11 h-11 rounded-full border border-border/50 flex items-center justify-center mb-3">
+          <Icon className="w-5 h-5 text-foreground" />
+        </div>
+        <h1 className="text-[24px] font-bold text-foreground leading-tight tracking-tight">
+          {topic.label}
+        </h1>
+        <p className="text-[13px] text-muted-foreground mt-1">{topic.description}</p>
+      </div>
+      <div className="mx-5 mb-6">
+        <div className="h-px bg-border/40 mb-1" />
+        <div className="divide-y divide-border/30">
+          {faqs.map((item, i) => {
+            const key = `${topic.id}-${i}`;
+            const isOpen = openKey === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setOpenKey(isOpen ? null : key)}
+                className="w-full text-left py-4 flex flex-col gap-1.5"
+              >
+                <div className="flex items-center justify-between gap-3">
+                  <span className="text-[14px] font-medium text-foreground">{item.q}</span>
+                  <ChevronDown
+                    className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                  />
+                </div>
+                {isOpen && (
+                  <p className="text-[13px] text-muted-foreground leading-relaxed pr-6">{item.a}</p>
+                )}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+    </>
   );
 }
