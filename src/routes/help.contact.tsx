@@ -380,8 +380,8 @@ const PRODUCTS = [
 ] as const;
 
 const baseSchema = z.object({
-  categoryId: z.string().min(1, "Pick a category"),
-  subId: z.string().min(1, "Pick a sub-category"),
+  categoryId: z.string().min(1, "Pick a topic"),
+  subId: z.string().min(1, "Pick what best describes it"),
 });
 
 const ticketSchema = baseSchema.extend({
@@ -585,12 +585,12 @@ function ContactForm() {
       <div className="mx-4 mt-1 pb-6">
         <h2 className="text-sm font-semibold text-foreground">Tell us what's wrong</h2>
 
-        <div className="space-y-3">
-          <Field label="Category" error={errors.categoryId}>
+        <div className="mt-4 space-y-3">
+          <Field label="What's this about?" error={errors.categoryId}>
             <SelectInput
               value={categoryId}
               onChange={(v) => setCategoryId(v as CategoryId | "")}
-              placeholder="Select a category"
+              placeholder="Choose a topic"
             >
               {CATEGORIES.map((c) => (
                 <option key={c.id} value={c.id}>
@@ -601,8 +601,8 @@ function ContactForm() {
           </Field>
 
           {category && (
-            <Field label="Sub-category" error={errors.subId}>
-              <SelectInput value={subId} onChange={setSubId} placeholder="Select a sub-category">
+            <Field label="What best describes it?" error={errors.subId}>
+              <SelectInput value={subId} onChange={setSubId} placeholder="Pick the closest match">
                 {category.subs.map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.label}
