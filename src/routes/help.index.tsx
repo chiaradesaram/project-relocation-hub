@@ -83,17 +83,6 @@ const TOPIC_SECTIONS: {
   },
 ];
 
-const RECENT_TXNS: {
-  name: string;
-  meta: string;
-  amount: string;
-  sub: string;
-  direction: "in" | "out";
-}[] = [
-  { name: "CAL Income Fund", meta: "Invested · 28 May", amount: "LKR 50,000", sub: "Direct Invest", direction: "out" },
-  { name: "CAL Quantitative Fund", meta: "Redeemed · 24 May", amount: "LKR 25,000", sub: "Instant", direction: "in" },
-  { name: "CAL Balanced Fund", meta: "Invested · 20 May", amount: "LKR 10,000", sub: "Recurring", direction: "out" },
-];
 
 export const Route = createFileRoute("/help/")({
   validateSearch: (search: Record<string, unknown>): { topic?: HelpTopic; q?: string } => ({
