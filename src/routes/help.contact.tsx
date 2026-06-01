@@ -767,10 +767,20 @@ function ContactForm() {
           {/* Recent transactions picker for investment / withdrawal issues */}
           {sub &&
             productReady &&
-            (sub.id === "investment-not-reflected" || sub.id === "withdrawal-delay") &&
+            (sub.id === "investment-not-reflected" ||
+              sub.id === "withdrawal-delay" ||
+              sub.id === "fund-split") &&
             !showForm && (
               <RecentTransactionsPicker subId={sub.id} productId={productId} />
             )}
+
+          {sub?.id === "form-difficulty" && (
+            <FormDifficultyPicker stepId={stepId} setStepId={setStepId} />
+          )}
+
+          {sub?.id === "creation-plan" && (
+            <CreationPlanPicker stepId={stepId} setStepId={setStepId} />
+          )}
 
           {/* Continue to ticket */}
           {sub && !resolveOnly && !showForm && (hasSuggestions || hasQuickLinks) && (
