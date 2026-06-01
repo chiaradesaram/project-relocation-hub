@@ -228,44 +228,6 @@ function HelpIndexPage() {
             </div>
           ) : (
             <>
-              {/* Recent transactions */}
-              <div className="mx-5 mb-7">
-                <div className="flex items-center justify-between mb-3">
-                  <p className="text-[14px] font-medium text-foreground">
-                    Need help with a recent transaction?
-                  </p>
-                  <Link to="/transactions" className="text-[13px] font-medium text-primary">
-                    View all
-                  </Link>
-                </div>
-                <div className="h-px bg-border/40 mb-1" />
-                <div className="divide-y divide-border/30">
-                  {RECENT_TXNS.map((t, i) => (
-                    <Link
-                      key={i}
-                      to="/transactions"
-                      className="flex items-center gap-3.5 py-4"
-                    >
-                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center shrink-0">
-                        {t.direction === "out" ? (
-                          <ArrowUpRight className="w-4.5 h-4.5 text-foreground" />
-                        ) : (
-                          <ArrowDownLeft className="w-4.5 h-4.5 text-foreground" />
-                        )}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-semibold text-foreground truncate">{t.name}</p>
-                        <p className="text-[12px] text-muted-foreground truncate">{t.meta}</p>
-                      </div>
-                      <div className="text-right">
-                        <p className="text-[14px] font-semibold text-foreground">{t.amount}</p>
-                        <p className="text-[12px] text-muted-foreground">{t.sub}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-
               {/* Explore all topics */}
               <div className="mx-5 mb-6">
                 <p className="text-[14px] font-medium text-foreground mb-3">Explore all topics</p>
