@@ -204,15 +204,23 @@ const CATEGORIES: Category[] = [
         suggestions: [
           {
             q: "What is a unit trust?",
-            a: "A pooled fund managed by professionals — your money is invested across many securities, so you get diversification without picking individual stocks or bonds.",
+            a: "A unit trust is a pooled investment where money from many investors is combined and invested in assets like government securities, corporate debt, deposits, and shares. You receive units based on your investment, and returns are shared accordingly.",
           },
           {
-            q: "How are returns paid?",
-            a: "Most CAL unit trusts reinvest daily, so your unit price grows. You realise gains when you redeem units.",
+            q: "How do I open a Unit Trust account?",
+            a: "Register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (Apple App Store / Google Play). If you prefer to apply in person, you can book an appointment. You'll need your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
           },
           {
-            q: "What are the fees?",
-            a: "A management fee is built into the daily NAV — there are no hidden entry, exit or transaction fees on the app.",
+            q: "How long does it take to process a new unit trust application?",
+            a: "Once you submit your application through the portal with all required documents, processing typically takes 3–5 working days. Times may be slightly longer during high-volume periods. You can track the status of your application directly through the portal.",
+          },
+          {
+            q: "What can I do once my unit trust account is active?",
+            a: "View your portfolio and balances, invest in Unit Trust funds, set up recurring investments, create redemption plans, track performance, and request account statements — plus more features to help you manage your investments easily.",
+          },
+          {
+            q: "How do I invest money into a unit trust fund?",
+            a: "Bank transfer: Transfer funds to the CAL Unit Trust account (Deutsche Bank AG, Colombo, Capital Alliance Investments Limited, Account No: 0046797000). Use your registered bank account, then log in and submit a creation request. JustPay: Link your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
           },
         ],
         quickLinks: [
@@ -236,16 +244,24 @@ const CATEGORIES: Category[] = [
         resolveOnly: true,
         suggestions: [
           {
-            q: "How do I buy or sell shares?",
-            a: "Place orders through CAL Online (vStock). Orders are routed to the CSE during market hours (9:30am–2:30pm, Mon–Fri).",
+            q: "What is equity?",
+            a: "Equity means ownership in a company. When you own equity (shares/stocks), you have rights like voting on company decisions and receiving a share of the company's profits (dividends).",
           },
           {
-            q: "When do trades settle?",
-            a: "CSE follows T+3 settlement — funds and shares move three business days after the trade date.",
+            q: "What are the benefits for CAL equities clients?",
+            a: "Track your portfolio via the CAL Online app, trade using the Atrad app, access AnalytiCAL (research portal with data on all CSE-listed companies, valuation ratios, and real-time metrics), access to research reports, webinars, and join a WhatsApp group for market updates. Get custom analytics and alerts tailored for you on your portfolio performance.",
           },
           {
-            q: "Are there brokerage fees?",
-            a: "Yes, standard CSE brokerage and statutory levies apply on every trade. Full breakdown is shown on the order confirmation.",
+            q: "What is the minimum investment amount for an equities account?",
+            a: "Self-trading account (internet trading only): minimum LKR 100,000. Account with advisor support on your trades: minimum LKR 5,000,000.",
+          },
+          {
+            q: "How do I transfer funds into my equities account?",
+            a: "Bank transfer (no limit): Transfer to the CAL Seylan Bank account (Millennium branch, Capital Alliance Securities Pvt Ltd, Account No: 086400041489001). Use your registered bank account, then go to Pay In on the portal and submit a request. JustPay: Link your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable anytime.",
+          },
+          {
+            q: "What are the fees involved with Equity Trading?",
+            a: "Brokerage fee: 0.64%. Total transaction cost: 1.12%, including CSE fees (0.084%), CDS fees (0.024%), SEC cess (0.072%), and Share Transaction Levy (0.300%).",
           },
         ],
         quickLinks: [
