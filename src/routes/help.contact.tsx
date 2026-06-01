@@ -484,7 +484,6 @@ function ContactForm() {
   const [stepId, setStepId] = useState("");
 
   const [description, setDescription] = useState("");
-  const [accountNumber, setAccountNumber] = useState("CAL-00012345");
 
   // NIC form state
   const [nicNumber, setNicNumber] = useState("");
