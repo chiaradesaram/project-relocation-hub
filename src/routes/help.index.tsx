@@ -47,6 +47,13 @@ const FAQS: FAQItem[] = [
   { topic: "account", q: "How do I add a bank account?", a: "Go to Bank Accounts from the More menu and tap Add. New accounts are verified within 1 business day.", featured: true },
 ];
 
+const QUICK_LINKS: { label: string; to: string; icon: typeof FileText }[] = [
+  { label: "Add a bank account", to: "/bank-accounts", icon: Landmark },
+  { label: "See fund rates", to: "/rates", icon: TrendingUp },
+  { label: "Set a recurring investment", to: "/invest", icon: RotateCcw },
+  { label: "Download a statement", to: "/transactions", icon: FileText },
+];
+
 const TOPIC_SECTIONS: {
   id: FAQTopic;
   label: string;
