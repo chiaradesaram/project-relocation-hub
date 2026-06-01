@@ -872,17 +872,6 @@ function ContactForm() {
                 </>
               ) : (
                 <>
-                  {needsAccount && (
-                    <Field label="Account number" error={errors.accountNumber}>
-                      <input
-                        value={accountNumber}
-                        onChange={(e) => setAccountNumber(e.target.value)}
-                        maxLength={40}
-                        className="w-full bg-transparent text-[12px] text-foreground outline-none"
-                      />
-                    </Field>
-                  )}
-
                   <Field label="Description" error={errors.description}>
                     <textarea
                       value={description}
