@@ -11,8 +11,7 @@ import {
   MessageCircle,
   Shield,
   Wallet,
-  Landmark,
-  RotateCcw,
+  Zap,
   X,
   ArrowLeft,
 } from "lucide-react";
@@ -47,11 +46,11 @@ const FAQS: FAQItem[] = [
   { topic: "account", q: "How do I add a bank account?", a: "Go to Bank Accounts from the More menu and tap Add. New accounts are verified within 1 business day.", featured: true },
 ];
 
-const QUICK_LINKS: { label: string; to: string; icon: typeof FileText }[] = [
-  { label: "Add a bank account", to: "/bank-accounts", icon: Landmark },
-  { label: "See fund rates", to: "/rates", icon: TrendingUp },
-  { label: "Set a recurring investment", to: "/invest", icon: RotateCcw },
-  { label: "Download a statement", to: "/transactions", icon: FileText },
+const QUICK_LINKS: { label: string; to: string }[] = [
+  { label: "Add a bank account", to: "/bank-accounts" },
+  { label: "See fund rates", to: "/rates" },
+  { label: "Set a recurring investment", to: "/invest" },
+  { label: "Download a statement", to: "/transactions" },
 ];
 
 const TOPIC_SECTIONS: {
@@ -229,14 +228,14 @@ function HelpIndexPage() {
                 <p className="text-[14px] font-medium text-foreground mb-3">Quick links</p>
                 <div className="h-px bg-border/40 mb-1" />
                 <div className="divide-y divide-border/30">
-                  {QUICK_LINKS.map(({ label, to, icon: Icon }) => (
+                  {QUICK_LINKS.map(({ label, to }) => (
                     <Link
                       key={label}
                       to={to}
                       className="w-full flex items-center gap-3.5 py-4"
                     >
-                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center shrink-0">
-                        <Icon className="w-4.5 h-4.5 text-foreground" />
+                      <div className="w-10 h-10 rounded-full bg-yellow-400/15 flex items-center justify-center shrink-0">
+                        <Zap className="w-4 h-4 text-yellow-400 fill-yellow-400" />
                       </div>
                       <span className="flex-1 text-[14px] font-medium text-foreground">{label}</span>
                       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
