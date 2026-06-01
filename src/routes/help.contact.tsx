@@ -60,6 +60,8 @@ interface Sub {
   resolveOnly?: boolean;
   /** Skip the product picker even if the parent category requires it. */
   skipProduct?: boolean;
+  /** Restrict this sub to a specific product. Hidden when another product is picked. */
+  onlyProduct?: string;
 }
 
 interface Category {
