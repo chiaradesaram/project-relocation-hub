@@ -547,7 +547,6 @@ function ContactForm() {
   const hasQuickLinks = quickLinks.length > 0;
   const specialForm = sub?.specialForm;
   const resolveOnly = !!sub?.resolveOnly;
-  const needsAccount = categoryId === "investments-withdrawals";
   const needsProduct = !!category?.requiresProduct && !sub?.skipProduct;
   const productReady = !needsProduct || !!productId;
 
