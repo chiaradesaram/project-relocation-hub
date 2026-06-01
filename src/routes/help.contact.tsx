@@ -1030,6 +1030,202 @@ const RECENT_TXS = [
   { id: "tx6", name: "Treasury Bill 91D", product: "treasuries", kind: "Maturity", date: "Mar 25, 2026", reflectDate: "Mar 30, 2026", value: "LKR 105,000" },
 ];
 
+const FORM_STEPS: { id: string; label: string; tips: string[]; intro?: string; footer?: { text: string; link?: { to: string; label: string } } }[] = [
+  {
+    id: "personal-details",
+    label: "Personal details",
+    intro: "Follow this guide to fill in your personal details correctly.",
+    tips: [
+      "Enter your full name exactly as printed on your NIC.",
+      "Use a phone number and email you actively check — we'll send OTPs there.",
+      "Pick the occupation that best matches your current role; you can update later.",
+      "Double-check date of birth — it must match your NIC.",
+    ],
+  },
+  {
+    id: "video-kyc",
+    label: "Video KYC",
+    intro: "Your video recording is not clear. Please re-record your video ensuring:",
+    tips: [
+      "Your NIC is clearly visible",
+      "You clearly read out the generated verification code",
+    ],
+    footer: {
+      text: "If you are having trouble with your camera or recording your video during KYC, you can book an in-person appointment.",
+      link: { to: "/get-started", label: "Book an in-person appointment" },
+    },
+  },
+  {
+    id: "address-proof",
+    label: "Address Proof",
+    intro:
+      "The address proof must match your correspondence address. If the address proof is under the name of a family member (e.g. spouse, parent, child), please attach a copy of a birth certificate or marriage certificate as proof of relationship. Otherwise, re-upload a valid address proof under your name that:",
+    tips: [
+      "Is issued within the last 3 months",
+      "Clearly shows your name",
+      "Includes a visible date",
+      "Matches your correspondence address",
+    ],
+  },
+  {
+    id: "billing-proof",
+    label: "Billing Proof",
+    intro: "Please upload a document that:",
+    tips: [
+      "Is issued within the last 3 months",
+      "Clearly shows the bank name and logo",
+      "Shows your full name and full account number",
+      "Is not password-protected",
+    ],
+  },
+  {
+    id: "nic",
+    label: "NIC",
+    intro: "Your latest NIC record must be uploaded. Please upload one that is:",
+    tips: [
+      "Original, full-size unedited images",
+      "Readable, well-lit, coloured images",
+      "Not reflective or blurry",
+      "Placed on a solid colour background",
+    ],
+  },
+  {
+    id: "selfie",
+    label: "Selfie",
+    intro: "Please re-upload a professional selfie image.",
+    tips: [
+      "Look directly at the camera in upright posture",
+      "Show entire face, jawline, and forehead",
+      "No hats, sunglasses, or high-collared clothing",
+      "Good lighting and clear photo",
+    ],
+  },
+];
+
+function FormDifficultyPicker({
+  stepId,
+  setStepId,
+}: {
+  stepId: string;
+  setStepId: (v: string) => void;
+}) {
+  const step = FORM_STEPS.find((s) => s.id === stepId) ?? null;
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+      <p className="text-[13px] font-semibold text-foreground">Which step are you stuck on?</p>
+      <p className="mt-0.5 text-[11px] text-muted-foreground">
+        Pick a step and we'll show tips to help you get through it.
+      </p>
+      <div className="mt-2">
+        <SelectInput value={stepId} onChange={setStepId} placeholder="Select a step">
+          {FORM_STEPS.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.label}
+            </option>
+          ))}
+        </SelectInput>
+      </div>
+
+      {step && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <div className="flex items-center gap-1.5">
+            <Lightbulb className="h-3.5 w-3.5 text-primary" />
+            <p className="text-[12px] font-semibold text-foreground">{step.label} tips</p>
+          </div>
+          {step.intro && (
+            <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">{step.intro}</p>
+          )}
+          <ul className="mt-2 space-y-1.5">
+            {step.tips.map((t, i) => (
+              <li key={i} className="flex items-start gap-1.5">
+                <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-success" />
+                <span className="text-[11px] leading-relaxed text-foreground">{t}</span>
+              </li>
+            ))}
+          </ul>
+          {step.footer && (
+            <div className="mt-2.5 border-t border-border/40 pt-2">
+              <p className="text-[11px] leading-relaxed text-muted-foreground">{step.footer.text}</p>
+              {step.footer.link && (
+                <Link
+                  to={step.footer.link.to}
+                  className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+                >
+                  {step.footer.link.label}
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CreationPlanPicker({
+  stepId,
+  setStepId,
+}: {
+  stepId: string;
+  setStepId: (v: string) => void;
+}) {
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+      <p className="text-[13px] font-semibold text-foreground">What would you like to do?</p>
+      <div className="mt-2">
+        <SelectInput value={stepId} onChange={setStepId} placeholder="Pick an option">
+          <option value="cancel">Cancel my creation plan</option>
+          <option value="edit">Edit my creation plan</option>
+          <option value="not-executed">My plan didn't execute</option>
+        </SelectInput>
+      </div>
+
+      {stepId === "cancel" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <div className="flex items-center gap-1.5">
+            <Lightbulb className="h-3.5 w-3.5 text-primary" />
+            <p className="text-[12px] font-semibold text-foreground">You can cancel anytime</p>
+          </div>
+          <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
+            You can cancel the plan at any time from your portfolio. Plans cannot be edited — to
+            change the fund, amount, or date, cancel the current plan and create a new one.
+          </p>
+          <Link
+            to="/unit-trusts"
+            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+          >
+            Go to my plans
+          </Link>
+        </div>
+      )}
+
+      {stepId === "edit" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
+            Creation plans cannot be edited. To change the fund, amount, or date, cancel the current
+            plan and create a new one.
+          </p>
+          <Link
+            to="/unit-trusts"
+            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+          >
+            Manage my plans
+          </Link>
+        </div>
+      )}
+
+      {stepId === "not-executed" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
+            Most often it's due to insufficient balance on the cycle date. The plan retries
+            automatically the next business day.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
+
 function RecentTransactionsPicker({ subId, productId }: { subId: string; productId: string }) {
   const [selected, setSelected] = useState<string | null>(null);
   const txs = RECENT_TXS.filter((t) => !productId || t.product === productId);
