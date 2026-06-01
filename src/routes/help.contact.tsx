@@ -330,7 +330,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "fund-split",
-        label: "Fund split issue",
+        label: "Fund Flips",
         onlyProduct: "unit-trusts",
       },
       {
@@ -484,7 +484,6 @@ function ContactForm() {
   const [stepId, setStepId] = useState("");
 
   const [description, setDescription] = useState("");
-  const [accountNumber, setAccountNumber] = useState("CAL-00012345");
 
   // NIC form state
   const [nicNumber, setNicNumber] = useState("");
@@ -548,7 +547,6 @@ function ContactForm() {
   const hasQuickLinks = quickLinks.length > 0;
   const specialForm = sub?.specialForm;
   const resolveOnly = !!sub?.resolveOnly;
-  const needsAccount = categoryId === "investments-withdrawals";
   const needsProduct = !!category?.requiresProduct && !sub?.skipProduct;
   const productReady = !needsProduct || !!productId;
 
@@ -874,17 +872,6 @@ function ContactForm() {
                 </>
               ) : (
                 <>
-                  {needsAccount && (
-                    <Field label="Account number" error={errors.accountNumber}>
-                      <input
-                        value={accountNumber}
-                        onChange={(e) => setAccountNumber(e.target.value)}
-                        maxLength={40}
-                        className="w-full bg-transparent text-[12px] text-foreground outline-none"
-                      />
-                    </Field>
-                  )}
-
                   <Field label="Description" error={errors.description}>
                     <textarea
                       value={description}
