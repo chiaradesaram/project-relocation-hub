@@ -584,9 +584,6 @@ function ContactForm() {
 
       <div className="mx-4 mt-1 pb-6">
         <h2 className="text-sm font-semibold text-foreground">Tell us what's wrong</h2>
-        <p className="mb-4 text-[12px] text-muted-foreground">
-          Pick the closest match — we'll route your request to the right team.
-        </p>
 
         <div className="space-y-3">
           <Field label="Category" error={errors.categoryId}>
