@@ -484,7 +484,26 @@ function ContactForm() {
     [category, subId],
   );
 
-  const suggestions = sub?.suggestions ?? [];
+  let suggestions = sub?.suggestions ?? [];
+  if (sub?.id === "withdrawal-delay") {
+    if (productId === "unit-trusts") {
+      suggestions = [
+        {
+          q: "How long do redemptions take?",
+          a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days.",
+        },
+      ];
+    } else if (productId === "equities" || productId === "treasuries") {
+      suggestions = [
+        {
+          q: "How long do payouts take?",
+          a: "Equity and treasury payouts settle within the standard market cycle — typically T+3 business days after the trade or maturity date.",
+        },
+      ];
+    } else {
+      suggestions = [];
+    }
+  }
   const quickLinks = sub?.quickLinks ?? [];
   const hasSuggestions = suggestions.length > 0;
   const hasQuickLinks = quickLinks.length > 0;
@@ -492,6 +511,7 @@ function ContactForm() {
   const resolveOnly = !!sub?.resolveOnly;
   const needsAccount = categoryId === "investments-withdrawals";
   const needsProduct = !!category?.requiresProduct && !sub?.skipProduct;
+  const productReady = !needsProduct || !!productId;
 
   useEffect(() => {
     setSubId("");
@@ -680,7 +700,7 @@ function ContactForm() {
           )}
 
           {/* Smart suggestions */}
-          {sub && hasSuggestions && (!showForm || resolveOnly) && (
+          {sub && productReady && hasSuggestions && (!showForm || resolveOnly) && (
             <div className="rounded-xl border border-border/40 bg-card/60 p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
@@ -703,9 +723,10 @@ function ContactForm() {
 
           {/* Recent transactions picker for investment / withdrawal issues */}
           {sub &&
+            productReady &&
             (sub.id === "investment-not-reflected" || sub.id === "withdrawal-delay") &&
             !showForm && (
-              <RecentTransactionsPicker subId={sub.id} />
+              <RecentTransactionsPicker subId={sub.id} productId={productId} />
             )}
 
           {/* Continue to ticket */}
