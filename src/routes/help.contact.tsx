@@ -19,7 +19,16 @@ import {
   TrendingUp,
   Landmark,
   PiggyBank,
+  AlertTriangle,
+  Clock,
 } from "lucide-react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 type CategoryId =
   | "account-opening"
@@ -69,12 +78,39 @@ const CATEGORIES: Category[] = [
     team: "Onboarding Team",
     subs: [
       {
+        id: "open-account",
+        label: "How do I open an account?",
+        resolveOnly: true,
+        suggestions: [
+          {
+            q: "Where do I register?",
+            a: "You can register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (available on the Apple App Store and Google Play). If you prefer to apply in person, you can book an appointment through the provided link.",
+          },
+          {
+            q: "What documents do I need?",
+            a: "Your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
+          },
+          {
+            q: "How long does account opening take?",
+            a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Start application",
+            to: "/get-started",
+            description: "Begin your account opening online",
+            icon: Compass,
+          },
+        ],
+      },
+      {
         id: "track-application",
         label: "Track my application",
         suggestions: [
           {
             q: "How long does account opening take?",
-            a: "Most applications are reviewed within 1–2 business days. During high volumes and around public holidays, it can take a few extra days.",
+            a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
           },
           {
             q: "When should I raise a ticket?",
@@ -207,15 +243,9 @@ const CATEGORIES: Category[] = [
         ],
         quickLinks: [
           {
-            label: "Open equities (vStock)",
-            to: "/vstock",
-            description: "Place orders, see holdings and watchlists",
-            icon: TrendingUp,
-          },
-          {
-            label: "Equity learning hub",
+            label: "Investing in equities",
             to: "/learn",
-            description: "Market basics, order types and analysis tips",
+            description: "Beginner's guide to buying and selling shares",
             icon: BookOpen,
           },
         ],
@@ -265,8 +295,7 @@ const CATEGORIES: Category[] = [
         id: "investment-not-reflected",
         label: "Investment not reflected",
         suggestions: [
-          { q: "How long do bank transfers take?", a: "1–2 business days after we receive your proof of payment and funds clear." },
-          { q: "What proof is accepted?", a: "A clear screenshot or PDF of the receipt showing reference, amount and date." },
+          { q: "How long do bank transfers take?", a: "Investments show up 1 business day after the transfer is confirmed and the funds clear." },
         ],
       },
       {
@@ -274,7 +303,7 @@ const CATEGORIES: Category[] = [
         label: "Withdrawal / redemption delay",
         suggestions: [
           { q: "How long do redemptions take?", a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days." },
-          { q: "Is there a daily withdrawal limit?", a: "Instant redemptions are capped at LKR 100,000 per transaction, up to 5 times a day." },
+          { q: "How long do Payouts take?", a: "Equity and treasury payouts settle within the standard market cycle — typically T+3 business days after the trade or maturity date." },
         ],
       },
       {
@@ -680,7 +709,7 @@ function ContactForm() {
               onClick={() => setShowForm(true)}
               className="w-full rounded-xl bg-primary py-2.5 text-[12px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Still need help — continue to ticket
+              Still need help? Continue to ticket
             </button>
           )}
 
