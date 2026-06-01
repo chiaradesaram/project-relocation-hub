@@ -129,6 +129,11 @@ const CATEGORIES: Category[] = [
         ],
       },
       { id: "doc-rejected", label: "Document rejected" },
+      {
+        id: "form-difficulty",
+        label: "Difficulty filling up the form",
+        resolveOnly: true,
+      },
       { id: "other", label: "Other" },
     ],
   },
