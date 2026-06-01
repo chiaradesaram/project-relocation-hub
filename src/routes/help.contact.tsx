@@ -295,16 +295,15 @@ const CATEGORIES: Category[] = [
         id: "investment-not-reflected",
         label: "Investment not reflected",
         suggestions: [
-          { q: "How long do bank transfers take?", a: "Investments show up 1 business day after the transfer is confirmed and the funds clear." },
+          {
+            q: "How long does it take for funds to reflect on the portal?",
+            a: "Your investment becomes active on the creation date and reflects on your portal by the end of the next business day, once the transfer is confirmed.",
+          },
         ],
       },
       {
         id: "withdrawal-delay",
         label: "Withdrawal / redemption delay",
-        suggestions: [
-          { q: "How long do redemptions take?", a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days." },
-          { q: "How long do Payouts take?", a: "Equity and treasury payouts settle within the standard market cycle — typically T+3 business days after the trade or maturity date." },
-        ],
       },
       {
         id: "redemption-plan",
