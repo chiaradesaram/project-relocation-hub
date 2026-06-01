@@ -295,16 +295,15 @@ const CATEGORIES: Category[] = [
         id: "investment-not-reflected",
         label: "Investment not reflected",
         suggestions: [
-          { q: "How long do bank transfers take?", a: "Investments show up 1 business day after the transfer is confirmed and the funds clear." },
+          {
+            q: "How long does it take for funds to reflect on the portal?",
+            a: "Your investment becomes active on the creation date and reflects on your portal by the end of the next business day, once the transfer is confirmed.",
+          },
         ],
       },
       {
         id: "withdrawal-delay",
         label: "Withdrawal / redemption delay",
-        suggestions: [
-          { q: "How long do redemptions take?", a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days." },
-          { q: "How long do Payouts take?", a: "Equity and treasury payouts settle within the standard market cycle — typically T+3 business days after the trade or maturity date." },
-        ],
       },
       {
         id: "redemption-plan",
@@ -485,7 +484,26 @@ function ContactForm() {
     [category, subId],
   );
 
-  const suggestions = sub?.suggestions ?? [];
+  let suggestions = sub?.suggestions ?? [];
+  if (sub?.id === "withdrawal-delay") {
+    if (productId === "unit-trusts") {
+      suggestions = [
+        {
+          q: "How long do redemptions take?",
+          a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days.",
+        },
+      ];
+    } else if (productId === "equities" || productId === "treasuries") {
+      suggestions = [
+        {
+          q: "How long do payouts take?",
+          a: "Equity and treasury payouts settle within the standard market cycle — typically T+3 business days after the trade or maturity date.",
+        },
+      ];
+    } else {
+      suggestions = [];
+    }
+  }
   const quickLinks = sub?.quickLinks ?? [];
   const hasSuggestions = suggestions.length > 0;
   const hasQuickLinks = quickLinks.length > 0;
@@ -493,6 +511,7 @@ function ContactForm() {
   const resolveOnly = !!sub?.resolveOnly;
   const needsAccount = categoryId === "investments-withdrawals";
   const needsProduct = !!category?.requiresProduct && !sub?.skipProduct;
+  const productReady = !needsProduct || !!productId;
 
   useEffect(() => {
     setSubId("");
@@ -681,7 +700,7 @@ function ContactForm() {
           )}
 
           {/* Smart suggestions */}
-          {sub && hasSuggestions && (!showForm || resolveOnly) && (
+          {sub && productReady && hasSuggestions && (!showForm || resolveOnly) && (
             <div className="rounded-xl border border-border/40 bg-card/60 p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
@@ -704,9 +723,10 @@ function ContactForm() {
 
           {/* Recent transactions picker for investment / withdrawal issues */}
           {sub &&
+            productReady &&
             (sub.id === "investment-not-reflected" || sub.id === "withdrawal-delay") &&
             !showForm && (
-              <RecentTransactionsPicker subId={sub.id} />
+              <RecentTransactionsPicker subId={sub.id} productId={productId} />
             )}
 
           {/* Continue to ticket */}
@@ -949,13 +969,18 @@ function DeactivateForm({
 }
 
 const RECENT_TXS = [
-  { id: "tx1", name: "CAL Income Fund", kind: "Investment", date: "Apr 12, 2026", value: "LKR 60,000" },
-  { id: "tx2", name: "HNB.N0000", kind: "Pay Out", date: "Apr 2, 2026", value: "LKR 25,000" },
-  { id: "tx3", name: "Treasury Bond 5Y", kind: "Investment", date: "Mar 30, 2026", value: "LKR 500,000" },
+  { id: "tx1", name: "CAL Income Fund", product: "unit-trusts", kind: "Investment", date: "Apr 12, 2026", reflectDate: "Apr 15, 2026", value: "LKR 60,000" },
+  { id: "tx2", name: "CAL Money Market", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 11, 2026", value: "LKR 200,000" },
+  { id: "tx3", name: "HNB.N0000", product: "equities", kind: "Pay Out", date: "Apr 2, 2026", reflectDate: "Apr 7, 2026", value: "LKR 25,000" },
+  { id: "tx4", name: "JKH.N0000", product: "equities", kind: "Pay Out", date: "Mar 28, 2026", reflectDate: "Apr 1, 2026", value: "LKR 40,000" },
+  { id: "tx5", name: "Treasury Bond 5Y", product: "treasuries", kind: "Investment", date: "Mar 30, 2026", reflectDate: "Apr 2, 2026", value: "LKR 500,000" },
+  { id: "tx6", name: "Treasury Bill 91D", product: "treasuries", kind: "Maturity", date: "Mar 25, 2026", reflectDate: "Mar 30, 2026", value: "LKR 105,000" },
 ];
 
-function RecentTransactionsPicker({ subId }: { subId: string }) {
+function RecentTransactionsPicker({ subId, productId }: { subId: string; productId: string }) {
   const [selected, setSelected] = useState<string | null>(null);
+  const txs = RECENT_TXS.filter((t) => !productId || t.product === productId);
+  const selectedTx = txs.find((t) => t.id === selected) ?? null;
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
       <p className="text-[13px] font-semibold text-foreground">
@@ -965,7 +990,7 @@ function RecentTransactionsPicker({ subId }: { subId: string }) {
         Pick the one you have a question about.
       </p>
       <div className="mt-2 space-y-1.5">
-        {RECENT_TXS.map((tx) => {
+        {txs.map((tx) => {
           const active = selected === tx.id;
           return (
             <button
@@ -990,17 +1015,39 @@ function RecentTransactionsPicker({ subId }: { subId: string }) {
             </button>
           );
         })}
+        {txs.length === 0 && (
+          <p className="text-[11px] text-muted-foreground">
+            No recent transactions for this product.
+          </p>
+        )}
       </div>
 
-      {selected && subId === "investment-not-reflected" && (
+      {selectedTx && subId === "investment-not-reflected" && (
         <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
-          <div className="flex items-start gap-2">
-            <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
-            <p className="text-[11px] leading-relaxed text-foreground">
-              Investments will show up 1 business day after the transfer is confirmed.
-            </p>
+          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Your estimated investment timeline
+          </p>
+          <div className="mt-2 space-y-2">
+            <div className="flex items-start gap-2">
+              <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
+              <div>
+                <p className="text-[11px] font-medium text-foreground">
+                  Creation date — {selectedTx.date}
+                </p>
+                <p className="text-[10px] leading-relaxed text-muted-foreground">
+                  This is the date your investment becomes active.
+                </p>
+              </div>
+            </div>
+            <div className="flex items-start gap-2">
+              <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />
+              <p className="text-[11px] leading-relaxed text-foreground">
+                Your investment will be reflected on your portal — by the end of{" "}
+                <span className="font-medium">{selectedTx.reflectDate}</span>
+              </p>
+            </div>
           </div>
-          <div className="mt-2 border-t border-border/40 pt-2">
+          <div className="mt-3 border-t border-border/40 pt-2">
             <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               A few tips
             </p>
