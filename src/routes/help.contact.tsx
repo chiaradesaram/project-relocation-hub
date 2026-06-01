@@ -692,7 +692,9 @@ function ContactForm() {
           {category && (
             <Field label="What best describes it?" error={errors.subId}>
               <SelectInput value={subId} onChange={setSubId} placeholder="Pick the closest match">
-                {category.subs.map((s) => (
+                {category.subs
+                  .filter((s) => !s.onlyProduct || !productId || s.onlyProduct === productId)
+                  .map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.label}
                   </option>
