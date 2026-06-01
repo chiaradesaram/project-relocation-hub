@@ -6,7 +6,6 @@ import {
   ChevronDown,
   ChevronRight,
   FileText,
-  Building2,
   TrendingUp,
   Repeat,
   MessageCircle,
