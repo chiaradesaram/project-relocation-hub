@@ -11,8 +11,6 @@ import {
   MessageCircle,
   Shield,
   Wallet,
-  ArrowUpRight,
-  ArrowDownLeft,
   X,
   ArrowLeft,
 } from "lucide-react";
