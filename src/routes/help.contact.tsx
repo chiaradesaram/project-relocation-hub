@@ -60,6 +60,8 @@ interface Sub {
   resolveOnly?: boolean;
   /** Skip the product picker even if the parent category requires it. */
   skipProduct?: boolean;
+  /** Restrict this sub to a specific product. Hidden when another product is picked. */
+  onlyProduct?: string;
 }
 
 interface Category {
@@ -127,6 +129,11 @@ const CATEGORIES: Category[] = [
         ],
       },
       { id: "doc-rejected", label: "Document rejected" },
+      {
+        id: "form-difficulty",
+        label: "Difficulty filling up the form",
+        resolveOnly: true,
+      },
       { id: "other", label: "Other" },
     ],
   },
@@ -197,15 +204,23 @@ const CATEGORIES: Category[] = [
         suggestions: [
           {
             q: "What is a unit trust?",
-            a: "A pooled fund managed by professionals — your money is invested across many securities, so you get diversification without picking individual stocks or bonds.",
+            a: "A unit trust is a pooled investment where money from many investors is combined and invested in assets like government securities, corporate debt, deposits, and shares. You receive units based on your investment, and returns are shared accordingly.",
           },
           {
-            q: "How are returns paid?",
-            a: "Most CAL unit trusts reinvest daily, so your unit price grows. You realise gains when you redeem units.",
+            q: "How do I open a Unit Trust account?",
+            a: "Register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (Apple App Store / Google Play). If you prefer to apply in person, you can book an appointment. You'll need your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
           },
           {
-            q: "What are the fees?",
-            a: "A management fee is built into the daily NAV — there are no hidden entry, exit or transaction fees on the app.",
+            q: "How long does it take to process a new unit trust application?",
+            a: "Once you submit your application through the portal with all required documents, processing typically takes 3–5 working days. Times may be slightly longer during high-volume periods. You can track the status of your application directly through the portal.",
+          },
+          {
+            q: "What can I do once my unit trust account is active?",
+            a: "View your portfolio and balances, invest in Unit Trust funds, set up recurring investments, create redemption plans, track performance, and request account statements — plus more features to help you manage your investments easily.",
+          },
+          {
+            q: "How do I invest money into a unit trust fund?",
+            a: "Bank transfer: Transfer funds to the CAL Unit Trust account (Deutsche Bank AG, Colombo, Capital Alliance Investments Limited, Account No: 0046797000). Use your registered bank account, then log in and submit a creation request. JustPay: Link your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
           },
         ],
         quickLinks: [
@@ -229,16 +244,24 @@ const CATEGORIES: Category[] = [
         resolveOnly: true,
         suggestions: [
           {
-            q: "How do I buy or sell shares?",
-            a: "Place orders through CAL Online (vStock). Orders are routed to the CSE during market hours (9:30am–2:30pm, Mon–Fri).",
+            q: "What is equity?",
+            a: "Equity means ownership in a company. When you own equity (shares/stocks), you have rights like voting on company decisions and receiving a share of the company's profits (dividends).",
           },
           {
-            q: "When do trades settle?",
-            a: "CSE follows T+3 settlement — funds and shares move three business days after the trade date.",
+            q: "What are the benefits for CAL equities clients?",
+            a: "Track your portfolio via the CAL Online app, trade using the Atrad app, access AnalytiCAL (research portal with data on all CSE-listed companies, valuation ratios, and real-time metrics), access to research reports, webinars, and join a WhatsApp group for market updates. Get custom analytics and alerts tailored for you on your portfolio performance.",
           },
           {
-            q: "Are there brokerage fees?",
-            a: "Yes, standard CSE brokerage and statutory levies apply on every trade. Full breakdown is shown on the order confirmation.",
+            q: "What is the minimum investment amount for an equities account?",
+            a: "Self-trading account (internet trading only): minimum LKR 100,000. Account with advisor support on your trades: minimum LKR 5,000,000.",
+          },
+          {
+            q: "How do I transfer funds into my equities account?",
+            a: "Bank transfer (no limit): Transfer to the CAL Seylan Bank account (Millennium branch, Capital Alliance Securities Pvt Ltd, Account No: 086400041489001). Use your registered bank account, then go to Pay In on the portal and submit a request. JustPay: Link your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable anytime.",
+          },
+          {
+            q: "What are the fees involved with Equity Trading?",
+            a: "Brokerage fee: 0.64%. Total transaction cost: 1.12%, including CSE fees (0.084%), CDS fees (0.024%), SEC cess (0.072%), and Share Transaction Levy (0.300%).",
           },
         ],
         quickLinks: [
@@ -306,6 +329,11 @@ const CATEGORIES: Category[] = [
         label: "Withdrawal / redemption delay",
       },
       {
+        id: "fund-split",
+        label: "Fund split issue",
+        onlyProduct: "unit-trusts",
+      },
+      {
         id: "redemption-plan",
         label: "Redemption plan issue",
         skipProduct: true,
@@ -317,9 +345,7 @@ const CATEGORIES: Category[] = [
         id: "creation-plan",
         label: "Creation plan issue",
         skipProduct: true,
-        suggestions: [
-          { q: "Why didn't my creation plan execute?", a: "Most often it's due to insufficient balance on the cycle date. The plan retries automatically the next business day." },
-        ],
+        resolveOnly: true,
       },
       { id: "other", label: "Other" },
     ],
@@ -455,6 +481,7 @@ function ContactForm() {
   const [subId, setSubId] = useState("");
   const [productId, setProductId] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [stepId, setStepId] = useState("");
 
   const [description, setDescription] = useState("");
   const [accountNumber, setAccountNumber] = useState("CAL-00012345");
@@ -485,12 +512,24 @@ function ContactForm() {
   );
 
   let suggestions = sub?.suggestions ?? [];
+  if (sub?.id === "investment-not-reflected" && productId === "unit-trusts") {
+    suggestions = [
+      {
+        q: "How long does it take for my unit trust investment to be processed?",
+        a: "Requests before 9:00 AM are processed the same working day and reflect on the portal by the next working day. After 9:00 AM, processing starts the next working day and reflects on the portal by 2 working days. Equity-based funds may take an additional day.",
+      },
+    ];
+  }
   if (sub?.id === "withdrawal-delay") {
     if (productId === "unit-trusts") {
       suggestions = [
         {
-          q: "How long do redemptions take?",
-          a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days.",
+          q: "How do I redeem money from my unit trust funds?",
+          a: "Log in to the CAL portal or mobile app and submit a redemption request. Requests made before 9:00 AM are processed the same working day; after 9:00 AM, the next working day. Redemptions are processed on weekdays only (excluding Poya, Mercantile, and Bank holidays), and funds are credited to your registered bank account.",
+        },
+        {
+          q: "Instant Redemption",
+          a: "You can redeem up to LKR 100,000 instantly at any time via the CAL app, including weekends and holidays. Available for the Investment Grade Fund and Fixed Income Opportunities Fund.",
         },
       ];
     } else if (productId === "equities" || productId === "treasuries") {
@@ -517,10 +556,12 @@ function ContactForm() {
     setSubId("");
     setProductId("");
     setShowForm(false);
+    setStepId("");
   }, [categoryId]);
 
   useEffect(() => {
     setShowForm(false);
+    setStepId("");
   }, [subId]);
 
   function submitForm() {
@@ -651,7 +692,9 @@ function ContactForm() {
           {category && (
             <Field label="What best describes it?" error={errors.subId}>
               <SelectInput value={subId} onChange={setSubId} placeholder="Pick the closest match">
-                {category.subs.map((s) => (
+                {category.subs
+                  .filter((s) => !s.onlyProduct || !productId || s.onlyProduct === productId)
+                  .map((s) => (
                   <option key={s.id} value={s.id}>
                     {s.label}
                   </option>
@@ -724,10 +767,20 @@ function ContactForm() {
           {/* Recent transactions picker for investment / withdrawal issues */}
           {sub &&
             productReady &&
-            (sub.id === "investment-not-reflected" || sub.id === "withdrawal-delay") &&
+            (sub.id === "investment-not-reflected" ||
+              sub.id === "withdrawal-delay" ||
+              sub.id === "fund-split") &&
             !showForm && (
               <RecentTransactionsPicker subId={sub.id} productId={productId} />
             )}
+
+          {sub?.id === "form-difficulty" && (
+            <FormDifficultyPicker stepId={stepId} setStepId={setStepId} />
+          )}
+
+          {sub?.id === "creation-plan" && (
+            <CreationPlanPicker stepId={stepId} setStepId={setStepId} />
+          )}
 
           {/* Continue to ticket */}
           {sub && !resolveOnly && !showForm && (hasSuggestions || hasQuickLinks) && (
@@ -976,6 +1029,202 @@ const RECENT_TXS = [
   { id: "tx5", name: "Treasury Bond 5Y", product: "treasuries", kind: "Investment", date: "Mar 30, 2026", reflectDate: "Apr 2, 2026", value: "LKR 500,000" },
   { id: "tx6", name: "Treasury Bill 91D", product: "treasuries", kind: "Maturity", date: "Mar 25, 2026", reflectDate: "Mar 30, 2026", value: "LKR 105,000" },
 ];
+
+const FORM_STEPS: { id: string; label: string; tips: string[]; intro?: string; footer?: { text: string; link?: { to: string; label: string } } }[] = [
+  {
+    id: "personal-details",
+    label: "Personal details",
+    intro: "Follow this guide to fill in your personal details correctly.",
+    tips: [
+      "Enter your full name exactly as printed on your NIC.",
+      "Use a phone number and email you actively check — we'll send OTPs there.",
+      "Pick the occupation that best matches your current role; you can update later.",
+      "Double-check date of birth — it must match your NIC.",
+    ],
+  },
+  {
+    id: "video-kyc",
+    label: "Video KYC",
+    intro: "Your video recording is not clear. Please re-record your video ensuring:",
+    tips: [
+      "Your NIC is clearly visible",
+      "You clearly read out the generated verification code",
+    ],
+    footer: {
+      text: "If you are having trouble with your camera or recording your video during KYC, you can book an in-person appointment.",
+      link: { to: "/get-started", label: "Book an in-person appointment" },
+    },
+  },
+  {
+    id: "address-proof",
+    label: "Address Proof",
+    intro:
+      "The address proof must match your correspondence address. If the address proof is under the name of a family member (e.g. spouse, parent, child), please attach a copy of a birth certificate or marriage certificate as proof of relationship. Otherwise, re-upload a valid address proof under your name that:",
+    tips: [
+      "Is issued within the last 3 months",
+      "Clearly shows your name",
+      "Includes a visible date",
+      "Matches your correspondence address",
+    ],
+  },
+  {
+    id: "billing-proof",
+    label: "Billing Proof",
+    intro: "Please upload a document that:",
+    tips: [
+      "Is issued within the last 3 months",
+      "Clearly shows the bank name and logo",
+      "Shows your full name and full account number",
+      "Is not password-protected",
+    ],
+  },
+  {
+    id: "nic",
+    label: "NIC",
+    intro: "Your latest NIC record must be uploaded. Please upload one that is:",
+    tips: [
+      "Original, full-size unedited images",
+      "Readable, well-lit, coloured images",
+      "Not reflective or blurry",
+      "Placed on a solid colour background",
+    ],
+  },
+  {
+    id: "selfie",
+    label: "Selfie",
+    intro: "Please re-upload a professional selfie image.",
+    tips: [
+      "Look directly at the camera in upright posture",
+      "Show entire face, jawline, and forehead",
+      "No hats, sunglasses, or high-collared clothing",
+      "Good lighting and clear photo",
+    ],
+  },
+];
+
+function FormDifficultyPicker({
+  stepId,
+  setStepId,
+}: {
+  stepId: string;
+  setStepId: (v: string) => void;
+}) {
+  const step = FORM_STEPS.find((s) => s.id === stepId) ?? null;
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+      <p className="text-[13px] font-semibold text-foreground">Which step are you stuck on?</p>
+      <p className="mt-0.5 text-[11px] text-muted-foreground">
+        Pick a step and we'll show tips to help you get through it.
+      </p>
+      <div className="mt-2">
+        <SelectInput value={stepId} onChange={setStepId} placeholder="Select a step">
+          {FORM_STEPS.map((s) => (
+            <option key={s.id} value={s.id}>
+              {s.label}
+            </option>
+          ))}
+        </SelectInput>
+      </div>
+
+      {step && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <div className="flex items-center gap-1.5">
+            <Lightbulb className="h-3.5 w-3.5 text-primary" />
+            <p className="text-[12px] font-semibold text-foreground">{step.label} tips</p>
+          </div>
+          {step.intro && (
+            <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">{step.intro}</p>
+          )}
+          <ul className="mt-2 space-y-1.5">
+            {step.tips.map((t, i) => (
+              <li key={i} className="flex items-start gap-1.5">
+                <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-success" />
+                <span className="text-[11px] leading-relaxed text-foreground">{t}</span>
+              </li>
+            ))}
+          </ul>
+          {step.footer && (
+            <div className="mt-2.5 border-t border-border/40 pt-2">
+              <p className="text-[11px] leading-relaxed text-muted-foreground">{step.footer.text}</p>
+              {step.footer.link && (
+                <Link
+                  to={step.footer.link.to}
+                  className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+                >
+                  {step.footer.link.label}
+                </Link>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function CreationPlanPicker({
+  stepId,
+  setStepId,
+}: {
+  stepId: string;
+  setStepId: (v: string) => void;
+}) {
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+      <p className="text-[13px] font-semibold text-foreground">What would you like to do?</p>
+      <div className="mt-2">
+        <SelectInput value={stepId} onChange={setStepId} placeholder="Pick an option">
+          <option value="cancel">Cancel my creation plan</option>
+          <option value="edit">Edit my creation plan</option>
+          <option value="not-executed">My plan didn't execute</option>
+        </SelectInput>
+      </div>
+
+      {stepId === "cancel" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <div className="flex items-center gap-1.5">
+            <Lightbulb className="h-3.5 w-3.5 text-primary" />
+            <p className="text-[12px] font-semibold text-foreground">You can cancel anytime</p>
+          </div>
+          <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
+            You can cancel the plan at any time from your portfolio. Plans cannot be edited — to
+            change the fund, amount, or date, cancel the current plan and create a new one.
+          </p>
+          <Link
+            to="/unit-trusts"
+            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+          >
+            Go to my plans
+          </Link>
+        </div>
+      )}
+
+      {stepId === "edit" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
+            Creation plans cannot be edited. To change the fund, amount, or date, cancel the current
+            plan and create a new one.
+          </p>
+          <Link
+            to="/unit-trusts"
+            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+          >
+            Manage my plans
+          </Link>
+        </div>
+      )}
+
+      {stepId === "not-executed" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <p className="text-[11px] leading-relaxed text-muted-foreground">
+            Most often it's due to insufficient balance on the cycle date. The plan retries
+            automatically the next business day.
+          </p>
+        </div>
+      )}
+    </div>
+  );
+}
 
 function RecentTransactionsPicker({ subId, productId }: { subId: string; productId: string }) {
   const [selected, setSelected] = useState<string | null>(null);
