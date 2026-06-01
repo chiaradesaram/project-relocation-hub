@@ -481,6 +481,7 @@ function ContactForm() {
   const [subId, setSubId] = useState("");
   const [productId, setProductId] = useState("");
   const [showForm, setShowForm] = useState(false);
+  const [stepId, setStepId] = useState("");
 
   const [description, setDescription] = useState("");
   const [accountNumber, setAccountNumber] = useState("CAL-00012345");
@@ -511,12 +512,24 @@ function ContactForm() {
   );
 
   let suggestions = sub?.suggestions ?? [];
+  if (sub?.id === "investment-not-reflected" && productId === "unit-trusts") {
+    suggestions = [
+      {
+        q: "How long does it take for my unit trust investment to be processed?",
+        a: "Requests before 9:00 AM are processed the same working day and reflect on the portal by the next working day. After 9:00 AM, processing starts the next working day and reflects on the portal by 2 working days. Equity-based funds may take an additional day.",
+      },
+    ];
+  }
   if (sub?.id === "withdrawal-delay") {
     if (productId === "unit-trusts") {
       suggestions = [
         {
-          q: "How long do redemptions take?",
-          a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days.",
+          q: "How do I redeem money from my unit trust funds?",
+          a: "Log in to the CAL portal or mobile app and submit a redemption request. Requests made before 9:00 AM are processed the same working day; after 9:00 AM, the next working day. Redemptions are processed on weekdays only (excluding Poya, Mercantile, and Bank holidays), and funds are credited to your registered bank account.",
+        },
+        {
+          q: "Instant Redemption",
+          a: "You can redeem up to LKR 100,000 instantly at any time via the CAL app, including weekends and holidays. Available for the Investment Grade Fund and Fixed Income Opportunities Fund.",
         },
       ];
     } else if (productId === "equities" || productId === "treasuries") {
@@ -543,10 +556,12 @@ function ContactForm() {
     setSubId("");
     setProductId("");
     setShowForm(false);
+    setStepId("");
   }, [categoryId]);
 
   useEffect(() => {
     setShowForm(false);
+    setStepId("");
   }, [subId]);
 
   function submitForm() {
