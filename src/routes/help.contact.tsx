@@ -642,7 +642,7 @@ function ContactForm() {
           )}
 
           {sub && needsProduct && (
-            <Field label="Which product?" error={errors.product}>
+            <Field label="Product" error={errors.product}>
               <SelectInput value={productId} onChange={setProductId} placeholder="Select a product">
                 {PRODUCTS.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -701,6 +701,13 @@ function ContactForm() {
               </div>
             </div>
           )}
+
+          {/* Recent transactions picker for investment / withdrawal issues */}
+          {sub &&
+            (sub.id === "investment-not-reflected" || sub.id === "withdrawal-delay") &&
+            !showForm && (
+              <RecentTransactionsPicker subId={sub.id} />
+            )}
 
           {/* Continue to ticket */}
           {sub && !resolveOnly && !showForm && (hasSuggestions || hasQuickLinks) && (
