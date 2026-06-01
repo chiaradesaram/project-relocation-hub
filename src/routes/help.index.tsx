@@ -11,6 +11,8 @@ import {
   MessageCircle,
   Shield,
   Wallet,
+  Landmark,
+  RotateCcw,
   X,
   ArrowLeft,
 } from "lucide-react";
@@ -43,6 +45,13 @@ const FAQS: FAQItem[] = [
   { topic: "account", q: "How do I update my profile?", a: "Go to Profile from the More menu to update your contact details and preferences." },
   { topic: "account", q: "Is my money safe?", a: "All investments are held in regulated CAL custody accounts and overseen by the SEC of Sri Lanka." },
   { topic: "account", q: "How do I add a bank account?", a: "Go to Bank Accounts from the More menu and tap Add. New accounts are verified within 1 business day.", featured: true },
+];
+
+const QUICK_LINKS: { label: string; to: string; icon: typeof FileText }[] = [
+  { label: "Add a bank account", to: "/bank-accounts", icon: Landmark },
+  { label: "See fund rates", to: "/rates", icon: TrendingUp },
+  { label: "Set a recurring investment", to: "/invest", icon: RotateCcw },
+  { label: "Download a statement", to: "/transactions", icon: FileText },
 ];
 
 const TOPIC_SECTIONS: {
@@ -215,6 +224,22 @@ function HelpIndexPage() {
             </div>
           ) : (
             <>
+              {/* Quick links */}
+              <div className="mx-5 mb-6 grid grid-cols-2 gap-3">
+                {QUICK_LINKS.map(({ label, to, icon: Icon }) => (
+                  <Link
+                    key={label}
+                    to={to}
+                    className="flex items-center gap-3 rounded-2xl border border-border/40 bg-card/40 p-3.5 hover:bg-card/60 transition-colors"
+                  >
+                    <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                      <Icon className="w-4 h-4 text-primary" />
+                    </div>
+                    <span className="text-[13px] font-medium text-foreground leading-snug">{label}</span>
+                  </Link>
+                ))}
+              </div>
+
               {/* Explore all topics */}
               <div className="mx-5 mb-6">
                 <p className="text-[14px] font-medium text-foreground mb-3">Explore all topics</p>
