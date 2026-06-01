@@ -19,7 +19,16 @@ import {
   TrendingUp,
   Landmark,
   PiggyBank,
+  AlertTriangle,
+  Clock,
 } from "lucide-react";
+import {
+  Drawer,
+  DrawerContent,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
 
 type CategoryId =
   | "account-opening"
@@ -69,12 +78,39 @@ const CATEGORIES: Category[] = [
     team: "Onboarding Team",
     subs: [
       {
+        id: "open-account",
+        label: "How do I open an account?",
+        resolveOnly: true,
+        suggestions: [
+          {
+            q: "Where do I register?",
+            a: "You can register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (available on the Apple App Store and Google Play). If you prefer to apply in person, you can book an appointment through the provided link.",
+          },
+          {
+            q: "What documents do I need?",
+            a: "Your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
+          },
+          {
+            q: "How long does account opening take?",
+            a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
+          },
+        ],
+        quickLinks: [
+          {
+            label: "Start application",
+            to: "/get-started",
+            description: "Begin your account opening online",
+            icon: Compass,
+          },
+        ],
+      },
+      {
         id: "track-application",
         label: "Track my application",
         suggestions: [
           {
             q: "How long does account opening take?",
-            a: "Most applications are reviewed within 1–2 business days. During high volumes and around public holidays, it can take a few extra days.",
+            a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
           },
           {
             q: "When should I raise a ticket?",
@@ -207,15 +243,9 @@ const CATEGORIES: Category[] = [
         ],
         quickLinks: [
           {
-            label: "Open equities (vStock)",
-            to: "/vstock",
-            description: "Place orders, see holdings and watchlists",
-            icon: TrendingUp,
-          },
-          {
-            label: "Equity learning hub",
+            label: "Investing in equities",
             to: "/learn",
-            description: "Market basics, order types and analysis tips",
+            description: "Beginner's guide to buying and selling shares",
             icon: BookOpen,
           },
         ],
@@ -265,8 +295,7 @@ const CATEGORIES: Category[] = [
         id: "investment-not-reflected",
         label: "Investment not reflected",
         suggestions: [
-          { q: "How long do bank transfers take?", a: "1–2 business days after we receive your proof of payment and funds clear." },
-          { q: "What proof is accepted?", a: "A clear screenshot or PDF of the receipt showing reference, amount and date." },
+          { q: "How long do bank transfers take?", a: "Investments show up 1 business day after the transfer is confirmed and the funds clear." },
         ],
       },
       {
@@ -274,7 +303,7 @@ const CATEGORIES: Category[] = [
         label: "Withdrawal / redemption delay",
         suggestions: [
           { q: "How long do redemptions take?", a: "Instant redemptions credit within minutes; normal redemptions take 1–3 business days." },
-          { q: "Is there a daily withdrawal limit?", a: "Instant redemptions are capped at LKR 100,000 per transaction, up to 5 times a day." },
+          { q: "How long do Payouts take?", a: "Equity and treasury payouts settle within the standard market cycle — typically T+3 business days after the trade or maturity date." },
         ],
       },
       {
@@ -613,7 +642,7 @@ function ContactForm() {
           )}
 
           {sub && needsProduct && (
-            <Field label="Which product?" error={errors.product}>
+            <Field label="Product" error={errors.product}>
               <SelectInput value={productId} onChange={setProductId} placeholder="Select a product">
                 {PRODUCTS.map((p) => (
                   <option key={p.id} value={p.id}>
@@ -673,6 +702,13 @@ function ContactForm() {
             </div>
           )}
 
+          {/* Recent transactions picker for investment / withdrawal issues */}
+          {sub &&
+            (sub.id === "investment-not-reflected" || sub.id === "withdrawal-delay") &&
+            !showForm && (
+              <RecentTransactionsPicker subId={sub.id} />
+            )}
+
           {/* Continue to ticket */}
           {sub && !resolveOnly && !showForm && (hasSuggestions || hasQuickLinks) && (
             <button
@@ -680,7 +716,7 @@ function ContactForm() {
               onClick={() => setShowForm(true)}
               className="w-full rounded-xl bg-primary py-2.5 text-[12px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
             >
-              Still need help — continue to ticket
+              Still need help? Continue to ticket
             </button>
           )}
 
@@ -844,24 +880,10 @@ function DeactivateForm({
   errors: Record<string, string>;
   onSubmit: () => void;
 }) {
+  const [blocked, setBlocked] = useState(false);
   return (
     <>
-      <div className="rounded-xl border border-border/40 bg-card/60 p-3">
-        <p className="text-[12px] font-medium text-foreground">Before you go…</p>
-        <p className="mt-0.5 text-[11px] leading-relaxed text-muted-foreground">
-          If something specific is bothering you, we'd love a chance to fix it. Many things —
-          notification noise, KYC issues, withdrawal speed — can be resolved in minutes.
-        </p>
-        <Link
-          to="/settings/notifications"
-          className="mt-2 inline-flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
-        >
-          Manage notifications instead
-          <ChevronRight className="h-3 w-3" />
-        </Link>
-      </div>
-
-      <Field label="Why are you leaving?" error={errors.reason}>
+      <Field label="Before you go…" error={errors.reason}>
         <textarea
           value={reason}
           onChange={(e) => setReason(e.target.value)}
@@ -882,15 +904,144 @@ function DeactivateForm({
         />
       </Field>
 
+      {blocked && (
+        <div className="rounded-xl border border-warning/40 bg-warning/10 p-3">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
+            <div className="flex-1">
+              <p className="text-[12px] font-semibold text-foreground">
+                We can't deactivate your profile right now
+              </p>
+              <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+                You've made a transaction within the last 6 years, so we're required to keep your
+                profile active. If this was for security reasons, we suggest you change your
+                password. If you'd like, you can contact us for further help.
+              </p>
+              <div className="mt-2 flex flex-wrap gap-2">
+                <Link
+                  to="/settings"
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+                >
+                  Change password
+                </Link>
+                <Link
+                  to="/help/contact"
+                  className="inline-flex items-center gap-1 rounded-lg border border-border/50 px-2.5 py-1 text-[11px] font-medium text-foreground hover:bg-muted/30"
+                >
+                  Contact us
+                </Link>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       <button
         type="button"
-        onClick={onSubmit}
+        onClick={() => setBlocked(true)}
         disabled={confirm !== "DEACTIVATE"}
         className="w-full rounded-xl bg-destructive py-3 text-[13px] font-medium text-destructive-foreground transition-colors hover:bg-destructive/90 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Submit deactivation request
       </button>
     </>
+  );
+}
+
+const RECENT_TXS = [
+  { id: "tx1", name: "CAL Income Fund", kind: "Investment", date: "Apr 12, 2026", value: "LKR 60,000" },
+  { id: "tx2", name: "HNB.N0000", kind: "Pay Out", date: "Apr 2, 2026", value: "LKR 25,000" },
+  { id: "tx3", name: "Treasury Bond 5Y", kind: "Investment", date: "Mar 30, 2026", value: "LKR 500,000" },
+];
+
+function RecentTransactionsPicker({ subId }: { subId: string }) {
+  const [selected, setSelected] = useState<string | null>(null);
+  return (
+    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+      <p className="text-[13px] font-semibold text-foreground">
+        Which transaction are you referring to?
+      </p>
+      <p className="mt-0.5 text-[11px] text-muted-foreground">
+        Pick the one you have a question about.
+      </p>
+      <div className="mt-2 space-y-1.5">
+        {RECENT_TXS.map((tx) => {
+          const active = selected === tx.id;
+          return (
+            <button
+              key={tx.id}
+              type="button"
+              onClick={() => setSelected(tx.id)}
+              className={`w-full rounded-lg border p-2.5 text-left transition-colors ${
+                active
+                  ? "border-primary/50 bg-primary/10"
+                  : "border-border/40 bg-muted/20 hover:bg-muted/30"
+              }`}
+            >
+              <div className="flex items-center justify-between gap-2">
+                <div className="min-w-0">
+                  <p className="truncate text-[12px] font-medium text-foreground">{tx.name}</p>
+                  <p className="text-[10px] text-muted-foreground">
+                    {tx.kind} · {tx.date}
+                  </p>
+                </div>
+                <span className="shrink-0 text-[11px] font-medium text-foreground">{tx.value}</span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {selected && subId === "investment-not-reflected" && (
+        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
+          <div className="flex items-start gap-2">
+            <Clock className="h-3.5 w-3.5 shrink-0 text-primary" />
+            <p className="text-[11px] leading-relaxed text-foreground">
+              Investments will show up 1 business day after the transfer is confirmed.
+            </p>
+          </div>
+          <div className="mt-2 border-t border-border/40 pt-2">
+            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+              A few tips
+            </p>
+            <div className="mt-1.5">
+              <Drawer>
+                <DrawerTrigger asChild>
+                  <button
+                    type="button"
+                    className="flex w-full items-center justify-between gap-2 rounded-md bg-card/60 px-2.5 py-2 text-left hover:bg-card/80"
+                  >
+                    <span className="text-[11px] text-foreground">
+                      Did you transfer using a registered bank account?
+                    </span>
+                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                  </button>
+                </DrawerTrigger>
+                <DrawerContent>
+                  <DrawerHeader>
+                    <DrawerTitle>Registered bank accounts</DrawerTitle>
+                  </DrawerHeader>
+                  <div className="px-4 pb-6">
+                    <p className="text-[12px] leading-relaxed text-muted-foreground">
+                      Investments only reflect when the transfer comes from a bank account you've
+                      registered with CAL. Check your linked accounts and add the one you used if
+                      it's missing.
+                    </p>
+                    <Link
+                      to="/bank-accounts"
+                      className="mt-3 flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-2.5 text-[12px] font-medium text-primary-foreground hover:bg-primary/90"
+                    >
+                      <CreditCard className="h-4 w-4" />
+                      View bank accounts
+                    </Link>
+                  </div>
+                </DrawerContent>
+              </Drawer>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
 
