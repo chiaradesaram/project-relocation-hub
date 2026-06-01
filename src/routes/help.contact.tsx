@@ -329,6 +329,11 @@ const CATEGORIES: Category[] = [
         label: "Withdrawal / redemption delay",
       },
       {
+        id: "fund-split",
+        label: "Fund split issue",
+        onlyProduct: "unit-trusts",
+      },
+      {
         id: "redemption-plan",
         label: "Redemption plan issue",
         skipProduct: true,
@@ -340,9 +345,7 @@ const CATEGORIES: Category[] = [
         id: "creation-plan",
         label: "Creation plan issue",
         skipProduct: true,
-        suggestions: [
-          { q: "Why didn't my creation plan execute?", a: "Most often it's due to insufficient balance on the cycle date. The plan retries automatically the next business day." },
-        ],
+        resolveOnly: true,
       },
       { id: "other", label: "Other" },
     ],
