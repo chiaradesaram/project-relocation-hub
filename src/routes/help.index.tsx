@@ -225,19 +225,24 @@ function HelpIndexPage() {
           ) : (
             <>
               {/* Quick links */}
-              <div className="mx-5 mb-6 grid grid-cols-2 gap-3">
-                {QUICK_LINKS.map(({ label, to, icon: Icon }) => (
-                  <Link
-                    key={label}
-                    to={to}
-                    className="flex items-center gap-3 rounded-2xl border border-border/40 bg-card/40 p-3.5 hover:bg-card/60 transition-colors"
-                  >
-                    <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                      <Icon className="w-4 h-4 text-primary" />
-                    </div>
-                    <span className="text-[13px] font-medium text-foreground leading-snug">{label}</span>
-                  </Link>
-                ))}
+              <div className="mx-5 mb-6">
+                <p className="text-[14px] font-medium text-foreground mb-3">Quick links</p>
+                <div className="h-px bg-border/40 mb-1" />
+                <div className="divide-y divide-border/30">
+                  {QUICK_LINKS.map(({ label, to, icon: Icon }) => (
+                    <Link
+                      key={label}
+                      to={to}
+                      className="w-full flex items-center gap-3.5 py-4"
+                    >
+                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center shrink-0">
+                        <Icon className="w-4.5 h-4.5 text-foreground" />
+                      </div>
+                      <span className="flex-1 text-[14px] font-medium text-foreground">{label}</span>
+                      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                    </Link>
+                  ))}
+                </div>
               </div>
 
               {/* Explore all topics */}
