@@ -330,7 +330,7 @@ const CATEGORIES: Category[] = [
       },
       {
         id: "fund-split",
-        label: "Fund split issue",
+        label: "Fund Flips",
         onlyProduct: "unit-trusts",
       },
       {
