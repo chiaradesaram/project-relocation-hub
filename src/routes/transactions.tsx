@@ -3,6 +3,7 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { TrendingUp, TrendingDown, Clock, Info } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transactions")({
@@ -35,9 +36,9 @@ type Tx = {
 };
 
 const transactions: Tx[] = [
-  { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending", createdDate: "Apr 12, 2026 · 09:24", reflectedDate: "Apr 15, 2026 (est.)" },
-  { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending", createdDate: "Apr 2, 2026 · 14:10", reflectedDate: "Apr 5, 2026 (est.)" },
-  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026 (est.)" },
+  { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending", createdDate: "Apr 12, 2026 · 09:24", reflectedDate: "Apr 15, 2026" },
+  { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending", createdDate: "Apr 2, 2026 · 14:10", reflectedDate: "Apr 5, 2026" },
+  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026" },
   { name: "CAL Growth Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 13, 2026", value: "LKR 125,000", positive: true, status: "Confirmed" },
   { name: "Treasury Bill 91D", product: "Treasuries", kind: "Maturity", subAccount: "Personal · Main", date: "Apr 12, 2026", value: "LKR 105,000", positive: true, status: "Confirmed" },
   { name: "CAL Equity Fund", product: "Unit Trusts", kind: "Redemption", subAccount: "Personal · Main", date: "Apr 8, 2026", value: "LKR 75,000", positive: false, status: "Confirmed" },
@@ -90,6 +91,7 @@ function Transactions() {
     });
 
   return (
+    <TooltipProvider>
     <MobileLayout>
       <PageHeader title="Transactions" showBack />
 
@@ -171,14 +173,22 @@ function Transactions() {
               </div>
               <p className="text-xs text-muted-foreground truncate mt-0.5">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
-                <div className="mt-1.5 space-y-0.5">
-                  <p className="text-[11px] text-foreground">
-                    <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
-                  </p>
-                  <p className="text-[11px] text-foreground">
-                    <span className="text-muted-foreground/70">Reflects on Portal:</span> {tx.reflectedDate}
-                  </p>
-                </div>
+              <div className="mt-1.5 space-y-0.5">
+                <p className="text-[11px] text-foreground">
+                  <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
+                </p>
+                <p className="text-[11px] text-foreground">
+                  <span className="text-muted-foreground/70">Reflects on Portal:</span>{" "}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="underline decoration-dotted underline-offset-2 cursor-help">{tx.reflectedDate}</span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Estimated date</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </p>
+              </div>
               ) : (
                 <p className="text-[11px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
               )}
@@ -195,5 +205,6 @@ function Transactions() {
         )}
       </div>
     </MobileLayout>
+    </TooltipProvider>
   );
 }
