@@ -99,10 +99,10 @@ function Transactions() {
           <button
             key={f}
             onClick={() => setProduct(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
+            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               product === f
-                ? "bg-primary/40 text-black"
-                : "bg-primary/10 text-primary"
+                ? "bg-primary/20 text-black"
+                : "bg-primary/10 text-primary/60"
             }`}
           >
             {f}
