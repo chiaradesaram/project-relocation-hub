@@ -72,9 +72,7 @@ function StatusIcon({ status, positive }: { status: Status; positive: boolean })
 
 function Transactions() {
   const [product, setProduct] = useState<Product>("All");
-  const [sub, setSub] = useState<string>("All");
-
-  const subs = subFiltersByProduct[product];
+  const sub = "All";
 
   const filtered = transactions
     .filter((tx) => {
@@ -100,37 +98,17 @@ function Transactions() {
         {productFilters.map((f) => (
           <button
             key={f}
-            onClick={() => {
-              setProduct(f);
-              setSub("All");
-            }}
+            onClick={() => setProduct(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition ${
-              product === f ? "gradient-primary text-primary-foreground" : "bg-secondary text-muted-foreground"
+              product === f
+                ? "bg-primary/30 text-foreground"
+                : "bg-primary/10 text-primary"
             }`}
           >
             {f}
           </button>
         ))}
       </div>
-
-      {/* Sub Filters */}
-      {subs.length > 1 && (
-        <div className="flex gap-2 px-4 mt-1 overflow-x-auto pb-2">
-          {subs.map((s) => (
-            <button
-              key={s}
-              onClick={() => setSub(s)}
-              className={`px-2.5 py-1 rounded-md text-[11px] font-medium whitespace-nowrap transition border ${
-                sub === s
-                  ? "border-primary/60 bg-primary/15 text-foreground"
-                  : "border-border/40 bg-transparent text-muted-foreground"
-              }`}
-            >
-              {s}
-            </button>
-          ))}
-        </div>
-      )}
 
       {/* Transaction List */}
       <div className="px-4 mt-3 space-y-2">
