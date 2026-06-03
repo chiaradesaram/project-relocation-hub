@@ -133,9 +133,9 @@ function Transactions() {
       {/* Transaction List */}
       <div className="px-4 mt-3 space-y-2">
         {filtered.map((tx, i) => (
-          <div key={i} className="glass-card p-3 flex items-start gap-3">
+          <div key={i} className="glass-card p-4 flex items-start gap-3">
             <div
-              className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+              className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
                   ? "bg-warning/20"
                   : tx.positive
@@ -147,8 +147,8 @@ function Transactions() {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
-                <p className="text-xs font-medium text-foreground truncate">{tx.name}</p>
-                <span className={`px-1.5 py-0.5 rounded text-[9px] font-medium ${statusStyles[tx.status]}`}>
+                <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
+                <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${statusStyles[tx.status]}`}>
                   {tx.status}
                 </span>
                 {tx.status === "Pending" && (
@@ -160,33 +160,32 @@ function Transactions() {
                         className="text-muted-foreground hover:text-foreground transition"
                         aria-label="Pending info"
                       >
-                        <Info className="w-3 h-3" />
+                        <Info className="w-3.5 h-3.5" />
                       </button>
                     </PopoverTrigger>
-                    <PopoverContent side="top" className="w-60 text-[11px] leading-relaxed">
+                    <PopoverContent side="top" className="w-60 text-xs leading-relaxed">
                       Your investment takes approximately two working days to reflect on the portal.
                     </PopoverContent>
                   </Popover>
                 )}
               </div>
-              <p className="text-[10px] text-muted-foreground truncate">{tx.subAccount}</p>
+              <p className="text-xs text-muted-foreground truncate mt-0.5">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
-                <div className="mt-1 space-y-0.5">
-                  <p className="text-[9px] text-foreground">
+                <div className="mt-1.5 space-y-0.5">
+                  <p className="text-[11px] text-foreground">
                     <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
                   </p>
-                  <p className="text-[9px] text-foreground">
+                  <p className="text-[11px] text-foreground">
                     <span className="text-muted-foreground/70">Reflects on Portal:</span> {tx.reflectedDate}
                   </p>
                 </div>
               ) : (
-                <p className="text-[9px] text-muted-foreground/70">{tx.date}</p>
+                <p className="text-[11px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
               )}
             </div>
             <div className="text-right shrink-0">
-              <p className="text-xs font-semibold text-foreground">{tx.value}</p>
-              <p className={`text-[10px] ${tx.positive ? "text-success" : "text-muted-foreground"}`}>
-                {tx.positive ? "+" : "−"} {tx.kind}
+              <p className={`text-sm font-semibold ${tx.positive ? "text-emerald-300" : "text-foreground"}`}>
+                {tx.positive ? "+" : "−"} {tx.value}
               </p>
             </div>
           </div>
