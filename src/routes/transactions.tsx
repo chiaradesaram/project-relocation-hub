@@ -205,5 +205,6 @@ function Transactions() {
         )}
       </div>
     </MobileLayout>
+    </TooltipProvider>
   );
 }
