@@ -246,7 +246,7 @@ function HelpIndexPage() {
 
               {/* Explore all topics */}
               <div className="mx-5 mb-6">
-                <p className="text-[14px] font-medium text-foreground mb-3">Explore all topics</p>
+                <p className="text-[14px] font-medium text-foreground mb-3">Suggested Topics</p>
                 <div className="h-px bg-border/40 mb-1" />
                 <div className="divide-y divide-border/30">
                   {TOPIC_SECTIONS.map(({ id, label, description, icon: Icon }) => (
