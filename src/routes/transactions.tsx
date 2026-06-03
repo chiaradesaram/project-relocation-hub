@@ -172,14 +172,22 @@ function Transactions() {
               </div>
               <p className="text-xs text-muted-foreground truncate mt-0.5">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
-                <div className="mt-1.5 space-y-0.5">
-                  <p className="text-[11px] text-foreground">
-                    <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
-                  </p>
-                  <p className="text-[11px] text-foreground">
-                    <span className="text-muted-foreground/70">Reflects on Portal:</span> {tx.reflectedDate}
-                  </p>
-                </div>
+              <div className="mt-1.5 space-y-0.5">
+                <p className="text-[11px] text-foreground">
+                  <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
+                </p>
+                <p className="text-[11px] text-foreground">
+                  <span className="text-muted-foreground/70">Reflects on Portal:</span>{" "}
+                  <Tooltip>
+                    <TooltipTrigger asChild>
+                      <span className="underline decoration-dotted underline-offset-2 cursor-help">{tx.reflectedDate}</span>
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <p>Estimated date</p>
+                    </TooltipContent>
+                  </Tooltip>
+                </p>
+              </div>
               ) : (
                 <p className="text-[11px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
               )}
