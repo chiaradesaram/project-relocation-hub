@@ -91,6 +91,7 @@ function Transactions() {
     });
 
   return (
+    <TooltipProvider>
     <MobileLayout>
       <PageHeader title="Transactions" showBack />
 
