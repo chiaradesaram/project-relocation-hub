@@ -1185,9 +1185,17 @@ function FormDifficultyPicker({
 function CreationPlanPicker({
   stepId,
   setStepId,
+  description,
+  setDescription,
+  onSubmit,
+  errors,
 }: {
   stepId: string;
   setStepId: (v: string) => void;
+  description: string;
+  setDescription: (v: string) => void;
+  onSubmit: () => void;
+  errors: Record<string, string>;
 }) {
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
@@ -1196,7 +1204,7 @@ function CreationPlanPicker({
         <SelectInput value={stepId} onChange={setStepId} placeholder="Pick an option">
           <option value="cancel">Cancel my creation plan</option>
           <option value="edit">Edit my creation plan</option>
-          <option value="not-executed">My plan didn't execute</option>
+          <option value="other-issue">Other issue</option>
         </SelectInput>
       </div>
 
@@ -1234,12 +1242,25 @@ function CreationPlanPicker({
         </div>
       )}
 
-      {stepId === "not-executed" && (
-        <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
-          <p className="text-[11px] leading-relaxed text-muted-foreground">
-            Most often it's due to insufficient balance on the cycle date. The plan retries
-            automatically the next business day.
-          </p>
+      {stepId === "other-issue" && (
+        <div className="mt-3 space-y-3">
+          <Field label="Description" error={errors.description}>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={2000}
+              rows={4}
+              placeholder="What happened and what would you like us to do?"
+              className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+            />
+          </Field>
+          <button
+            type="button"
+            onClick={onSubmit}
+            className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Submit ticket
+          </button>
         </div>
       )}
     </div>
