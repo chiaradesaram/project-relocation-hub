@@ -480,7 +480,6 @@ function ContactForm() {
   const [nicBackName, setNicBackName] = useState<string | null>(null);
 
   // Deactivate state
-  const [deactivateConfirm, setDeactivateConfirm] = useState("");
   const [deactivateReason, setDeactivateReason] = useState("");
 
   const [fileName, setFileName] = useState<string | null>(null);
