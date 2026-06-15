@@ -1262,9 +1262,6 @@ function RecentTransactionsPicker({
       <p className="text-[13px] font-semibold text-foreground">
         Which transaction are you referring to?
       </p>
-      <p className="mt-0.5 text-[11px] text-muted-foreground">
-        Pick the one you have a question about.
-      </p>
       <div className="mt-2 space-y-1.5">
         {txs.map((tx) => {
           const active = selectedTxId === tx.id;
