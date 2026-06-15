@@ -1243,10 +1243,23 @@ function CreationPlanPicker({
   );
 }
 
-function RecentTransactionsPicker({ subId, productId }: { subId: string; productId: string }) {
-  const [selected, setSelected] = useState<string | null>(null);
-  const txs = RECENT_TXS.filter((t) => !productId || t.product === productId);
-  const selectedTx = txs.find((t) => t.id === selected) ?? null;
+function RecentTransactionsPicker({
+  subId,
+  productId,
+  selectedTxId,
+  onSelect,
+  onNotListed,
+}: {
+  subId: string;
+  productId: string;
+  selectedTxId: string | null;
+  onSelect: (id: string) => void;
+  onNotListed: () => void;
+}) {
+  const txs = RECENT_TXS
+    .filter((t) => !productId || t.product === productId)
+    .slice(0, 3);
+  const selectedTx = txs.find((t) => t.id === selectedTxId) ?? null;
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
       <p className="text-[13px] font-semibold text-foreground">
@@ -1257,18 +1270,18 @@ function RecentTransactionsPicker({ subId, productId }: { subId: string; product
       </p>
       <div className="mt-2 space-y-1.5">
         {txs.map((tx) => {
-          const active = selected === tx.id;
+          const active = selectedTxId === tx.id;
           const displayKind =
             subId === "withdrawal-delay"
               ? tx.product === "equities"
-                ? "payouts"
-                : "redemption"
+                ? "Payout"
+                : "Redemption"
               : tx.kind;
           return (
             <button
               key={tx.id}
               type="button"
-              onClick={() => setSelected(tx.id)}
+              onClick={() => onSelect(tx.id)}
               className={`w-full rounded-lg border p-2.5 text-left transition-colors ${
                 active
                   ? "border-primary/50 bg-primary/10"
@@ -1305,6 +1318,19 @@ function RecentTransactionsPicker({ subId, productId }: { subId: string; product
             No recent transactions for this product.
           </p>
         )}
+        <button
+          type="button"
+          onClick={onNotListed}
+          className="w-full rounded-lg border border-dashed border-border/50 bg-muted/10 p-2.5 text-left text-[12px] font-medium text-foreground transition-colors hover:bg-muted/20"
+        >
+          <div className="flex items-center justify-between gap-2">
+            <span>Transaction not listed here?</span>
+            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+          </div>
+          <p className="mt-0.5 text-[10px] text-muted-foreground">
+            Describe the issue and we'll look into it.
+          </p>
+        </button>
       </div>
 
       {selectedTx && subId === "investment-not-reflected" && (
