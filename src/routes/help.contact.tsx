@@ -1020,12 +1020,12 @@ type RecentTx = {
 };
 
 const RECENT_TXS: RecentTx[] = [
-  { id: "tx1", name: "CAL Income Fund", product: "unit-trusts", kind: "Investment", date: "Apr 12, 2026", reflectDate: "Apr 15, 2026", value: "LKR 60,000" },
-  { id: "tx2", name: "CAL Money Market", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 11, 2026", value: "LKR 200,000" },
+  { id: "tx1", name: "CAL Income Fund", product: "unit-trusts", kind: "Investment", date: "Apr 12, 2026", reflectDate: "Apr 15, 2026", value: "LKR 60,000", status: "Pending" },
+  { id: "tx2", name: "CAL Money Market", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 11, 2026", value: "LKR 200,000", status: "Confirmed" },
   { id: "tx3", name: "Commercial Bank ••3421", product: "equities", kind: "Pay In", date: "Apr 2, 2026", reflectDate: "Apr 5, 2026", value: "LKR 50,000", status: "Pending" },
   { id: "tx4", name: "Sampath Bank ••8807", product: "equities", kind: "Pay In", date: "Mar 28, 2026", reflectDate: "Mar 30, 2026", value: "LKR 120,000", status: "Confirmed" },
-  { id: "tx5", name: "Treasury Bond 5Y", product: "treasuries", kind: "Investment", date: "Mar 30, 2026", reflectDate: "Apr 2, 2026", value: "LKR 500,000" },
-  { id: "tx6", name: "Treasury Bill 91D", product: "treasuries", kind: "Maturity", date: "Mar 25, 2026", reflectDate: "Mar 30, 2026", value: "LKR 105,000" },
+  { id: "tx5", name: "Treasury Bond 5Y", product: "treasuries", kind: "Investment", date: "Mar 30, 2026", reflectDate: "Apr 2, 2026", value: "LKR 500,000", status: "Pending" },
+  { id: "tx6", name: "Treasury Bill 91D", product: "treasuries", kind: "Maturity", date: "Mar 25, 2026", reflectDate: "Mar 30, 2026", value: "LKR 105,000", status: "Confirmed" },
 ];
 
 const FORM_STEPS: { id: string; label: string; tips: string[]; intro?: string; footer?: { text: string; link?: { to: string; label: string } } }[] = [
