@@ -939,15 +939,11 @@ function ContactForm() {
 }
 
 function DeactivateForm({
-  confirm,
-  setConfirm,
   reason,
   setReason,
   errors,
   onSubmit,
 }: {
-  confirm: string;
-  setConfirm: (v: string) => void;
   reason: string;
   setReason: (v: string) => void;
   errors: Record<string, string>;
@@ -956,6 +952,16 @@ function DeactivateForm({
   const [blocked, setBlocked] = useState(false);
   return (
     <>
+      <div className="rounded-xl border border-warning/40 bg-warning/10 p-3">
+        <div className="flex items-start gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
+          <p className="text-[11px] leading-relaxed text-foreground">
+            Heads up — deactivation can take up to <span className="font-semibold">1 month</span>.
+            We need this time to make sure the deletion complies with regulatory requirements.
+          </p>
+        </div>
+      </div>
+
       <Field label="Before you go…" error={errors.reason}>
         <textarea
           value={reason}
@@ -964,16 +970,6 @@ function DeactivateForm({
           rows={3}
           placeholder="Help us improve — what made you decide to leave?"
           className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
-        />
-      </Field>
-
-      <Field label='Type "DEACTIVATE" to confirm' error={errors.confirm}>
-        <input
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value.toUpperCase())}
-          maxLength={20}
-          placeholder="DEACTIVATE"
-          className="w-full bg-transparent text-[12px] font-mono tracking-wider text-foreground placeholder:text-muted-foreground outline-none"
         />
       </Field>
 
@@ -1011,8 +1007,13 @@ function DeactivateForm({
 
       <button
         type="button"
-        onClick={() => setBlocked(true)}
-        disabled={confirm !== "DEACTIVATE"}
+        onClick={() => {
+          if (reason.trim().length < 10) {
+            onSubmit();
+            return;
+          }
+          setBlocked(true);
+        }}
         className="w-full rounded-xl bg-destructive py-3 text-[13px] font-medium text-destructive-foreground transition-colors hover:bg-destructive/90 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Submit deactivation request
