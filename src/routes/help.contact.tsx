@@ -1041,6 +1041,8 @@ type RecentTx = {
 
 const RECENT_TXS: RecentTx[] = [
   { id: "tx1", name: "CAL Income Fund", product: "unit-trusts", kind: "Investment", date: "Apr 12, 2026", reflectDate: "Apr 15, 2026", value: "LKR 60,000", status: "Pending", subAccount: "Account 1" },
+  { id: "tx1b", name: "CAL Balanced Fund", product: "unit-trusts", kind: "Investment", date: "Apr 11, 2026", reflectDate: "Apr 14, 2026", value: "LKR 80,000", status: "Pending", subAccount: "Account 2" },
+  { id: "tx1c", name: "CAL Quantitative Equity Fund", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 13, 2026", value: "LKR 45,000", status: "Pending", subAccount: "Account 1" },
   { id: "tx2", name: "CAL Money Market", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 11, 2026", value: "LKR 200,000", status: "Confirmed", subAccount: "Account 1" },
   { id: "tx3", name: "Commercial Bank ••3421", product: "equities", kind: "Pay In", date: "Apr 2, 2026", reflectDate: "Apr 5, 2026", value: "LKR 50,000", status: "Pending" },
   { id: "tx4", name: "Sampath Bank ••8807", product: "equities", kind: "Pay In", date: "Mar 28, 2026", reflectDate: "Mar 30, 2026", value: "LKR 120,000", status: "Confirmed" },
