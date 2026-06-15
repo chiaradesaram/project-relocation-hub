@@ -1287,7 +1287,8 @@ function RecentTransactionsPicker({
                 <div className="min-w-0">
                   <p className="truncate text-[12px] font-medium text-foreground">{tx.name}</p>
                   <p className="text-[10px] text-muted-foreground">
-                    {displayKind} · {tx.date}
+                    {displayKind}
+                    {tx.subAccount ? ` · ${tx.subAccount}` : ""} · {tx.date}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
