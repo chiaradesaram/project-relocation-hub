@@ -809,8 +809,6 @@ function ContactForm() {
             <>
               {isDeactivate ? (
                 <DeactivateForm
-                  confirm={deactivateConfirm}
-                  setConfirm={setDeactivateConfirm}
                   reason={deactivateReason}
                   setReason={setDeactivateReason}
                   errors={errors}
