@@ -1318,12 +1318,13 @@ function RecentTransactionsPicker({
         <button
           type="button"
           onClick={onNotListed}
-          className="w-full rounded-lg border border-dashed border-border/50 bg-muted/10 p-2.5 text-left text-[12px] font-medium text-foreground transition-colors hover:bg-muted/20"
+          className={`w-full rounded-lg border p-2.5 text-left text-[12px] font-medium text-foreground transition-colors ${
+            notListedSelected
+              ? "border-primary/50 bg-primary/10"
+              : "border-dashed border-border/50 bg-muted/10 hover:bg-muted/20"
+          }`}
         >
-          <div className="flex items-center justify-between gap-2">
-            <span>Transaction not listed here?</span>
-            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-          </div>
+          <p>Transaction not listed here?</p>
           <p className="mt-0.5 text-[10px] text-muted-foreground">
             Describe the issue and we'll look into it.
           </p>
