@@ -781,6 +781,7 @@ function ContactForm() {
                   setSelectedTxId(null);
                   setShowForm(true);
                 }}
+                notListedSelected={selectedTxId === null && showForm}
               />
             )}
 
