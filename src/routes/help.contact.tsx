@@ -1031,6 +1031,7 @@ type RecentTx = {
   reflectDate: string;
   value: string;
   status?: "Pending" | "Confirmed";
+  subAccount?: string;
 };
 
 const RECENT_TXS: RecentTx[] = [
