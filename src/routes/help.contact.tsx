@@ -449,9 +449,6 @@ const nicSchema = baseSchema.extend({
 });
 
 const deactivateSchema = baseSchema.extend({
-  confirm: z.literal("DEACTIVATE", {
-    errorMap: () => ({ message: 'Type "DEACTIVATE" to confirm' }),
-  }),
   reason: z.string().trim().min(10, "Tell us why so we can improve").max(2000),
 });
 
@@ -578,7 +575,6 @@ function ContactForm() {
       result = deactivateSchema.safeParse({
         categoryId,
         subId,
-        confirm: deactivateConfirm,
         reason: deactivateReason,
       });
     } else {
@@ -754,7 +750,7 @@ function ContactForm() {
                 {suggestions.map((s, i) => (
                   <div key={i} className="rounded-lg bg-muted/20 p-2.5">
                     <p className="text-[13px] font-medium text-foreground">{s.q}</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
+                    <p className="mt-0.5 whitespace-pre-line text-[10px] leading-relaxed text-muted-foreground">
                       {s.a}
                     </p>
                   </div>
