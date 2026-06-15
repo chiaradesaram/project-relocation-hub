@@ -78,10 +78,6 @@ const CATEGORIES: Category[] = [
         resolveOnly: true,
         suggestions: [
           {
-            q: "Where do I register?",
-            a: "You can register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (available on the Apple App Store and Google Play). If you prefer to apply in person, you can book an appointment through the provided link.",
-          },
-          {
             q: "What documents do I need?",
             a: "Your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
           },
@@ -121,7 +117,7 @@ const CATEGORIES: Category[] = [
           },
         ],
       },
-      { id: "doc-rejected", label: "Document rejected" },
+      { id: "doc-rejected", label: "Application Returned" },
       {
         id: "form-difficulty",
         label: "Difficulty filling up the form",
@@ -201,19 +197,19 @@ const CATEGORIES: Category[] = [
           },
           {
             q: "How do I open a Unit Trust account?",
-            a: "Register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (Apple App Store / Google Play). If you prefer to apply in person, you can book an appointment. You'll need your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
+            a: "Register in one of three ways:\n• Online at portal.cal.lk using your NIC, mobile number and email\n• Through the CAL Online mobile app (App Store / Google Play)\n• In person — book an appointment\n\nDocuments you'll need:\n• NIC\n• Proof of bank account (e.g. a recent statement)\n• Proof of address (only if it differs from your NIC address)",
           },
           {
             q: "How long does it take to process a new unit trust application?",
-            a: "Once you submit your application through the portal with all required documents, processing typically takes 3–5 working days. Times may be slightly longer during high-volume periods. You can track the status of your application directly through the portal.",
+            a: "Typically 3–5 working days once you've submitted with all required documents. It may take a bit longer during high-volume periods. You can track your application status on the portal.",
           },
           {
             q: "What can I do once my unit trust account is active?",
-            a: "View your portfolio and balances, invest in Unit Trust funds, set up recurring investments, create redemption plans, track performance, and request account statements — plus more features to help you manage your investments easily.",
+            a: "• View your portfolio and balances\n• Invest in Unit Trust funds\n• Set up recurring investments\n• Create redemption plans\n• Track performance\n• Request account statements",
           },
           {
             q: "How do I invest money into a unit trust fund?",
-            a: "Bank transfer: Transfer funds to the CAL Unit Trust account (Deutsche Bank AG, Colombo, Capital Alliance Investments Limited, Account No: 0046797000). Use your registered bank account, then log in and submit a creation request. JustPay: Link your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
+            a: "Bank transfer:\nTransfer to the CAL Unit Trust account from your registered bank account, then log in and submit a creation request.\n• Bank: Deutsche Bank AG, Colombo\n• Name: Capital Alliance Investments Limited\n• Account No: 0046797000\n\nJustPay:\nLink your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
           },
         ],
         quickLinks: [
@@ -242,19 +238,19 @@ const CATEGORIES: Category[] = [
           },
           {
             q: "What are the benefits for CAL equities clients?",
-            a: "Track your portfolio via the CAL Online app, trade using the Atrad app, access AnalytiCAL (research portal with data on all CSE-listed companies, valuation ratios, and real-time metrics), access to research reports, webinars, and join a WhatsApp group for market updates. Get custom analytics and alerts tailored for you on your portfolio performance.",
+            a: "• Track your portfolio via the CAL Online app\n• Trade using the Atrad app\n• Access AnalytiCAL — data on all CSE-listed companies, valuation ratios and real-time metrics\n• Research reports and webinars\n• WhatsApp group for market updates\n• Custom analytics and alerts on your portfolio",
           },
           {
             q: "What is the minimum investment amount for an equities account?",
-            a: "Self-trading account (internet trading only): minimum LKR 100,000. Account with advisor support on your trades: minimum LKR 5,000,000.",
+            a: "• Self-trading (internet trading only): LKR 100,000\n• With advisor support on your trades: LKR 5,000,000",
           },
           {
             q: "How do I transfer funds into my equities account?",
-            a: "Bank transfer (no limit): Transfer to the CAL Seylan Bank account (Millennium branch, Capital Alliance Securities Pvt Ltd, Account No: 086400041489001). Use your registered bank account, then go to Pay In on the portal and submit a request. JustPay: Link your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable anytime.",
+            a: "Bank transfer (no limit):\nTransfer from your registered bank account, then go to Pay In on the portal and submit a request.\n• Bank: Seylan Bank, Millennium branch\n• Name: Capital Alliance Securities Pvt Ltd\n• Account No: 086400041489001\n\nJustPay:\nLink your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable.",
           },
           {
             q: "What are the fees involved with Equity Trading?",
-            a: "Brokerage fee: 0.64%. Total transaction cost: 1.12%, including CSE fees (0.084%), CDS fees (0.024%), SEC cess (0.072%), and Share Transaction Levy (0.300%).",
+            a: "• Brokerage fee: 0.64%\n• Total transaction cost: 1.12%\n\nIncluded in the total:\n• CSE fees: 0.084%\n• CDS fees: 0.024%\n• SEC cess: 0.072%\n• Share Transaction Levy: 0.300%",
           },
         ],
         quickLinks: [
@@ -453,9 +449,6 @@ const nicSchema = baseSchema.extend({
 });
 
 const deactivateSchema = baseSchema.extend({
-  confirm: z.literal("DEACTIVATE", {
-    errorMap: () => ({ message: 'Type "DEACTIVATE" to confirm' }),
-  }),
   reason: z.string().trim().min(10, "Tell us why so we can improve").max(2000),
 });
 
@@ -487,7 +480,6 @@ function ContactForm() {
   const [nicBackName, setNicBackName] = useState<string | null>(null);
 
   // Deactivate state
-  const [deactivateConfirm, setDeactivateConfirm] = useState("");
   const [deactivateReason, setDeactivateReason] = useState("");
 
   const [fileName, setFileName] = useState<string | null>(null);
@@ -582,7 +574,6 @@ function ContactForm() {
       result = deactivateSchema.safeParse({
         categoryId,
         subId,
-        confirm: deactivateConfirm,
         reason: deactivateReason,
       });
     } else {
@@ -758,7 +749,7 @@ function ContactForm() {
                 {suggestions.map((s, i) => (
                   <div key={i} className="rounded-lg bg-muted/20 p-2.5">
                     <p className="text-[13px] font-medium text-foreground">{s.q}</p>
-                    <p className="mt-0.5 text-[10px] leading-relaxed text-muted-foreground">
+                    <p className="mt-0.5 whitespace-pre-line text-[10px] leading-relaxed text-muted-foreground">
                       {s.a}
                     </p>
                   </div>
@@ -786,7 +777,14 @@ function ContactForm() {
             )}
 
           {sub?.id === "form-difficulty" && (
-            <FormDifficultyPicker stepId={stepId} setStepId={setStepId} />
+            <FormDifficultyPicker
+              stepId={stepId}
+              setStepId={setStepId}
+              description={description}
+              setDescription={setDescription}
+              onSubmit={submitForm}
+              errors={errors}
+            />
           )}
 
           {sub?.id === "creation-plan" && (
@@ -817,8 +815,6 @@ function ContactForm() {
             <>
               {isDeactivate ? (
                 <DeactivateForm
-                  confirm={deactivateConfirm}
-                  setConfirm={setDeactivateConfirm}
                   reason={deactivateReason}
                   setReason={setDeactivateReason}
                   errors={errors}
@@ -947,15 +943,11 @@ function ContactForm() {
 }
 
 function DeactivateForm({
-  confirm,
-  setConfirm,
   reason,
   setReason,
   errors,
   onSubmit,
 }: {
-  confirm: string;
-  setConfirm: (v: string) => void;
   reason: string;
   setReason: (v: string) => void;
   errors: Record<string, string>;
@@ -964,6 +956,16 @@ function DeactivateForm({
   const [blocked, setBlocked] = useState(false);
   return (
     <>
+      <div className="rounded-xl border border-warning/40 bg-warning/10 p-3">
+        <div className="flex items-start gap-2">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
+          <p className="text-[11px] leading-relaxed text-foreground">
+            Heads up — deactivation can take up to <span className="font-semibold">1 month</span>.
+            We need this time to make sure the deletion complies with regulatory requirements.
+          </p>
+        </div>
+      </div>
+
       <Field label="Before you go…" error={errors.reason}>
         <textarea
           value={reason}
@@ -972,16 +974,6 @@ function DeactivateForm({
           rows={3}
           placeholder="Help us improve — what made you decide to leave?"
           className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
-        />
-      </Field>
-
-      <Field label='Type "DEACTIVATE" to confirm' error={errors.confirm}>
-        <input
-          value={confirm}
-          onChange={(e) => setConfirm(e.target.value.toUpperCase())}
-          maxLength={20}
-          placeholder="DEACTIVATE"
-          className="w-full bg-transparent text-[12px] font-mono tracking-wider text-foreground placeholder:text-muted-foreground outline-none"
         />
       </Field>
 
@@ -1019,8 +1011,13 @@ function DeactivateForm({
 
       <button
         type="button"
-        onClick={() => setBlocked(true)}
-        disabled={confirm !== "DEACTIVATE"}
+        onClick={() => {
+          if (reason.trim().length < 10) {
+            onSubmit();
+            return;
+          }
+          setBlocked(true);
+        }}
         className="w-full rounded-xl bg-destructive py-3 text-[13px] font-medium text-destructive-foreground transition-colors hover:bg-destructive/90 disabled:cursor-not-allowed disabled:opacity-50"
       >
         Submit deactivation request
@@ -1043,6 +1040,8 @@ type RecentTx = {
 
 const RECENT_TXS: RecentTx[] = [
   { id: "tx1", name: "CAL Income Fund", product: "unit-trusts", kind: "Investment", date: "Apr 12, 2026", reflectDate: "Apr 15, 2026", value: "LKR 60,000", status: "Pending", subAccount: "Account 1" },
+  { id: "tx1b", name: "CAL Balanced Fund", product: "unit-trusts", kind: "Investment", date: "Apr 11, 2026", reflectDate: "Apr 14, 2026", value: "LKR 80,000", status: "Pending", subAccount: "Account 2" },
+  { id: "tx1c", name: "CAL Quantitative Equity Fund", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 13, 2026", value: "LKR 45,000", status: "Pending", subAccount: "Account 1" },
   { id: "tx2", name: "CAL Money Market", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 11, 2026", value: "LKR 200,000", status: "Confirmed", subAccount: "Account 1" },
   { id: "tx3", name: "Commercial Bank ••3421", product: "equities", kind: "Pay In", date: "Apr 2, 2026", reflectDate: "Apr 5, 2026", value: "LKR 50,000", status: "Pending" },
   { id: "tx4", name: "Sampath Bank ••8807", product: "equities", kind: "Pay In", date: "Mar 28, 2026", reflectDate: "Mar 30, 2026", value: "LKR 120,000", status: "Confirmed" },
@@ -1125,11 +1124,20 @@ const FORM_STEPS: { id: string; label: string; tips: string[]; intro?: string; f
 function FormDifficultyPicker({
   stepId,
   setStepId,
+  description,
+  setDescription,
+  onSubmit,
+  errors,
 }: {
   stepId: string;
   setStepId: (v: string) => void;
+  description: string;
+  setDescription: (v: string) => void;
+  onSubmit: () => void;
+  errors: Record<string, string>;
 }) {
   const step = FORM_STEPS.find((s) => s.id === stepId) ?? null;
+  const isOther = stepId === "other";
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
       <p className="text-[13px] font-semibold text-foreground">Which step are you stuck on?</p>
@@ -1143,6 +1151,7 @@ function FormDifficultyPicker({
               {s.label}
             </option>
           ))}
+          <option value="other">Other</option>
         </SelectInput>
       </div>
 
@@ -1176,6 +1185,28 @@ function FormDifficultyPicker({
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {(step || isOther) && (
+        <div className="mt-3 space-y-3">
+          <Field label={isOther ? "Description" : "Still stuck? Tell us what's happening"} error={errors.description}>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={2000}
+              rows={4}
+              placeholder="What happened and what would you like us to do?"
+              className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+            />
+          </Field>
+          <button
+            type="button"
+            onClick={onSubmit}
+            className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Raise a ticket
+          </button>
         </div>
       )}
     </div>
@@ -1284,6 +1315,7 @@ function RecentTransactionsPicker({
 }) {
   const txs = RECENT_TXS
     .filter((t) => !productId || t.product === productId)
+    .filter((t) => (subId === "investment-not-reflected" ? t.status === "Pending" : true))
     .slice(0, 3);
   const selectedTx = txs.find((t) => t.id === selectedTxId) ?? null;
   return (
