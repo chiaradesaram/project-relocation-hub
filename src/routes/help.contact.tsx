@@ -1008,11 +1008,22 @@ function DeactivateForm({
   );
 }
 
-const RECENT_TXS = [
+type RecentTx = {
+  id: string;
+  name: string;
+  product: string;
+  kind: string;
+  date: string;
+  reflectDate: string;
+  value: string;
+  status?: "Pending" | "Confirmed";
+};
+
+const RECENT_TXS: RecentTx[] = [
   { id: "tx1", name: "CAL Income Fund", product: "unit-trusts", kind: "Investment", date: "Apr 12, 2026", reflectDate: "Apr 15, 2026", value: "LKR 60,000" },
   { id: "tx2", name: "CAL Money Market", product: "unit-trusts", kind: "Investment", date: "Apr 10, 2026", reflectDate: "Apr 11, 2026", value: "LKR 200,000" },
-  { id: "tx3", name: "HNB.N0000", product: "equities", kind: "Pay Out", date: "Apr 2, 2026", reflectDate: "Apr 7, 2026", value: "LKR 25,000" },
-  { id: "tx4", name: "JKH.N0000", product: "equities", kind: "Pay Out", date: "Mar 28, 2026", reflectDate: "Apr 1, 2026", value: "LKR 40,000" },
+  { id: "tx3", name: "Commercial Bank ••3421", product: "equities", kind: "Pay In", date: "Apr 2, 2026", reflectDate: "Apr 5, 2026", value: "LKR 50,000", status: "Pending" },
+  { id: "tx4", name: "Sampath Bank ••8807", product: "equities", kind: "Pay In", date: "Mar 28, 2026", reflectDate: "Mar 30, 2026", value: "LKR 120,000", status: "Confirmed" },
   { id: "tx5", name: "Treasury Bond 5Y", product: "treasuries", kind: "Investment", date: "Mar 30, 2026", reflectDate: "Apr 2, 2026", value: "LKR 500,000" },
   { id: "tx6", name: "Treasury Bill 91D", product: "treasuries", kind: "Maturity", date: "Mar 25, 2026", reflectDate: "Mar 30, 2026", value: "LKR 105,000" },
 ];
@@ -1246,7 +1257,20 @@ function RecentTransactionsPicker({ subId, productId }: { subId: string; product
                     {tx.kind} · {tx.date}
                   </p>
                 </div>
-                <span className="shrink-0 text-[11px] font-medium text-foreground">{tx.value}</span>
+                <div className="flex shrink-0 items-center gap-1.5">
+                  {tx.status && (
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
+                        tx.status === "Pending"
+                          ? "bg-warning/15 text-warning"
+                          : "bg-success/15 text-success"
+                      }`}
+                    >
+                      {tx.status}
+                    </span>
+                  )}
+                  <span className="text-[11px] font-medium text-foreground">{tx.value}</span>
+                </div>
               </div>
             </button>
           );
