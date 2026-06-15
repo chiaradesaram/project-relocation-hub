@@ -1239,6 +1239,12 @@ function RecentTransactionsPicker({ subId, productId }: { subId: string; product
       <div className="mt-2 space-y-1.5">
         {txs.map((tx) => {
           const active = selected === tx.id;
+          const displayKind =
+            subId === "withdrawal-delay"
+              ? tx.product === "equities"
+                ? "payouts"
+                : "redemption"
+              : tx.kind;
           return (
             <button
               key={tx.id}
@@ -1254,7 +1260,7 @@ function RecentTransactionsPicker({ subId, productId }: { subId: string; product
                 <div className="min-w-0">
                   <p className="truncate text-[12px] font-medium text-foreground">{tx.name}</p>
                   <p className="text-[10px] text-muted-foreground">
-                    {tx.kind} · {tx.date}
+                    {displayKind} · {tx.date}
                   </p>
                 </div>
                 <div className="flex shrink-0 items-center gap-1.5">
