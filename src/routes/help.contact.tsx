@@ -1331,7 +1331,7 @@ function RecentTransactionsPicker({
         </button>
       </div>
 
-      {selectedTx && subId === "investment-not-reflected" && (
+      {selectedTx && selectedTx.status === "Pending" && subId === "investment-not-reflected" && (
         <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
           <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
             Your estimated investment timeline
