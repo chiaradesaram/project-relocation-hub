@@ -790,7 +790,14 @@ function ContactForm() {
           )}
 
           {sub?.id === "creation-plan" && (
-            <CreationPlanPicker stepId={stepId} setStepId={setStepId} />
+            <CreationPlanPicker
+              stepId={stepId}
+              setStepId={setStepId}
+              description={description}
+              setDescription={setDescription}
+              onSubmit={submitForm}
+              errors={errors}
+            />
           )}
 
           {/* Continue to ticket */}
