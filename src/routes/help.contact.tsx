@@ -1363,40 +1363,16 @@ function RecentTransactionsPicker({
             <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
               A few tips
             </p>
-            <div className="mt-1.5">
-              <Drawer>
-                <DrawerTrigger asChild>
-                  <button
-                    type="button"
-                    className="flex w-full items-center justify-between gap-2 rounded-md bg-card/60 px-2.5 py-2 text-left hover:bg-card/80"
-                  >
-                    <span className="text-[11px] text-foreground">
-                      Did you transfer using a registered bank account?
-                    </span>
-                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                  </button>
-                </DrawerTrigger>
-                <DrawerContent>
-                  <DrawerHeader>
-                    <DrawerTitle>Registered bank accounts</DrawerTitle>
-                  </DrawerHeader>
-                  <div className="px-4 pb-6">
-                    <p className="text-[12px] leading-relaxed text-muted-foreground">
-                      Investments only reflect when the transfer comes from a bank account you've
-                      registered with CAL. Check your linked accounts and add the one you used if
-                      it's missing.
-                    </p>
-                    <Link
-                      to="/bank-accounts"
-                      className="mt-3 flex items-center justify-center gap-1.5 rounded-xl bg-primary px-3 py-2.5 text-[12px] font-medium text-primary-foreground hover:bg-primary/90"
-                    >
-                      <CreditCard className="h-4 w-4" />
-                      View bank accounts
-                    </Link>
-                  </div>
-                </DrawerContent>
-              </Drawer>
-            </div>
+            <ul className="mt-1.5 space-y-1.5">
+              <li className="flex items-start gap-1.5">
+                <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-success" />
+                <span className="text-[11px] leading-relaxed text-foreground">
+                  Investments only reflect when the transfer comes from a bank account you've
+                  registered with CAL. Check your linked accounts and add the one you used if
+                  it's missing.
+                </span>
+              </li>
+            </ul>
           </div>
         </div>
       )}
