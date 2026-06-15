@@ -22,13 +22,6 @@ import {
   AlertTriangle,
   Clock,
 } from "lucide-react";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
 
 type CategoryId =
   | "account-opening"
