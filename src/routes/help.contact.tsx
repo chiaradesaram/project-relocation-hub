@@ -1243,12 +1243,14 @@ function RecentTransactionsPicker({
   selectedTxId,
   onSelect,
   onNotListed,
+  notListedSelected,
 }: {
   subId: string;
   productId: string;
   selectedTxId: string | null;
   onSelect: (id: string) => void;
   onNotListed: () => void;
+  notListedSelected?: boolean;
 }) {
   const txs = RECENT_TXS
     .filter((t) => !productId || t.product === productId)
