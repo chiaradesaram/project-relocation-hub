@@ -1314,6 +1314,7 @@ function RecentTransactionsPicker({
 }) {
   const txs = RECENT_TXS
     .filter((t) => !productId || t.product === productId)
+    .filter((t) => (subId === "investment-not-reflected" ? t.status === "Pending" : true))
     .slice(0, 3);
   const selectedTx = txs.find((t) => t.id === selectedTxId) ?? null;
   return (
