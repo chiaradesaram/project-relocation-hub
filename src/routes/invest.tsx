@@ -455,9 +455,9 @@ function Invest() {
       <Dialog open={defaultModalOpen} onOpenChange={setDefaultModalOpen}>
         <DialogContent className="max-w-sm rounded-2xl">
           <DialogHeader>
-            <DialogTitle>Set default</DialogTitle>
+            <DialogTitle>Set as Default Fund</DialogTitle>
             <DialogDescription>
-              Used when a bank transfer arrives without a matching request. Manual reconciliation may add 1–2 business days.
+              This fund will be selected first for new investments. Funds without valid transfer instructions may also be allocated to this fund.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3">
