@@ -778,7 +778,14 @@ function ContactForm() {
             )}
 
           {sub?.id === "form-difficulty" && (
-            <FormDifficultyPicker stepId={stepId} setStepId={setStepId} />
+            <FormDifficultyPicker
+              stepId={stepId}
+              setStepId={setStepId}
+              description={description}
+              setDescription={setDescription}
+              onSubmit={submitForm}
+              errors={errors}
+            />
           )}
 
           {sub?.id === "creation-plan" && (
@@ -1116,11 +1123,20 @@ const FORM_STEPS: { id: string; label: string; tips: string[]; intro?: string; f
 function FormDifficultyPicker({
   stepId,
   setStepId,
+  description,
+  setDescription,
+  onSubmit,
+  errors,
 }: {
   stepId: string;
   setStepId: (v: string) => void;
+  description: string;
+  setDescription: (v: string) => void;
+  onSubmit: () => void;
+  errors: Record<string, string>;
 }) {
   const step = FORM_STEPS.find((s) => s.id === stepId) ?? null;
+  const isOther = stepId === "other";
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
       <p className="text-[13px] font-semibold text-foreground">Which step are you stuck on?</p>
@@ -1134,6 +1150,7 @@ function FormDifficultyPicker({
               {s.label}
             </option>
           ))}
+          <option value="other">Other</option>
         </SelectInput>
       </div>
 
@@ -1167,6 +1184,28 @@ function FormDifficultyPicker({
               )}
             </div>
           )}
+        </div>
+      )}
+
+      {(step || isOther) && (
+        <div className="mt-3 space-y-3">
+          <Field label={isOther ? "Description" : "Still stuck? Tell us what's happening"} error={errors.description}>
+            <textarea
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              maxLength={2000}
+              rows={4}
+              placeholder="What happened and what would you like us to do?"
+              className="w-full resize-none bg-transparent text-[12px] text-foreground placeholder:text-muted-foreground outline-none"
+            />
+          </Field>
+          <button
+            type="button"
+            onClick={onSubmit}
+            className="w-full rounded-xl bg-primary py-3 text-[13px] font-medium text-primary-foreground transition-colors hover:bg-primary/90"
+          >
+            Raise a ticket
+          </button>
         </div>
       )}
     </div>
