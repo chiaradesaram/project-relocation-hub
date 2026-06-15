@@ -1355,21 +1355,6 @@ function RecentTransactionsPicker({
               </p>
             </div>
           </div>
-          <div className="mt-3 border-t border-border/40 pt-2">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-              A few tips
-            </p>
-            <ul className="mt-1.5 space-y-1.5">
-              <li className="flex items-start gap-1.5">
-                <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-success" />
-                <span className="text-[11px] leading-relaxed text-foreground">
-                  Investments only reflect when the transfer comes from a bank account you've
-                  registered with CAL. Check your linked accounts and add the one you used if
-                  it's missing.
-                </span>
-              </li>
-            </ul>
-          </div>
         </div>
       )}
     </div>
