@@ -484,6 +484,7 @@ function ContactForm() {
   const [stepId, setStepId] = useState("");
 
   const [description, setDescription] = useState("");
+  const [selectedTxId, setSelectedTxId] = useState<string | null>(null);
 
   // NIC form state
   const [nicNumber, setNicNumber] = useState("");
@@ -555,12 +556,23 @@ function ContactForm() {
     setProductId("");
     setShowForm(false);
     setStepId("");
+    setSelectedTxId(null);
   }, [categoryId]);
 
   useEffect(() => {
     setShowForm(false);
     setStepId("");
+    setSelectedTxId(null);
   }, [subId]);
+
+  useEffect(() => {
+    setSelectedTxId(null);
+  }, [productId]);
+
+  const isTxFlow =
+    sub?.id === "investment-not-reflected" ||
+    sub?.id === "withdrawal-delay" ||
+    sub?.id === "fund-split";
 
   function submitForm() {
     let result;
@@ -741,7 +753,8 @@ function ContactForm() {
           )}
 
           {/* Smart suggestions */}
-          {sub && productReady && hasSuggestions && (!showForm || resolveOnly) && (
+          {sub && productReady && hasSuggestions && (!showForm || resolveOnly) &&
+            (!isTxFlow || !!selectedTxId) && (
             <div className="rounded-xl border border-border/40 bg-card/60 p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
@@ -764,12 +777,18 @@ function ContactForm() {
 
           {/* Recent transactions picker for investment / withdrawal issues */}
           {sub &&
-            productReady &&
-            (sub.id === "investment-not-reflected" ||
-              sub.id === "withdrawal-delay" ||
-              sub.id === "fund-split") &&
+            isTxFlow &&
             !showForm && (
-              <RecentTransactionsPicker subId={sub.id} productId={productId} />
+              <RecentTransactionsPicker
+                subId={sub.id}
+                productId={productId}
+                selectedTxId={selectedTxId}
+                onSelect={(id) => setSelectedTxId(id)}
+                onNotListed={() => {
+                  setSelectedTxId(null);
+                  setShowForm(true);
+                }}
+              />
             )}
 
           {sub?.id === "form-difficulty" && (
