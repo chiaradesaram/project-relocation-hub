@@ -752,9 +752,8 @@ function ContactForm() {
             </div>
           )}
 
-          {/* Smart suggestions */}
-          {sub && productReady && hasSuggestions && (!showForm || resolveOnly) &&
-            (!isTxFlow || !!selectedTxId) && (
+          {/* Smart suggestions (hidden in tx flows — they go straight to picker) */}
+          {sub && productReady && hasSuggestions && !isTxFlow && (!showForm || resolveOnly) && (
             <div className="rounded-xl border border-border/40 bg-card/60 p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
@@ -776,14 +775,15 @@ function ContactForm() {
           )}
 
           {/* Recent transactions picker for investment / withdrawal issues */}
-          {sub &&
-            isTxFlow &&
-            !showForm && (
+          {sub && isTxFlow && productReady && (
               <RecentTransactionsPicker
                 subId={sub.id}
                 productId={productId}
                 selectedTxId={selectedTxId}
-                onSelect={(id) => setSelectedTxId(id)}
+                onSelect={(id) => {
+                  setSelectedTxId(id);
+                  setShowForm(true);
+                }}
                 onNotListed={() => {
                   setSelectedTxId(null);
                   setShowForm(true);
@@ -800,7 +800,7 @@ function ContactForm() {
           )}
 
           {/* Continue to ticket */}
-          {sub && !resolveOnly && !showForm && (hasSuggestions || hasQuickLinks) && (
+          {sub && !resolveOnly && !isTxFlow && !showForm && (hasSuggestions || hasQuickLinks) && (
             <button
               type="button"
               onClick={() => setShowForm(true)}
