@@ -78,10 +78,6 @@ const CATEGORIES: Category[] = [
         resolveOnly: true,
         suggestions: [
           {
-            q: "Where do I register?",
-            a: "You can register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (available on the Apple App Store and Google Play). If you prefer to apply in person, you can book an appointment through the provided link.",
-          },
-          {
             q: "What documents do I need?",
             a: "Your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
           },
@@ -121,7 +117,7 @@ const CATEGORIES: Category[] = [
           },
         ],
       },
-      { id: "doc-rejected", label: "Document rejected" },
+      { id: "doc-rejected", label: "Application Returned" },
       {
         id: "form-difficulty",
         label: "Difficulty filling up the form",
@@ -201,19 +197,19 @@ const CATEGORIES: Category[] = [
           },
           {
             q: "How do I open a Unit Trust account?",
-            a: "Register online at portal.cal.lk using your NIC, mobile number, and email address. You can also sign up through the CAL Online mobile app (Apple App Store / Google Play). If you prefer to apply in person, you can book an appointment. You'll need your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
+            a: "Register in one of three ways:\n• Online at portal.cal.lk using your NIC, mobile number and email\n• Through the CAL Online mobile app (App Store / Google Play)\n• In person — book an appointment\n\nDocuments you'll need:\n• NIC\n• Proof of bank account (e.g. a recent statement)\n• Proof of address (only if it differs from your NIC address)",
           },
           {
             q: "How long does it take to process a new unit trust application?",
-            a: "Once you submit your application through the portal with all required documents, processing typically takes 3–5 working days. Times may be slightly longer during high-volume periods. You can track the status of your application directly through the portal.",
+            a: "Typically 3–5 working days once you've submitted with all required documents. It may take a bit longer during high-volume periods. You can track your application status on the portal.",
           },
           {
             q: "What can I do once my unit trust account is active?",
-            a: "View your portfolio and balances, invest in Unit Trust funds, set up recurring investments, create redemption plans, track performance, and request account statements — plus more features to help you manage your investments easily.",
+            a: "• View your portfolio and balances\n• Invest in Unit Trust funds\n• Set up recurring investments\n• Create redemption plans\n• Track performance\n• Request account statements",
           },
           {
             q: "How do I invest money into a unit trust fund?",
-            a: "Bank transfer: Transfer funds to the CAL Unit Trust account (Deutsche Bank AG, Colombo, Capital Alliance Investments Limited, Account No: 0046797000). Use your registered bank account, then log in and submit a creation request. JustPay: Link your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
+            a: "Bank transfer:\nTransfer to the CAL Unit Trust account from your registered bank account, then log in and submit a creation request.\n• Bank: Deutsche Bank AG, Colombo\n• Name: Capital Alliance Investments Limited\n• Account No: 0046797000\n\nJustPay:\nLink your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
           },
         ],
         quickLinks: [
@@ -242,19 +238,19 @@ const CATEGORIES: Category[] = [
           },
           {
             q: "What are the benefits for CAL equities clients?",
-            a: "Track your portfolio via the CAL Online app, trade using the Atrad app, access AnalytiCAL (research portal with data on all CSE-listed companies, valuation ratios, and real-time metrics), access to research reports, webinars, and join a WhatsApp group for market updates. Get custom analytics and alerts tailored for you on your portfolio performance.",
+            a: "• Track your portfolio via the CAL Online app\n• Trade using the Atrad app\n• Access AnalytiCAL — data on all CSE-listed companies, valuation ratios and real-time metrics\n• Research reports and webinars\n• WhatsApp group for market updates\n• Custom analytics and alerts on your portfolio",
           },
           {
             q: "What is the minimum investment amount for an equities account?",
-            a: "Self-trading account (internet trading only): minimum LKR 100,000. Account with advisor support on your trades: minimum LKR 5,000,000.",
+            a: "• Self-trading (internet trading only): LKR 100,000\n• With advisor support on your trades: LKR 5,000,000",
           },
           {
             q: "How do I transfer funds into my equities account?",
-            a: "Bank transfer (no limit): Transfer to the CAL Seylan Bank account (Millennium branch, Capital Alliance Securities Pvt Ltd, Account No: 086400041489001). Use your registered bank account, then go to Pay In on the portal and submit a request. JustPay: Link your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable anytime.",
+            a: "Bank transfer (no limit):\nTransfer from your registered bank account, then go to Pay In on the portal and submit a request.\n• Bank: Seylan Bank, Millennium branch\n• Name: Capital Alliance Securities Pvt Ltd\n• Account No: 086400041489001\n\nJustPay:\nLink your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable.",
           },
           {
             q: "What are the fees involved with Equity Trading?",
-            a: "Brokerage fee: 0.64%. Total transaction cost: 1.12%, including CSE fees (0.084%), CDS fees (0.024%), SEC cess (0.072%), and Share Transaction Levy (0.300%).",
+            a: "• Brokerage fee: 0.64%\n• Total transaction cost: 1.12%\n\nIncluded in the total:\n• CSE fees: 0.084%\n• CDS fees: 0.024%\n• SEC cess: 0.072%\n• Share Transaction Levy: 0.300%",
           },
         ],
         quickLinks: [
