@@ -666,10 +666,12 @@ function ContactForm() {
       <PageHeader title="Contact us" showBack hideHelp />
 
       <div className="mx-4 mt-1 pb-6">
-        <h2 className="text-sm font-semibold text-foreground">Tell us what's wrong</h2>
+        <div className="pt-1 border-t border-border/20">
+          <p className="mt-2 text-[11px] text-muted-foreground/70">Tell us what&apos;s wrong so we can help.</p>
+        </div>
 
         <div className="mt-4 space-y-3">
-          <Field label="What's this about?" error={errors.categoryId}>
+          <Field error={errors.categoryId}>
             <SelectInput
               value={categoryId}
               onChange={(v) => setCategoryId(v as CategoryId | "")}
@@ -1464,15 +1466,17 @@ function Field({
   error,
   children,
 }: {
-  label: string;
+  label?: string;
   error?: string;
   children: React.ReactNode;
 }) {
   return (
     <div>
-      <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">
-        {label.toUpperCase()}
-      </p>
+      {label && (
+        <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">
+          {label.toUpperCase()}
+        </p>
+      )}
       <div className="rounded-xl border border-border/40 bg-card/60 px-3 py-2.5 backdrop-blur-md">
         {children}
       </div>
