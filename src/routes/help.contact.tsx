@@ -16,7 +16,6 @@ import {
   ClipboardList,
   Compass,
   BookOpen,
-  TrendingUp,
   Landmark,
   PiggyBank,
   AlertTriangle,
