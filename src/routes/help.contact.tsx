@@ -481,16 +481,16 @@ function ContactForm() {
   const hasQuickLinks = quickLinks.length > 0;
   const specialForm = sub?.specialForm;
   const resolveOnly = !!sub?.resolveOnly;
-  const needsProduct = !!category?.requiresProduct && !sub?.skipProduct;
-  const productReady = !needsProduct || !!productId;
+  const needsProduct = false;
+  const productReady = true;
 
   useEffect(() => {
     setSubId("");
-    setProductId("");
+    setProductId(category?.autoProduct ?? "");
     setShowForm(false);
     setStepId("");
     setSelectedTxId(null);
-  }, [categoryId]);
+  }, [category]);
 
   useEffect(() => {
     setShowForm(false);
