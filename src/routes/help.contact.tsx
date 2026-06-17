@@ -189,6 +189,7 @@ function productSubs(
   productLabel: string,
   learnSuggestions: { q: string; a: string }[],
   learnLinks: QuickLink[],
+  opts?: { investmentLabel?: string; redemptionLabel?: string },
 ): Sub[] {
   return [
     {
@@ -197,8 +198,8 @@ function productSubs(
       suggestions: ACCOUNT_OPENING_SUGGESTIONS,
       quickLinks: ACCOUNT_OPENING_LINKS,
     },
-    { id: "investment-not-reflected", label: "Investment issue" },
-    { id: "withdrawal-delay", label: "Redemption issue" },
+    { id: "investment-not-reflected", label: opts?.investmentLabel ?? "Investment issue" },
+    { id: "withdrawal-delay", label: opts?.redemptionLabel ?? "Redemption issue" },
     {
       id: "learn-product",
       label: `Learn about ${productLabel}`,
