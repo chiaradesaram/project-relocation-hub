@@ -223,7 +223,10 @@ const CATEGORIES: Category[] = [
     label: "Equities",
     team: "Equities Team",
     autoProduct: "equities",
-    subs: productSubs("Equities", EQ_LEARN_SUGGESTIONS, EQ_LEARN_LINKS),
+    subs: productSubs("Equities", EQ_LEARN_SUGGESTIONS, EQ_LEARN_LINKS, {
+      investmentLabel: "Pay in issue",
+      redemptionLabel: "Payout issue",
+    }),
   },
   {
     id: "treasuries",
