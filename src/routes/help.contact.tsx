@@ -24,10 +24,10 @@ import {
 } from "lucide-react";
 
 type CategoryId =
-  | "account-opening"
+  | "unit-trusts"
+  | "equities"
+  | "treasuries"
   | "account-profile"
-  | "product-info"
-  | "investments-withdrawals"
   | "statements-documents"
   | "technical"
   | "feedback"
@@ -61,70 +61,176 @@ interface Category {
   id: CategoryId;
   label: string;
   team: string;
-  /** When true, ask the user which product (UT / Equity / Treasury) the issue relates to. */
-  requiresProduct?: boolean;
+  /** If set, this category is a product — auto-fills productId and skips the product picker. */
+  autoProduct?: string;
   subs: Sub[];
+}
+
+const ACCOUNT_OPENING_SUGGESTIONS = [
+  {
+    q: "What documents do I need?",
+    a: "Your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
+  },
+  {
+    q: "How long does account opening take?",
+    a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
+  },
+];
+
+const ACCOUNT_OPENING_LINKS: QuickLink[] = [
+  {
+    label: "Start application",
+    to: "/get-started",
+    description: "Begin your account opening online",
+    icon: Compass,
+  },
+];
+
+const UT_LEARN_SUGGESTIONS = [
+  {
+    q: "What is a unit trust?",
+    a: "A unit trust is a pooled investment where money from many investors is combined and invested in assets like government securities, corporate debt, deposits, and shares. You receive units based on your investment, and returns are shared accordingly.",
+  },
+  {
+    q: "How do I open a Unit Trust account?",
+    a: "Register in one of three ways:\n• Online at portal.cal.lk using your NIC, mobile number and email\n• Through the CAL Online mobile app (App Store / Google Play)\n• In person — book an appointment\n\nDocuments you'll need:\n• NIC\n• Proof of bank account (e.g. a recent statement)\n• Proof of address (only if it differs from your NIC address)",
+  },
+  {
+    q: "How long does it take to process a new unit trust application?",
+    a: "Typically 3–5 working days once you've submitted with all required documents. It may take a bit longer during high-volume periods. You can track your application status on the portal.",
+  },
+  {
+    q: "What can I do once my unit trust account is active?",
+    a: "• View your portfolio and balances\n• Invest in Unit Trust funds\n• Set up recurring investments\n• Create redemption plans\n• Track performance\n• Request account statements",
+  },
+  {
+    q: "How do I invest money into a unit trust fund?",
+    a: "Bank transfer:\nTransfer to the CAL Unit Trust account from your registered bank account, then log in and submit a creation request.\n• Bank: Deutsche Bank AG, Colombo\n• Name: Capital Alliance Investments Limited\n• Account No: 0046797000\n\nJustPay:\nLink your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
+  },
+];
+
+const UT_LEARN_LINKS: QuickLink[] = [
+  {
+    label: "Browse unit trust funds",
+    to: "/unit-trusts",
+    description: "See live NAVs, historical returns and fund factsheets",
+    icon: PiggyBank,
+  },
+  {
+    label: "Unit trust guides",
+    to: "/learn",
+    description: "Beginner explainers and how-to videos",
+    icon: BookOpen,
+  },
+];
+
+const EQ_LEARN_SUGGESTIONS = [
+  {
+    q: "What is equity?",
+    a: "Equity means ownership in a company. When you own equity (shares/stocks), you have rights like voting on company decisions and receiving a share of the company's profits (dividends).",
+  },
+  {
+    q: "What are the benefits for CAL equities clients?",
+    a: "• Track your portfolio via the CAL Online app\n• Trade using the Atrad app\n• Access AnalytiCAL — data on all CSE-listed companies, valuation ratios and real-time metrics\n• Research reports and webinars\n• WhatsApp group for market updates\n• Custom analytics and alerts on your portfolio",
+  },
+  {
+    q: "What is the minimum investment amount for an equities account?",
+    a: "• Self-trading (internet trading only): LKR 100,000\n• With advisor support on your trades: LKR 5,000,000",
+  },
+  {
+    q: "How do I transfer funds into my equities account?",
+    a: "Bank transfer (no limit):\nTransfer from your registered bank account, then go to Pay In on the portal and submit a request.\n• Bank: Seylan Bank, Millennium branch\n• Name: Capital Alliance Securities Pvt Ltd\n• Account No: 086400041489001\n\nJustPay:\nLink your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable.",
+  },
+  {
+    q: "What are the fees involved with Equity Trading?",
+    a: "• Brokerage fee: 0.64%\n• Total transaction cost: 1.12%\n\nIncluded in the total:\n• CSE fees: 0.084%\n• CDS fees: 0.024%\n• SEC cess: 0.072%\n• Share Transaction Levy: 0.300%",
+  },
+];
+
+const EQ_LEARN_LINKS: QuickLink[] = [
+  {
+    label: "Investing in equities",
+    to: "/learn",
+    description: "Beginner's guide to buying and selling shares",
+    icon: BookOpen,
+  },
+];
+
+const TB_LEARN_SUGGESTIONS = [
+  {
+    q: "What are Treasury Bills and Bonds?",
+    a: "Government-issued debt instruments — T-Bills mature within a year, T-Bonds run longer. Backed by the Government of Sri Lanka, considered the safest LKR investment.",
+  },
+  {
+    q: "Is the interest taxed?",
+    a: "Yes, withholding tax applies at source. The yield shown on the app is gross of WHT.",
+  },
+  {
+    q: "Can I sell before maturity?",
+    a: "Yes — CAL can buy back your holding at the prevailing market rate. The settlement amount may differ from face value.",
+  },
+];
+
+const TB_LEARN_LINKS: QuickLink[] = [
+  {
+    label: "View treasury rates",
+    to: "/rates",
+    description: "Latest T-Bill and T-Bond yields",
+    icon: Landmark,
+  },
+  {
+    label: "Treasury guides",
+    to: "/learn",
+    description: "How treasuries work and who they're for",
+    icon: BookOpen,
+  },
+];
+
+function productSubs(
+  productLabel: string,
+  learnSuggestions: { q: string; a: string }[],
+  learnLinks: QuickLink[],
+): Sub[] {
+  return [
+    {
+      id: "account-opening",
+      label: "Account opening",
+      suggestions: ACCOUNT_OPENING_SUGGESTIONS,
+      quickLinks: ACCOUNT_OPENING_LINKS,
+    },
+    { id: "investment-not-reflected", label: "Investment issue" },
+    { id: "withdrawal-delay", label: "Redemption issue" },
+    {
+      id: "learn-product",
+      label: `Learn about ${productLabel}`,
+      resolveOnly: true,
+      suggestions: learnSuggestions,
+      quickLinks: learnLinks,
+    },
+  ];
 }
 
 const CATEGORIES: Category[] = [
   {
-    id: "account-opening",
-    label: "Account Opening",
-    team: "Onboarding Team",
-    subs: [
-      {
-        id: "open-account",
-        label: "How do I open an account?",
-        resolveOnly: true,
-        suggestions: [
-          {
-            q: "What documents do I need?",
-            a: "Your NIC, proof of your bank account (e.g. a recent bank statement), and proof of address (only if your correspondence address differs from your NIC address).",
-          },
-          {
-            q: "How long does account opening take?",
-            a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
-          },
-        ],
-        quickLinks: [
-          {
-            label: "Start application",
-            to: "/get-started",
-            description: "Begin your account opening online",
-            icon: Compass,
-          },
-        ],
-      },
-      {
-        id: "track-application",
-        label: "Track my application",
-        suggestions: [
-          {
-            q: "How long does account opening take?",
-            a: "Most applications are reviewed within 4–5 business days. During high volumes and around public holidays, it can take a few extra days.",
-          },
-          {
-            q: "When should I raise a ticket?",
-            a: "If your application has been pending for more than 4 working days, raise a ticket and we'll chase it up for you.",
-          },
-        ],
-        quickLinks: [
-          {
-            label: "Open application tracker",
-            to: "/get-started",
-            description: "See your current stage and what's pending",
-            icon: Compass,
-          },
-        ],
-      },
-      { id: "doc-rejected", label: "Application Returned" },
-      {
-        id: "form-difficulty",
-        label: "Difficulty filling up the form",
-        resolveOnly: true,
-      },
-      { id: "other", label: "Other" },
-    ],
+    id: "unit-trusts",
+    label: "Unit Trusts",
+    team: "Unit Trust Team",
+    autoProduct: "unit-trusts",
+    subs: productSubs("Unit Trusts", UT_LEARN_SUGGESTIONS, UT_LEARN_LINKS),
+  },
+  {
+    id: "equities",
+    label: "Equities",
+    team: "Equities Team",
+    autoProduct: "equities",
+    subs: productSubs("Equities", EQ_LEARN_SUGGESTIONS, EQ_LEARN_LINKS),
+  },
+  {
+    id: "treasuries",
+    label: "Treasuries",
+    team: "Treasuries Team",
+    autoProduct: "treasuries",
+    subs: productSubs("Treasuries", TB_LEARN_SUGGESTIONS, TB_LEARN_LINKS),
   },
   {
     id: "account-profile",
@@ -177,164 +283,6 @@ const CATEGORIES: Category[] = [
         id: "deactivate",
         label: "Deactivate account",
         specialForm: "deactivate",
-      },
-      { id: "other", label: "Other" },
-    ],
-  },
-  {
-    id: "product-info",
-    label: "Learn about a product",
-    team: "Education Team",
-    subs: [
-      {
-        id: "unit-trusts",
-        label: "Unit Trusts",
-        resolveOnly: true,
-        suggestions: [
-          {
-            q: "What is a unit trust?",
-            a: "A unit trust is a pooled investment where money from many investors is combined and invested in assets like government securities, corporate debt, deposits, and shares. You receive units based on your investment, and returns are shared accordingly.",
-          },
-          {
-            q: "How do I open a Unit Trust account?",
-            a: "Register in one of three ways:\n• Online at portal.cal.lk using your NIC, mobile number and email\n• Through the CAL Online mobile app (App Store / Google Play)\n• In person — book an appointment\n\nDocuments you'll need:\n• NIC\n• Proof of bank account (e.g. a recent statement)\n• Proof of address (only if it differs from your NIC address)",
-          },
-          {
-            q: "How long does it take to process a new unit trust application?",
-            a: "Typically 3–5 working days once you've submitted with all required documents. It may take a bit longer during high-volume periods. You can track your application status on the portal.",
-          },
-          {
-            q: "What can I do once my unit trust account is active?",
-            a: "• View your portfolio and balances\n• Invest in Unit Trust funds\n• Set up recurring investments\n• Create redemption plans\n• Track performance\n• Request account statements",
-          },
-          {
-            q: "How do I invest money into a unit trust fund?",
-            a: "Bank transfer:\nTransfer to the CAL Unit Trust account from your registered bank account, then log in and submit a creation request.\n• Bank: Deutsche Bank AG, Colombo\n• Name: Capital Alliance Investments Limited\n• Account No: 0046797000\n\nJustPay:\nLink your bank account and invest directly — no proof upload needed. Up to LKR 150,000 per transaction (repeatable).",
-          },
-        ],
-        quickLinks: [
-          {
-            label: "Browse unit trust funds",
-            to: "/unit-trusts",
-            description: "See live NAVs, historical returns and fund factsheets",
-            icon: PiggyBank,
-          },
-          {
-            label: "Unit trust guides",
-            to: "/learn",
-            description: "Beginner explainers and how-to videos",
-            icon: BookOpen,
-          },
-        ],
-      },
-      {
-        id: "equities",
-        label: "Equities",
-        resolveOnly: true,
-        suggestions: [
-          {
-            q: "What is equity?",
-            a: "Equity means ownership in a company. When you own equity (shares/stocks), you have rights like voting on company decisions and receiving a share of the company's profits (dividends).",
-          },
-          {
-            q: "What are the benefits for CAL equities clients?",
-            a: "• Track your portfolio via the CAL Online app\n• Trade using the Atrad app\n• Access AnalytiCAL — data on all CSE-listed companies, valuation ratios and real-time metrics\n• Research reports and webinars\n• WhatsApp group for market updates\n• Custom analytics and alerts on your portfolio",
-          },
-          {
-            q: "What is the minimum investment amount for an equities account?",
-            a: "• Self-trading (internet trading only): LKR 100,000\n• With advisor support on your trades: LKR 5,000,000",
-          },
-          {
-            q: "How do I transfer funds into my equities account?",
-            a: "Bank transfer (no limit):\nTransfer from your registered bank account, then go to Pay In on the portal and submit a request.\n• Bank: Seylan Bank, Millennium branch\n• Name: Capital Alliance Securities Pvt Ltd\n• Account No: 086400041489001\n\nJustPay:\nLink your bank account in the app and invest directly — no proof upload needed. Up to LKR 150,000 per transaction, repeatable.",
-          },
-          {
-            q: "What are the fees involved with Equity Trading?",
-            a: "• Brokerage fee: 0.64%\n• Total transaction cost: 1.12%\n\nIncluded in the total:\n• CSE fees: 0.084%\n• CDS fees: 0.024%\n• SEC cess: 0.072%\n• Share Transaction Levy: 0.300%",
-          },
-        ],
-        quickLinks: [
-          {
-            label: "Investing in equities",
-            to: "/learn",
-            description: "Beginner's guide to buying and selling shares",
-            icon: BookOpen,
-          },
-        ],
-      },
-      {
-        id: "treasuries",
-        label: "Treasuries",
-        resolveOnly: true,
-        suggestions: [
-          {
-            q: "What are Treasury Bills and Bonds?",
-            a: "Government-issued debt instruments — T-Bills mature within a year, T-Bonds run longer. Backed by the Government of Sri Lanka, considered the safest LKR investment.",
-          },
-          {
-            q: "Is the interest taxed?",
-            a: "Yes, withholding tax applies at source. The yield shown on the app is gross of WHT.",
-          },
-          {
-            q: "Can I sell before maturity?",
-            a: "Yes — CAL can buy back your holding at the prevailing market rate. The settlement amount may differ from face value.",
-          },
-        ],
-        quickLinks: [
-          {
-            label: "View treasury rates",
-            to: "/rates",
-            description: "Latest T-Bill and T-Bond yields",
-            icon: Landmark,
-          },
-          {
-            label: "Treasury guides",
-            to: "/learn",
-            description: "How treasuries work and who they're for",
-            icon: BookOpen,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    id: "investments-withdrawals",
-    label: "Investments & Withdrawals",
-    team: "Payments Team",
-    requiresProduct: true,
-    subs: [
-      {
-        id: "investment-not-reflected",
-        label: "Investment not reflected",
-        suggestions: [
-          {
-            q: "How long does it take for funds to reflect on the portal?",
-            a: "Your investment becomes active on the creation date and reflects on your portal by the end of the next business day, once the transfer is confirmed.",
-          },
-        ],
-      },
-      {
-        id: "withdrawal-delay",
-        label: "Withdrawal / redemption delay",
-      },
-      {
-        id: "fund-split",
-        label: "Fund Flips",
-        onlyProduct: "unit-trusts",
-      },
-      {
-        id: "redemption-plan",
-        label: "Redemption plan issue",
-        skipProduct: true,
-        suggestions: [
-          { q: "Can I edit a scheduled redemption?", a: "Yes — open the plan from your portfolio and tap Edit. Changes apply from the next cycle." },
-        ],
-      },
-      {
-        id: "creation-plan",
-        label: "Creation plan issue",
-        skipProduct: true,
-        resolveOnly: true,
       },
       { id: "other", label: "Other" },
     ],
