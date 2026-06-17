@@ -60,7 +60,7 @@ function GetStarted() {
               <span className="flex h-7 w-7 items-center justify-center rounded-full bg-primary/30">
                 <Sparkles className="h-3.5 w-3.5 text-foreground" />
               </span>
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Welcome</p>
+              <p className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Welcome</p>
             </div>
             <h2 className="mt-3 text-lg font-semibold text-foreground leading-snug">
               Not sure where to start?
@@ -79,7 +79,7 @@ function GetStarted() {
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-[13px] font-medium text-foreground">Learn about Unit Trusts</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">A 60-second explainer</p>
+              <p className="text-[12px] text-muted-foreground mt-0.5">A 60-second explainer</p>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground/60" />
           </button>
@@ -93,7 +93,7 @@ function GetStarted() {
             </span>
             <div className="flex-1 min-w-0">
               <p className="text-[13px] font-medium text-foreground">Find a fund for me</p>
-              <p className="text-[11px] text-muted-foreground mt-0.5">Answer 2 quick questions</p>
+              <p className="text-[12px] text-muted-foreground mt-0.5">Answer 2 quick questions</p>
             </div>
             <ChevronRight className="h-4 w-4 text-muted-foreground/60" />
           </button>
@@ -103,7 +103,7 @@ function GetStarted() {
       {step === "learn" && (
         <div className="px-4 pt-2 pb-6 space-y-3">
           <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md p-5">
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">What is a Unit Trust?</p>
+            <p className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">What is a Unit Trust?</p>
             <p className="mt-2 text-[13px] leading-relaxed text-foreground">
               A Unit Trust pools money from many investors and a professional manager invests it across a mix of assets — like government bonds, corporate debt, and equities.
             </p>
@@ -124,7 +124,7 @@ function GetStarted() {
                 </span>
                 <div>
                   <p className="text-[13px] font-medium text-foreground">{title}</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5 leading-relaxed">{body}</p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5 leading-relaxed">{body}</p>
                 </div>
               </div>
             ))}
@@ -142,7 +142,7 @@ function GetStarted() {
       {step === "quiz" && (
         <div className="px-4 pt-2 pb-6 space-y-4">
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 mb-2">Question 1 of 2</p>
+            <p className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground/70 mb-2">Question 1 of 2</p>
             <p className="text-[14px] font-medium text-foreground mb-3">How would you feel if your investment dropped 10% in a month?</p>
             <div className="space-y-2">
               {([
@@ -160,14 +160,14 @@ function GetStarted() {
                   }`}
                 >
                   <p className="text-[13px] font-medium text-foreground">{opt.label}</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{opt.sub}</p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5">{opt.sub}</p>
                 </button>
               ))}
             </div>
           </div>
 
           <div>
-            <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70 mb-2">Question 2 of 2</p>
+            <p className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground/70 mb-2">Question 2 of 2</p>
             <p className="text-[14px] font-medium text-foreground mb-3">When might you need this money?</p>
             <div className="space-y-2">
               {([
@@ -185,7 +185,7 @@ function GetStarted() {
                   }`}
                 >
                   <p className="text-[13px] font-medium text-foreground">{opt.label}</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5">{opt.sub}</p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5">{opt.sub}</p>
                 </button>
               ))}
             </div>
@@ -212,7 +212,7 @@ function GetStarted() {
           >
             <div className="flex items-center gap-2">
               <CheckCircle2 className="h-4 w-4 text-success" />
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">Recommended for you</p>
+              <p className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">Recommended for you</p>
             </div>
             <div className="mt-3 flex items-start gap-3">
               <span
@@ -249,7 +249,7 @@ function GetStarted() {
 
           <Link
             to="/learn"
-            className="block w-full text-center text-[11px] text-muted-foreground hover:text-foreground transition pt-2"
+            className="block w-full text-center text-[12px] text-muted-foreground hover:text-foreground transition pt-2"
           >
             Browse all funds →
           </Link>

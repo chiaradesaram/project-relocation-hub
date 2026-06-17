@@ -78,7 +78,7 @@ function UnitTrustPortfolio() {
         <p className="text-3xl font-bold tracking-tight text-foreground mt-1">
           LKR 2,450,000
         </p>
-        <div className="mt-2 flex items-center justify-center gap-4 text-[11px]">
+        <div className="mt-2 flex items-center justify-center gap-4 text-[12px]">
           <span className="text-muted-foreground">
             7d{" "}
             <span className="font-medium text-success">+16,436</span>
@@ -200,7 +200,7 @@ function UnitTrustPortfolio() {
                               {sub.name}
                             </span>
                             {hasGoal && (
-                              <span className="text-[9px] text-muted-foreground/70 truncate">
+                              <span className="text-[12px] text-muted-foreground/70 truncate">
                                 · {sub.goalLabel}
                               </span>
                             )}
@@ -216,11 +216,11 @@ function UnitTrustPortfolio() {
                         {/* Earnings + tiny goal indicator, right aligned */}
                         <div className="mt-1.5 flex items-center justify-end gap-1">
                           {hasGoal && (
-                            <span className="rounded-full bg-primary/10 px-1.5 py-px text-[9px] font-medium text-primary">
+                            <span className="rounded-full bg-primary/10 px-1.5 py-px text-[12px] font-medium text-primary">
                               {Math.round(progress)}% of goal
                             </span>
                           )}
-                          <span className="rounded-full bg-success/10 px-1.5 py-px text-[9px] font-medium text-success">
+                          <span className="rounded-full bg-success/10 px-1.5 py-px text-[12px] font-medium text-success">
                             All {sub.earningsAll}
                           </span>
                         </div>
@@ -281,7 +281,7 @@ function UnitTrustPortfolio() {
                       <p className="text-sm font-medium text-foreground">
                         {fund.name}
                       </p>
-                      <p className="text-[11px] text-muted-foreground">
+                      <p className="text-[12px] text-muted-foreground">
                         {fund.returnPct} return · {fund.subAccounts.length} sub-accounts
                       </p>
                     </div>
@@ -346,7 +346,7 @@ function UnitTrustPortfolio() {
                     <button
                       key={preset}
                       onClick={() => setGoalTarget(String(preset))}
-                      className="flex-1 rounded-lg border border-border/30 bg-background/30 py-1.5 text-[10px] font-medium text-muted-foreground transition hover:bg-muted/10 hover:text-foreground"
+                      className="flex-1 rounded-lg border border-border/30 bg-background/30 py-1.5 text-[12px] font-medium text-muted-foreground transition hover:bg-muted/10 hover:text-foreground"
                     >
                       {(preset / 1000000).toFixed(preset < 1000000 ? 1 : 0)}M
                     </button>

@@ -69,7 +69,7 @@ function Redeem() {
             <button
               key={id}
               onClick={() => setMethod(id)}
-              className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-[11px] font-medium transition-all ${
+              className={`flex-1 flex items-center justify-center gap-1 py-2 rounded-lg text-[12px] font-medium transition-all ${
                 method === id
                   ? "gradient-primary text-primary-foreground shadow-lg"
                   : "text-muted-foreground hover:text-foreground"
@@ -91,7 +91,7 @@ function Redeem() {
       {/* Existing Plans */}
       {method === "plan" && (
         <div className="mx-4 mt-3">
-          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mb-2">EXISTING PLANS</p>
+          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider uppercase mb-2">EXISTING PLANS</p>
           {existingPlans.map((p, i) => (
             <div key={i} className="glass-card p-3 mb-2 flex items-center gap-3">
               <div className="flex-1">
@@ -103,7 +103,7 @@ function Redeem() {
               <Trash2 className="w-3.5 h-3.5 text-destructive" />
             </div>
           ))}
-          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mt-4 mb-2">NEW PLAN</p>
+          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider uppercase mt-4 mb-2">NEW PLAN</p>
         </div>
       )}
 

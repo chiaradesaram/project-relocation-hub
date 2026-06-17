@@ -128,7 +128,7 @@ function Transactions() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
-                <span className={`px-1.5 py-0.5 rounded text-[10px] font-medium ${statusStyles[tx.status]}`}>
+                <span className={`px-1.5 py-0.5 rounded text-[12px] font-medium ${statusStyles[tx.status]}`}>
                   {tx.status}
                 </span>
                 {tx.status === "Pending" && (
@@ -152,10 +152,10 @@ function Transactions() {
               <p className="text-xs text-muted-foreground truncate mt-0.5">{tx.subAccount}</p>
               {tx.status === "Pending" && tx.createdDate ? (
               <div className="mt-1.5 space-y-0.5">
-                <p className="text-[11px] text-foreground">
+                <p className="text-[12px] text-foreground">
                   <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
                 </p>
-                <p className="text-[11px] text-foreground">
+                <p className="text-[12px] text-foreground">
                   <span className="text-muted-foreground/70">Reflects on Portal:</span>{" "}
                   <Tooltip>
                     <TooltipTrigger asChild>
@@ -168,7 +168,7 @@ function Transactions() {
                 </p>
               </div>
               ) : (
-                <p className="text-[11px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
+                <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
               )}
             </div>
             <div className="text-right shrink-0">

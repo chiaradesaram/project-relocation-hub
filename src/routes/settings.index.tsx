@@ -32,7 +32,7 @@ function Settings() {
       <PageHeader title="Settings" showBack />
       {sections.map((section) => (
         <div key={section.title} className="mx-4 mt-4">
-          <p className="px-1 pb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{section.title}</p>
+          <p className="px-1 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{section.title}</p>
           <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
             {section.items.map(({ icon: Icon, label, description, to }) => (
               <Link
@@ -45,7 +45,7 @@ function Settings() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[13px] font-semibold text-foreground leading-tight">{label}</p>
-                  <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{description}</p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">{description}</p>
                 </div>
                 <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
               </Link>

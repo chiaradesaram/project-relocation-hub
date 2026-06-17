@@ -63,7 +63,7 @@ function More() {
           </div>
           <div className="flex-1 text-left">
             <p className="text-sm font-semibold text-foreground">John Doe</p>
-            <p className="text-[11px] text-muted-foreground">john.doe@email.com</p>
+            <p className="text-[12px] text-muted-foreground">john.doe@email.com</p>
           </div>
           <ChevronRight className="w-4 h-4 text-muted-foreground" />
         </button>
@@ -71,7 +71,7 @@ function More() {
 
       {sections.map((section) => (
         <div key={section.title} className="mx-4 mt-4">
-          <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">{section.title}</p>
+          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">{section.title}</p>
           <div className="glass-card overflow-hidden divide-y divide-border/30">
             {section.items.map(({ icon: Icon, label, path, subtitle }: any) => (
               <button
@@ -82,7 +82,7 @@ function More() {
                 <Icon className="w-5 h-5 text-primary" />
                 <div className="flex-1 text-left">
                   <p className="text-xs font-medium text-foreground">{label}</p>
-                  {subtitle && <p className="text-[10px] text-muted-foreground">{subtitle}</p>}
+                  {subtitle && <p className="text-[12px] text-muted-foreground">{subtitle}</p>}
                 </div>
                 <ChevronRight className="w-4 h-4 text-muted-foreground" />
               </button>

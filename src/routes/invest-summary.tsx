@@ -46,27 +46,27 @@ function InvestSummary() {
 
       {/* Total */}
       <div className="mx-4 mt-2 glass-card p-4 text-center">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider">TOTAL</p>
+        <p className="text-[12px] font-semibold text-muted-foreground tracking-wider">TOTAL</p>
         <p className="mt-1 text-2xl font-bold text-foreground">LKR {total.toLocaleString()}</p>
-        <p className="text-[10px] text-muted-foreground mt-0.5">
+        <p className="text-[12px] text-muted-foreground mt-0.5">
           {isInstant ? "Direct Invest" : "Bank Transfer"}
         </p>
       </div>
 
       {/* Investment Details */}
       <div className="mx-4 mt-3 glass-card p-3">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">INVESTMENT DETAILS</p>
+        <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">INVESTMENT DETAILS</p>
         <div className="space-y-2">
           <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
           {isInstant && (
             <div className="flex items-start justify-between gap-2">
-              <span className="text-[11px] text-muted-foreground flex items-center gap-1">
+              <span className="text-[12px] text-muted-foreground flex items-center gap-1">
                 Justpay service charge
                 <button type="button" onClick={() => setShowJustpayInfo(!showJustpayInfo)} aria-label="About Justpay charge">
                   <Info className="w-3 h-3 text-muted-foreground" />
                 </button>
               </span>
-              <span className="text-[11px] font-medium text-foreground">LKR {serviceCharge.toLocaleString()}</span>
+              <span className="text-[12px] font-medium text-foreground">LKR {serviceCharge.toLocaleString()}</span>
             </div>
           )}
           {isInstant && showJustpayInfo && (
@@ -78,7 +78,7 @@ function InvestSummary() {
               }}
             >
               <Lightbulb className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-blue)" }} />
-              <p className="text-[10px] text-muted-foreground">
+              <p className="text-[12px] text-muted-foreground">
                 Justpay is the payment provider that powers Direct Invest. To remove this charge, link a{" "}
                 <span className="text-foreground font-medium">Seylan Bank</span> account.
               </p>
@@ -109,7 +109,7 @@ function InvestSummary() {
 
       {/* Fund Info */}
       <div className="mx-4 mt-3 glass-card p-3">
-        <p className="text-[10px] font-semibold text-muted-foreground tracking-wider mb-2">FUND INFO</p>
+        <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">FUND INFO</p>
         <div className="space-y-2">
           <Row label="Fund name" value={fund || "—"} />
           <Row label="Sub account" value={account || "—"} />
@@ -134,8 +134,8 @@ function InvestSummary() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className="text-[11px] text-muted-foreground">{label}</span>
-      <span className="text-[11px] font-medium text-foreground text-right">{value}</span>
+      <span className="text-[12px] text-muted-foreground">{label}</span>
+      <span className="text-[12px] font-medium text-foreground text-right">{value}</span>
     </div>
   );
 }
@@ -160,7 +160,7 @@ function RowWithInfo({
     <div>
       <div className="flex items-center justify-between gap-2">
         <span
-          className="text-[11px] flex items-center gap-1"
+          className="text-[12px] flex items-center gap-1"
           style={accent ? { color: accentColor } : undefined}
         >
           <span className={accent ? "" : "text-muted-foreground"}>{label}</span>
@@ -169,14 +169,14 @@ function RowWithInfo({
           </button>
         </span>
         <span
-          className="text-[11px] font-medium text-right"
+          className="text-[12px] font-medium text-right"
           style={accent ? { color: accentColor } : undefined}
         >
           {value}
         </span>
       </div>
       {open && (
-        <p className="mt-1 text-[10px] text-muted-foreground/80 leading-relaxed">{infoText}</p>
+        <p className="mt-1 text-[12px] text-muted-foreground/80 leading-relaxed">{infoText}</p>
       )}
     </div>
   );

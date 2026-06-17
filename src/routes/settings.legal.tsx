@@ -36,13 +36,13 @@ function LegalDocuments() {
               </div>
               <div className="min-w-0 flex-1">
                 <p className="text-[13px] font-semibold text-foreground leading-tight">{label}</p>
-                <p className="text-[11px] text-muted-foreground mt-0.5 leading-snug">{description}</p>
+                <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">{description}</p>
               </div>
               <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
             </Link>
           ))}
         </div>
-        <p className="px-1 pt-3 text-[11px] text-muted-foreground/80">
+        <p className="px-1 pt-3 text-[12px] text-muted-foreground/80">
           App version 2.4.1 · © {new Date().getFullYear()} Capital Alliance
         </p>
       </div>

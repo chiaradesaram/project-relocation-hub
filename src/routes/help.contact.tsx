@@ -581,7 +581,7 @@ function ContactForm() {
             </p>
             <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-muted/30 px-2.5 py-1">
               <span className="text-[12px] text-muted-foreground">Reference</span>
-              <span className="text-[11px] font-mono font-medium text-foreground">{refId}</span>
+              <span className="text-[12px] font-mono font-medium text-foreground">{refId}</span>
             </div>
           </div>
 
@@ -612,7 +612,7 @@ function ContactForm() {
 
       <div className="mx-4 mt-1 pb-6">
         <div className="pt-1 border-t border-border/20">
-          <p className="mt-2 text-[10px] font-semibold tracking-wider uppercase text-muted-foreground">
+          <p className="mt-2 text-[12px] font-semibold tracking-wider uppercase text-muted-foreground">
             Tell us what&apos;s wrong so we can help
           </p>
         </div>
@@ -662,7 +662,7 @@ function ContactForm() {
                     </div>
                     <div className="flex-1">
                       <p className="text-[13px] font-semibold text-foreground">{q.label}</p>
-                      <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      <p className="text-[12px] leading-relaxed text-muted-foreground">
                         {q.description}
                       </p>
                     </div>
@@ -686,7 +686,7 @@ function ContactForm() {
                 {suggestions.map((s, i) => (
                   <div key={i} className="rounded-lg bg-muted/20 p-2.5">
                     <p className="text-[13px] font-medium text-foreground">{s.q}</p>
-                    <p className="mt-0.5 whitespace-pre-line text-[10px] leading-relaxed text-muted-foreground">
+                    <p className="mt-0.5 whitespace-pre-line text-[12px] leading-relaxed text-muted-foreground">
                       {s.a}
                     </p>
                   </div>
@@ -860,7 +860,7 @@ function ContactForm() {
                       }}
                     />
                   </label>
-                  {errors.file && <p className="text-[10px] text-destructive">{errors.file}</p>}
+                  {errors.file && <p className="text-[12px] text-destructive">{errors.file}</p>}
 
                   <button
                     type="button"
@@ -896,7 +896,7 @@ function DeactivateForm({
       <div className="rounded-xl border border-warning/40 bg-warning/10 p-3">
         <div className="flex items-start gap-2">
           <AlertTriangle className="h-4 w-4 shrink-0 text-warning" />
-          <p className="text-[11px] leading-relaxed text-foreground">
+          <p className="text-[12px] leading-relaxed text-foreground">
             Heads up — deactivation can take up to <span className="font-semibold">1 month</span>.
             We need this time to make sure the deletion complies with regulatory requirements.
           </p>
@@ -922,7 +922,7 @@ function DeactivateForm({
               <p className="text-[12px] font-semibold text-foreground">
                 We can't deactivate your profile right now
               </p>
-              <p className="mt-1 text-[11px] leading-relaxed text-muted-foreground">
+              <p className="mt-1 text-[12px] leading-relaxed text-muted-foreground">
                 You've made a transaction within the last 6 years, so we're required to keep your
                 profile active. If this was for security reasons, we suggest you change your
                 password. If you'd like, you can contact us for further help.
@@ -930,13 +930,13 @@ function DeactivateForm({
               <div className="mt-2 flex flex-wrap gap-2">
                 <Link
                   to="/settings"
-                  className="inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+                  className="inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[12px] font-medium text-primary hover:bg-primary/20"
                 >
                   Change password
                 </Link>
                 <Link
                   to="/help/contact"
-                  className="inline-flex items-center gap-1 rounded-lg border border-border/50 px-2.5 py-1 text-[11px] font-medium text-foreground hover:bg-muted/30"
+                  className="inline-flex items-center gap-1 rounded-lg border border-border/50 px-2.5 py-1 text-[12px] font-medium text-foreground hover:bg-muted/30"
                 >
                   Contact us
                 </Link>
@@ -1078,7 +1078,7 @@ function FormDifficultyPicker({
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
       <p className="text-[13px] font-semibold text-foreground">Which step are you stuck on?</p>
-      <p className="mt-0.5 text-[11px] text-muted-foreground">
+      <p className="mt-0.5 text-[12px] text-muted-foreground">
         Pick a step and we'll show tips to help you get through it.
       </p>
       <div className="mt-2">
@@ -1099,23 +1099,23 @@ function FormDifficultyPicker({
             <p className="text-[12px] font-semibold text-foreground">{step.label} tips</p>
           </div>
           {step.intro && (
-            <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">{step.intro}</p>
+            <p className="mt-1.5 text-[12px] leading-relaxed text-muted-foreground">{step.intro}</p>
           )}
           <ul className="mt-2 space-y-1.5">
             {step.tips.map((t, i) => (
               <li key={i} className="flex items-start gap-1.5">
                 <CheckCircle2 className="mt-0.5 h-3 w-3 shrink-0 text-success" />
-                <span className="text-[11px] leading-relaxed text-foreground">{t}</span>
+                <span className="text-[12px] leading-relaxed text-foreground">{t}</span>
               </li>
             ))}
           </ul>
           {step.footer && (
             <div className="mt-2.5 border-t border-border/40 pt-2">
-              <p className="text-[11px] leading-relaxed text-muted-foreground">{step.footer.text}</p>
+              <p className="text-[12px] leading-relaxed text-muted-foreground">{step.footer.text}</p>
               {step.footer.link && (
                 <Link
                   to={step.footer.link.to}
-                  className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+                  className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[12px] font-medium text-primary hover:bg-primary/20"
                 >
                   {step.footer.link.label}
                 </Link>
@@ -1182,13 +1182,13 @@ function CreationPlanPicker({
             <Lightbulb className="h-3.5 w-3.5 text-primary" />
             <p className="text-[12px] font-semibold text-foreground">You can cancel anytime</p>
           </div>
-          <p className="mt-1.5 text-[11px] leading-relaxed text-muted-foreground">
+          <p className="mt-1.5 text-[12px] leading-relaxed text-muted-foreground">
             You can cancel the plan at any time from your portfolio. Plans cannot be edited — to
             change the fund, amount, or date, cancel the current plan and create a new one.
           </p>
           <Link
             to="/unit-trusts"
-            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[12px] font-medium text-primary hover:bg-primary/20"
           >
             Go to my plans
           </Link>
@@ -1197,13 +1197,13 @@ function CreationPlanPicker({
 
       {stepId === "edit" && (
         <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
-          <p className="text-[11px] leading-relaxed text-muted-foreground">
+          <p className="text-[12px] leading-relaxed text-muted-foreground">
             Creation plans cannot be edited. To change the fund, amount, or date, cancel the current
             plan and create a new one.
           </p>
           <Link
             to="/unit-trusts"
-            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[11px] font-medium text-primary hover:bg-primary/20"
+            className="mt-2 inline-flex items-center gap-1 rounded-lg bg-primary/15 px-2.5 py-1 text-[12px] font-medium text-primary hover:bg-primary/20"
           >
             Manage my plans
           </Link>
@@ -1283,7 +1283,7 @@ function RecentTransactionsPicker({
               <div className="flex items-center justify-between gap-2">
                 <div className="min-w-0">
                   <p className="truncate text-[12px] font-medium text-foreground">{tx.name}</p>
-                  <p className="text-[10px] text-muted-foreground">
+                  <p className="text-[12px] text-muted-foreground">
                     {displayKind}
                     {tx.subAccount ? ` · ${tx.subAccount}` : ""} · {tx.date}
                   </p>
@@ -1291,7 +1291,7 @@ function RecentTransactionsPicker({
                 <div className="flex shrink-0 items-center gap-1.5">
                   {tx.status && (
                     <span
-                      className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${
+                      className={`rounded px-1.5 py-0.5 text-[12px] font-medium ${
                         tx.status === "Pending"
                           ? "bg-warning/15 text-warning"
                           : "bg-success/15 text-success"
@@ -1300,14 +1300,14 @@ function RecentTransactionsPicker({
                       {tx.status}
                     </span>
                   )}
-                  <span className="text-[11px] font-medium text-foreground">{tx.value}</span>
+                  <span className="text-[12px] font-medium text-foreground">{tx.value}</span>
                 </div>
               </div>
             </button>
           );
         })}
         {txs.length === 0 && (
-          <p className="text-[11px] text-muted-foreground">
+          <p className="text-[12px] text-muted-foreground">
             No recent transactions for this product.
           </p>
         )}
@@ -1321,7 +1321,7 @@ function RecentTransactionsPicker({
           }`}
         >
           <p>Transaction not listed here?</p>
-          <p className="mt-0.5 text-[10px] text-muted-foreground">
+          <p className="mt-0.5 text-[12px] text-muted-foreground">
             Describe the issue and we'll look into it.
           </p>
         </button>
@@ -1329,24 +1329,24 @@ function RecentTransactionsPicker({
 
       {selectedTx && selectedTx.status === "Pending" && subId === "investment-not-reflected" && (
         <div className="mt-3 rounded-lg bg-muted/30 p-2.5">
-          <p className="text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <p className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
             Your estimated investment timeline
           </p>
           <div className="mt-2 space-y-2">
             <div className="flex items-start gap-2">
               <Clock className="mt-0.5 h-3.5 w-3.5 shrink-0 text-primary" />
               <div>
-                <p className="text-[11px] font-medium text-foreground">
+                <p className="text-[12px] font-medium text-foreground">
                   Creation date — {selectedTx.date}
                 </p>
-                <p className="text-[10px] leading-relaxed text-muted-foreground">
+                <p className="text-[12px] leading-relaxed text-muted-foreground">
                   This is the date your investment becomes active.
                 </p>
               </div>
             </div>
             <div className="flex items-start gap-2">
               <CheckCircle2 className="mt-0.5 h-3.5 w-3.5 shrink-0 text-success" />
-              <p className="text-[11px] leading-relaxed text-foreground">
+              <p className="text-[12px] leading-relaxed text-foreground">
                 Your investment will be reflected on your portal — by the end of{" "}
                 <span className="font-medium">{selectedTx.reflectDate}</span>
               </p>
@@ -1371,7 +1371,7 @@ function NicUpload({
 }) {
   return (
     <div>
-      <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">
+      <p className="mb-1 text-[12px] font-semibold tracking-wider text-muted-foreground">
         {label.toUpperCase()}
       </p>
       <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
@@ -1391,7 +1391,7 @@ function NicUpload({
           }}
         />
       </label>
-      {error && <p className="mt-1 text-[10px] text-destructive">{error}</p>}
+      {error && <p className="mt-1 text-[12px] text-destructive">{error}</p>}
     </div>
   );
 }
@@ -1408,14 +1408,14 @@ function Field({
   return (
     <div>
       {label && (
-        <p className="mb-1 text-[10px] font-semibold tracking-wider text-muted-foreground">
+        <p className="mb-1 text-[12px] font-semibold tracking-wider text-muted-foreground">
           {label.toUpperCase()}
         </p>
       )}
       <div className="rounded-xl border border-border/40 bg-card/60 px-3 py-2.5 backdrop-blur-md">
         {children}
       </div>
-      {error && <p className="mt-1 text-[10px] text-destructive">{error}</p>}
+      {error && <p className="mt-1 text-[12px] text-destructive">{error}</p>}
     </div>
   );
 }
