@@ -555,7 +555,7 @@ function Dashboard() {
               <WidgetMenu widget="quick" />
             </div>
           </div>
-          <div className="grid grid-cols-4 gap-1.5">
+          <div className="grid grid-cols-3 gap-1.5">
             {quickActions
               .map((id) => QUICK_ACTION_CATALOG.find((a) => a.id === id))
               .filter((a): a is (typeof QUICK_ACTION_CATALOG)[number] => Boolean(a))
