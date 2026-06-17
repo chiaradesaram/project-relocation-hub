@@ -364,12 +364,6 @@ const CATEGORIES: Category[] = [
   },
 ];
 
-const PRODUCTS = [
-  { id: "unit-trusts", label: "Unit Trusts" },
-  { id: "equities", label: "Equities" },
-  { id: "treasuries", label: "Treasuries" },
-] as const;
-
 const baseSchema = z.object({
   categoryId: z.string().min(1, "Pick a topic"),
   subId: z.string().min(1, "Pick what best describes it"),
