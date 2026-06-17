@@ -612,7 +612,9 @@ function ContactForm() {
 
       <div className="mx-4 mt-1 pb-6">
         <div className="pt-1 border-t border-border/20">
-          <p className="mt-2 text-[11px] text-muted-foreground/70">Tell us what&apos;s wrong so we can help.</p>
+          <p className="mt-2 text-[10px] font-semibold tracking-wider uppercase text-muted-foreground">
+            Tell us what&apos;s wrong so we can help
+          </p>
         </div>
 
         <div className="mt-4 space-y-3">
