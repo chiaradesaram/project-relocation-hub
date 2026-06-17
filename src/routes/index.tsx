@@ -358,6 +358,51 @@ function Dashboard() {
       </div>
       )}
 
+      {/* Quick actions */}
+      {isVisible("quick") && (
+      <div className="mx-4 mt-3.5">
+        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-2.5">
+          <div className="flex items-center justify-between px-1 pb-1.5">
+            <h3 className="text-[13px] font-medium text-muted-foreground">Quick actions</h3>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setEditingQuick(true)}
+                className="rounded-full p-1 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
+                aria-label="Customize quick actions"
+              >
+                <Settings2 className="h-3.5 w-3.5" />
+              </button>
+              <WidgetMenu widget="quick" />
+            </div>
+          </div>
+          <div className="grid grid-cols-3 gap-1.5">
+            {quickActions
+              .map((id) => QUICK_ACTION_CATALOG.find((a) => a.id === id))
+              .filter((a): a is (typeof QUICK_ACTION_CATALOG)[number] => Boolean(a))
+              .map(({ id, icon: Icon, label, to }) => (
+                <button
+                  key={id}
+                  onClick={() => navigate({ to })}
+                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-1 py-3 transition hover:bg-primary/20 hover:border-primary/40"
+                >
+                  <Icon className="h-4 w-4 text-primary" />
+                  <span className="text-[10px] font-medium text-foreground whitespace-nowrap">{label}</span>
+                </button>
+              ))}
+            {quickActions.length < 8 && (
+              <button
+                onClick={() => setEditingQuick(true)}
+                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-primary/40 hover:bg-primary/5"
+              >
+                <Plus className="h-4 w-4 text-muted-foreground" />
+                <span className="text-[10px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
+              </button>
+            )}
+          </div>
+        </div>
+      </div>
+      )}
+
       {/* Watchlist */}
       {isVisible("watchlist") && (
         <div className="mx-4 mt-3.5">
