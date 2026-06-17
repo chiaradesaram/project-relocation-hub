@@ -63,7 +63,7 @@ const QUICK_ACTION_CATALOG: { id: string; label: string; icon: typeof Gamepad2; 
   { id: "rates",      label: "Rates",      icon: TrendingUp, to: "/invest" },
   { id: "txns",       label: "Activity",   icon: Receipt,    to: "/transactions" },
 ];
-const DEFAULT_QUICK_ACTIONS = ["vstock", "dividends", "watchlist", "research"];
+const DEFAULT_QUICK_ACTIONS = ["vstock", "dividends", "watchlist"];
 const QUICK_KEY = "dashboard.quickActions.v1";
 
 const recentTransactions = [
