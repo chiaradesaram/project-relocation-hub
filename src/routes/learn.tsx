@@ -36,12 +36,12 @@ function Learn() {
 
       {/* Featured */}
       <div className="mx-4 mt-2 gradient-primary rounded-2xl p-5">
-        <span className="text-[10px] bg-white/20 text-primary-foreground px-2 py-0.5 rounded-full">{featured.tag}</span>
+        <span className="text-[12px] bg-white/20 text-primary-foreground px-2 py-0.5 rounded-full">{featured.tag}</span>
         <h3 className="text-base font-bold text-primary-foreground mt-2">{featured.title}</h3>
-        <p className="text-[11px] text-primary-foreground/80 mt-1">{featured.description}</p>
+        <p className="text-[12px] text-primary-foreground/80 mt-1">{featured.description}</p>
         <div className="flex items-center justify-between mt-3">
-          <span className="text-[10px] text-primary-foreground/60">{featured.duration}</span>
-          <button className="text-[11px] bg-white/20 text-primary-foreground px-3 py-1 rounded-lg font-medium">Read Now</button>
+          <span className="text-[12px] text-primary-foreground/60">{featured.duration}</span>
+          <button className="text-[12px] bg-white/20 text-primary-foreground px-3 py-1 rounded-lg font-medium">Read Now</button>
         </div>
       </div>
 
@@ -50,8 +50,8 @@ function Learn() {
         {categories.map(({ icon: Icon, label, count }) => (
           <div key={label} className="glass-card p-3 flex flex-col items-center min-w-[72px]">
             <Icon className="w-5 h-5 text-primary mb-1" />
-            <span className="text-[10px] font-medium text-foreground">{label}</span>
-            <span className="text-[9px] text-muted-foreground">{count}</span>
+            <span className="text-[12px] font-medium text-foreground">{label}</span>
+            <span className="text-[12px] text-muted-foreground">{count}</span>
           </div>
         ))}
       </div>
@@ -64,10 +64,10 @@ function Learn() {
             <div key={article.title} className="glass-card p-3 flex items-center gap-3">
               <div className="flex-1">
                 <p className="text-xs font-medium text-foreground">{article.title}</p>
-                <p className="text-[10px] text-muted-foreground mt-0.5">{article.desc}</p>
+                <p className="text-[12px] text-muted-foreground mt-0.5">{article.desc}</p>
                 <div className="flex gap-2 mt-1">
-                  <span className="text-[9px] text-muted-foreground">{article.time}</span>
-                  <span className="text-[9px] text-primary">{article.tag}</span>
+                  <span className="text-[12px] text-muted-foreground">{article.time}</span>
+                  <span className="text-[12px] text-primary">{article.tag}</span>
                 </div>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground" />

@@ -42,7 +42,7 @@ function Requests() {
     <MobileLayout>
       <PageHeader title="Requests" showBack />
 
-      <p className="px-4 mt-2 text-[11px] text-muted-foreground">
+      <p className="px-4 mt-2 text-[12px] text-muted-foreground">
         Submit service requests and track their status.
       </p>
 
@@ -58,7 +58,7 @@ function Requests() {
             </div>
             <div className="flex-1">
               <p className="text-xs font-medium text-foreground">{label}</p>
-              <p className="text-[10px] text-muted-foreground mt-0.5">{description}</p>
+              <p className="text-[12px] text-muted-foreground mt-0.5">{description}</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </button>

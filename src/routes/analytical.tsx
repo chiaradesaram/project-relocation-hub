@@ -52,15 +52,15 @@ function Analytical() {
 
         <div className="flex justify-between text-center">
           <div>
-            <p className="text-[10px] text-muted-foreground">Returns</p>
+            <p className="text-[12px] text-muted-foreground">Returns</p>
             <p className="text-sm font-bold text-success">+7.8%</p>
           </div>
           <div>
-            <p className="text-[10px] text-muted-foreground">Invested</p>
+            <p className="text-[12px] text-muted-foreground">Invested</p>
             <p className="text-sm font-bold text-foreground">LKR 6.8M</p>
           </div>
           <div>
-            <p className="text-[10px] text-muted-foreground">Current</p>
+            <p className="text-[12px] text-muted-foreground">Current</p>
             <p className="text-sm font-bold text-foreground">LKR 7.4M</p>
           </div>
         </div>
@@ -93,7 +93,7 @@ function Analytical() {
           <div key={fund.fund} className="flex items-center justify-between py-2.5 border-b border-border/30 last:border-0">
             <div>
               <p className="text-xs font-medium text-foreground">{fund.fund}</p>
-              <p className="text-[10px] text-muted-foreground">NAV: {fund.nav} · Risk: {fund.risk}</p>
+              <p className="text-[12px] text-muted-foreground">NAV: {fund.nav} · Risk: {fund.risk}</p>
             </div>
             <p className="text-sm font-bold text-success">{fund.returns}</p>
           </div>

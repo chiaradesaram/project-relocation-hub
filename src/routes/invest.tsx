@@ -160,7 +160,7 @@ function Invest() {
       {/* Recurring Plans List */}
       {method === "instant" && investType === "recurring" && (
         <div className="mx-4 mt-4">
-          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mb-3 px-1">Existing plans</p>
+          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider uppercase mb-3 px-1">Existing plans</p>
           <div className="space-y-2.5">
             {existingRecurring.map((plan, i) => {
               const freq = plan.frequency.toLowerCase();
@@ -178,7 +178,7 @@ function Invest() {
                           LKR {plan.amount}
                         </span>
                         <span
-                          className={`px-2 py-0.5 rounded-full text-[10px] font-semibold capitalize ${
+                          className={`px-2 py-0.5 rounded-full text-[12px] font-semibold capitalize ${
                             isMonthly
                               ? "text-[oklch(0.78_0.14_260)]"
                               : "text-[oklch(0.78_0.14_155)]"
@@ -195,12 +195,12 @@ function Invest() {
                       <p className="mt-1 text-[13px] text-muted-foreground truncate">{plan.fund}</p>
                     </div>
                     <div className="text-right shrink-0">
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground/80">Next</p>
+                      <p className="text-[12px] uppercase tracking-wider text-muted-foreground/80">Next</p>
                       <p className="text-[13px] font-medium text-foreground mt-0.5">{plan.nextDate.replace(/, \d{4}$/, "")}</p>
                     </div>
                   </div>
                   <div className="mt-3 pt-3 border-t border-border/40 flex items-center justify-between">
-                    <span className="text-[11px] text-muted-foreground">{plan.account}</span>
+                    <span className="text-[12px] text-muted-foreground">{plan.account}</span>
                     <div className="flex items-center gap-1">
                       <span
                         role="button"
@@ -224,13 +224,13 @@ function Invest() {
               );
             })}
           </div>
-          <p className="text-[11px] font-semibold text-muted-foreground tracking-wider uppercase mt-6 mb-2 px-1">New recurring plan</p>
+          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider uppercase mt-6 mb-2 px-1">New recurring plan</p>
         </div>
       )}
 
       {/* Amount Input */}
       <section className="mx-4 mt-5">
-        <h2 className="px-1 mb-2.5 text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+        <h2 className="px-1 mb-2.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
           Amount
         </h2>
         <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
@@ -274,7 +274,7 @@ function Invest() {
                 <button
                   key={n}
                   onClick={() => setRepeatCount(n)}
-                  className={`w-9 h-7 rounded-md text-[11px] font-semibold transition-all ${
+                  className={`w-9 h-7 rounded-md text-[12px] font-semibold transition-all ${
                     repeatCount === n ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground"
                   }`}
                 >
@@ -462,7 +462,7 @@ function Invest() {
           </DialogHeader>
           <div className="space-y-3">
             <div>
-              <label className="text-[11px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
+              <label className="text-[12px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
                 Default fund
               </label>
               <div className="mt-1.5">
@@ -474,7 +474,7 @@ function Invest() {
               </div>
             </div>
             <div>
-              <label className="text-[11px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
+              <label className="text-[12px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
                 Default sub account
               </label>
               <div className="mt-1.5">

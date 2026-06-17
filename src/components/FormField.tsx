@@ -17,7 +17,7 @@ export function FormSection({
   return (
     <section className={cn("mx-4 mt-6", className)}>
       {title && (
-        <h2 className="px-1 mb-3 text-[11px] font-semibold tracking-[0.1em] uppercase text-muted-foreground/70">
+        <h2 className="px-1 mb-3 text-[12px] font-semibold tracking-[0.1em] uppercase text-muted-foreground/70">
           {title}
         </h2>
       )}
@@ -50,7 +50,7 @@ export function FormField({
   return (
     <div className={cn("px-4 pt-3 pb-3.5", className)}>
       <div className="flex items-center justify-between gap-3 mb-2.5">
-        <label className="text-[11px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70 leading-none">
+        <label className="text-[12px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70 leading-none">
           {label}
         </label>
         {action}

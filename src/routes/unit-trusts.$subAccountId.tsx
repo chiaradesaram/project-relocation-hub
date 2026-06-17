@@ -128,7 +128,7 @@ function SubAccountDetail() {
         <section className="mx-4 mt-5">
           <div className="mb-2 flex items-center gap-1.5">
             <Target className="h-3.5 w-3.5 text-muted-foreground" />
-            <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+            <h2 className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
               Goal
             </h2>
           </div>
@@ -138,7 +138,7 @@ function SubAccountDetail() {
                 <p className="text-sm font-medium text-foreground">
                   {sub.goalLabel ?? `${sub.name} goal`}
                 </p>
-                <p className="text-[11px] text-muted-foreground">
+                <p className="text-[12px] text-muted-foreground">
                   Target {formatLKR(sub.goalTarget!)}
                   {sub.goalDeadline && ` · by ${formatDate(sub.goalDeadline)}`}
                 </p>
@@ -153,7 +153,7 @@ function SubAccountDetail() {
                 style={{ width: `${progress}%` }}
               />
             </div>
-            <div className="mt-2 flex items-center justify-between text-[11px] text-muted-foreground">
+            <div className="mt-2 flex items-center justify-between text-[12px] text-muted-foreground">
               <span>{sub.value}</span>
               <span>{formatLKR(remaining)} to go</span>
             </div>
@@ -161,7 +161,7 @@ function SubAccountDetail() {
             {monthlyNeeded !== null && (
               <div className="mt-3 rounded-xl bg-primary/10 border border-primary/20 px-3 py-2.5 flex items-start gap-2">
                 <Info className="h-3.5 w-3.5 text-primary mt-0.5 shrink-0" />
-                <p className="text-[11px] text-foreground/90 leading-relaxed">
+                <p className="text-[12px] text-foreground/90 leading-relaxed">
                   Add{" "}
                   <span className="font-semibold text-primary">
                     {formatLKR(monthlyNeeded)}
@@ -179,14 +179,14 @@ function SubAccountDetail() {
       <section className="mx-4 mt-5">
         <div className="mb-2 flex items-center gap-1.5">
           <TrendingUp className="h-3.5 w-3.5 text-muted-foreground" />
-          <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <h2 className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
             Performance
           </h2>
         </div>
         <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md p-4">
           <div className="grid grid-cols-3 gap-3">
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              <p className="text-[12px] uppercase tracking-wider text-muted-foreground">
                 7 days
               </p>
               <p className="mt-1 text-sm font-semibold text-success">
@@ -194,7 +194,7 @@ function SubAccountDetail() {
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              <p className="text-[12px] uppercase tracking-wider text-muted-foreground">
                 30 days
               </p>
               <p className="mt-1 text-sm font-semibold text-success">
@@ -202,7 +202,7 @@ function SubAccountDetail() {
               </p>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-wider text-muted-foreground">
+              <p className="text-[12px] uppercase tracking-wider text-muted-foreground">
                 All time
               </p>
               <p className="mt-1 text-sm font-semibold text-success">
@@ -211,7 +211,7 @@ function SubAccountDetail() {
             </div>
           </div>
           <div className="mt-3 border-t border-border/20 pt-3 flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">
+            <span className="text-[12px] text-muted-foreground">
               Annualised return
             </span>
             <span className="text-xs font-semibold text-success">
@@ -225,14 +225,14 @@ function SubAccountDetail() {
       <section className="mx-4 mt-4">
         <div className="mb-2 flex items-center gap-1.5">
           <Wallet className="h-3.5 w-3.5 text-muted-foreground" />
-          <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <h2 className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
             Holdings
           </h2>
         </div>
         <div className="rounded-2xl border border-border/30 bg-card/60 backdrop-blur-md p-4 space-y-2.5">
           {sub.units !== undefined && (
             <div className="flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">Units held</span>
+              <span className="text-[12px] text-muted-foreground">Units held</span>
               <span className="text-xs font-medium text-foreground">
                 {sub.units.toLocaleString("en-LK", { maximumFractionDigits: 2 })}
               </span>
@@ -240,7 +240,7 @@ function SubAccountDetail() {
           )}
           {sub.navPerUnit !== undefined && (
             <div className="flex items-center justify-between">
-              <span className="text-[11px] text-muted-foreground">NAV / unit</span>
+              <span className="text-[12px] text-muted-foreground">NAV / unit</span>
               <span className="text-xs font-medium text-foreground">
                 LKR {sub.navPerUnit.toFixed(2)}
               </span>
@@ -248,19 +248,19 @@ function SubAccountDetail() {
           )}
           <div className="border-t border-border/20" />
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">Total invested</span>
+            <span className="text-[12px] text-muted-foreground">Total invested</span>
             <span className="text-xs font-medium text-foreground">
               {formatLKR(totalInvested)}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">Total redeemed</span>
+            <span className="text-[12px] text-muted-foreground">Total redeemed</span>
             <span className="text-xs font-medium text-foreground">
               {formatLKR(totalRedeemed)}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-[11px] text-muted-foreground">Net contributed</span>
+            <span className="text-[12px] text-muted-foreground">Net contributed</span>
             <span className="text-xs font-semibold text-foreground">
               {formatLKR(totalInvested - totalRedeemed)}
             </span>
@@ -272,7 +272,7 @@ function SubAccountDetail() {
       <section className="mx-4 mt-4">
         <div className="mb-2 flex items-center gap-1.5">
           <Calendar className="h-3.5 w-3.5 text-muted-foreground" />
-          <h2 className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">
+          <h2 className="text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
             Recent activity
           </h2>
         </div>
@@ -287,12 +287,12 @@ function SubAccountDetail() {
                   Last creation
                 </p>
                 {lastInvest ? (
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-[12px] text-muted-foreground">
                     {formatDate(lastInvest.date)}
                     {lastInvest.method && ` · ${lastInvest.method}`}
                   </p>
                 ) : (
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-[12px] text-muted-foreground">
                     No investments yet
                   </p>
                 )}
@@ -317,12 +317,12 @@ function SubAccountDetail() {
                   Last redemption
                 </p>
                 {lastRedeem ? (
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-[12px] text-muted-foreground">
                     {formatDate(lastRedeem.date)}
                     {lastRedeem.method && ` · ${lastRedeem.method}`}
                   </p>
                 ) : (
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-[12px] text-muted-foreground">
                     No redemptions yet
                   </p>
                 )}

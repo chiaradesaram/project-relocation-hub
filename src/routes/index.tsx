@@ -252,7 +252,7 @@ function Dashboard() {
           background: "oklch(0.28 0.10 285)",
         }}
       >
-        <p className="text-[11px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
+        <p className="text-[12px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
         <h2 className="mt-2 text-center text-[32px] font-bold tracking-tight text-white leading-none">
           LKR 7,370,000
         </h2>
@@ -336,13 +336,13 @@ function Dashboard() {
                   <div className="min-w-0 flex-1 text-left">
                     <p className="text-[13px] font-semibold text-white leading-tight">{item.name}</p>
                     {item.earnings30d && (
-                      <p className="text-[11px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5 leading-tight">
+                      <p className="text-[12px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5 leading-tight">
                         {item.earnings30d}
                       </p>
                     )}
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-white/70">
+                    <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[12px] font-medium text-white/70">
                       {item.status}
                     </span>
                   ) : (
@@ -386,7 +386,7 @@ function Dashboard() {
                   className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-1 py-3 transition hover:bg-primary/20 hover:border-primary/40"
                 >
                   <Icon className="h-4 w-4 text-primary" />
-                  <span className="text-[10px] font-medium text-foreground whitespace-nowrap">{label}</span>
+                  <span className="text-[12px] font-medium text-foreground whitespace-nowrap">{label}</span>
                 </button>
               ))}
             {quickActions.length < 8 && (
@@ -395,7 +395,7 @@ function Dashboard() {
                 className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-primary/40 hover:bg-primary/5"
               >
                 <Plus className="h-4 w-4 text-muted-foreground" />
-                <span className="text-[10px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
+                <span className="text-[12px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
               </button>
             )}
           </div>
@@ -427,14 +427,14 @@ function Dashboard() {
                   className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
                 >
                   <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-[11px] font-bold text-[oklch(0.85_0.12_295)]"
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-[oklch(0.85_0.12_295)]"
                     style={{ background: "oklch(0.32 0.10 285)" }}
                   >
                     {s.symbol.slice(0, 2)}
                   </div>
                   <div className="min-w-0 flex-1 text-left">
                     <p className="text-[13.5px] font-semibold text-white leading-tight">{s.symbol}</p>
-                    <p className="text-[11px] text-white/55 mt-0.5">LKR {s.price}</p>
+                    <p className="text-[12px] text-white/55 mt-0.5">LKR {s.price}</p>
                   </div>
                   <p className={`text-[13px] font-semibold ${s.positive ? "text-[oklch(0.85_0.18_155)]" : "text-[oklch(0.72_0.20_25)]"}`}>
                     {s.change}
@@ -455,8 +455,8 @@ function Dashboard() {
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
-                <span className="text-[11px] font-medium text-muted-foreground">ASPI</span>
-                <span className={`flex items-center gap-0.5 text-[10px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
+                <span className="text-[12px] font-medium text-muted-foreground">ASPI</span>
+                <span className={`flex items-center gap-0.5 text-[12px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
                   {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
                   +1.2%
                 </span>
@@ -471,7 +471,7 @@ function Dashboard() {
                 <p className="text-[10.5px] text-muted-foreground mt-1.5">
                   Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
                 </p>
-                <p className="text-[10px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
+                <p className="text-[12px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
               </div>
               <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
                 <defs>
@@ -523,7 +523,7 @@ function Dashboard() {
                   >
                     <div className="min-w-0 flex-1 text-left">
                       <p className="text-[13.5px] font-semibold text-white leading-tight truncate">{r.short}</p>
-                      <p className="text-[11px] text-white/55 mt-0.5">{r.tenor}</p>
+                      <p className="text-[12px] text-white/55 mt-0.5">{r.tenor}</p>
                     </div>
                     <p className="text-[14px] font-semibold text-white tabular-nums">{r.rate}</p>
                   </button>
@@ -571,7 +571,7 @@ function Dashboard() {
                     </span>
                     <div className="min-w-0 flex-1 text-left">
                       <p className="text-[12.5px] font-medium text-foreground leading-tight truncate">{t.name}</p>
-                      <p className="text-[10px] text-muted-foreground mt-0.5">{t.sub}</p>
+                      <p className="text-[12px] text-muted-foreground mt-0.5">{t.sub}</p>
                     </div>
                     <p className={`text-[12.5px] font-semibold ${isInvest ? "text-foreground" : "text-[oklch(0.78_0.18_155)]"}`}>
                       {t.amount}
@@ -589,7 +589,7 @@ function Dashboard() {
       <div className="mx-4 mt-2 mb-4 flex justify-center">
         <button
           onClick={() => setCustomizing(true)}
-          className="flex items-center gap-1.5 rounded-full bg-muted/30 px-3 py-1.5 text-[11px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
+          className="flex items-center gap-1.5 rounded-full bg-muted/30 px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
         >
           <Settings2 className="h-3 w-3" />
           Customize dashboard

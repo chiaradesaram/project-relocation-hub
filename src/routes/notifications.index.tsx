@@ -88,7 +88,7 @@ function NotificationsInbox() {
           if (groupItems.length === 0) return null;
           return (
             <div key={group} className="mx-4 mt-2">
-              <p className="px-1 pb-2 text-[11px] font-medium uppercase tracking-wider text-muted-foreground">{group}</p>
+              <p className="px-1 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{group}</p>
               <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
                 {groupItems.map((n) => {
                   const { icon: Icon, bg, color } = ICONS[n.type];

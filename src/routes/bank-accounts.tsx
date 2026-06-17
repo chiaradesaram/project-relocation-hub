@@ -64,12 +64,12 @@ function BankAccounts() {
                 </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-sm font-semibold text-foreground truncate">{acc.bank}</p>
-                  <p className="text-[11px] text-muted-foreground/80 truncate">{acc.branch} branch</p>
+                  <p className="text-[12px] text-muted-foreground/80 truncate">{acc.branch} branch</p>
                   <p className="text-[12px] text-muted-foreground mt-0.5 font-mono tracking-wide">{acc.accNo}</p>
                 </div>
               </div>
               <div className="flex items-center gap-1.5 shrink-0">
-                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[11px] font-semibold ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
+                <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-[12px] font-semibold ${productPillClass[acc.product] ?? "bg-muted/30 text-muted-foreground"}`}>
                   {acc.product}
                 </span>
                 <AlertDialog>

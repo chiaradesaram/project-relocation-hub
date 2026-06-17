@@ -25,9 +25,9 @@ function VStock() {
 
       {/* Virtual Portfolio */}
       <div className="mx-4 mt-2 gradient-portfolio rounded-2xl p-5 text-center">
-        <p className="text-[10px] text-muted-foreground uppercase tracking-wider">Virtual Portfolio</p>
+        <p className="text-[12px] text-muted-foreground uppercase tracking-wider">Virtual Portfolio</p>
         <h2 className="text-2xl font-bold text-foreground mt-1">LKR {balance.toLocaleString()}</h2>
-        <p className="text-[11px] text-success mt-1">+15.2% since start</p>
+        <p className="text-[12px] text-success mt-1">+15.2% since start</p>
       </div>
 
       {/* Stats */}
@@ -39,7 +39,7 @@ function VStock() {
         ].map(({ icon: Icon, label, value }) => (
           <div key={label} className="flex-1 glass-card p-3 text-center">
             <Icon className="w-4 h-4 text-primary mx-auto mb-1" />
-            <p className="text-[9px] text-muted-foreground">{label}</p>
+            <p className="text-[12px] text-muted-foreground">{label}</p>
             <p className="text-sm font-bold text-foreground">{value}</p>
           </div>
         ))}
@@ -51,17 +51,17 @@ function VStock() {
         <div className="space-y-2">
           {stocks.map((stock) => (
             <div key={stock.name} className="glass-card p-3 flex items-center gap-3">
-              <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-[10px] font-bold text-primary-foreground">
+              <div className="w-8 h-8 rounded-full gradient-primary flex items-center justify-center text-[12px] font-bold text-primary-foreground">
                 {stock.name.slice(0, 2)}
               </div>
               <div className="flex-1">
                 <p className="text-xs font-medium text-foreground">{stock.name}</p>
-                <p className="text-[10px] text-muted-foreground">LKR {stock.price}</p>
+                <p className="text-[12px] text-muted-foreground">LKR {stock.price}</p>
               </div>
               <p className={`text-xs font-medium ${stock.positive ? "text-success" : "text-destructive"}`}>
                 {stock.change}
               </p>
-              <button className="text-[10px] bg-primary/20 text-primary px-2 py-1 rounded-lg font-medium">Trade</button>
+              <button className="text-[12px] bg-primary/20 text-primary px-2 py-1 rounded-lg font-medium">Trade</button>
             </div>
           ))}
         </div>

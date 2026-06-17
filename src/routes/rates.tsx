@@ -97,7 +97,7 @@ const RiskPill = ({ risk }: { risk: Risk }) => {
   const s = riskStyle(risk);
   return (
     <span
-      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[9px] font-semibold"
+      className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[12px] font-semibold"
       style={{ background: s.bg, color: s.color }}
     >
       <span className="w-1 h-1 rounded-full" style={{ background: s.color }} />
@@ -117,7 +117,7 @@ const CompositionBar = ({ comp }: { comp: Fund["composition"] }) => (
       {comp.map((c) => (
         <div key={c.label} className="flex items-center gap-1">
           <span className="w-1.5 h-1.5 rounded-sm" style={{ background: c.color }} />
-          <span className="text-[9px] text-muted-foreground">{c.label} {c.pct}%</span>
+          <span className="text-[12px] text-muted-foreground">{c.label} {c.pct}%</span>
         </div>
       ))}
     </div>
@@ -143,51 +143,51 @@ const YieldCalculator = () => {
   return (
     <div className="mx-4 mt-3 glass-card p-4 space-y-3">
       <div>
-        <label className="text-[10px] text-muted-foreground">Fund</label>
-        <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="w-full bg-secondary rounded-xl p-2.5 text-[11px] text-foreground outline-none">
+        <label className="text-[12px] text-muted-foreground">Fund</label>
+        <ModernSelect value={selectedFund} onChange={(e) => setSelectedFund(e.target.value)} className="w-full bg-secondary rounded-xl p-2.5 text-[12px] text-foreground outline-none">
           {fundsData.map((f) => <option key={f.name}>{f.name}</option>)}
         </ModernSelect>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <label className="text-[10px] text-muted-foreground">Start Date</label>
-          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[11px] text-foreground outline-none" />
+          <label className="text-[12px] text-muted-foreground">Start Date</label>
+          <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[12px] text-foreground outline-none" />
         </div>
         <div>
-          <label className="text-[10px] text-muted-foreground">End Date</label>
-          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[11px] text-foreground outline-none" />
+          <label className="text-[12px] text-muted-foreground">End Date</label>
+          <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[12px] text-foreground outline-none" />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-2">
         <div>
-          <label className="text-[10px] text-muted-foreground">Start Unit Price</label>
-          <input type="number" value={startPrice} onChange={(e) => setStartPrice(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[11px] text-foreground outline-none" />
+          <label className="text-[12px] text-muted-foreground">Start Unit Price</label>
+          <input type="number" value={startPrice} onChange={(e) => setStartPrice(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[12px] text-foreground outline-none" />
         </div>
         <div>
-          <label className="text-[10px] text-muted-foreground">End Unit Price</label>
-          <input type="number" value={endPrice} onChange={(e) => setEndPrice(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[11px] text-foreground outline-none" />
+          <label className="text-[12px] text-muted-foreground">End Unit Price</label>
+          <input type="number" value={endPrice} onChange={(e) => setEndPrice(e.target.value)} className="w-full bg-secondary rounded-lg px-3 py-2 text-[12px] text-foreground outline-none" />
         </div>
       </div>
       <div className="grid grid-cols-3 gap-2 text-center">
         <div className="bg-secondary rounded-xl p-2">
-          <p className="text-[9px] text-muted-foreground">Period ({days}d)</p>
+          <p className="text-[12px] text-muted-foreground">Period ({days}d)</p>
           <p className="text-sm font-bold text-success">{periodReturn.toFixed(2)}%</p>
         </div>
         <div className="bg-secondary rounded-xl p-2">
-          <p className="text-[9px] text-muted-foreground">Annualized</p>
+          <p className="text-[12px] text-muted-foreground">Annualized</p>
           <p className="text-sm font-bold text-success">{annualizedYield.toFixed(2)}%</p>
         </div>
         <div className="bg-secondary rounded-xl p-2">
-          <p className="text-[9px] text-muted-foreground">Price Δ</p>
+          <p className="text-[12px] text-muted-foreground">Price Δ</p>
           <p className="text-sm font-bold text-foreground">{(ep - sp).toFixed(2)}</p>
         </div>
       </div>
-      <button onClick={() => setShowExplanation(!showExplanation)} className="flex items-center gap-1.5 text-[11px] text-primary font-medium">
+      <button onClick={() => setShowExplanation(!showExplanation)} className="flex items-center gap-1.5 text-[12px] text-primary font-medium">
         <Info className="w-3 h-3" />
         {showExplanation ? "Hide" : "How is this calculated?"}
       </button>
       {showExplanation && (
-        <div className="bg-secondary/50 rounded-xl p-3 text-[11px] text-muted-foreground space-y-1">
+        <div className="bg-secondary/50 rounded-xl p-3 text-[12px] text-muted-foreground space-y-1">
           <p className="font-semibold text-foreground">Return Calculation</p>
           <p><strong>Period Return</strong> = (End − Start) ÷ Start × 100</p>
           <p>= ({endPrice} − {startPrice}) ÷ {startPrice} × 100 = {periodReturn.toFixed(2)}%</p>
@@ -314,7 +314,7 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                 />
               ))}
             </div>
-            <p className="text-[10px] text-muted-foreground mt-2">Step {step + 1} of {total}</p>
+            <p className="text-[12px] text-muted-foreground mt-2">Step {step + 1} of {total}</p>
           </div>
         )}
 
@@ -342,7 +342,7 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                           {selected && <div className="w-2 h-2 rounded-full bg-primary" />}
                         </div>
                       </div>
-                      {opt.hint && <p className="text-[10px] text-muted-foreground mt-0.5">{opt.hint}</p>}
+                      {opt.hint && <p className="text-[12px] text-muted-foreground mt-0.5">{opt.hint}</p>}
                     </button>
                   );
                 })}
@@ -356,14 +356,14 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                 className="p-4 rounded-2xl"
                 style={{ background: "color-mix(in oklch, var(--portfolio-purple) 16%, oklch(0.18 0.02 280))" }}
               >
-                <p className="text-[10px] uppercase tracking-wide text-white/60 font-semibold">Your investor profile</p>
+                <p className="text-[12px] uppercase tracking-wide text-white/60 font-semibold">Your investor profile</p>
                 <p className="text-xl font-bold text-white mt-1">{profile.label}</p>
-                <p className="text-[11px] text-white/75 mt-1 leading-snug">{profile.blurb}</p>
+                <p className="text-[12px] text-white/75 mt-1 leading-snug">{profile.blurb}</p>
                 <div className="mt-2"><RiskPill risk={profile.risk} /></div>
               </div>
 
               <div>
-                <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wide mb-2">Top matches for you</p>
+                <p className="text-[12px] font-semibold text-muted-foreground uppercase tracking-wide mb-2">Top matches for you</p>
                 <div className="space-y-2">
                   {matches.map(({ fund, match }) => (
                     <div key={fund.name} className="glass-card p-3 space-y-2">
@@ -372,11 +372,11 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                           <p className="text-xs font-semibold text-foreground">{fund.name}</p>
                           <div className="flex items-center gap-1.5 mt-1">
                             <RiskPill risk={fund.risk} />
-                            <span className="text-[9px] text-success font-semibold">{fund.yield30d} 30d</span>
+                            <span className="text-[12px] text-success font-semibold">{fund.yield30d} 30d</span>
                           </div>
                         </div>
                         <div className="text-right">
-                          <p className="text-[9px] text-muted-foreground">Match</p>
+                          <p className="text-[12px] text-muted-foreground">Match</p>
                           <p className="text-sm font-bold text-foreground">{match}%</p>
                         </div>
                       </div>
@@ -386,7 +386,7 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
                 </div>
               </div>
 
-              <p className="text-[10px] text-muted-foreground text-center leading-snug">
+              <p className="text-[12px] text-muted-foreground text-center leading-snug">
                 This is guidance only, not financial advice. Consider reading each fund's factsheet before investing.
               </p>
             </div>
@@ -451,7 +451,7 @@ function Rates() {
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`flex-1 py-2 rounded-lg text-[11px] font-semibold transition-all flex items-center justify-center gap-1 ${
+              className={`flex-1 py-2 rounded-lg text-[12px] font-semibold transition-all flex items-center justify-center gap-1 ${
                 activeTab === tab ? "bg-primary text-primary-foreground shadow-md" : "text-muted-foreground"
               }`}
             >
@@ -479,16 +479,16 @@ function Rates() {
                   </div>
                   <div className="flex gap-4 mt-2">
                     <div>
-                      <p className="text-[9px] text-muted-foreground">Unit Price</p>
+                      <p className="text-[12px] text-muted-foreground">Unit Price</p>
                       <p className="text-sm font-bold text-foreground">{fund.unitPrice}</p>
                       <p className="text-[8px] text-muted-foreground">{fund.priceAsOf}</p>
                     </div>
                     <div>
-                      <p className="text-[9px] text-muted-foreground">30d Yield</p>
+                      <p className="text-[12px] text-muted-foreground">30d Yield</p>
                       <p className="text-sm font-bold text-success">{fund.yield30d}</p>
                     </div>
                     <div>
-                      <p className="text-[9px] text-muted-foreground">Fund Size</p>
+                      <p className="text-[12px] text-muted-foreground">Fund Size</p>
                       <p className="text-sm font-bold text-foreground">{fund.fundSize.replace("LKR ", "")}</p>
                     </div>
                   </div>
@@ -498,10 +498,10 @@ function Rates() {
                   </div>
 
                   <div className="flex gap-2 mt-3 items-center">
-                    <a href={fund.factsheet} className="text-[10px] text-primary flex items-center gap-0.5">
+                    <a href={fund.factsheet} className="text-[12px] text-primary flex items-center gap-0.5">
                       <Download className="w-3 h-3" /> Factsheet
                     </a>
-                    <button className="ml-auto text-[10px] gradient-primary text-primary-foreground px-3 py-1 rounded-lg font-medium">
+                    <button className="ml-auto text-[12px] gradient-primary text-primary-foreground px-3 py-1 rounded-lg font-medium">
                       {fund.needsSignup ? "Add Fund" : "Invest"}
                     </button>
                   </div>
@@ -509,7 +509,7 @@ function Rates() {
 
                 {expandedFund === fund.name && (
                   <div className="px-3 pb-3 border-t border-border/30 pt-2">
-                    <p className="text-[11px] text-muted-foreground">{fund.description}</p>
+                    <p className="text-[12px] text-muted-foreground">{fund.description}</p>
                   </div>
                 )}
               </div>
@@ -530,7 +530,7 @@ function Rates() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-[12px] font-semibold text-white">Not sure what to invest in?</p>
-              <p className="text-[10px] text-white/70 mt-0.5">Take a 30-second quiz to find funds that match you</p>
+              <p className="text-[12px] text-white/70 mt-0.5">Take a 30-second quiz to find funds that match you</p>
             </div>
             <ArrowRight className="w-4 h-4 text-white/70 shrink-0" />
           </button>
