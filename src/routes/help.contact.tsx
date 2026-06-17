@@ -647,18 +647,6 @@ function ContactForm() {
             </Field>
           )}
 
-          {sub && needsProduct && (
-            <Field label="Product" error={errors.product}>
-              <SelectInput value={productId} onChange={setProductId} placeholder="Select a product">
-                {PRODUCTS.map((p) => (
-                  <option key={p.id} value={p.id}>
-                    {p.label}
-                  </option>
-                ))}
-              </SelectInput>
-            </Field>
-          )}
-
           {/* Quick links */}
           {sub && hasQuickLinks && (!showForm || resolveOnly) && (
             <div className="space-y-2">
