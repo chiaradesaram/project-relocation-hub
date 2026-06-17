@@ -101,8 +101,8 @@ function Transactions() {
             onClick={() => setProduct(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               product === f
-                ? "bg-[#c084fc] text-black"
-                : "bg-[#c084fc]/20 text-[#d8b4fe]"
+                ? "bg-primary text-primary-foreground"
+                : "bg-primary/20 text-primary"
             }`}
           >
             {f}
