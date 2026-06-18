@@ -585,7 +585,7 @@ function Invest() {
 
       {/* Bank transfer: HNB closing notice */}
       {method === "bank" && selectedPayTo.startsWith("HNB") && (
-        <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.24 0.02 280))" }}>
+        <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.24 0.03 280))" }}>
           <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 40%, transparent)" }}>
             <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
           </div>
