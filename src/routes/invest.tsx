@@ -233,7 +233,7 @@ function Invest() {
         <h2 className="px-1 mb-2.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
           Amount
         </h2>
-        <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
+        <div className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
           <div className="flex items-baseline gap-2">
             <span className="text-[13px] font-medium text-muted-foreground">LKR</span>
             <input
@@ -302,7 +302,7 @@ function Invest() {
 
       {/* Recurring options */}
       {method === "instant" && investType === "new" && (
-        <div className="mx-4 mt-3 rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 overflow-hidden">
+        <div className="mx-4 mt-3 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <div className="flex items-center justify-between gap-3 px-4 py-3.5">
             <div className="flex items-center gap-3 min-w-0">
               <div
