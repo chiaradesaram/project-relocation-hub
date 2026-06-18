@@ -117,7 +117,7 @@ function Transactions() {
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
-                  ? "bg-warning/20"
+                  ? "bg-accent-cyan/15"
                   : tx.positive
                     ? "bg-success/20"
                     : "bg-muted/40"
