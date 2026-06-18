@@ -600,7 +600,7 @@ function Invest() {
 
       {/* Bank transfer: Deutsche prompt */}
       {method === "bank" && !selectedPayTo.includes("Deutsche") && (
-        <div className="mx-4 mt-3 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.02 280))" }}>
+        <div className="mx-4 mt-3 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.03 280))" }}>
           <button
             type="button"
             onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
