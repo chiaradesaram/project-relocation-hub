@@ -278,7 +278,7 @@
   }
 
   .nav-glass {
-    background: oklch(0.24 0.04 275 / 0.75);
+    background: oklch(0.24 0.05 275 / 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
