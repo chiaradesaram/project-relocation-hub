@@ -62,11 +62,11 @@ const subToKinds: Record<string, string[]> = {
 
 const statusStyles: Record<Status, string> = {
   Confirmed: "bg-success/15 text-success",
-  Pending: "bg-warning/15 text-warning",
+  Pending: "bg-accent-cyan/15 text-accent-cyan",
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
+  if (status === "Pending") return <Clock className="w-4 h-4 text-accent-cyan" />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
 
