@@ -498,7 +498,7 @@ function Dashboard() {
       {/* Rates to watch */}
       {isVisible("rates") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 275)" }}>
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.05 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
               <h3 className="text-[15px] font-semibold text-white">Rates to watch</h3>
               <div className="flex items-center gap-1">
