@@ -52,6 +52,8 @@
   --color-portfolio-blue: var(--portfolio-blue);
   --color-portfolio-purple: var(--portfolio-purple);
   --color-portfolio-pink: var(--portfolio-pink);
+  --color-accent-cyan: var(--accent-cyan);
+  --color-accent-magenta: var(--accent-magenta);
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-slide-up: slide-up 0.4s ease-out;
 }
