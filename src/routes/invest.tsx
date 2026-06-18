@@ -124,7 +124,7 @@ function Invest() {
       </div>
 
       {/* Info */}
-      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.02 280))" }}>
+      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.03 280))" }}>
         <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
           <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
         </div>
