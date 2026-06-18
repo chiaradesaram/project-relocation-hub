@@ -170,7 +170,7 @@ export const funds: Fund[] = [
         earningsAll: "+39,700",
         earningsAllNum: 39700,
         returnPct: "+5.4%",
-        dotColor: "oklch(0.65 0.18 155)",
+        dotColor: "oklch(0.60 0.24 359)",
         units: 12260.31,
         navPerUnit: 24.47,
         createdAt: "2023-09-02",
