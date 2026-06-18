@@ -31,7 +31,7 @@ const recommendations: Record<string, { fund: string; tagline: string; why: stri
     fund: "High Yield Fund",
     tagline: "Higher growth potential",
     why: "Targets higher-return opportunities across equities and corporate debt. Best if you can tolerate short-term swings.",
-    color: "oklch(0.55 0.25 290)",
+    color: "oklch(0.55 0.25 280)",
     icon: TrendingUp,
   },
 };
