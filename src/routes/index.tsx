@@ -312,10 +312,13 @@ function Dashboard() {
       {/* Portfolio card – purple style */}
       {isVisible("portfolio") && (
       <div className="mx-4 mt-3.5">
-        <div className="rounded-2xl overflow-hidden p-3.5 bg-card">
+        <div
+          className="rounded-2xl overflow-hidden p-3.5"
+          style={{ background: "oklch(0.32 0.12 275)" }}
+        >
           <div className="flex items-center justify-between pb-2.5">
-            <h3 className="text-[15px] font-semibold text-foreground">Portfolio</h3>
-            <WidgetMenu widget="portfolio" />
+            <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
+            <WidgetMenu widget="portfolio" tone="light" />
           </div>
           <div className="flex flex-col gap-2">
             {portfolioItems.map((item) => {
@@ -325,13 +328,13 @@ function Dashboard() {
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
                   className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
-                  style={{ background: "oklch(0.44 0.04 275)" }}
+                  style={{ background: "oklch(0.40 0.12 275)" }}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
                     <Icon className="h-4 w-4 text-white" />
                   </div>
                   <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[13px] font-semibold text-foreground leading-tight">{item.name}</p>
+                    <p className="text-[13px] font-semibold text-white leading-tight">{item.name}</p>
                     {item.earnings30d && (
                       <p className="text-[12px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5 leading-tight">
                         {item.earnings30d}
@@ -339,11 +342,11 @@ function Dashboard() {
                     )}
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-foreground/10 px-2.5 py-0.5 text-[12px] font-medium text-muted-foreground">
+                    <span className="rounded-full bg-white/10 px-2.5 py-0.5 text-[12px] font-medium text-white/70">
                       {item.status}
                     </span>
                   ) : (
-                    <p className="shrink-0 text-[13px] font-semibold text-foreground">
+                    <p className="shrink-0 text-[13px] font-semibold text-white">
                       {item.value ? `LKR ${item.value}` : "Pending"}
                     </p>
                   )}
@@ -403,17 +406,17 @@ function Dashboard() {
       {/* Watchlist */}
       {isVisible("watchlist") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5 bg-card">
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
-              <h3 className="text-[15px] font-semibold text-foreground">Watchlist</h3>
+              <h3 className="text-[15px] font-semibold text-white">Watchlist</h3>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => navigate({ to: "/invest" })}
-                  className="text-[12px] font-medium text-primary hover:brightness-110 transition"
+                  className="text-[12px] font-medium text-[oklch(0.78_0.16_295)] hover:brightness-110 transition"
                 >
                   Manage
                 </button>
-                <WidgetMenu widget="watchlist" />
+                <WidgetMenu widget="watchlist" tone="light" />
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -421,17 +424,17 @@ function Dashboard() {
                 <button
                   key={s.symbol}
                   onClick={() => navigate({ to: "/invest" })}
-                  className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-foreground/5"
+                  className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
                 >
                   <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-foreground"
-                    style={{ background: "oklch(0.46 0.05 275)" }}
+                    className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-[oklch(0.85_0.12_295)]"
+                    style={{ background: "oklch(0.38 0.10 275)" }}
                   >
                     {s.symbol.slice(0, 2)}
                   </div>
                   <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[13.5px] font-semibold text-foreground leading-tight">{s.symbol}</p>
-                    <p className="text-[12px] text-muted-foreground mt-0.5">LKR {s.price}</p>
+                    <p className="text-[13.5px] font-semibold text-white leading-tight">{s.symbol}</p>
+                    <p className="text-[12px] text-white/55 mt-0.5">LKR {s.price}</p>
                   </div>
                   <p className={`text-[13px] font-semibold ${s.positive ? "text-[oklch(0.85_0.18_155)]" : "text-[oklch(0.72_0.20_25)]"}`}>
                     {s.change}
@@ -495,17 +498,17 @@ function Dashboard() {
       {/* Rates to watch */}
       {isVisible("rates") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5 bg-card">
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
-              <h3 className="text-[15px] font-semibold text-foreground">Rates to watch</h3>
+              <h3 className="text-[15px] font-semibold text-white">Rates to watch</h3>
               <div className="flex items-center gap-1">
                 <button
                   onClick={() => setEditingRates(true)}
-                  className="text-[12px] font-medium text-primary hover:brightness-110 transition"
+                  className="text-[12px] font-medium text-[oklch(0.78_0.16_295)] hover:brightness-110 transition"
                 >
                   Edit
                 </button>
-                <WidgetMenu widget="rates" />
+                <WidgetMenu widget="rates" tone="light" />
               </div>
             </div>
             <div className="flex flex-col gap-2">
@@ -516,18 +519,18 @@ function Dashboard() {
                   <button
                     key={r.id}
                     onClick={() => navigate({ to: "/rates" })}
-                    className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-foreground/5"
+                    className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
                   >
                     <div className="min-w-0 flex-1 text-left">
-                      <p className="text-[13.5px] font-semibold text-foreground leading-tight truncate">{r.short}</p>
-                      <p className="text-[12px] text-muted-foreground mt-0.5">{r.tenor}</p>
+                      <p className="text-[13.5px] font-semibold text-white leading-tight truncate">{r.short}</p>
+                      <p className="text-[12px] text-white/55 mt-0.5">{r.tenor}</p>
                     </div>
-                    <p className="text-[14px] font-semibold text-foreground tabular-nums">{r.rate}</p>
+                    <p className="text-[14px] font-semibold text-white tabular-nums">{r.rate}</p>
                   </button>
                 ))}
               <button
                 onClick={() => setEditingRates(true)}
-                className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/40 py-2 text-muted-foreground transition hover:bg-foreground/5 hover:text-foreground"
+                className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-white/15 py-2 text-white/60 transition hover:bg-white/5 hover:text-white"
                 aria-label="Add rate to track"
               >
                 <Plus className="h-3.5 w-3.5" />
