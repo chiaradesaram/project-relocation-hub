@@ -354,7 +354,7 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
             <div className="space-y-4">
               <div
                 className="p-4 rounded-2xl"
-                style={{ background: "color-mix(in oklch, var(--portfolio-purple) 16%, oklch(0.24 0.02 280))" }}
+                style={{ background: "color-mix(in oklch, var(--portfolio-purple) 16%, oklch(0.24 0.03 280))" }}
               >
                 <p className="text-[12px] uppercase tracking-wide text-white/60 font-semibold">Your investor profile</p>
                 <p className="text-xl font-bold text-white mt-1">{profile.label}</p>
@@ -520,7 +520,7 @@ function Rates() {
           <button
             onClick={() => setQuizOpen(true)}
             className="mx-4 mt-3 mb-2 w-[calc(100%-2rem)] flex items-center gap-3 p-3 rounded-2xl text-left transition-all hover:opacity-90"
-            style={{ background: "color-mix(in oklch, var(--portfolio-purple) 14%, oklch(0.24 0.02 280))" }}
+            style={{ background: "color-mix(in oklch, var(--portfolio-purple) 14%, oklch(0.24 0.03 280))" }}
           >
             <div
               className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"

@@ -68,22 +68,22 @@
 
 :root {
   --radius: 0.75rem;
-  --background: oklch(0.23 0.06 270);
+  --background: oklch(0.23 0.07 270);
   --foreground: oklch(0.97 0 0);
 
-  --card: oklch(0.33 0.05 275);
+  --card: oklch(0.33 0.06 275);
   --card-foreground: oklch(0.97 0 0);
 
-  --popover: oklch(0.30 0.05 275);
+  --popover: oklch(0.30 0.06 275);
   --popover-foreground: oklch(0.97 0 0);
 
   --primary: oklch(0.64 0.2 280);
   --primary-foreground: oklch(1 0 0);
 
-  --secondary: oklch(0.36 0.04 275);
+  --secondary: oklch(0.36 0.05 275);
   --secondary-foreground: oklch(0.97 0 0);
 
-  --muted: oklch(0.38 0.04 275);
+  --muted: oklch(0.38 0.05 275);
   --muted-foreground: oklch(0.82 0.02 275);
 
   --accent: oklch(0.6 0.23 280);
@@ -92,8 +92,8 @@
   --destructive: oklch(0.57 0.22 25);
   --destructive-foreground: oklch(1 0 0);
 
-  --border: oklch(0.42 0.04 275);
-  --input: oklch(0.32 0.04 275);
+  --border: oklch(0.42 0.05 275);
+  --input: oklch(0.32 0.05 275);
   --ring: oklch(0.55 0.25 280);
 
   --success: oklch(0.7 0.18 155);
@@ -111,13 +111,13 @@
   --chart-4: oklch(0.828 0.189 84.429);
   --chart-5: oklch(0.769 0.188 70.08);
 
-  --sidebar: oklch(0.20 0.04 275);
+  --sidebar: oklch(0.20 0.05 275);
   --sidebar-foreground: oklch(0.97 0 0);
   --sidebar-primary: oklch(0.55 0.25 280);
   --sidebar-primary-foreground: oklch(1 0 0);
-  --sidebar-accent: oklch(0.28 0.04 275);
+  --sidebar-accent: oklch(0.28 0.05 275);
   --sidebar-accent-foreground: oklch(0.97 0 0);
-  --sidebar-border: oklch(0.34 0.04 275);
+  --sidebar-border: oklch(0.34 0.05 275);
   --sidebar-ring: oklch(0.55 0.25 280);
 }
 
@@ -268,7 +268,7 @@
   }
 
   .gradient-card {
-    background: linear-gradient(180deg, oklch(0.30 0.04 275) 0%, oklch(0.26 0.04 275) 100%);
+    background: linear-gradient(180deg, oklch(0.30 0.05 275) 0%, oklch(0.26 0.05 275) 100%);
   }
 
   .text-gradient {
@@ -278,7 +278,7 @@
   }
 
   .nav-glass {
-    background: oklch(0.24 0.04 275 / 0.75);
+    background: oklch(0.24 0.05 275 / 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
   }
