@@ -121,7 +121,7 @@ function UnitTrustPortfolio() {
           onClick={openGoalSheet}
           className="flex flex-1 items-center justify-center gap-2 rounded-xl border border-border/30 bg-card/60 py-2.5 backdrop-blur-md transition hover:bg-muted/10"
         >
-          <Target className="h-4 w-4 text-primary" />
+          <Target className="h-4 w-4 text-accent-magenta" />
           <span className="text-xs font-medium text-foreground">Goal</span>
         </button>
       </div>
@@ -216,9 +216,9 @@ function UnitTrustPortfolio() {
                         {/* Earnings + tiny goal indicator, right aligned */}
                         <div className="mt-1.5 flex items-center justify-end gap-1">
                           {hasGoal && (
-                            <span className="rounded-full bg-primary/10 px-1.5 py-px text-[12px] font-medium text-primary">
-                              {Math.round(progress)}% of goal
-                            </span>
+                          <span className="rounded-full bg-accent-magenta/15 px-1.5 py-px text-[12px] font-medium text-accent-magenta">
+                            {Math.round(progress)}% of goal
+                          </span>
                           )}
                           <span className="rounded-full bg-success/10 px-1.5 py-px text-[12px] font-medium text-success">
                             All {sub.earningsAll}
