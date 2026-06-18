@@ -124,7 +124,7 @@ function Invest() {
       </div>
 
       {/* Info */}
-      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
+      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.02 280))" }}>
         <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
           <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
         </div>
@@ -585,7 +585,7 @@ function Invest() {
 
       {/* Bank transfer: HNB closing notice */}
       {method === "bank" && selectedPayTo.startsWith("HNB") && (
-        <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.18 0.02 280))" }}>
+        <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.24 0.02 280))" }}>
           <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 40%, transparent)" }}>
             <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
           </div>
@@ -600,7 +600,7 @@ function Invest() {
 
       {/* Bank transfer: Deutsche prompt */}
       {method === "bank" && !selectedPayTo.includes("Deutsche") && (
-        <div className="mx-4 mt-3 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.18 0.02 280))" }}>
+        <div className="mx-4 mt-3 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.02 280))" }}>
           <button
             type="button"
             onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
@@ -616,7 +616,7 @@ function Invest() {
             <ChevronDown className={`w-4 h-4 mt-1 shrink-0 transition-transform text-white/60 ${showDeutscheDetails ? "rotate-180" : ""}`} />
           </button>
           {showDeutscheDetails && (
-            <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.14 0.02 280)" }}>
+            <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.22 0.02 280)" }}>
               <p className="text-[12px] text-white/70">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
               <p className="text-[12px] text-white/70">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
               <p className="text-[12px] text-white/70">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
