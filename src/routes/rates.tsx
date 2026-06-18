@@ -354,7 +354,7 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
             <div className="space-y-4">
               <div
                 className="p-4 rounded-2xl"
-                style={{ background: "color-mix(in oklch, var(--portfolio-purple) 16%, oklch(0.24 0.02 280))" }}
+                style={{ background: "color-mix(in oklch, var(--portfolio-purple) 16%, oklch(0.24 0.03 280))" }}
               >
                 <p className="text-[12px] uppercase tracking-wide text-white/60 font-semibold">Your investor profile</p>
                 <p className="text-xl font-bold text-white mt-1">{profile.label}</p>
