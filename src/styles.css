@@ -255,7 +255,6 @@
   .glass-card {
     background-color: color-mix(in oklch, var(--card) 80%, transparent);
     backdrop-filter: blur(16px);
-    border: 1px solid color-mix(in oklch, var(--border) 50%, transparent);
     border-radius: 1rem;
   }
 

@@ -264,7 +264,7 @@ function Dashboard() {
 
       {isFirstTimeInvestor && (
         <div className="mx-4 mt-2">
-          <div className="relative overflow-hidden rounded-2xl border border-primary/40 bg-primary/15 backdrop-blur-md p-3.5">
+          <div className="relative overflow-hidden rounded-2xl bg-primary/15 backdrop-blur-md p-3.5">
             <button
               onClick={() => setIsFirstTimeInvestor(false)}
               className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-background/30 text-muted-foreground hover:text-foreground transition"
@@ -361,7 +361,7 @@ function Dashboard() {
       {/* Quick actions */}
       {isVisible("quick") && (
       <div className="mx-4 mt-3.5">
-        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-2.5">
+        <div className="rounded-2xl bg-card backdrop-blur-md overflow-hidden p-2.5">
           <div className="flex items-center justify-between px-1 pb-1.5">
             <h3 className="text-[13px] font-medium text-muted-foreground">Quick actions</h3>
             <div className="flex items-center gap-1">
@@ -451,7 +451,7 @@ function Dashboard() {
         <div className="mx-4 mt-3.5">
           <button
             onClick={() => navigate({ to: "/rates" })}
-            className="w-full text-left rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
+            className="w-full text-left rounded-2xl bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
           >
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-2">
@@ -544,7 +544,7 @@ function Dashboard() {
       {/* Latest transactions */}
       {isVisible("transactions") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden">
+          <div className="rounded-2xl bg-card backdrop-blur-md overflow-hidden">
             <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
               <h3 className="text-[13px] font-medium text-muted-foreground">Latest transactions</h3>
               <div className="flex items-center gap-1">

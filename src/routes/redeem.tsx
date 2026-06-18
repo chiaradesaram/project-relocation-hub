@@ -180,7 +180,7 @@ function Redeem() {
           <h2 className="px-1 mb-2 text-[15px] font-semibold text-foreground">
             Redemption Amount
           </h2>
-          <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 px-4 py-4">
+          <div className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
             <div className="flex items-baseline gap-2">
               <span className="text-[22px] font-medium text-muted-foreground">LKR</span>
               <input
