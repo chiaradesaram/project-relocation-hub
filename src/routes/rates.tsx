@@ -293,7 +293,7 @@ const FundQuizModal = ({ open, onClose }: { open: boolean; onClose: () => void }
         <div className="flex items-center justify-between px-5 pt-4 pb-2">
           <div className="flex items-center gap-2">
             <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "color-mix(in oklch, var(--portfolio-purple) 30%, transparent)" }}>
-              <Sparkles className="w-3.5 h-3.5" style={{ color: "oklch(0.9 0.12 300)" }} />
+              <Sparkles className="w-3.5 h-3.5" style={{ color: "oklch(0.9 0.12 290)" }} />
             </div>
             <p className="text-sm font-semibold text-foreground">Fund matcher</p>
           </div>

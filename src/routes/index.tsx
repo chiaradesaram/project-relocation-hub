@@ -23,7 +23,7 @@ const portfolioItems = [
   },
   {
     name: "Equities", value: "1,820,000", earnings30d: "+22,750",
-    icon: BarChart2, path: "/invest?product=equities", percentage: 30, color: "oklch(0.55 0.25 290)",
+    icon: BarChart2, path: "/invest?product=equities", percentage: 30, color: "oklch(0.55 0.25 280)",
     status: null as string | null,
   },
   {
@@ -249,7 +249,7 @@ function Dashboard() {
       <div
         className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-5 pt-5 pb-4 shadow-sm"
         style={{
-          background: "oklch(0.34 0.10 285)",
+          background: "oklch(0.34 0.10 275)",
         }}
       >
         <p className="text-[12px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
@@ -314,7 +314,7 @@ function Dashboard() {
       <div className="mx-4 mt-3.5">
         <div
           className="rounded-2xl overflow-hidden p-3.5"
-          style={{ background: "oklch(0.32 0.12 285)" }}
+          style={{ background: "oklch(0.32 0.12 275)" }}
         >
           <div className="flex items-center justify-between pb-2.5">
             <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
@@ -328,7 +328,7 @@ function Dashboard() {
                   key={item.name}
                   onClick={() => navigate({ to: item.path })}
                   className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
-                  style={{ background: "oklch(0.40 0.12 285)" }}
+                  style={{ background: "oklch(0.40 0.12 275)" }}
                 >
                   <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
                     <Icon className="h-4 w-4 text-white" />
@@ -406,7 +406,7 @@ function Dashboard() {
       {/* Watchlist */}
       {isVisible("watchlist") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 285)" }}>
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
               <h3 className="text-[15px] font-semibold text-white">Watchlist</h3>
               <div className="flex items-center gap-1">
@@ -428,7 +428,7 @@ function Dashboard() {
                 >
                   <div
                     className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-[oklch(0.85_0.12_295)]"
-                    style={{ background: "oklch(0.38 0.10 285)" }}
+                    style={{ background: "oklch(0.38 0.10 275)" }}
                   >
                     {s.symbol.slice(0, 2)}
                   </div>
@@ -498,7 +498,7 @@ function Dashboard() {
       {/* Rates to watch */}
       {isVisible("rates") && (
         <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 285)" }}>
+          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.04 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
               <h3 className="text-[15px] font-semibold text-white">Rates to watch</h3>
               <div className="flex items-center gap-1">
