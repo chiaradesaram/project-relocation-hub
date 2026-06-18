@@ -216,9 +216,9 @@ function UnitTrustPortfolio() {
                         {/* Earnings + tiny goal indicator, right aligned */}
                         <div className="mt-1.5 flex items-center justify-end gap-1">
                           {hasGoal && (
-                            <span className="rounded-full bg-primary/10 px-1.5 py-px text-[12px] font-medium text-primary">
-                              {Math.round(progress)}% of goal
-                            </span>
+                          <span className="rounded-full bg-accent-magenta/15 px-1.5 py-px text-[12px] font-medium text-accent-magenta">
+                            {Math.round(progress)}% of goal
+                          </span>
                           )}
                           <span className="rounded-full bg-success/10 px-1.5 py-px text-[12px] font-medium text-success">
                             All {sub.earningsAll}
