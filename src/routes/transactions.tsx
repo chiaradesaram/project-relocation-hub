@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, Landmark } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, Landmark, Receipt } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { useState } from "react";
 
@@ -177,6 +177,11 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-8 h-8 rounded-full bg-pill/20 flex items-center justify-center text-pill shrink-0">
+                {openTx?.product === "Unit Trusts" && <Landmark className="w-4 h-4" />}
+                {openTx?.product === "Equities" && <TrendingUp className="w-4 h-4" />}
+                {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
+              </div>
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
               <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                 openTx?.status === "Pending"
@@ -194,57 +199,32 @@ function Transactions() {
 
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-4">
             {openTx?.fund && (
-              <div className="flex items-center gap-3 p-4">
-                <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
-                  <Landmark className="w-5 h-5" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-semibold text-foreground">Fund</p>
-                  <p className="text-xs text-muted-foreground truncate">{openTx?.fund}</p>
-                </div>
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Fund</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.fund}</p>
               </div>
             )}
             {openTx?.product === "Unit Trusts" && (
               <>
-                <div className="flex items-center gap-3 p-4">
-                  <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
-                    <Hash className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-foreground">Units</p>
-                    <p className="text-xs text-muted-foreground truncate">
-                      {openTx?.units?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 }) ?? "—"}
-                    </p>
-                  </div>
+                <div className="p-4">
+                  <p className="text-sm font-semibold text-foreground">Units</p>
+                  <p className="text-xs text-muted-foreground truncate">
+                    {openTx?.units?.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 4 }) ?? "—"}
+                  </p>
                 </div>
-                <div className="flex items-center gap-3 p-4">
-                  <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
-                    <Tag className="w-5 h-5" />
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-foreground">Unit price</p>
-                    <p className="text-xs text-muted-foreground truncate">{openTx?.unitPrice ?? "—"}</p>
-                  </div>
+                <div className="p-4">
+                  <p className="text-sm font-semibold text-foreground">Unit price</p>
+                  <p className="text-xs text-muted-foreground truncate">{openTx?.unitPrice ?? "—"}</p>
                 </div>
               </>
             )}
-            <div className="flex items-center gap-3 p-4">
-              <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
-                <CalendarDays className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground">Created date</p>
-                <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
-              </div>
+            <div className="p-4">
+              <p className="text-sm font-semibold text-foreground">Created date</p>
+              <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
             </div>
-            <div className="flex items-center gap-3 p-4">
-              <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
-                <CalendarCheck2 className="w-5 h-5" />
-              </div>
-              <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
-                <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
-              </div>
+            <div className="p-4">
+              <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
+              <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
             </div>
           </div>
 
