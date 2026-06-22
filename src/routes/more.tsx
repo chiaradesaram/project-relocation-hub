@@ -56,7 +56,7 @@ function More() {
       <PageHeader title="More" />
 
       {/* Profile Card */}
-      <div className="mx-4 mt-2 bg-[#0a1422] rounded-2xl p-4">
+      <div className="mx-4 mt-2 bg-card rounded-2xl p-4">
         <button onClick={() => navigate({ to: "/profile" })} className="w-full flex items-center gap-3">
           <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center text-primary-foreground font-bold">
             JD
