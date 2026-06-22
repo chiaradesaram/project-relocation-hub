@@ -193,6 +193,17 @@ function Transactions() {
           </DrawerHeader>
 
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-4">
+            {openTx?.fund && (
+              <div className="flex items-center gap-3 p-4">
+                <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
+                  <Landmark className="w-5 h-5" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-foreground">Fund</p>
+                  <p className="text-xs text-muted-foreground truncate">{openTx?.fund}</p>
+                </div>
+              </div>
+            )}
             {openTx?.product === "Unit Trusts" && (
               <>
                 <div className="flex items-center gap-3 p-4">
