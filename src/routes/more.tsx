@@ -79,7 +79,7 @@ function More() {
                 onClick={() => navigate({ to: path })}
                 className="w-full flex items-center gap-3 p-3.5 hover:bg-muted/30 transition"
               >
-                <Icon className="w-5 h-5 text-primary" />
+                <Icon className="w-5 h-5 text-pill" />
                 <div className="flex-1 text-left">
                   <p className="text-xs font-medium text-foreground">{label}</p>
                   {subtitle && <p className="text-[12px] text-muted-foreground">{subtitle}</p>}
