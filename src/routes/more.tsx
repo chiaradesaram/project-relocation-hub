@@ -56,7 +56,7 @@ function More() {
       <PageHeader title="More" />
 
       {/* Profile Card */}
-      <div className="mx-4 mt-2 glass-card p-4">
+      <div className="mx-4 mt-2 bg-[#0a1422] rounded-2xl p-4">
         <button onClick={() => navigate({ to: "/profile" })} className="w-full flex items-center gap-3">
           <div className="w-12 h-12 rounded-full gradient-primary flex items-center justify-center text-primary-foreground font-bold">
             JD
@@ -72,7 +72,7 @@ function More() {
       {sections.map((section) => (
         <div key={section.title} className="mx-4 mt-4">
           <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">{section.title}</p>
-          <div className="glass-card overflow-hidden divide-y divide-border/30">
+          <div className="bg-[#0a1422] rounded-2xl overflow-hidden divide-y divide-border/30">
             {section.items.map(({ icon: Icon, label, path, subtitle }: any) => (
               <button
                 key={label}

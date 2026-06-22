@@ -655,18 +655,18 @@ function ContactForm() {
                   <Link
                     key={q.to + q.label}
                     to={q.to}
-                    className="flex items-center gap-3 rounded-xl bg-primary p-3 transition-colors hover:bg-primary/90"
+                    className="flex items-center gap-3 rounded-xl bg-[#0a1422] p-3 transition-colors hover:bg-[#0a1422]/80"
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-foreground/20">
-                      <Icon className="h-4 w-4 text-primary-foreground" />
+                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pill/90">
+                      <Icon className="h-4 w-4 text-pill-foreground" />
                     </div>
                     <div className="flex-1">
-                      <p className="text-[13px] font-semibold text-primary-foreground">{q.label}</p>
-                      <p className="text-[12px] leading-relaxed text-primary-foreground/80">
+                      <p className="text-[13px] font-semibold text-foreground">{q.label}</p>
+                      <p className="text-[12px] leading-relaxed text-muted-foreground">
                         {q.description}
                       </p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-primary-foreground/70" />
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
                   </Link>
                 );
               })}
