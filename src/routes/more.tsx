@@ -72,7 +72,7 @@ function More() {
       {sections.map((section) => (
         <div key={section.title} className="mx-4 mt-4">
           <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">{section.title}</p>
-          <div className="bg-[#141D2B] rounded-2xl overflow-hidden divide-y divide-border/30">
+          <div className="bg-[#1E1C3A] rounded-2xl overflow-hidden divide-y divide-border/30">
             {section.items.map(({ icon: Icon, label, path, subtitle }: any) => (
               <button
                 key={label}
