@@ -68,7 +68,7 @@ const BottomNav = () => {
               className="flex flex-col items-center gap-0.5 px-3 py-1 transition-all"
             >
               <Icon className="w-5 h-5 text-pill" />
-              <span className={`text-[12px] font-medium ${isActive ? "text-pill" : "text-muted-foreground"}`}>
+              <span className={`text-[12px] font-medium ${isActive ? "text-pill" : "text-foreground"}`}>
                 {label}
               </span>
             </button>
