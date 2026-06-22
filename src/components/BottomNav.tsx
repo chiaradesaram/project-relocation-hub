@@ -66,7 +66,7 @@ const BottomNav = () => {
               key={path}
               onClick={() => handleNavClick(path)}
               className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-all ${
-                isActive ? "text-primary" : "text-muted-foreground"
+                isActive ? "text-pill" : "text-muted-foreground"
               }`}
             >
               <Icon className="w-5 h-5" />
