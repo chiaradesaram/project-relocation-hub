@@ -276,8 +276,8 @@ function Dashboard() {
               onClick={() => navigate({ to: "/get-started" })}
               className="flex w-full items-center gap-3 text-left"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary ring-1 ring-primary/60">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pill ring-1 ring-pill/60">
+                <Sparkles className="h-4 w-4 text-pill-foreground" />
               </span>
               <div className="min-w-0 flex-1 pr-5">
                 <p className="text-[12px] font-semibold text-foreground leading-tight">New here? Let's get you started</p>
@@ -548,7 +548,7 @@ function Dashboard() {
             <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
               <h3 className="text-[13px] font-medium text-muted-foreground">Latest transactions</h3>
               <div className="flex items-center gap-1">
-                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">See all</button>
+                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-pill hover:brightness-110 transition">See all</button>
                 <WidgetMenu widget="transactions" />
               </div>
             </div>
@@ -564,7 +564,7 @@ function Dashboard() {
                   >
                     <span
                       className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                        isInvest ? "bg-primary/15 text-primary" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
+                        isInvest ? "bg-pill/15 text-pill" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5" />
