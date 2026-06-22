@@ -134,7 +134,7 @@ function Transactions() {
                   aria-label={tx.status}
                   className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
                     tx.status === "Pending"
-                      ? "bg-accent-cyan/15 text-accent-cyan"
+                      ? "bg-warning/15 text-warning"
                       : "bg-success/20 text-success"
                   }`}
                 >
