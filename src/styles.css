@@ -73,7 +73,7 @@
   --background: #130d35;
   --foreground: oklch(0.97 0 0);
 
-  --card: oklch(0.36 0.10 265);
+  --card: oklch(0.30 0.07 270);
   --card-foreground: oklch(0.97 0 0);
 
   --popover: oklch(0.32 0.10 265);
