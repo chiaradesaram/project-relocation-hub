@@ -342,7 +342,7 @@ function Dashboard() {
                     )}
                   </div>
                   {item.status ? (
-                    <span className="rounded-full bg-accent-cyan/15 px-2.5 py-0.5 text-[12px] font-medium text-accent-cyan">
+                    <span className="rounded-full bg-warning/15 px-2.5 py-0.5 text-[12px] font-medium text-warning">
                       {item.status}
                     </span>
                   ) : (
