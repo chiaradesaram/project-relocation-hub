@@ -383,16 +383,16 @@ function Dashboard() {
                 <button
                   key={id}
                   onClick={() => navigate({ to })}
-                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-1 py-3 transition hover:bg-primary/20 hover:border-primary/40"
+                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-pill/20 bg-pill/10 px-1 py-3 transition hover:bg-pill/20 hover:border-pill/40"
                 >
-                  <Icon className="h-4 w-4 text-primary" />
+                  <Icon className="h-4 w-4 text-pill" />
                   <span className="text-[12px] font-medium text-foreground whitespace-nowrap">{label}</span>
                 </button>
               ))}
             {quickActions.length < 8 && (
               <button
                 onClick={() => setEditingQuick(true)}
-                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-primary/40 hover:bg-primary/5"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-pill/40 hover:bg-pill/5"
               >
                 <Plus className="h-4 w-4 text-muted-foreground" />
                 <span className="text-[12px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
