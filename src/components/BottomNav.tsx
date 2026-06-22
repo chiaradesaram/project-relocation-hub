@@ -65,12 +65,12 @@ const BottomNav = () => {
             <button
               key={path}
               onClick={() => handleNavClick(path)}
-              className={`flex flex-col items-center gap-0.5 px-3 py-1 transition-all ${
-                isActive ? "text-pill" : "text-muted-foreground"
-              }`}
+              className="flex flex-col items-center gap-0.5 px-3 py-1 transition-all"
             >
-              <Icon className="w-5 h-5" />
-              <span className="text-[12px] font-medium">{label}</span>
+              <Icon className="w-5 h-5 text-pill" />
+              <span className={`text-[12px] font-medium ${isActive ? "text-pill" : "text-muted-foreground"}`}>
+                {label}
+              </span>
             </button>
           );
         })}
