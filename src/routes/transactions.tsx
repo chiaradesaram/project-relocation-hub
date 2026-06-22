@@ -30,6 +30,7 @@ type Tx = {
   value: string;
   positive: boolean;
   status: Status;
+  fund?: string;
   createdDate?: string;
   reflectedDate?: string;
   units?: number;
