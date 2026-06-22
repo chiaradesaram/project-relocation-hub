@@ -63,7 +63,7 @@ const subToKinds: Record<string, string[]> = {
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") return <Clock className="w-4 h-4 text-accent-cyan" />;
+  if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
 
