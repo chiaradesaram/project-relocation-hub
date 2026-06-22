@@ -204,7 +204,7 @@ function Dashboard() {
                 }}
                 className="mb-2 flex w-full items-center gap-3 rounded-xl bg-secondary p-4 transition hover:bg-muted/50"
               >
-                <Icon className="h-5 w-5 text-primary" />
+                <Icon className="h-5 w-5 text-pill" />
                 <span className="text-sm font-medium text-foreground">{label}</span>
               </button>
             ))}
@@ -276,8 +276,8 @@ function Dashboard() {
               onClick={() => navigate({ to: "/get-started" })}
               className="flex w-full items-center gap-3 text-left"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary ring-1 ring-primary/60">
-                <Sparkles className="h-4 w-4 text-primary-foreground" />
+              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pill ring-1 ring-pill/60">
+                <Sparkles className="h-4 w-4 text-pill-foreground" />
               </span>
               <div className="min-w-0 flex-1 pr-5">
                 <p className="text-[12px] font-semibold text-foreground leading-tight">New here? Let's get you started</p>
@@ -295,17 +295,17 @@ function Dashboard() {
       <div className="mx-4 mt-2.5 flex gap-2">
         <button
           onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 transition hover:brightness-110"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-pill py-2.5 transition hover:brightness-110"
         >
-          <Plus className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
-          <span className="text-[12px] font-semibold text-primary-foreground">Invest</span>
+          <Plus className="h-3.5 w-3.5 text-pill-foreground" strokeWidth={3} />
+          <span className="text-[12px] font-semibold text-pill-foreground">Invest</span>
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-muted/40 py-2.5 transition hover:bg-muted/60"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-pill/15 py-2.5 transition hover:bg-pill/25"
         >
-          <Minus className="h-3.5 w-3.5 text-foreground" strokeWidth={3} />
-          <span className="text-[12px] font-semibold text-foreground">Redeem</span>
+          <Minus className="h-3.5 w-3.5 text-pill" strokeWidth={3} />
+          <span className="text-[12px] font-semibold text-pill">Redeem</span>
         </button>
       </div>
 
@@ -383,16 +383,16 @@ function Dashboard() {
                 <button
                   key={id}
                   onClick={() => navigate({ to })}
-                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-primary/20 bg-primary/10 px-1 py-3 transition hover:bg-primary/20 hover:border-primary/40"
+                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-pill/20 bg-pill/10 px-1 py-3 transition hover:bg-pill/20 hover:border-pill/40"
                 >
-                  <Icon className="h-4 w-4 text-primary" />
+                  <Icon className="h-4 w-4 text-pill" />
                   <span className="text-[12px] font-medium text-foreground whitespace-nowrap">{label}</span>
                 </button>
               ))}
             {quickActions.length < 8 && (
               <button
                 onClick={() => setEditingQuick(true)}
-                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-primary/40 hover:bg-primary/5"
+                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-pill/40 hover:bg-pill/5"
               >
                 <Plus className="h-4 w-4 text-muted-foreground" />
                 <span className="text-[12px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
@@ -548,7 +548,7 @@ function Dashboard() {
             <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
               <h3 className="text-[13px] font-medium text-muted-foreground">Latest transactions</h3>
               <div className="flex items-center gap-1">
-                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-primary hover:brightness-110 transition">See all</button>
+                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-pill hover:brightness-110 transition">See all</button>
                 <WidgetMenu widget="transactions" />
               </div>
             </div>
@@ -564,7 +564,7 @@ function Dashboard() {
                   >
                     <span
                       className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                        isInvest ? "bg-primary/15 text-primary" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
+                        isInvest ? "bg-pill/15 text-pill" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
                       }`}
                     >
                       <Icon className="h-3.5 w-3.5" />
