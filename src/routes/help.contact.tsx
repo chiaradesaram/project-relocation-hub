@@ -655,7 +655,7 @@ function ContactForm() {
                   <Link
                     key={q.to + q.label}
                     to={q.to}
-                    className="flex items-center gap-3 rounded-xl bg-[#0a1422] p-3 transition-colors hover:bg-[#0a1422]/80"
+                    className="flex items-center gap-3 rounded-xl bg-card p-3 transition-colors hover:bg-secondary"
                   >
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pill/90">
                       <Icon className="h-4 w-4 text-pill-foreground" />
