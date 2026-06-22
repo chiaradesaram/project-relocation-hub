@@ -204,7 +204,7 @@ function Dashboard() {
                 }}
                 className="mb-2 flex w-full items-center gap-3 rounded-xl bg-secondary p-4 transition hover:bg-muted/50"
               >
-                <Icon className="h-5 w-5 text-primary" />
+                <Icon className="h-5 w-5 text-pill" />
                 <span className="text-sm font-medium text-foreground">{label}</span>
               </button>
             ))}
