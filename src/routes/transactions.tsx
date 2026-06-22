@@ -1,9 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Info } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/components/ui/tooltip";
+import { TrendingUp, TrendingDown, Clock, Check } from "lucide-react";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { useState } from "react";
 
 export const Route = createFileRoute("/transactions")({
@@ -60,11 +59,6 @@ const subToKinds: Record<string, string[]> = {
   Maturities: ["Maturity"],
 };
 
-const statusStyles: Record<Status, string> = {
-  Confirmed: "bg-success/15 text-success",
-  Pending: "bg-accent-cyan/15 text-accent-cyan",
-};
-
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
   if (status === "Pending") return <Clock className="w-4 h-4 text-accent-cyan" />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
@@ -73,6 +67,7 @@ function StatusIcon({ status, positive }: { status: Status; positive: boolean })
 function Transactions() {
   const [product, setProduct] = useState<Product>("All");
   const sub = "All";
+  const [openTx, setOpenTx] = useState<Tx | null>(null);
 
   const filtered = transactions
     .filter((tx) => {
@@ -89,7 +84,6 @@ function Transactions() {
     });
 
   return (
-    <TooltipProvider>
     <MobileLayout>
       <PageHeader title="Transactions" showBack />
 
@@ -128,48 +122,25 @@ function Transactions() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
-                <span className={`px-1.5 py-0.5 rounded text-[12px] font-medium ${statusStyles[tx.status]}`}>
-                  {tx.status}
-                </span>
-                {tx.status === "Pending" && (
-                  <Popover>
-                    <PopoverTrigger asChild>
-                      <button
-                        type="button"
-                        onClick={(e) => e.stopPropagation()}
-                        className="text-muted-foreground hover:text-foreground transition"
-                        aria-label="Pending info"
-                      >
-                        <Info className="w-3.5 h-3.5" />
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent side="top" className="w-60 text-xs leading-relaxed">
-                      Your investment takes approximately two working days to reflect on the portal.
-                    </PopoverContent>
-                  </Popover>
-                )}
+                <button
+                  type="button"
+                  onClick={() => setOpenTx(tx)}
+                  aria-label={`${tx.status} — view details`}
+                  className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
+                    tx.status === "Pending"
+                      ? "bg-accent-cyan/15 text-accent-cyan"
+                      : "bg-success/20 text-success"
+                  }`}
+                >
+                  {tx.status === "Pending" ? (
+                    <Clock className="w-2.5 h-2.5" />
+                  ) : (
+                    <Check className="w-2.5 h-2.5" strokeWidth={3} />
+                  )}
+                </button>
               </div>
               <p className="text-xs text-muted-foreground truncate mt-0.5">{tx.subAccount}</p>
-              {tx.status === "Pending" && tx.createdDate ? (
-              <div className="mt-1.5 space-y-0.5">
-                <p className="text-[12px] text-foreground">
-                  <span className="text-muted-foreground/70">Created:</span> {tx.createdDate}
-                </p>
-                <p className="text-[12px] text-foreground">
-                  <span className="text-muted-foreground/70">Reflects on Portal:</span>{" "}
-                  <Tooltip>
-                    <TooltipTrigger asChild>
-                      <span className="underline decoration-dotted underline-offset-2 cursor-help">{tx.reflectedDate}</span>
-                    </TooltipTrigger>
-                    <TooltipContent>
-                      <p>Estimated date</p>
-                    </TooltipContent>
-                  </Tooltip>
-                </p>
-              </div>
-              ) : (
-                <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
-              )}
+              <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
             </div>
             <div className="text-right shrink-0">
               <p className={`text-sm font-semibold ${tx.positive ? "text-emerald-300" : "text-foreground"}`}>
@@ -182,7 +153,38 @@ function Transactions() {
           <p className="text-center text-xs text-muted-foreground py-8">No transactions found</p>
         )}
       </div>
+
+      <Drawer open={!!openTx} onOpenChange={(o) => !o && setOpenTx(null)}>
+        <DrawerContent>
+          <DrawerHeader className="text-left">
+            <DrawerTitle className="flex items-center gap-2">
+              {openTx?.status === "Pending" ? (
+                <Clock className="w-4 h-4 text-accent-cyan" />
+              ) : (
+                <Check className="w-4 h-4 text-success" strokeWidth={3} />
+              )}
+              {openTx?.status} · {openTx?.name}
+            </DrawerTitle>
+            <DrawerDescription>{openTx?.subAccount}</DrawerDescription>
+          </DrawerHeader>
+          <div className="px-4 pb-6 space-y-3 text-sm">
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Created Date</span>
+              <span className="text-foreground">{openTx?.createdDate ?? openTx?.date}</span>
+            </div>
+            <div className="flex justify-between">
+              <span className="text-muted-foreground">Reflected on the portal by</span>
+              <span className="text-foreground">{openTx?.reflectedDate ?? openTx?.date}</span>
+            </div>
+            <a
+              href="#"
+              className="block pt-3 text-pill underline underline-offset-4 text-sm"
+            >
+              Got an issue with this transaction?
+            </a>
+          </div>
+        </DrawerContent>
+      </Drawer>
     </MobileLayout>
-    </TooltipProvider>
   );
 }
