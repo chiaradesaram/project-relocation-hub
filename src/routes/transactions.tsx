@@ -63,7 +63,7 @@ const subToKinds: Record<string, string[]> = {
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") return <Clock className="w-4 h-4 text-accent-cyan" />;
+  if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
 
@@ -119,7 +119,7 @@ function Transactions() {
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
-                  ? "bg-accent-cyan/15"
+                  ? "bg-warning/15"
                   : tx.positive
                     ? "bg-success/20"
                     : "bg-muted/40"
@@ -134,7 +134,7 @@ function Transactions() {
                   aria-label={tx.status}
                   className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
                     tx.status === "Pending"
-                      ? "bg-accent-cyan/15 text-accent-cyan"
+                      ? "bg-warning/15 text-warning"
                       : "bg-success/20 text-success"
                   }`}
                 >
@@ -180,7 +180,7 @@ function Transactions() {
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
               <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                 openTx?.status === "Pending"
-                  ? "bg-accent-cyan/15 text-accent-cyan"
+                  ? "bg-warning/15 text-warning"
                   : "bg-success/20 text-success"
               }`}>
                 {openTx?.status === "Pending" ? <Clock className="w-3 h-3" /> : <Check className="w-3 h-3" strokeWidth={3} />}
