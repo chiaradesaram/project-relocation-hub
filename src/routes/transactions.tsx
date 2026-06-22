@@ -177,6 +177,11 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
+              <div className="w-8 h-8 rounded-full bg-pill/20 flex items-center justify-center text-pill shrink-0">
+                {openTx?.product === "Unit Trusts" && <Landmark className="w-4 h-4" />}
+                {openTx?.product === "Equities" && <TrendingUp className="w-4 h-4" />}
+                {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
+              </div>
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
               <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                 openTx?.status === "Pending"
