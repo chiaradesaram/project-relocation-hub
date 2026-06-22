@@ -75,6 +75,9 @@
   --background: #130d35;
   --foreground: oklch(0.97 0 0);
 
+  --pill: #23EBFF;
+  --pill-foreground: #130d35;
+
   --card: oklch(0.30 0.07 270);
   --card-foreground: oklch(0.97 0 0);
 
