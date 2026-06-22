@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Check } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { useState } from "react";
 
@@ -107,7 +107,12 @@ function Transactions() {
       {/* Transaction List */}
       <div className="px-4 mt-3 space-y-2">
         {filtered.map((tx, i) => (
-          <div key={i} className="glass-card p-4 flex items-start gap-3">
+          <button
+            key={i}
+            type="button"
+            onClick={() => setOpenTx(tx)}
+            className="glass-card p-4 flex items-start gap-3 w-full text-left hover:bg-white/[0.03] transition"
+          >
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
@@ -122,10 +127,8 @@ function Transactions() {
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
                 <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
-                <button
-                  type="button"
-                  onClick={() => setOpenTx(tx)}
-                  aria-label={`${tx.status} — view details`}
+                <span
+                  aria-label={tx.status}
                   className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
                     tx.status === "Pending"
                       ? "bg-accent-cyan/15 text-accent-cyan"
@@ -137,7 +140,7 @@ function Transactions() {
                   ) : (
                     <Check className="w-2.5 h-2.5" strokeWidth={3} />
                   )}
-                </button>
+                </span>
               </div>
               <p className="text-xs text-muted-foreground truncate mt-0.5">{tx.subAccount}</p>
               <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
@@ -147,7 +150,7 @@ function Transactions() {
                 {tx.positive ? "+" : "−"} {tx.value}
               </p>
             </div>
-          </div>
+          </button>
         ))}
         {filtered.length === 0 && (
           <p className="text-center text-xs text-muted-foreground py-8">No transactions found</p>
@@ -155,34 +158,67 @@ function Transactions() {
       </div>
 
       <Drawer open={!!openTx} onOpenChange={(o) => !o && setOpenTx(null)}>
-        <DrawerContent>
-          <DrawerHeader className="text-left">
-            <DrawerTitle className="flex items-center gap-2">
-              {openTx?.status === "Pending" ? (
-                <Clock className="w-4 h-4 text-accent-cyan" />
-              ) : (
-                <Check className="w-4 h-4 text-success" strokeWidth={3} />
-              )}
-              {openTx?.status} · {openTx?.name}
-            </DrawerTitle>
-            <DrawerDescription>{openTx?.subAccount}</DrawerDescription>
-          </DrawerHeader>
-          <div className="px-4 pb-6 space-y-3 text-sm">
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Created Date</span>
-              <span className="text-foreground">{openTx?.createdDate ?? openTx?.date}</span>
-            </div>
-            <div className="flex justify-between">
-              <span className="text-muted-foreground">Reflected on the portal by</span>
-              <span className="text-foreground">{openTx?.reflectedDate ?? openTx?.date}</span>
-            </div>
-            <a
-              href="#"
-              className="block pt-3 text-pill underline underline-offset-4 text-sm"
+        <DrawerContent className="bg-[#0a1422] border-none rounded-t-[28px] px-5 pb-8">
+          <div className="flex items-center justify-between pt-2 pb-5">
+            <button
+              type="button"
+              onClick={() => setOpenTx(null)}
+              aria-label="Close"
+              className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              Got an issue with this transaction?
-            </a>
+              <X className="w-5 h-5" />
+            </button>
+            <div className={`flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium ${
+              openTx?.status === "Pending"
+                ? "bg-accent-cyan/15 text-accent-cyan"
+                : "bg-success/20 text-success"
+            }`}>
+              {openTx?.status === "Pending" ? <Clock className="w-3 h-3" /> : <Check className="w-3 h-3" strokeWidth={3} />}
+              {openTx?.status}
+            </div>
           </div>
+
+          <DrawerHeader className="text-left p-0 pb-5">
+            <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
+            <DrawerDescription>
+              {openTx?.subAccount} · {openTx?.positive ? "+" : "−"} {openTx?.value}
+            </DrawerDescription>
+          </DrawerHeader>
+
+          <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-4">
+            <div className="flex items-center gap-3 p-4">
+              <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
+                <CalendarDays className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">Created date</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 p-4">
+              <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
+                <CalendarCheck2 className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
+              </div>
+            </div>
+          </div>
+
+          <a
+            href="#"
+            className="rounded-2xl bg-white/[0.04] flex items-center gap-3 p-4"
+          >
+            <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
+              <LifeBuoy className="w-5 h-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-semibold text-foreground">Got an issue with this transaction?</p>
+              <p className="text-xs text-muted-foreground truncate">We'll help you sort it out</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground" />
+          </a>
         </DrawerContent>
       </Drawer>
     </MobileLayout>
