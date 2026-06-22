@@ -180,7 +180,7 @@ function Transactions() {
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
               <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
                 openTx?.status === "Pending"
-                  ? "bg-accent-cyan/15 text-accent-cyan"
+                  ? "bg-warning/15 text-warning"
                   : "bg-success/20 text-success"
               }`}>
                 {openTx?.status === "Pending" ? <Clock className="w-3 h-3" /> : <Check className="w-3 h-3" strokeWidth={3} />}
