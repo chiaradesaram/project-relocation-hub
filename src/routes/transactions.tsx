@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, Landmark, Receipt } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { useState } from "react";
 
@@ -178,8 +178,8 @@ function Transactions() {
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
               <div className="w-8 h-8 rounded-full bg-pill/20 flex items-center justify-center text-pill shrink-0">
-                {openTx?.product === "Unit Trusts" && <Landmark className="w-4 h-4" />}
-                {openTx?.product === "Equities" && <TrendingUp className="w-4 h-4" />}
+                {openTx?.product === "Unit Trusts" && <PieChart className="w-4 h-4" />}
+                {openTx?.product === "Equities" && <BarChart3 className="w-4 h-4" />}
                 {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
               </div>
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
