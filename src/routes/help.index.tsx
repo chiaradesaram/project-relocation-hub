@@ -308,8 +308,8 @@ function HelpIndexPage() {
                       }}
                       className="w-full flex items-center gap-3.5 py-4 text-left"
                     >
-                      <div className="w-10 h-10 rounded-full border border-border/50 flex items-center justify-center shrink-0">
-                        <Icon className="w-4.5 h-4.5 text-foreground" />
+                      <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                        <Icon className="w-4 h-4 text-primary" />
                       </div>
                       <div className="flex-1 min-w-0">
                         <p className="text-[14px] font-semibold text-foreground">{label}</p>
