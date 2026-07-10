@@ -88,7 +88,7 @@ function Transactions() {
 
   return (
     <MobileLayout>
-      <PageHeader title="Transactions" showBack />
+      <PageHeader title="Transactions" showBack helpTopic="transactions" />
 
       {/* Product Filters */}
       <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-2">
