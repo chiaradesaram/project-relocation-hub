@@ -107,7 +107,7 @@ export const Route = createFileRoute("/help/")({
 });
 
 function HelpIndexPage() {
-  const { q } = Route.useSearch();
+  const { q, topic } = Route.useSearch();
   const [query, setQuery] = useState(q ?? "");
   const [openKey, setOpenKey] = useState<string | null>(null);
   const [selectedTopic, setSelectedTopic] = useState<FAQTopic | null>(null);
@@ -126,6 +126,23 @@ function HelpIndexPage() {
     ? TOPIC_SECTIONS.find((t) => t.id === selectedTopic) ?? null
     : null;
   const topicFaqs = selectedTopic ? FAQS.filter((f) => f.topic === selectedTopic) : [];
+
+  const contextTopic: FAQTopic | null =
+    topic && topic !== "general" && TOPIC_SECTIONS.some((t) => t.id === topic)
+      ? (topic as FAQTopic)
+      : null;
+
+  const suggestedFaqs = useMemo(() => {
+    if (!contextTopic) return [];
+    const inTopic = FAQS.filter((f) => f.topic === contextTopic);
+    const featured = inTopic.filter((f) => f.featured);
+    const rest = inTopic.filter((f) => !f.featured);
+    return [...featured, ...rest].slice(0, 3);
+  }, [contextTopic]);
+
+  const otherTopics = contextTopic
+    ? TOPIC_SECTIONS.filter((t) => t.id !== contextTopic)
+    : TOPIC_SECTIONS;
 
   return (
     <MobileLayout>
@@ -223,33 +240,65 @@ function HelpIndexPage() {
             </div>
           ) : (
             <>
-              {/* Quick links */}
-              <div className="mx-5 mb-6">
-                <p className="text-[14px] font-medium text-foreground mb-3">Quick links</p>
-                <div className="h-px bg-border/40 mb-1" />
-                <div className="divide-y divide-border/30">
-                  {QUICK_LINKS.map(({ label, to }) => (
-                    <Link
-                      key={label}
-                      to={to}
-                      className="w-full flex items-center gap-3.5 py-4"
-                    >
-                      <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
-                        <Zap className="w-4 h-4 text-primary fill-primary" />
-                      </div>
-                      <span className="flex-1 text-[14px] font-medium text-foreground">{label}</span>
-                      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-                    </Link>
-                  ))}
+              {contextTopic ? (
+                <div className="mx-5 mb-6">
+                  <p className="text-[14px] font-medium text-foreground mb-3">Suggested FAQs</p>
+                  <div className="h-px bg-border/40 mb-1" />
+                  <div className="divide-y divide-border/30">
+                    {suggestedFaqs.map((item, i) => {
+                      const key = `suggested-${i}`;
+                      const isOpen = openKey === key;
+                      return (
+                        <button
+                          key={key}
+                          type="button"
+                          onClick={() => setOpenKey(isOpen ? null : key)}
+                          className="w-full text-left py-4 flex flex-col gap-1.5"
+                        >
+                          <div className="flex items-center justify-between gap-3">
+                            <span className="text-[14px] font-medium text-foreground">{item.q}</span>
+                            <ChevronDown
+                              className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${isOpen ? "rotate-180" : ""}`}
+                            />
+                          </div>
+                          {isOpen && (
+                            <p className="text-[13px] text-muted-foreground leading-relaxed pr-6">{item.a}</p>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
+              ) : (
+                <div className="mx-5 mb-6">
+                  <p className="text-[14px] font-medium text-foreground mb-3">Quick links</p>
+                  <div className="h-px bg-border/40 mb-1" />
+                  <div className="divide-y divide-border/30">
+                    {QUICK_LINKS.map(({ label, to }) => (
+                      <Link
+                        key={label}
+                        to={to}
+                        className="w-full flex items-center gap-3.5 py-4"
+                      >
+                        <div className="w-10 h-10 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                          <Zap className="w-4 h-4 text-primary fill-primary" />
+                        </div>
+                        <span className="flex-1 text-[14px] font-medium text-foreground">{label}</span>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              )}
 
-              {/* Explore all topics */}
+              {/* Topics list */}
               <div className="mx-5 mb-6">
-                <p className="text-[14px] font-medium text-foreground mb-3">Suggested Topics</p>
+                <p className="text-[14px] font-medium text-foreground mb-3">
+                  {contextTopic ? "Other Topics" : "Suggested Topics"}
+                </p>
                 <div className="h-px bg-border/40 mb-1" />
                 <div className="divide-y divide-border/30">
-                  {TOPIC_SECTIONS.map(({ id, label, description, icon: Icon }) => (
+                  {otherTopics.map(({ id, label, description, icon: Icon }) => (
                     <button
                       key={id}
                       type="button"

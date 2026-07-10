@@ -1,27 +1,31 @@
-## Use dark navy from bottom sheet for nav cards and contact link buttons
+## Contextual Help page based on `?topic=` search param
 
-Match the dark navy card surface seen in the transaction bottom sheet (`#0a1422`) across the More section's nav cards and the Contact Us page's link-out buttons.
+Update `src/routes/help.index.tsx` so that when the user arrives with a topic (e.g. `/help?topic=transactions` from the transaction page's help icon), the page shows FAQs relevant to that topic instead of the generic Quick Links.
 
-### Changes
+### Behavior
 
-**1. `src/routes/more.tsx` — nav cards**
-- Replace `glass-card` with `bg-[#0a1422] rounded-2xl` on:
-  - The profile card (line 59)
-  - Each section nav card wrapper (line 75)
-- Keep the `divide-y divide-border/30` row dividers and rounded corners.
-- Leave icon colors (`text-pill`) and chevron colors untouched.
+- Keep the hero heading ("Hi, how can we help?"), search bar, and Contact us card unchanged.
+- Read `topic` from `Route.useSearch()` (already validated).
+- Treat `topic` as contextual when it is one of the FAQ topics (`invest`, `rates`, `unit-trusts`, `transactions`, `account`). `general` or missing = no context → current behavior (Quick Links + Suggested Topics).
+- When contextual and not searching:
+  - **Replace** the Quick Links section with a **Suggested FAQs** section:
+    - Heading: "Suggested FAQs"
+    - Show up to 3 FAQs from `FAQS` filtered by the current topic. Prefer `featured: true` first, then fill in order until 3.
+    - Reuse the existing expandable FAQ row styling from `TopicView` / search results (chevron down, toggle on click, `openKey` state).
+  - **Rename** the "Suggested Topics" section heading to "Other Topics" and exclude the current topic from the list so the user only sees the other categories.
+- Search behavior (typing in the search bar) stays exactly as it is today — results replace both sections, contextual or not.
+- Topic drill-down (tapping an item in Other Topics) still opens the existing `TopicView`; back button behavior unchanged.
 
-**2. `src/routes/help.contact.tsx` — link-out cards**
-- Quick-link cards (Start Application, Browse unit trust funds, etc., line 658):
-  - `bg-primary` → `bg-[#0a1422]`
-  - Hover `hover:bg-primary/90` → `hover:bg-[#0a1422]/80`
-  - Icon container `bg-primary-foreground/20` → `bg-pill/90` (bright blue circle, matching the bottom-sheet style in the screenshot)
-  - Icon color `text-primary-foreground` → `text-pill-foreground`
-  - Title `text-primary-foreground` → `text-foreground`
-  - Description `text-primary-foreground/80` → `text-muted-foreground`
-  - Chevron `text-primary-foreground/70` → `text-muted-foreground`
+### Transactions-page mapping (already wired)
+
+`PageHeader` on the transactions screen already links to `/help` with `search={{ topic: "transactions" }}` via its `helpTopic` prop, so no change needed there — this plan just makes the destination page respect it. Same applies to any other screen that already passes `helpTopic`.
+
+### Files
+
+- `src/routes/help.index.tsx` — add topic-aware branch rendering Suggested FAQs + Other Topics; leave search, hero, header, TopicView, and Contact us untouched.
 
 ### Out of scope
-- No changes to inline link pills, form submit buttons, the "Continue to ticket" button, or the success screen — those use the brand `bg-primary` deliberately as action CTAs. Only link-out navigation cards swap to dark navy.
-- No design-token edits in `src/styles.css` — using literal `#0a1422` to exactly match the bottom-sheet drawer.
-- No new dependencies or backend changes.
+
+- No changes to `PageHeader`, `help.contact.tsx`, `help.tsx`, or any caller pages.
+- No new FAQ content — uses existing entries in the `FAQS` array (the three transaction FAQs the user listed are already present).
+- No design-token or style changes.
