@@ -15,19 +15,12 @@ const initialCategories: Pref[] = [
   { id: "transactions", label: "Account Activity and Insight", description: "Receive notifications about your investments and withdrawals", icon: Receipt, enabled: true },
   { id: "market", label: "Market alerts", description: "Major moves on ASPI, S&P SL20 and your watchlist", icon: Bell, enabled: false },
   { id: "research", label: "Research", description: "Fund research, market insights and analyst reports", icon: BookOpen, enabled: false },
-  { id: "promotions", label: "Promotions & news", description: "Hear about new funds, CAL products, features and more", icon: Megaphone, enabled: false },
+  { id: "promotions", label: "Product and Service updates", description: "Hear about new funds, CAL products, features and more", icon: Megaphone, enabled: false },
   { id: "security", label: "Security alerts", description: "Login attempts and account changes (recommended)", icon: ShieldAlert, enabled: true, disabled: true },
-];
-
-const initialChannels: Pref[] = [
-  { id: "push", label: "Push notifications", description: "On this device", icon: Smartphone, enabled: true },
-  { id: "email", label: "Email", description: "john.doe@email.com", icon: Mail, enabled: true },
-  { id: "sms", label: "SMS", description: "+94 77 123 4567", icon: MessageSquare, enabled: false },
 ];
 
 function NotificationPreferences() {
   const [categories, setCategories] = useState(initialCategories);
-  const [channels, setChannels] = useState(initialChannels);
 
   const toggle = (
     setter: React.Dispatch<React.SetStateAction<Pref[]>>,
