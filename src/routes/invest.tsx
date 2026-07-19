@@ -594,33 +594,241 @@ function MethodForm({ method }: { method: InvestMethod }) {
           side="bottom"
           className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
         >
-          <SheetHeader className="px-5 pb-0">
-            <div className="flex items-center justify-between">
-              <SheetTitle className="text-base font-semibold text-foreground">
-                {picker ? pickerTitles[picker] : ""}
-              </SheetTitle>
-              <button
-                onClick={() => setPicker(null)}
-                className="rounded-full p-1 hover:bg-muted/20 transition"
-              >
-                <X className="h-4 w-4 text-muted-foreground" />
-              </button>
-            </div>
+          <SheetHeader className="px-5 pb-0 pr-12">
+            <SheetTitle className="text-base font-semibold text-foreground text-left">
+              {picker ? pickerTitles[picker] : ""}
+            </SheetTitle>
+            {picker === "fund" && (
+              <p className="text-[12px] text-muted-foreground text-left">
+                Tap to select. Pick more than one to split the investment.
+              </p>
+            )}
           </SheetHeader>
-          <div className="px-5 mt-4 space-y-2">
-            {picker &&
-              pickerOptions[picker].map((opt) => {
+
+          {/* FUND: multi-select + splits + save default */}
+          {picker === "fund" && (
+            <div className="px-5 mt-4">
+              <div className="space-y-2 max-h-[45vh] overflow-y-auto">
+                {funds.map((f) => {
+                  const checked = selectedFunds.includes(f);
+                  const isDefault = defaults.funds.includes(f);
+                  return (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => toggleFund(f)}
+                      className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
+                        checked ? "bg-muted/20" : "bg-background/40 hover:bg-muted/10"
+                      }`}
+                    >
+                      <span
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition ${
+                          checked ? "" : "border-2 border-muted-foreground/40"
+                        }`}
+                        style={
+                          checked
+                            ? { background: "var(--pill)" }
+                            : undefined
+                        }
+                      >
+                        {checked && (
+                          <Check
+                            className="w-3.5 h-3.5"
+                            style={{ color: "var(--pill-foreground)" }}
+                            strokeWidth={3}
+                          />
+                        )}
+                      </span>
+                      <span className="text-sm text-foreground flex-1 truncate">
+                        {f}
+                      </span>
+                      {isDefault && (
+                        <span
+                          className="px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0"
+                          style={{
+                            background:
+                              "color-mix(in oklch, var(--pill) 18%, transparent)",
+                            color: "var(--pill)",
+                          }}
+                        >
+                          Default
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selectedFunds.length > 1 && (
+                <div className="mt-4 rounded-2xl bg-background/40 px-4 py-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Split className="w-3.5 h-3.5 text-muted-foreground" />
+                      <p className="text-[12px] font-semibold text-foreground">
+                        Split allocation
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={evenlyDistribute}
+                      className="text-[11px] font-semibold"
+                      style={{ color: "var(--pill)" }}
+                    >
+                      Even split
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {selectedFunds.map((f) => (
+                      <div key={f} className="flex items-center gap-3">
+                        <span className="text-[13px] text-foreground flex-1 truncate">
+                          {f}
+                        </span>
+                        <div className="flex items-center gap-1 rounded-lg bg-card/70 px-2 py-1">
+                          <input
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={splits[f] ?? 0}
+                            onChange={(e) =>
+                              setSplitFor(f, parseFloat(e.target.value) || 0)
+                            }
+                            className="w-10 bg-transparent text-right text-[13px] font-semibold text-foreground outline-none tabular-nums"
+                          />
+                          <span className="text-[12px] text-muted-foreground">
+                            %
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-[11px] text-muted-foreground">
+                      Total
+                    </span>
+                    <span
+                      className="text-[12px] font-semibold tabular-nums"
+                      style={{
+                        color:
+                          Math.round(splitTotal) === 100
+                            ? "var(--pill)"
+                            : "oklch(0.85 0.15 70)",
+                      }}
+                    >
+                      {Math.round(splitTotal)}%
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-4 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={saveAsDefault}
+                  disabled={selectedFunds.length === 0 || !splitValid}
+                  className="flex-1 flex items-center justify-center gap-1.5 rounded-full py-3 text-[13px] font-semibold bg-background/50 text-foreground transition hover:bg-muted/20 disabled:opacity-40"
+                >
+                  <Pin className="w-3.5 h-3.5" />
+                  Save as default
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPicker(null)}
+                  disabled={selectedFunds.length === 0 || !splitValid}
+                  className="flex-1 rounded-full py-3 text-[13px] font-semibold transition disabled:opacity-40"
+                  style={{
+                    background: "var(--pill)",
+                    color: "var(--pill-foreground)",
+                  }}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ACCOUNT: single-select with default pin */}
+          {picker === "account" && (
+            <div className="px-5 mt-4 space-y-2">
+              {accounts.map((opt) => {
+                const isSelected = opt === selectedAccount;
+                const isDefault = defaults.account === opt;
+                return (
+                  <div
+                    key={opt}
+                    className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 transition ${
+                      isSelected ? "bg-muted/20" : "bg-background/40"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedAccount(opt);
+                        setPicker(null);
+                      }}
+                      className="flex items-center gap-3 flex-1 text-left min-w-0"
+                    >
+                      <span className="text-sm text-foreground flex-1 truncate">
+                        {opt}
+                      </span>
+                      {isSelected && (
+                        <Check
+                          className="w-4 h-4 shrink-0"
+                          style={{ color: "var(--pill)" }}
+                        />
+                      )}
+                    </button>
+                    {isDefault && (
+                      <span
+                        className="px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0"
+                        style={{
+                          background:
+                            "color-mix(in oklch, var(--pill) 18%, transparent)",
+                          color: "var(--pill)",
+                        }}
+                      >
+                        Default
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        persistDefaults({
+                          ...defaults,
+                          account: isDefault ? null : opt,
+                        })
+                      }
+                      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 hover:bg-muted/20 transition"
+                      aria-label={isDefault ? "Unset default" : "Set as default"}
+                    >
+                      <Pin
+                        className="w-3.5 h-3.5"
+                        style={{
+                          color: isDefault
+                            ? "var(--pill)"
+                            : "oklch(0.7 0.02 260)",
+                        }}
+                        fill={isDefault ? "currentColor" : "none"}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Other single-select pickers */}
+          {picker && picker !== "fund" && picker !== "account" && (
+            <div className="px-5 mt-4 space-y-2">
+              {pickerOptions[picker].map((opt) => {
                 const isSelected =
-                  (picker === "fund" && opt === selectedFund) ||
-                  (picker === "account" && opt === selectedAccount) ||
                   (picker === "payFrom" &&
-                    opt === (isFlip ? selectedFund : selectedBank)) ||
+                    opt === (isFlip ? flipFromFund : selectedBank)) ||
                   (picker === "payTo" && opt === selectedPayTo) ||
                   (picker === "flipTo" && opt === selectedFlipTo);
                 return (
                   <button
                     key={opt}
-                    onClick={() => handlePick(opt)}
+                    onClick={() => handleSingleSelect(opt)}
                     className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
                       isSelected
                         ? "bg-muted/20"
@@ -637,7 +845,8 @@ function MethodForm({ method }: { method: InvestMethod }) {
                   </button>
                 );
               })}
-          </div>
+            </div>
+          )}
         </SheetContent>
       </Sheet>
     </MobileLayout>
