@@ -1,112 +1,69 @@
-import { ModernSelect } from "@/components/ModernSelect";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, ChevronRight, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
-import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
-import { FormSection, FormField } from "@/components/FormField";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+  Zap,
+  Building2,
+  ArrowLeftRight,
+  ChevronRight,
+  Upload,
+  AlertTriangle,
+  Star,
+  X,
+  Image as ImageIcon,
+  Check,
+} from "lucide-react";
+import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+
+type InvestMethod = "instant" | "bank" | "flip";
 
 export const Route = createFileRoute("/invest")({
   validateSearch: (search: Record<string, unknown>) => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
-      search.method === "instant" || search.method === "bank" || search.method === "flip"
+      search.method === "instant" ||
+      search.method === "bank" ||
+      search.method === "flip"
         ? (search.method as InvestMethod)
         : undefined,
   }),
   component: Invest,
 });
 
-type InvestMethod = "instant" | "bank" | "flip";
-type InvestType = "new" | "recurring";
-
-const funds = ["CAL Growth Fund", "CAL Income Fund", "CAL Balanced Fund", "CAL Money Market Fund"];
+const funds = [
+  "CAL Growth Fund",
+  "CAL Income Fund",
+  "CAL Balanced Fund",
+  "CAL Money Market Fund",
+];
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
-const banks = ["Deutsche Bank", "Commercial Bank", "Sampath Bank", "HNB", "BOC"];
+const banks = [
+  "Commercial Bank ****2849",
+  "Deutsche Bank ****1122",
+  "Sampath Bank ****9034",
+  "HNB ****4507",
+  "BOC ****7781",
+];
 const calBankAccounts = [
-  { bank: "Deutsche Bank", accNo: "0012 3456 789", branch: "Colombo" },
-  { bank: "Commercial Bank", accNo: "8001 2345 678", branch: "Colombo 07" },
-  { bank: "HNB", accNo: "7700 1234 567", branch: "Colombo 03" },
+  { label: "CAL Securities Account", note: "Deutsche Bank · Auto-verified" },
+  { label: "CAL — Commercial Bank", note: "8001 2345 678" },
+  { label: "CAL — HNB", note: "7700 1234 567 · Closing soon" },
 ];
 
-const existingRecurring = [
-  { fund: "CAL Growth Fund", amount: "25,000", frequency: "Monthly", nextDate: "May 1, 2026", account: "Main Account" },
-  { fund: "CAL Income Fund", amount: "10,000", frequency: "Weekly", nextDate: "Apr 21, 2026", account: "Joint Account" },
-];
-
-const DIRECT_INVEST_LIMIT = 150000;
+const DIRECT_INVEST_LIMIT = 149950;
 
 function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
-  const [method, setMethod] = useState<InvestMethod>(search.method ?? "instant");
-  const [investType, setInvestType] = useState<InvestType>("new");
-  const [amount, setAmount] = useState("");
-  const [isRecurring, setIsRecurring] = useState(false);
-  const [recurringFreq, setRecurringFreq] = useState("monthly");
-  const [selectedFund, setSelectedFund] = useState("");
-  const [selectedAccount, setSelectedAccount] = useState("");
-  const [selectedBank, setSelectedBank] = useState("");
-  const [selectedPayTo, setSelectedPayTo] = useState("");
-  const [showBankDetails, setShowBankDetails] = useState(false);
 
-  const methods = [
-    { id: "instant" as const, icon: Zap, label: "Direct Invest" },
-    { id: "bank" as const, icon: Building2, label: "Bank Transfer" },
-    { id: "flip" as const, icon: ArrowLeftRight, label: "Flip" },
-  ];
-
-  const methodInfo: Record<InvestMethod, string> = {
-    instant: "Direct Invest by linking your bank account directly with the app. Max LKR 149,950 per transfer — multiple allowed.",
-    bank: "Standard bank transfer. Any amount. Proof required unless paying to Deutsche Bank. 1-2 business days.",
-    flip: "Move funds between CAL accounts instantly. No fees.",
-  };
-
-  const [showJustpayInfo, setShowJustpayInfo] = useState(false);
-  const [showDeutscheDetails, setShowDeutscheDetails] = useState(false);
-
-  const [acceptedTerms, setAcceptedTerms] = useState(false);
-  const [repeatCount, setRepeatCount] = useState(1);
-  const [showRepeatInfo, setShowRepeatInfo] = useState(false);
-
-  // Fallback default fund + sub account for unmatched bank transfers
-  const [defaultFund, setDefaultFund] = useState(funds[0]);
-  const [defaultSubAccount, setDefaultSubAccount] = useState(accounts[0]);
-  const [showDefaultInfo, setShowDefaultInfo] = useState(false);
-  const [defaultModalOpen, setDefaultModalOpen] = useState(false);
-  const [draftDefaultFund, setDraftDefaultFund] = useState(defaultFund);
-  const [draftDefaultSubAccount, setDraftDefaultSubAccount] = useState(defaultSubAccount);
-
-  const amountNum = parseFloat(amount || "0") || 0;
-  const isDirectInvest = method === "instant";
-  const overLimit = isDirectInvest && amountNum > DIRECT_INVEST_LIMIT;
-  const atLimit = isDirectInvest && amountNum >= DIRECT_INVEST_LIMIT;
-
-  const handleAmountChange = (raw: string) => {
-    const sanitized = sanitizeAmountInput(raw);
-    if (isDirectInvest) {
-      const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT) {
-        setAmount(String(DIRECT_INVEST_LIMIT));
-        return;
-      }
-    }
-    setAmount(sanitized);
-    if (parseFloat(sanitized || "0") < DIRECT_INVEST_LIMIT) setRepeatCount(1);
-  };
-
-  // Show method picker first when no method chosen yet
+  // Method picker landing
   if (!search.method) {
     const methodCards: {
       id: InvestMethod;
@@ -124,7 +81,8 @@ function Invest() {
         id: "bank",
         icon: Building2,
         label: "Bank Transfer",
-        desc: "Any amount. 1–2 business days. Upload proof unless paying Deutsche Bank.",
+        desc:
+          "Any amount. 1–2 business days. Upload proof unless paying Deutsche Bank.",
       },
       {
         id: "flip",
@@ -156,13 +114,20 @@ function Invest() {
             >
               <div
                 className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-                style={{ background: "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)" }}
+                style={{
+                  background:
+                    "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
+                }}
               >
                 <Icon className="w-5 h-5" style={{ color: "var(--pill)" }} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="text-sm font-semibold text-foreground leading-tight">{label}</p>
-                <p className="text-[12px] text-muted-foreground mt-1 leading-snug">{desc}</p>
+                <p className="text-sm font-semibold text-foreground leading-tight">
+                  {label}
+                </p>
+                <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+                  {desc}
+                </p>
               </div>
               <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
             </button>
@@ -172,622 +137,399 @@ function Invest() {
     );
   }
 
+  return <MethodForm method={search.method} />;
+}
+
+type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
+
+function MethodForm({ method }: { method: InvestMethod }) {
+  const navigate = useNavigate();
+
+  const [amount, setAmount] = useState("");
+  const [selectedFund, setSelectedFund] = useState("");
+  const [selectedAccount, setSelectedAccount] = useState("Personal Account");
+  const [selectedBank, setSelectedBank] = useState(
+    method === "bank" ? "Commercial Bank ****2849" : "",
+  );
+  const [selectedPayTo, setSelectedPayTo] = useState(
+    method === "bank" ? "CAL Securities Account" : "",
+  );
+  const [selectedFlipTo, setSelectedFlipTo] = useState("");
+  const [proofName, setProofName] = useState<string | null>(null);
+  const [picker, setPicker] = useState<PickerKind>(null);
+  const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
+
+  const title =
+    method === "instant"
+      ? "Direct Invest"
+      : method === "bank"
+        ? "Bank transfer"
+        : "Flip";
+
+  const isBank = method === "bank";
+  const isFlip = method === "flip";
+  const isInstant = method === "instant";
+
+  const amountNum = parseFloat(amount || "0") || 0;
+
+  const handleAmountChange = (raw: string) => {
+    const sanitized = sanitizeAmountInput(raw);
+    if (isInstant) {
+      const n = parseFloat(sanitized || "0") || 0;
+      if (n > DIRECT_INVEST_LIMIT) {
+        setAmount(String(DIRECT_INVEST_LIMIT));
+        return;
+      }
+    }
+    setAmount(sanitized);
+  };
+
+  const payFromLabel = isFlip ? "Transfer from" : "Paying from";
+  const payFromValue = isFlip ? selectedFund : selectedBank;
+  const payFromPlaceholder = isFlip ? "Select a fund" : "Select bank account";
+
+  const sendToLabel = isFlip ? "Transfer to" : "Send to";
+  const sendToValue = isFlip ? selectedFlipTo : selectedPayTo;
+  const sendToPlaceholder = isFlip
+    ? "Select destination fund"
+    : "Select CAL account";
+
+  const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
+  const needsProof = isBank && !isDeutsche;
+
+  const canReview = (() => {
+    if (amountNum <= 0) return false;
+    if (isFlip) return !!selectedFund && !!selectedFlipTo;
+    if (!selectedFund || !selectedAccount) return false;
+    if (isInstant) return !!selectedBank;
+    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
+    return false;
+  })();
+
+  const handleReview = () => {
+    navigate({
+      to: "/invest-summary",
+      search: {
+        method,
+        amount: amount || "0",
+        fund: selectedFund,
+        account: selectedAccount,
+        bank: isFlip ? selectedFlipTo : isInstant ? selectedBank : selectedPayTo,
+      },
+    });
+  };
+
+  // ---- Picker options ----
+  const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
+    fund: funds,
+    account: accounts,
+    payFrom: isFlip ? funds : banks,
+    payTo: calBankAccounts.map((a) => a.label),
+    flipTo: funds,
+  };
+  const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
+    fund: "Select fund",
+    account: "Select sub-account",
+    payFrom: isFlip ? "Transfer from" : "Paying from",
+    payTo: "Send to",
+    flipTo: "Transfer to",
+  };
+
+  const handlePick = (value: string) => {
+    if (picker === "fund") setSelectedFund(value);
+    if (picker === "account") setSelectedAccount(value);
+    if (picker === "payFrom") {
+      if (isFlip) setSelectedFund(value);
+      else setSelectedBank(value);
+    }
+    if (picker === "payTo") setSelectedPayTo(value);
+    if (picker === "flipTo") setSelectedFlipTo(value);
+    setPicker(null);
+  };
 
   return (
     <MobileLayout>
-      <PageHeader title="Invest" showBack helpTopic="invest" />
+      <PageHeader title={title} showBack helpTopic="invest" />
 
-      {/* Method Selector */}
-      <div className="mx-4 mt-2">
-        <div className="flex gap-1 bg-secondary rounded-xl p-1">
-          {methods.map(({ id, icon: Icon, label }) => (
-            <button
-              key={id}
-              onClick={() => setMethod(id)}
-              className={`flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[13px] font-semibold transition-all ${
-                method === id
-                  ? "gradient-primary text-primary-foreground shadow-lg"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              <Icon className="w-4 h-4" />
-              {label}
-            </button>
-          ))}
+      {/* Amount hero */}
+      <div className="px-4 pt-6 pb-6 text-center">
+        <div className="inline-flex items-baseline gap-2">
+          <span className="text-[18px] font-medium text-muted-foreground">
+            LKR
+          </span>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={formatAmountDisplay(amount)}
+            onChange={(e) => handleAmountChange(e.target.value)}
+            placeholder="0"
+            className="bg-transparent text-[44px] font-bold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none text-center"
+            style={{
+              width: `${Math.max(
+                2,
+                (formatAmountDisplay(amount) || "0").length,
+              )}ch`,
+            }}
+          />
         </div>
-      </div>
-
-      {/* Info */}
-      <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.03 280))" }}>
-        <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
-          <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
-        </div>
-        <p className="text-[12px] text-white/90 leading-snug pt-1">{methodInfo[method]}</p>
-      </div>
-
-      {/* Investment Type Toggle — instant only */}
-      {method === "instant" && (
-        <div className="mx-4 mt-3">
-          <div className="flex gap-1 rounded-xl p-1 backdrop-blur-sm" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 12%, transparent)" }}>
-            {(["new", "recurring"] as const).map((type) => (
-              <button
-                key={type}
-                onClick={() => setInvestType(type)}
-                className={`flex-1 py-2 rounded-lg text-[12px] font-medium transition-all ${
-                  investType === type
-                    ? "text-foreground shadow-sm"
-                    : "text-muted-foreground"
-                }`}
-                style={
-                  investType === type
-                    ? { background: "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)" }
-                    : undefined
-                }
-              >
-                {type === "new" ? "New Investment" : "Recurring Investments"}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* Recurring Plans List */}
-      {method === "instant" && investType === "recurring" && (
-        <div className="mx-4 mt-4">
-          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider uppercase mb-3 px-1">Existing plans</p>
-          <div className="space-y-2.5">
-            {existingRecurring.map((plan, i) => {
-              const freq = plan.frequency.toLowerCase();
-              const isMonthly = freq === "monthly";
-              return (
-                <button
-                  key={i}
-                  type="button"
-                  className="group w-full glass-card p-4 text-left transition-all hover:border-primary/30 active:scale-[0.99]"
-                >
-                  <div className="flex items-start justify-between gap-3">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-baseline gap-2 flex-wrap">
-                        <span className="text-[18px] font-semibold text-foreground tracking-tight tabular-nums">
-                          LKR {plan.amount}
-                        </span>
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-[12px] font-semibold capitalize ${
-                            isMonthly
-                              ? "text-[oklch(0.78_0.14_260)]"
-                              : "text-[oklch(0.78_0.14_155)]"
-                          }`}
-                          style={{
-                            background: isMonthly
-                              ? "color-mix(in oklch, var(--portfolio-blue) 22%, transparent)"
-                              : "color-mix(in oklch, var(--success) 22%, transparent)",
-                          }}
-                        >
-                          {plan.frequency}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-[13px] text-muted-foreground truncate">{plan.fund}</p>
-                    </div>
-                    <div className="text-right shrink-0">
-                      <p className="text-[12px] uppercase tracking-wider text-muted-foreground/80">Next</p>
-                      <p className="text-[13px] font-medium text-foreground mt-0.5">{plan.nextDate.replace(/, \d{4}$/, "")}</p>
-                    </div>
-                  </div>
-                  <div className="mt-3 pt-3 border-t border-border/40 flex items-center justify-between">
-                    <span className="text-[12px] text-muted-foreground">{plan.account}</span>
-                    <div className="flex items-center gap-1">
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        className="p-1.5 rounded-lg text-muted-foreground hover:text-foreground hover:bg-card/80 transition-colors"
-                        aria-label="Edit plan"
-                      >
-                        <Edit2 className="w-3.5 h-3.5" />
-                      </span>
-                      <span
-                        role="button"
-                        tabIndex={0}
-                        className="p-1.5 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors"
-                        aria-label="Delete plan"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </span>
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-          <p className="text-[12px] font-semibold text-muted-foreground tracking-wider uppercase mt-6 mb-2 px-1">New recurring plan</p>
-        </div>
-      )}
-
-      {/* Amount Input */}
-      <section className="mx-4 mt-5">
-        <h2 className="px-1 mb-2.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
-          Amount
-        </h2>
-        <div className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
-          <div className="flex items-baseline gap-2">
-            <span className="text-[13px] font-medium text-muted-foreground">LKR</span>
-            <input
-              type="text"
-              inputMode="decimal"
-              value={formatAmountDisplay(amount)}
-              onChange={(e) => handleAmountChange(e.target.value)}
-              placeholder="0.00"
-              className="flex-1 bg-transparent text-[20px] font-semibold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none"
-            />
-          </div>
-          {isDirectInvest && (
-            <p className="mt-2.5 text-[12px] text-muted-foreground/80">
-              Per-transfer limit: LKR {DIRECT_INVEST_LIMIT.toLocaleString()}
-            </p>
-          )}
-        </div>
-      </section>
-
-      {/* Direct Invest: repeat multiplier — shown when at the cap */}
-      {isDirectInvest && atLimit && investType === "new" && (
-        <div className="mx-4 mt-2 glass-card p-3">
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-[13px] font-semibold text-foreground flex items-center gap-1.5 min-w-0">
-              <CopyPlus className="w-3.5 h-3.5 text-primary shrink-0" />
-              <span className="truncate">Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transaction</span>
-              <button
-                type="button"
-                onClick={() => setShowRepeatInfo(!showRepeatInfo)}
-                aria-label="Why is there a limit?"
-                className="shrink-0"
-              >
-                <Info className="w-3 h-3 text-muted-foreground" />
-              </button>
-            </p>
-            <div className="flex gap-1 bg-secondary rounded-lg p-1 shrink-0">
-              {[1, 2, 3].map((n) => (
-                <button
-                  key={n}
-                  onClick={() => setRepeatCount(n)}
-                  className={`w-9 h-7 rounded-md text-[12px] font-semibold transition-all ${
-                    repeatCount === n ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground"
-                  }`}
-                >
-                  {n}×
-                </button>
-              ))}
-            </div>
-          </div>
-          {showRepeatInfo && (
-            <p className="mt-2 text-[12px] text-muted-foreground bg-secondary/60 rounded-lg p-2 leading-snug">
-              Direct Invest uses a real-time bank rail (Justpay) that caps each transfer at LKR {DIRECT_INVEST_LIMIT.toLocaleString()}. To invest more in one go, the app sends up to 3 back-to-back transfers of the same amount. For larger lump sums, use Bank Transfer instead.
-            </p>
-          )}
-          {repeatCount > 1 && (
-            <div className="mt-2.5 pt-2.5 border-t border-border/40 flex items-center justify-between">
-              <span className="text-[12px] text-muted-foreground">Total investment</span>
-              <span className="text-xs font-semibold text-foreground">
-                LKR {(DIRECT_INVEST_LIMIT * repeatCount).toLocaleString()}
-                <span className="text-[12px] text-muted-foreground font-normal ml-1">({repeatCount} transfers)</span>
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Recurring options */}
-      {method === "instant" && investType === "new" && (
-        <div className="mx-4 mt-3 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
-          <div className="flex items-center justify-between gap-3 px-4 py-3.5">
-            <div className="flex items-center gap-3 min-w-0">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-colors`}
-                style={{
-                  background: isRecurring
-                    ? "color-mix(in oklch, var(--success) 22%, transparent)"
-                    : "color-mix(in oklch, var(--muted-foreground) 14%, transparent)",
-                }}
-              >
-                <Repeat className={`w-4 h-4 ${isRecurring ? "text-success" : "text-muted-foreground"}`} />
-              </div>
-              <div className="min-w-0">
-                <p className="text-[14px] font-medium text-foreground leading-tight">Repeat this investment</p>
-                <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">Auto-invest on a schedule</p>
-              </div>
-            </div>
-            <button
-              onClick={() => setIsRecurring(!isRecurring)}
-              className={`w-11 h-6 rounded-full transition-all flex items-center shrink-0 ${isRecurring ? "bg-success" : "bg-muted"}`}
-              aria-label="Toggle recurring"
-            >
-              <div className={`w-5 h-5 rounded-full bg-white shadow-md transition-transform ${isRecurring ? "translate-x-[22px]" : "translate-x-0.5"}`} />
-            </button>
-          </div>
-          {isRecurring && (
-            <div className="form-field-inline border-t border-border/30 divide-y divide-border/30">
-              <FormField label="Frequency">
-                <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)}>
-                  <option>Weekly</option>
-                  <option>Bi-weekly</option>
-                  <option>Monthly</option>
-                  <option>Quarterly</option>
-                </ModernSelect>
-              </FormField>
-              <FormField label="Start date">
-                <input type="date" />
-              </FormField>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Recurring setup for recurring tab */}
-      {method === "instant" && investType === "recurring" && (
-        <FormSection title="Schedule">
-          <div className="form-field-inline divide-y divide-border/30">
-            <FormField label="Frequency">
-              <ModernSelect value={recurringFreq} onChange={(e) => setRecurringFreq(e.target.value)}>
-                <option>Weekly</option>
-                <option>Bi-weekly</option>
-                <option>Monthly</option>
-                <option>Quarterly</option>
-              </ModernSelect>
-            </FormField>
-            <FormField label="Start date">
-              <input type="date" />
-            </FormField>
-          </div>
-        </FormSection>
-      )}
-
-      {/* Fund & Account */}
-      <FormSection title="Fund & Account">
-        <div className="form-field-inline divide-y divide-border/40">
-          <FormField
-            label="Which fund?"
-            action={
-              <div className="flex items-center gap-2">
-                {selectedFund && (
-                  <button
-                    type="button"
-                    onClick={() => navigate({ to: "/rates" })}
-                    className="inline-flex items-center gap-1 text-[12px] font-medium"
-                    style={{ color: "var(--portfolio-blue)" }}
-                  >
-                    View rates
-                    <ExternalLink className="w-3 h-3" />
-                  </button>
-                )}
-              </div>
-            }
-          >
-            <ModernSelect
-              value={selectedFund}
-              onChange={(e) => {
-                if (e.target.value === "__add_fund") {
-                  navigate({ to: "/rates" });
-                } else {
-                  setSelectedFund(e.target.value);
-                }
-              }}
-            >
-              <option value="">Select your fund</option>
-              {funds.map((f) => (
-                <option key={f} value={f} data-pill={method === "bank" && f === defaultFund ? "Default" : undefined}>
-                  {f}
-                </option>
-              ))}
-              <option value="__add_fund" data-action="Add Fund">Islamic Money Market Fund</option>
-            </ModernSelect>
-          </FormField>
-          <FormField
-            label="Sub Account"
-          >
-            <ModernSelect value={selectedAccount} onChange={(e) => setSelectedAccount(e.target.value)}>
-              <option value="">Select account</option>
-              {accounts.map((a) => (
-                <option key={a} value={a} data-pill={method === "bank" && a === defaultSubAccount ? "Default" : undefined}>
-                  {a}
-                </option>
-              ))}
-            </ModernSelect>
-          </FormField>
-        </div>
-
-        {/* Set default action — Bank Transfer only */}
-        {method === "bank" && (
-          <div className="px-4 py-3 flex items-center justify-end gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setDraftDefaultFund(defaultFund);
-                setDraftDefaultSubAccount(defaultSubAccount);
-                setDefaultModalOpen(true);
-              }}
-              className="text-[12px] font-medium leading-none"
-              style={{ color: "var(--portfolio-blue)" }}
-            >
-              Set default
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowDefaultInfo(!showDefaultInfo)}
-              aria-label="Why set a default?"
-              className="text-muted-foreground/70 hover:text-foreground transition-colors leading-none"
-            >
-              <Info className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        )}
-        {method === "bank" && showDefaultInfo && (
-          <p className="px-4 pb-3 -mt-1 text-[12px] text-muted-foreground leading-snug">
-            If a transfer arrives without a matching in-app request, we allocate it to your default fund and sub account. Manual reconciliation may add 1–2 business days.
+        {isInstant && (
+          <p className="mt-3 text-[12px] text-muted-foreground">
+            Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transfer
           </p>
         )}
-      </FormSection>
+      </div>
 
-      {/* Set default modal */}
-      <Dialog open={defaultModalOpen} onOpenChange={setDefaultModalOpen}>
-        <DialogContent className="max-w-sm rounded-2xl">
-          <DialogHeader>
-            <DialogTitle>Set as Default Fund</DialogTitle>
-            <DialogDescription>
-              This fund will be selected first for new investments. Funds without valid transfer instructions may also be allocated to this fund.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-3">
-            <div>
-              <label className="text-[12px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
-                Default fund
-              </label>
-              <div className="mt-1.5">
-                <ModernSelect value={draftDefaultFund} onChange={(e) => setDraftDefaultFund(e.target.value)}>
-                  {funds.map((f) => (
-                    <option key={f} value={f}>{f}</option>
-                  ))}
-                </ModernSelect>
-              </div>
-            </div>
-            <div>
-              <label className="text-[12px] font-semibold tracking-[0.06em] uppercase text-muted-foreground/70">
-                Default sub account
-              </label>
-              <div className="mt-1.5">
-                <ModernSelect value={draftDefaultSubAccount} onChange={(e) => setDraftDefaultSubAccount(e.target.value)}>
-                  {accounts.map((a) => (
-                    <option key={a} value={a}>{a}</option>
-                  ))}
-                </ModernSelect>
-              </div>
-            </div>
-          </div>
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setDefaultModalOpen(false)}>Cancel</Button>
-            <Button
-              onClick={() => {
-                setDefaultFund(draftDefaultFund);
-                setDefaultSubAccount(draftDefaultSubAccount);
-                setDefaultModalOpen(false);
-              }}
-            >
-              Save
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+      {/* Details card */}
+      <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+        <PickerRow
+          label="Fund"
+          value={selectedFund}
+          placeholder="Select a fund"
+          onClick={() => setPicker("fund")}
+        />
+        {!isFlip && (
+          <PickerRow
+            label="Sub-account"
+            value={selectedAccount}
+            placeholder="Select sub-account"
+            onClick={() => setPicker("account")}
+          />
+        )}
+        <PickerRow
+          label={payFromLabel}
+          value={payFromValue}
+          placeholder={payFromPlaceholder}
+          onClick={() => setPicker("payFrom")}
+        />
+        {(isBank || isFlip) && (
+          <PickerRow
+            label={sendToLabel}
+            value={sendToValue}
+            placeholder={sendToPlaceholder}
+            onClick={() => setPicker(isFlip ? "flipTo" : "payTo")}
+          />
+        )}
+      </div>
 
-      {/* Transfer Details */}
-      <FormSection title="Transfer Details">
-        <div className="form-field-inline divide-y divide-border/40">
-          <FormField
-            label={method === "flip" ? "Transfer from" : "Pay from"}
-            hint={
-              showJustpayInfo && method !== "flip"
-                ? "Accounts need to be verified using Justpay."
-                : undefined
-            }
-            action={
-              method !== "flip" ? (
-                <button
-                  type="button"
-                  onClick={() => setShowJustpayInfo(!showJustpayInfo)}
-                  aria-label="About Pay from"
-                  className="text-muted-foreground hover:text-foreground"
+      {/* Proof of payment — Bank transfer, non-Deutsche */}
+      {needsProof && (
+        <div className="mx-4 mt-6">
+          <p className="px-1 mb-2 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+            Proof of payment
+          </p>
+          {proofName ? (
+            <>
+              <div className="rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--portfolio-blue) 28%, transparent)",
+                  }}
                 >
-                  <Info className="w-4 h-4" />
-                </button>
-              ) : undefined
-            }
-          >
-            <ModernSelect
-              value={selectedBank}
-              onChange={(e) => {
-                if (e.target.value === "__add_bank") {
-                  navigate({ to: "/bank-accounts" });
-                } else if (e.target.value === "__add_fund") {
-                  navigate({ to: "/rates" });
-                } else {
-                  setSelectedBank(e.target.value);
-                }
-              }}
-            >
-              <option value="">{method === "flip" ? "Select your fund" : "Select your bank account"}</option>
-              {method === "flip"
-                ? (
-                  <>
-                    {funds.map((f) => <option key={f} value={f}>{f}</option>)}
-                    <option value="__add_fund" data-action="Add Fund">Islamic Money Market Fund</option>
-                  </>
-                )
-                : (
-                  <>
-                    {banks.map((b) => <option key={b}>{b}</option>)}
-                    <option value="__add_bank">+ Add Bank Account</option>
-                  </>
-                )
-              }
-            </ModernSelect>
-          </FormField>
-
-          {method === "bank" && (
-            <FormField
-              label="Pay to"
-              action={
+                  <ImageIcon className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground truncate">
+                    {proofName}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground">
+                    1.2 MB · Image
+                  </p>
+                </div>
                 <button
-                  onClick={() => setShowBankDetails(!showBankDetails)}
-                  className="text-[12px] text-primary font-medium flex items-center gap-1"
+                  onClick={() => setProofName(null)}
+                  className="w-7 h-7 rounded-full bg-muted/30 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                  aria-label="Remove"
                 >
-                  <ExternalLink className="w-3 h-3" />
-                  Bank details
+                  <X className="w-3.5 h-3.5" />
                 </button>
-              }
+              </div>
+              <div className="mt-2 flex items-center gap-1.5 px-1">
+                <Check className="w-3.5 h-3.5 text-success" />
+                <span className="text-[12px] font-medium text-success">
+                  Receipt attached
+                </span>
+              </div>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setProofName("transfer_receipt.jpg")}
+              className="w-full rounded-2xl bg-card/60 backdrop-blur-md py-6 flex flex-col items-center gap-2 transition hover:bg-muted/10"
             >
-              <ModernSelect value={selectedPayTo} onChange={(e) => setSelectedPayTo(e.target.value)}>
-                <option value="">Select CAL bank account</option>
-                {calBankAccounts.map((a) => {
-                  const isDeutsche = a.bank.includes("Deutsche");
-                  return (
-                    <option key={a.accNo} value={`${a.bank} — ${a.accNo}`}>
-                      {a.bank} — {a.accNo}{isDeutsche ? "  ✦ Recommended" : ""}
-                    </option>
-                  );
-                })}
-              </ModernSelect>
-            </FormField>
+              <Upload className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[12px] text-muted-foreground">
+                Tap to upload receipt
+              </span>
+            </button>
           )}
         </div>
-      </FormSection>
+      )}
 
-      {/* Bank transfer: HNB closing notice */}
-      {method === "bank" && selectedPayTo.startsWith("HNB") && (
-        <div className="mx-4 mt-3 flex items-start gap-3 p-3.5 rounded-2xl" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 18%, oklch(0.24 0.03 280))" }}>
-          <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, oklch(0.7 0.18 25) 40%, transparent)" }}>
-            <Info className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.06 25)" }} />
+      {/* Link to a goal */}
+      <div className="mx-4 mt-4">
+        <button
+          type="button"
+          onClick={() =>
+            setLinkedGoal(linkedGoal ? null : "New car")
+          }
+          className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
+        >
+          <div
+            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+            style={{
+              background:
+                "color-mix(in oklch, var(--success) 30%, transparent)",
+            }}
+          >
+            <Star className="w-5 h-5 text-success" />
           </div>
-          <div className="pt-0.5">
-            <p className="text-[13px] font-semibold text-white">Account closing soon</p>
-            <p className="text-[12px] text-white/80 mt-0.5 leading-snug">
-              This HNB account will be removed after May. For your next investment please use the Deutsche Bank account instead.
+          <div className="min-w-0 flex-1">
+            <p className="text-sm font-semibold text-foreground leading-tight">
+              {linkedGoal ? linkedGoal : "Link to a goal"}
+            </p>
+            <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
+              {linkedGoal
+                ? "Tap to change goal"
+                : "Tag this investment to a savings goal"}
             </p>
           </div>
-        </div>
-      )}
-
-      {/* Bank transfer: Deutsche prompt */}
-      {method === "bank" && !selectedPayTo.includes("Deutsche") && (
-        <div className="mx-4 mt-3 rounded-2xl overflow-hidden" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 14%, oklch(0.24 0.03 280))" }}>
-          <button
-            type="button"
-            onClick={() => setShowDeutscheDetails(!showDeutscheDetails)}
-            className="w-full flex items-start gap-3 text-left p-3.5"
-          >
-            <div className="w-7 h-7 rounded-full flex items-center justify-center shrink-0" style={{ background: "color-mix(in oklch, var(--portfolio-blue) 35%, transparent)" }}>
-              <Lightbulb className="w-3.5 h-3.5" style={{ color: "oklch(0.95 0.05 230)" }} />
-            </div>
-            <div className="flex-1 pt-0.5">
-              <p className="text-[13px] font-semibold text-white">Skip proof of payment</p>
-              <p className="text-[12px] text-white/80 mt-0.5 leading-snug">Pay to Deutsche Bank — transfers are auto-verified, no upload needed.</p>
-            </div>
-            <ChevronDown className={`w-4 h-4 mt-1 shrink-0 transition-transform text-white/60 ${showDeutscheDetails ? "rotate-180" : ""}`} />
-          </button>
-          {showDeutscheDetails && (
-            <div className="mx-3.5 mb-3.5 ml-[58px] p-2.5 rounded-xl space-y-0.5" style={{ background: "oklch(0.22 0.03 280)" }}>
-              <p className="text-[12px] text-white/70">Bank: <span className="text-white font-medium">Deutsche Bank</span></p>
-              <p className="text-[12px] text-white/70">A/C: <span className="text-white font-medium">{calBankAccounts[0].accNo}</span></p>
-              <p className="text-[12px] text-white/70">Branch: <span className="text-white font-medium">{calBankAccounts[0].branch}</span></p>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Bank account details panel */}
-      {method === "bank" && showBankDetails && (
-        <div className="mx-4 mt-2 glass-card p-3">
-          {calBankAccounts.map((a) => (
-            <div key={a.accNo} className="flex items-center gap-3 py-2">
-              <Building2 className="w-4 h-4 text-primary" />
-              <div>
-                <p className="text-xs font-medium text-foreground">{a.bank}</p>
-                <p className="text-[12px] text-muted-foreground">A/C: {a.accNo} · {a.branch}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {method === "flip" && (
-        <FormSection>
-          <div className="form-field-inline">
-            <FormField label="Transfer to">
-              <ModernSelect
-                onChange={(e) => {
-                  if (e.target.value === "__add_fund") navigate({ to: "/rates" });
-                }}
-              >
-                <option value="">Select CAL account</option>
-                {funds.map((f) => <option key={f} value={f}>{f}</option>)}
-                <option value="__add_fund" data-action="Add Fund">Islamic Money Market Fund</option>
-              </ModernSelect>
-            </FormField>
-          </div>
-        </FormSection>
-      )}
-
-      {method === "bank" && !selectedPayTo.includes("Deutsche") && (
-        <div className="mx-4 mt-3 glass-card p-3">
-          <label className="text-[12px] text-muted-foreground">Proof of payment</label>
-          <div className="mt-2 border-2 border-dashed border-border rounded-xl p-6 flex flex-col items-center gap-2">
-            <Upload className="w-6 h-6 text-muted-foreground" />
-            <span className="text-[12px] text-muted-foreground">Tap to upload</span>
-          </div>
-        </div>
-      )}
-
-      {/* Terms & Conditions — direct invest and bank transfer only */}
-      {method !== "flip" && (
-        <div className="mx-4 mt-3">
-          <label className="flex items-start gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={acceptedTerms}
-              onChange={(e) => setAcceptedTerms(e.target.checked)}
-              className="mt-0.5 w-3.5 h-3.5 rounded accent-primary"
-            />
-            <span className="text-[12px] text-muted-foreground">
-              I agree to the <a href="#" className="text-primary underline">Terms & Conditions</a>
-            </span>
-          </label>
-        </div>
-      )}
-
-      {/* Submit */}
-      <div className="mx-4 mt-3 mb-6">
-        <button
-          disabled={method !== "flip" && !acceptedTerms}
-          onClick={() => {
-            if (method === "flip") return;
-            navigate({
-              to: "/invest-summary",
-              search: {
-                method,
-                amount: amount || "0",
-                fund: selectedFund,
-                account: selectedAccount,
-                bank: method === "instant" ? selectedBank : selectedPayTo,
-                ...(isDirectInvest && repeatCount > 1 ? { repeat: repeatCount } : {}),
-              },
-            });
-          }}
-          className="w-full gradient-primary text-primary-foreground py-3 rounded-xl text-sm font-semibold disabled:opacity-50 disabled:cursor-not-allowed"
-        >
-          {method === "flip"
-            ? "Flip Funds"
-            : investType === "recurring"
-              ? "Create Recurring Plan"
-              : isDirectInvest && repeatCount > 1
-                ? `Send ${repeatCount} Transfers`
-                : "Send Request"}
+          <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
         </button>
       </div>
+
+      {/* Bank transfer warning */}
+      {isBank && (
+        <div className="mx-4 mt-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden flex">
+          <div
+            className="w-1 shrink-0"
+            style={{ background: "oklch(0.77 0.17 70)" }}
+          />
+          <div className="flex items-start gap-3 px-3 py-3.5 flex-1">
+            <div
+              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background:
+                  "color-mix(in oklch, oklch(0.77 0.17 70) 25%, transparent)",
+              }}
+            >
+              <AlertTriangle
+                className="w-4 h-4"
+                style={{ color: "oklch(0.85 0.15 70)" }}
+              />
+            </div>
+            <div className="pt-0.5">
+              <p className="text-[13px] font-semibold text-foreground">
+                Transfer funds before submitting
+              </p>
+              <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
+                Please make sure your funds have been sent to the CAL account
+                before raising this request.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Review CTA */}
+      <div className="mx-4 mt-8 mb-8">
+        <button
+          disabled={!canReview}
+          onClick={handleReview}
+          className="w-full py-4 rounded-full text-[15px] font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
+          style={{
+            background: "var(--pill)",
+            color: "var(--pill-foreground)",
+          }}
+        >
+          Review
+        </button>
+      </div>
+
+      {/* Picker Sheet */}
+      <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
+        >
+          <SheetHeader className="px-5 pb-0">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-base font-semibold text-foreground">
+                {picker ? pickerTitles[picker] : ""}
+              </SheetTitle>
+              <button
+                onClick={() => setPicker(null)}
+                className="rounded-full p-1 hover:bg-muted/20 transition"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="px-5 mt-4 space-y-2">
+            {picker &&
+              pickerOptions[picker].map((opt) => {
+                const isSelected =
+                  (picker === "fund" && opt === selectedFund) ||
+                  (picker === "account" && opt === selectedAccount) ||
+                  (picker === "payFrom" &&
+                    opt === (isFlip ? selectedFund : selectedBank)) ||
+                  (picker === "payTo" && opt === selectedPayTo) ||
+                  (picker === "flipTo" && opt === selectedFlipTo);
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => handlePick(opt)}
+                    className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+                      isSelected
+                        ? "bg-muted/20"
+                        : "bg-background/40 hover:bg-muted/10"
+                    }`}
+                  >
+                    <span className="text-sm text-foreground">{opt}</span>
+                    {isSelected && (
+                      <Check
+                        className="w-4 h-4"
+                        style={{ color: "var(--pill)" }}
+                      />
+                    )}
+                  </button>
+                );
+              })}
+          </div>
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
+  );
+}
+
+function PickerRow({
+  label,
+  value,
+  placeholder,
+  onClick,
+}: {
+  label: string;
+  value: string;
+  placeholder: string;
+  onClick: () => void;
+}) {
+  const hasValue = !!value;
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted/10 border-b border-border/20 last:border-b-0"
+    >
+      <span className="text-sm text-muted-foreground shrink-0">{label}</span>
+      <span
+        className={`flex-1 text-right text-sm font-medium truncate ${
+          hasValue ? "text-foreground" : "text-muted-foreground/70"
+        }`}
+      >
+        {hasValue ? value : placeholder}
+      </span>
+      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+    </button>
   );
 }
