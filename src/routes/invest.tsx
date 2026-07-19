@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -13,6 +13,8 @@ import {
   X,
   Image as ImageIcon,
   Check,
+  Split,
+  Pin,
 } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
@@ -142,12 +144,67 @@ function Invest() {
 
 type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
 
+const DEFAULTS_KEY = "invest_defaults_v1";
+type InvestDefaults = {
+  funds: string[];
+  splits: Record<string, number>;
+  account: string | null;
+};
+const emptyDefaults: InvestDefaults = { funds: [], splits: {}, account: null };
+
+function evenSplit(fs: string[]): Record<string, number> {
+  if (fs.length === 0) return {};
+  const base = Math.floor(100 / fs.length);
+  const rem = 100 - base * fs.length;
+  const out: Record<string, number> = {};
+  fs.forEach((f, i) => (out[f] = base + (i < rem ? 1 : 0)));
+  return out;
+}
+
 function MethodForm({ method }: { method: InvestMethod }) {
   const navigate = useNavigate();
 
   const [amount, setAmount] = useState("");
-  const [selectedFund, setSelectedFund] = useState("");
+  const [defaults, setDefaults] = useState<InvestDefaults>(emptyDefaults);
+  const [selectedFunds, setSelectedFunds] = useState<string[]>([]);
+  const [splits, setSplits] = useState<Record<string, number>>({});
   const [selectedAccount, setSelectedAccount] = useState("Personal Account");
+  const [flipFromFund, setFlipFromFund] = useState("");
+
+  // Load saved defaults once on mount and pre-fill the form.
+  useEffect(() => {
+    try {
+      const raw =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem(DEFAULTS_KEY)
+          : null;
+      if (!raw) return;
+      const p = JSON.parse(raw) as InvestDefaults;
+      const d: InvestDefaults = {
+        funds: Array.isArray(p.funds) ? p.funds : [],
+        splits: p.splits ?? {},
+        account: p.account ?? null,
+      };
+      setDefaults(d);
+      if (d.funds.length && method !== "flip") {
+        setSelectedFunds(d.funds);
+        setSplits(
+          Object.keys(d.splits).length ? d.splits : evenSplit(d.funds),
+        );
+      }
+      if (d.account) setSelectedAccount(d.account);
+    } catch {}
+  }, [method]);
+
+  const persistDefaults = (d: InvestDefaults) => {
+    setDefaults(d);
+    try {
+      window.localStorage.setItem(DEFAULTS_KEY, JSON.stringify(d));
+    } catch {}
+  };
+
+  const primaryFund = selectedFunds[0] ?? "";
+  const selectedFund = primaryFund; // legacy alias for flip source display
   const [selectedBank, setSelectedBank] = useState(
     method === "bank" ? "Commercial Bank ****2849" : "",
   );
@@ -171,6 +228,12 @@ function MethodForm({ method }: { method: InvestMethod }) {
   const isInstant = method === "instant";
 
   const amountNum = parseFloat(amount || "0") || 0;
+  const splitTotal = useMemo(
+    () => selectedFunds.reduce((s, f) => s + (splits[f] || 0), 0),
+    [selectedFunds, splits],
+  );
+  const splitValid =
+    selectedFunds.length <= 1 || Math.round(splitTotal) === 100;
 
   const handleAmountChange = (raw: string) => {
     const sanitized = sanitizeAmountInput(raw);
@@ -185,7 +248,7 @@ function MethodForm({ method }: { method: InvestMethod }) {
   };
 
   const payFromLabel = isFlip ? "Transfer from" : "Paying from";
-  const payFromValue = isFlip ? selectedFund : selectedBank;
+  const payFromValue = isFlip ? flipFromFund : selectedBank;
   const payFromPlaceholder = isFlip ? "Select a fund" : "Select bank account";
 
   const sendToLabel = isFlip ? "Transfer to" : "Send to";
@@ -199,10 +262,12 @@ function MethodForm({ method }: { method: InvestMethod }) {
 
   const canReview = (() => {
     if (amountNum <= 0) return false;
-    if (isFlip) return !!selectedFund && !!selectedFlipTo;
-    if (!selectedFund || !selectedAccount) return false;
+    if (isFlip) return !!flipFromFund && !!selectedFlipTo;
+    if (selectedFunds.length === 0 || !selectedAccount) return false;
+    if (!splitValid) return false;
     if (isInstant) return !!selectedBank;
-    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
+    if (isBank)
+      return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
     return false;
   })();
 
@@ -212,7 +277,10 @@ function MethodForm({ method }: { method: InvestMethod }) {
       search: {
         method,
         amount: amount || "0",
-        fund: selectedFund,
+        fund:
+          selectedFunds.length > 1
+            ? `${selectedFunds.length} funds`
+            : selectedFunds[0] ?? flipFromFund,
         account: selectedAccount,
         bank: isFlip ? selectedFlipTo : isInstant ? selectedBank : selectedPayTo,
       },
@@ -228,24 +296,60 @@ function MethodForm({ method }: { method: InvestMethod }) {
     flipTo: funds,
   };
   const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
-    fund: "Select fund",
+    fund: "Select fund(s)",
     account: "Select sub-account",
     payFrom: isFlip ? "Transfer from" : "Paying from",
     payTo: "Send to",
     flipTo: "Transfer to",
   };
 
-  const handlePick = (value: string) => {
-    if (picker === "fund") setSelectedFund(value);
+  const handleSingleSelect = (value: string) => {
     if (picker === "account") setSelectedAccount(value);
     if (picker === "payFrom") {
-      if (isFlip) setSelectedFund(value);
+      if (isFlip) setFlipFromFund(value);
       else setSelectedBank(value);
     }
     if (picker === "payTo") setSelectedPayTo(value);
     if (picker === "flipTo") setSelectedFlipTo(value);
     setPicker(null);
   };
+
+  const toggleFund = (f: string) => {
+    setSelectedFunds((prev) => {
+      const has = prev.includes(f);
+      const next = has ? prev.filter((x) => x !== f) : [...prev, f];
+      // rebalance splits to even any time the set changes
+      setSplits(evenSplit(next));
+      return next;
+    });
+  };
+
+  const setSplitFor = (f: string, val: number) => {
+    const clamped = Math.max(0, Math.min(100, Math.round(val)));
+    setSplits((prev) => ({ ...prev, [f]: clamped }));
+  };
+
+  const evenlyDistribute = () => setSplits(evenSplit(selectedFunds));
+
+  const saveAsDefault = () => {
+    persistDefaults({
+      funds: selectedFunds,
+      splits: splits,
+      account: selectedAccount,
+    });
+  };
+
+  const isDefaultMix =
+    defaults.funds.length === selectedFunds.length &&
+    defaults.funds.every((f) => selectedFunds.includes(f)) &&
+    selectedFunds.length > 0;
+
+  const fundRowDisplay =
+    selectedFunds.length === 0
+      ? ""
+      : selectedFunds.length === 1
+        ? selectedFunds[0]
+        : `${selectedFunds.length} funds · split`;
 
   return (
     <MobileLayout>
@@ -281,18 +385,26 @@ function MethodForm({ method }: { method: InvestMethod }) {
 
       {/* Details card */}
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
-        <PickerRow
-          label="Fund"
-          value={selectedFund}
-          placeholder="Select a fund"
-          onClick={() => setPicker("fund")}
-        />
+        {!isFlip && (
+          <PickerRow
+            label="Fund"
+            value={fundRowDisplay}
+            placeholder="Select a fund"
+            onClick={() => setPicker("fund")}
+            pill={isDefaultMix ? "Default" : undefined}
+          />
+        )}
         {!isFlip && (
           <PickerRow
             label="Sub-account"
             value={selectedAccount}
             placeholder="Select sub-account"
             onClick={() => setPicker("account")}
+            pill={
+              defaults.account && selectedAccount === defaults.account
+                ? "Default"
+                : undefined
+            }
           />
         )}
         <PickerRow
@@ -310,6 +422,35 @@ function MethodForm({ method }: { method: InvestMethod }) {
           />
         )}
       </div>
+
+      {/* Split breakdown when multiple funds selected */}
+      {!isFlip && selectedFunds.length > 1 && amountNum > 0 && (
+        <div className="mx-4 mt-3 rounded-2xl bg-card/40 backdrop-blur-md overflow-hidden">
+          <div className="px-4 pt-3 pb-1 flex items-center gap-2">
+            <Split className="w-3.5 h-3.5 text-muted-foreground" />
+            <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+              Split
+            </p>
+          </div>
+          <div className="px-4 pb-3 pt-1 space-y-1.5">
+            {selectedFunds.map((f) => {
+              const pct = splits[f] || 0;
+              const val = Math.round((amountNum * pct) / 100);
+              return (
+                <div
+                  key={f}
+                  className="flex items-center justify-between text-[13px]"
+                >
+                  <span className="text-foreground truncate pr-3">{f}</span>
+                  <span className="text-muted-foreground shrink-0 tabular-nums">
+                    {pct}% · LKR {val.toLocaleString()}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Proof of payment — Bank transfer, non-Deutsche */}
       {needsProof && (
@@ -453,33 +594,241 @@ function MethodForm({ method }: { method: InvestMethod }) {
           side="bottom"
           className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
         >
-          <SheetHeader className="px-5 pb-0">
-            <div className="flex items-center justify-between">
-              <SheetTitle className="text-base font-semibold text-foreground">
-                {picker ? pickerTitles[picker] : ""}
-              </SheetTitle>
-              <button
-                onClick={() => setPicker(null)}
-                className="rounded-full p-1 hover:bg-muted/20 transition"
-              >
-                <X className="h-4 w-4 text-muted-foreground" />
-              </button>
-            </div>
+          <SheetHeader className="px-5 pb-0 pr-12">
+            <SheetTitle className="text-base font-semibold text-foreground text-left">
+              {picker ? pickerTitles[picker] : ""}
+            </SheetTitle>
+            {picker === "fund" && (
+              <p className="text-[12px] text-muted-foreground text-left">
+                Tap to select. Pick more than one to split the investment.
+              </p>
+            )}
           </SheetHeader>
-          <div className="px-5 mt-4 space-y-2">
-            {picker &&
-              pickerOptions[picker].map((opt) => {
+
+          {/* FUND: multi-select + splits + save default */}
+          {picker === "fund" && (
+            <div className="px-5 mt-4">
+              <div className="space-y-2 max-h-[45vh] overflow-y-auto">
+                {funds.map((f) => {
+                  const checked = selectedFunds.includes(f);
+                  const isDefault = defaults.funds.includes(f);
+                  return (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => toggleFund(f)}
+                      className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 text-left transition ${
+                        checked ? "bg-muted/20" : "bg-background/40 hover:bg-muted/10"
+                      }`}
+                    >
+                      <span
+                        className={`w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition ${
+                          checked ? "" : "border-2 border-muted-foreground/40"
+                        }`}
+                        style={
+                          checked
+                            ? { background: "var(--pill)" }
+                            : undefined
+                        }
+                      >
+                        {checked && (
+                          <Check
+                            className="w-3.5 h-3.5"
+                            style={{ color: "var(--pill-foreground)" }}
+                            strokeWidth={3}
+                          />
+                        )}
+                      </span>
+                      <span className="text-sm text-foreground flex-1 truncate">
+                        {f}
+                      </span>
+                      {isDefault && (
+                        <span
+                          className="px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0"
+                          style={{
+                            background:
+                              "color-mix(in oklch, var(--pill) 18%, transparent)",
+                            color: "var(--pill)",
+                          }}
+                        >
+                          Default
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {selectedFunds.length > 1 && (
+                <div className="mt-4 rounded-2xl bg-background/40 px-4 py-3">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <Split className="w-3.5 h-3.5 text-muted-foreground" />
+                      <p className="text-[12px] font-semibold text-foreground">
+                        Split allocation
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={evenlyDistribute}
+                      className="text-[11px] font-semibold"
+                      style={{ color: "var(--pill)" }}
+                    >
+                      Even split
+                    </button>
+                  </div>
+                  <div className="space-y-2">
+                    {selectedFunds.map((f) => (
+                      <div key={f} className="flex items-center gap-3">
+                        <span className="text-[13px] text-foreground flex-1 truncate">
+                          {f}
+                        </span>
+                        <div className="flex items-center gap-1 rounded-lg bg-card/70 px-2 py-1">
+                          <input
+                            type="number"
+                            min={0}
+                            max={100}
+                            value={splits[f] ?? 0}
+                            onChange={(e) =>
+                              setSplitFor(f, parseFloat(e.target.value) || 0)
+                            }
+                            className="w-10 bg-transparent text-right text-[13px] font-semibold text-foreground outline-none tabular-nums"
+                          />
+                          <span className="text-[12px] text-muted-foreground">
+                            %
+                          </span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-2 flex items-center justify-between">
+                    <span className="text-[11px] text-muted-foreground">
+                      Total
+                    </span>
+                    <span
+                      className="text-[12px] font-semibold tabular-nums"
+                      style={{
+                        color:
+                          Math.round(splitTotal) === 100
+                            ? "var(--pill)"
+                            : "oklch(0.85 0.15 70)",
+                      }}
+                    >
+                      {Math.round(splitTotal)}%
+                    </span>
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-4 flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={saveAsDefault}
+                  disabled={selectedFunds.length === 0 || !splitValid}
+                  className="flex-1 flex items-center justify-center gap-1.5 rounded-full py-3 text-[13px] font-semibold bg-background/50 text-foreground transition hover:bg-muted/20 disabled:opacity-40"
+                >
+                  <Pin className="w-3.5 h-3.5" />
+                  Save as default
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setPicker(null)}
+                  disabled={selectedFunds.length === 0 || !splitValid}
+                  className="flex-1 rounded-full py-3 text-[13px] font-semibold transition disabled:opacity-40"
+                  style={{
+                    background: "var(--pill)",
+                    color: "var(--pill-foreground)",
+                  }}
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* ACCOUNT: single-select with default pin */}
+          {picker === "account" && (
+            <div className="px-5 mt-4 space-y-2">
+              {accounts.map((opt) => {
+                const isSelected = opt === selectedAccount;
+                const isDefault = defaults.account === opt;
+                return (
+                  <div
+                    key={opt}
+                    className={`w-full flex items-center gap-3 rounded-xl px-3 py-3 transition ${
+                      isSelected ? "bg-muted/20" : "bg-background/40"
+                    }`}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setSelectedAccount(opt);
+                        setPicker(null);
+                      }}
+                      className="flex items-center gap-3 flex-1 text-left min-w-0"
+                    >
+                      <span className="text-sm text-foreground flex-1 truncate">
+                        {opt}
+                      </span>
+                      {isSelected && (
+                        <Check
+                          className="w-4 h-4 shrink-0"
+                          style={{ color: "var(--pill)" }}
+                        />
+                      )}
+                    </button>
+                    {isDefault && (
+                      <span
+                        className="px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0"
+                        style={{
+                          background:
+                            "color-mix(in oklch, var(--pill) 18%, transparent)",
+                          color: "var(--pill)",
+                        }}
+                      >
+                        Default
+                      </span>
+                    )}
+                    <button
+                      type="button"
+                      onClick={() =>
+                        persistDefaults({
+                          ...defaults,
+                          account: isDefault ? null : opt,
+                        })
+                      }
+                      className="w-7 h-7 rounded-full flex items-center justify-center shrink-0 hover:bg-muted/20 transition"
+                      aria-label={isDefault ? "Unset default" : "Set as default"}
+                    >
+                      <Pin
+                        className="w-3.5 h-3.5"
+                        style={{
+                          color: isDefault
+                            ? "var(--pill)"
+                            : "oklch(0.7 0.02 260)",
+                        }}
+                        fill={isDefault ? "currentColor" : "none"}
+                      />
+                    </button>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {/* Other single-select pickers */}
+          {picker && picker !== "fund" && picker !== "account" && (
+            <div className="px-5 mt-4 space-y-2">
+              {pickerOptions[picker].map((opt) => {
                 const isSelected =
-                  (picker === "fund" && opt === selectedFund) ||
-                  (picker === "account" && opt === selectedAccount) ||
                   (picker === "payFrom" &&
-                    opt === (isFlip ? selectedFund : selectedBank)) ||
+                    opt === (isFlip ? flipFromFund : selectedBank)) ||
                   (picker === "payTo" && opt === selectedPayTo) ||
                   (picker === "flipTo" && opt === selectedFlipTo);
                 return (
                   <button
                     key={opt}
-                    onClick={() => handlePick(opt)}
+                    onClick={() => handleSingleSelect(opt)}
                     className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
                       isSelected
                         ? "bg-muted/20"
@@ -496,7 +845,8 @@ function MethodForm({ method }: { method: InvestMethod }) {
                   </button>
                 );
               })}
-          </div>
+            </div>
+          )}
         </SheetContent>
       </Sheet>
     </MobileLayout>
@@ -508,11 +858,13 @@ function PickerRow({
   value,
   placeholder,
   onClick,
+  pill,
 }: {
   label: string;
   value: string;
   placeholder: string;
   onClick: () => void;
+  pill?: string;
 }) {
   const hasValue = !!value;
   return (
@@ -529,6 +881,17 @@ function PickerRow({
       >
         {hasValue ? value : placeholder}
       </span>
+      {pill && (
+        <span
+          className="px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0"
+          style={{
+            background: "color-mix(in oklch, var(--pill) 18%, transparent)",
+            color: "var(--pill)",
+          }}
+        >
+          {pill}
+        </span>
+      )}
       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
     </button>
   );
