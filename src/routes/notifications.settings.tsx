@@ -3,7 +3,7 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Switch } from "@/components/ui/switch";
-import { Bell, TrendingUp, Receipt, Megaphone, ShieldAlert, Mail, Smartphone, MessageSquare, BookOpen } from "lucide-react";
+import { Bell, TrendingUp, Receipt, Megaphone, ShieldAlert, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/notifications/settings")({
   component: NotificationPreferences,
