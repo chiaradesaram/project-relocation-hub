@@ -163,7 +163,7 @@ function Transactions() {
       </div>
 
       <Drawer open={!!openTx} onOpenChange={(o) => !o && setOpenTx(null)}>
-        <DrawerContent className="bg-[#0a1422] border-none rounded-t-[28px] px-5 pb-8">
+        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-8">
           <div className="flex justify-end pt-2 pb-4">
             <button
               type="button"
