@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Zap, Building2, ArrowLeftRight, ChevronDown, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
+import { Zap, Building2, ArrowLeftRight, ChevronDown, ChevronRight, Upload, Info, Plus, Edit2, Trash2, ExternalLink, Repeat, Lightbulb, CopyPlus } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import { FormSection, FormField } from "@/components/FormField";
 import {
@@ -18,6 +18,13 @@ import {
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/invest")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    product: typeof search.product === "string" ? search.product : undefined,
+    method:
+      search.method === "instant" || search.method === "bank" || search.method === "flip"
+        ? (search.method as InvestMethod)
+        : undefined,
+  }),
   component: Invest,
 });
 
@@ -42,7 +49,8 @@ const DIRECT_INVEST_LIMIT = 150000;
 
 function Invest() {
   const navigate = useNavigate();
-  const [method, setMethod] = useState<InvestMethod>("instant");
+  const search = Route.useSearch();
+  const [method, setMethod] = useState<InvestMethod>(search.method ?? "instant");
   const [investType, setInvestType] = useState<InvestType>("new");
   const [amount, setAmount] = useState("");
   const [isRecurring, setIsRecurring] = useState(false);
@@ -97,6 +105,72 @@ function Invest() {
     setAmount(sanitized);
     if (parseFloat(sanitized || "0") < DIRECT_INVEST_LIMIT) setRepeatCount(1);
   };
+
+  // Show method picker first when no method chosen yet
+  if (!search.method) {
+    const methodCards: {
+      id: InvestMethod;
+      icon: typeof Zap;
+      label: string;
+      desc: string;
+    }[] = [
+      {
+        id: "instant",
+        icon: Zap,
+        label: "Direct Invest",
+        desc: "Instant bank rail. Max LKR 149,950 per transfer.",
+      },
+      {
+        id: "bank",
+        icon: Building2,
+        label: "Bank Transfer",
+        desc: "Any amount. 1–2 business days. Upload proof unless paying Deutsche Bank.",
+      },
+      {
+        id: "flip",
+        icon: ArrowLeftRight,
+        label: "Flip",
+        desc: "Move funds between your CAL accounts instantly. No fees.",
+      },
+    ];
+
+    return (
+      <MobileLayout>
+        <PageHeader title="Invest" showBack helpTopic="invest" />
+        <div className="px-4 mt-2">
+          <p className="text-[13px] text-muted-foreground leading-snug">
+            How would you like to invest?
+          </p>
+        </div>
+        <div className="mx-4 mt-4 space-y-2.5">
+          {methodCards.map(({ id, icon: Icon, label, desc }) => (
+            <button
+              key={id}
+              onClick={() =>
+                navigate({
+                  to: "/invest",
+                  search: { ...search, method: id },
+                })
+              }
+              className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4 text-left transition hover:bg-muted/10"
+            >
+              <div
+                className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)" }}
+              >
+                <Icon className="w-5 h-5" style={{ color: "var(--pill)" }} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="text-sm font-semibold text-foreground leading-tight">{label}</p>
+                <p className="text-[12px] text-muted-foreground mt-1 leading-snug">{desc}</p>
+              </div>
+              <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+            </button>
+          ))}
+        </div>
+      </MobileLayout>
+    );
+  }
 
 
   return (
