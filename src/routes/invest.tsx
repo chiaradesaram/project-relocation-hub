@@ -144,12 +144,67 @@ function Invest() {
 
 type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
 
+const DEFAULTS_KEY = "invest_defaults_v1";
+type InvestDefaults = {
+  funds: string[];
+  splits: Record<string, number>;
+  account: string | null;
+};
+const emptyDefaults: InvestDefaults = { funds: [], splits: {}, account: null };
+
+function evenSplit(fs: string[]): Record<string, number> {
+  if (fs.length === 0) return {};
+  const base = Math.floor(100 / fs.length);
+  const rem = 100 - base * fs.length;
+  const out: Record<string, number> = {};
+  fs.forEach((f, i) => (out[f] = base + (i < rem ? 1 : 0)));
+  return out;
+}
+
 function MethodForm({ method }: { method: InvestMethod }) {
   const navigate = useNavigate();
 
   const [amount, setAmount] = useState("");
-  const [selectedFund, setSelectedFund] = useState("");
+  const [defaults, setDefaults] = useState<InvestDefaults>(emptyDefaults);
+  const [selectedFunds, setSelectedFunds] = useState<string[]>([]);
+  const [splits, setSplits] = useState<Record<string, number>>({});
   const [selectedAccount, setSelectedAccount] = useState("Personal Account");
+  const [flipFromFund, setFlipFromFund] = useState("");
+
+  // Load saved defaults once on mount and pre-fill the form.
+  useEffect(() => {
+    try {
+      const raw =
+        typeof window !== "undefined"
+          ? window.localStorage.getItem(DEFAULTS_KEY)
+          : null;
+      if (!raw) return;
+      const p = JSON.parse(raw) as InvestDefaults;
+      const d: InvestDefaults = {
+        funds: Array.isArray(p.funds) ? p.funds : [],
+        splits: p.splits ?? {},
+        account: p.account ?? null,
+      };
+      setDefaults(d);
+      if (d.funds.length && method !== "flip") {
+        setSelectedFunds(d.funds);
+        setSplits(
+          Object.keys(d.splits).length ? d.splits : evenSplit(d.funds),
+        );
+      }
+      if (d.account) setSelectedAccount(d.account);
+    } catch {}
+  }, [method]);
+
+  const persistDefaults = (d: InvestDefaults) => {
+    setDefaults(d);
+    try {
+      window.localStorage.setItem(DEFAULTS_KEY, JSON.stringify(d));
+    } catch {}
+  };
+
+  const primaryFund = selectedFunds[0] ?? "";
+  const selectedFund = primaryFund; // legacy alias for flip source display
   const [selectedBank, setSelectedBank] = useState(
     method === "bank" ? "Commercial Bank ****2849" : "",
   );
@@ -173,6 +228,12 @@ function MethodForm({ method }: { method: InvestMethod }) {
   const isInstant = method === "instant";
 
   const amountNum = parseFloat(amount || "0") || 0;
+  const splitTotal = useMemo(
+    () => selectedFunds.reduce((s, f) => s + (splits[f] || 0), 0),
+    [selectedFunds, splits],
+  );
+  const splitValid =
+    selectedFunds.length <= 1 || Math.round(splitTotal) === 100;
 
   const handleAmountChange = (raw: string) => {
     const sanitized = sanitizeAmountInput(raw);
@@ -187,7 +248,7 @@ function MethodForm({ method }: { method: InvestMethod }) {
   };
 
   const payFromLabel = isFlip ? "Transfer from" : "Paying from";
-  const payFromValue = isFlip ? selectedFund : selectedBank;
+  const payFromValue = isFlip ? flipFromFund : selectedBank;
   const payFromPlaceholder = isFlip ? "Select a fund" : "Select bank account";
 
   const sendToLabel = isFlip ? "Transfer to" : "Send to";
@@ -201,10 +262,12 @@ function MethodForm({ method }: { method: InvestMethod }) {
 
   const canReview = (() => {
     if (amountNum <= 0) return false;
-    if (isFlip) return !!selectedFund && !!selectedFlipTo;
-    if (!selectedFund || !selectedAccount) return false;
+    if (isFlip) return !!flipFromFund && !!selectedFlipTo;
+    if (selectedFunds.length === 0 || !selectedAccount) return false;
+    if (!splitValid) return false;
     if (isInstant) return !!selectedBank;
-    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
+    if (isBank)
+      return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
     return false;
   })();
 
@@ -214,7 +277,10 @@ function MethodForm({ method }: { method: InvestMethod }) {
       search: {
         method,
         amount: amount || "0",
-        fund: selectedFund,
+        fund:
+          selectedFunds.length > 1
+            ? `${selectedFunds.length} funds`
+            : selectedFunds[0] ?? flipFromFund,
         account: selectedAccount,
         bank: isFlip ? selectedFlipTo : isInstant ? selectedBank : selectedPayTo,
       },
@@ -230,24 +296,60 @@ function MethodForm({ method }: { method: InvestMethod }) {
     flipTo: funds,
   };
   const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
-    fund: "Select fund",
+    fund: "Select fund(s)",
     account: "Select sub-account",
     payFrom: isFlip ? "Transfer from" : "Paying from",
     payTo: "Send to",
     flipTo: "Transfer to",
   };
 
-  const handlePick = (value: string) => {
-    if (picker === "fund") setSelectedFund(value);
+  const handleSingleSelect = (value: string) => {
     if (picker === "account") setSelectedAccount(value);
     if (picker === "payFrom") {
-      if (isFlip) setSelectedFund(value);
+      if (isFlip) setFlipFromFund(value);
       else setSelectedBank(value);
     }
     if (picker === "payTo") setSelectedPayTo(value);
     if (picker === "flipTo") setSelectedFlipTo(value);
     setPicker(null);
   };
+
+  const toggleFund = (f: string) => {
+    setSelectedFunds((prev) => {
+      const has = prev.includes(f);
+      const next = has ? prev.filter((x) => x !== f) : [...prev, f];
+      // rebalance splits to even any time the set changes
+      setSplits(evenSplit(next));
+      return next;
+    });
+  };
+
+  const setSplitFor = (f: string, val: number) => {
+    const clamped = Math.max(0, Math.min(100, Math.round(val)));
+    setSplits((prev) => ({ ...prev, [f]: clamped }));
+  };
+
+  const evenlyDistribute = () => setSplits(evenSplit(selectedFunds));
+
+  const saveAsDefault = () => {
+    persistDefaults({
+      funds: selectedFunds,
+      splits: splits,
+      account: selectedAccount,
+    });
+  };
+
+  const isDefaultMix =
+    defaults.funds.length === selectedFunds.length &&
+    defaults.funds.every((f) => selectedFunds.includes(f)) &&
+    selectedFunds.length > 0;
+
+  const fundRowDisplay =
+    selectedFunds.length === 0
+      ? ""
+      : selectedFunds.length === 1
+        ? selectedFunds[0]
+        : `${selectedFunds.length} funds · split`;
 
   return (
     <MobileLayout>
