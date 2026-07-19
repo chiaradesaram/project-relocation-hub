@@ -385,18 +385,26 @@ function MethodForm({ method }: { method: InvestMethod }) {
 
       {/* Details card */}
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
-        <PickerRow
-          label="Fund"
-          value={selectedFund}
-          placeholder="Select a fund"
-          onClick={() => setPicker("fund")}
-        />
+        {!isFlip && (
+          <PickerRow
+            label="Fund"
+            value={fundRowDisplay}
+            placeholder="Select a fund"
+            onClick={() => setPicker("fund")}
+            pill={isDefaultMix ? "Default" : undefined}
+          />
+        )}
         {!isFlip && (
           <PickerRow
             label="Sub-account"
             value={selectedAccount}
             placeholder="Select sub-account"
             onClick={() => setPicker("account")}
+            pill={
+              defaults.account && selectedAccount === defaults.account
+                ? "Default"
+                : undefined
+            }
           />
         )}
         <PickerRow
@@ -414,6 +422,35 @@ function MethodForm({ method }: { method: InvestMethod }) {
           />
         )}
       </div>
+
+      {/* Split breakdown when multiple funds selected */}
+      {!isFlip && selectedFunds.length > 1 && amountNum > 0 && (
+        <div className="mx-4 mt-3 rounded-2xl bg-card/40 backdrop-blur-md overflow-hidden">
+          <div className="px-4 pt-3 pb-1 flex items-center gap-2">
+            <Split className="w-3.5 h-3.5 text-muted-foreground" />
+            <p className="text-[11px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+              Split
+            </p>
+          </div>
+          <div className="px-4 pb-3 pt-1 space-y-1.5">
+            {selectedFunds.map((f) => {
+              const pct = splits[f] || 0;
+              const val = Math.round((amountNum * pct) / 100);
+              return (
+                <div
+                  key={f}
+                  className="flex items-center justify-between text-[13px]"
+                >
+                  <span className="text-foreground truncate pr-3">{f}</span>
+                  <span className="text-muted-foreground shrink-0 tabular-nums">
+                    {pct}% · LKR {val.toLocaleString()}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Proof of payment — Bank transfer, non-Deutsche */}
       {needsProof && (
