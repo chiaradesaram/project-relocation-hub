@@ -55,7 +55,6 @@ function NotificationPreferences() {
     <MobileLayout>
       <PageHeader title="Notification settings" showBack />
       <Section title="What to notify me about" items={categories} onToggle={toggle(setCategories)} />
-      <Section title="How to reach me" items={channels} onToggle={toggle(setChannels)} />
       <div className="h-6" />
     </MobileLayout>
   );
