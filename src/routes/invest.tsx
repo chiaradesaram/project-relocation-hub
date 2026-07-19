@@ -649,11 +649,13 @@ function PickerRow({
   value,
   placeholder,
   onClick,
+  pill,
 }: {
   label: string;
   value: string;
   placeholder: string;
   onClick: () => void;
+  pill?: string;
 }) {
   const hasValue = !!value;
   return (
@@ -670,6 +672,17 @@ function PickerRow({
       >
         {hasValue ? value : placeholder}
       </span>
+      {pill && (
+        <span
+          className="px-1.5 py-0.5 rounded text-[10px] font-semibold shrink-0"
+          style={{
+            background: "color-mix(in oklch, var(--pill) 18%, transparent)",
+            color: "var(--pill)",
+          }}
+        >
+          {pill}
+        </span>
+      )}
       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
     </button>
   );
