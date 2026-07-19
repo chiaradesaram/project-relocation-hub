@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -13,6 +13,8 @@ import {
   X,
   Image as ImageIcon,
   Check,
+  Split,
+  Pin,
 } from "lucide-react";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
