@@ -309,8 +309,8 @@ function Dashboard() {
         </button>
       </div>
 
-      {/* Portfolio card – purple style */}
-      {isVisible("portfolio") && (
+      {/* Portfolio card – purple style (hidden for now) */}
+      {false && isVisible("portfolio") && (
       <div className="mx-4 mt-3.5">
         <div
           className="rounded-2xl overflow-hidden p-3.5"
