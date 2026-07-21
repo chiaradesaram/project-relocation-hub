@@ -238,7 +238,7 @@ function Transactions() {
           {/* Calendar */}
           <div
             className={cn(
-              "w-full -mx-5 mb-4 [&_[data-slot=calendar]]:bg-transparent",
+              "w-full mb-4 [&_[data-slot=calendar]]:bg-transparent",
               "[&_[data-range-start=true]]:!bg-pill [&_[data-range-start=true]]:!text-pill-foreground",
               "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-pill-foreground",
               "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-pill-foreground",
@@ -254,8 +254,16 @@ function Transactions() {
               }}
               numberOfMonths={1}
               defaultMonth={draftRange?.from ?? new Date()}
-              className="pointer-events-auto w-full bg-transparent p-0 [--cell-size:2.75rem]"
-              classNames={{ root: "w-full", months: "w-full", month: "w-full" }}
+              className="pointer-events-auto w-full bg-transparent p-0"
+              classNames={{
+                root: "w-full",
+                months: "w-full",
+                month: "w-full",
+                table: "w-full border-collapse",
+                week: "mt-2 flex w-full",
+                day: "w-full",
+                day_button: "w-full !min-w-0",
+              }}
             />
           </div>
 
