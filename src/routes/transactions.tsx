@@ -395,23 +395,7 @@ function Transactions() {
               <StatusIcon status={tx.status} positive={tx.positive} />
             </div>
             <div className="flex-1 min-w-0">
-              <div className="flex items-center gap-1.5">
-                <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
-                <span
-                  aria-label={tx.status}
-                  className={`shrink-0 w-4 h-4 rounded-full flex items-center justify-center ${
-                    tx.status === "Pending"
-                      ? "bg-warning/15 text-warning"
-                      : "bg-success/20 text-success"
-                  }`}
-                >
-                  {tx.status === "Pending" ? (
-                    <Clock className="w-2.5 h-2.5" />
-                  ) : (
-                    <Check className="w-2.5 h-2.5" strokeWidth={3} />
-                  )}
-                </span>
-              </div>
+              <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
               <p className="text-xs text-muted-foreground truncate mt-0.5">
                 {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
               </p>
