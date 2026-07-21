@@ -413,14 +413,14 @@ function Transactions() {
                 tx.status === "Pending"
                   ? "bg-warning/15"
                   : tx.kind === "Fund Flip"
-                    ? "bg-pill/20"
+                    ? "bg-success/20"
                     : tx.positive
                     ? "bg-success/20"
                     : "bg-muted/40"
               }`}
             >
               {tx.kind === "Fund Flip" ? (
-                <Repeat className="w-4 h-4 text-pill" />
+                <Repeat className="w-4 h-4 text-success" />
               ) : (
                 <StatusIcon status={tx.status} positive={tx.positive} />
               )}
