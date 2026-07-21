@@ -616,7 +616,7 @@ function Transactions() {
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-semibold text-foreground">Got an issue with this transaction?</p>
-              <p className="text-xs text-muted-foreground truncate">We'll help you sort it out</p>
+              
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
           </Link>
