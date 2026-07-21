@@ -202,6 +202,82 @@ function Transactions() {
         )}
       </div>
 
+      {/* Sub filters (per product) */}
+      {product !== "All" && (
+        <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-1">
+          {product === "Unit Trusts" && (
+            <button
+              type="button"
+              onClick={() => setSubAccountOpen(true)}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition",
+                subAccount
+                  ? "bg-pill text-pill-foreground"
+                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
+              )}
+            >
+              {subAccount ?? "Sub Account"}
+              <ChevronRight className="w-3 h-3 rotate-90" />
+            </button>
+          )}
+          {subFiltersByProduct[product].map((f) => {
+            const active = sub === f;
+            return (
+              <button
+                key={f}
+                type="button"
+                onClick={() => setSub(active ? null : f)}
+                className={cn(
+                  "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition",
+                  active
+                    ? "bg-pill text-pill-foreground"
+                    : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
+                )}
+              >
+                {f}
+              </button>
+            );
+          })}
+        </div>
+      )}
+
+      {/* Sub Account picker drawer */}
+      <Drawer open={subAccountOpen} onOpenChange={setSubAccountOpen}>
+        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6">
+          <div className="flex items-center justify-between pt-2 pb-3">
+            <DrawerTitle className="text-lg font-semibold">Sub Account</DrawerTitle>
+            <button
+              type="button"
+              onClick={() => setSubAccountOpen(false)}
+              aria-label="Close"
+              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
+            <button
+              type="button"
+              onClick={() => { setSubAccount(null); setSubAccountOpen(false); }}
+              className="w-full text-left p-4 text-sm font-medium text-foreground"
+            >
+              All sub accounts
+            </button>
+            {subAccountOptions.map((s) => (
+              <button
+                key={s}
+                type="button"
+                onClick={() => { setSubAccount(s); setSubAccountOpen(false); }}
+                className="w-full text-left p-4 text-sm font-medium text-foreground flex items-center justify-between"
+              >
+                <span>{s}</span>
+                {subAccount === s && <Check className="w-4 h-4 text-pill" strokeWidth={3} />}
+              </button>
+            ))}
+          </div>
+        </DrawerContent>
+      </Drawer>
+
       {/* Wise-style Date Range Picker Drawer */}
       <Drawer open={dateOpen} onOpenChange={setDateOpen}>
         <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6 max-h-[92vh]">
