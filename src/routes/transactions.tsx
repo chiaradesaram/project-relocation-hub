@@ -513,6 +513,28 @@ function Transactions() {
             </div>
           </div>
 
+          {openTx?.trades && openTx.trades.length > 0 && (
+            <div className="rounded-2xl bg-white/[0.04] mb-4 overflow-hidden">
+              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
+                <p className="text-sm font-semibold text-foreground">Trades on {openTx.date}</p>
+                <span className="text-[11px] text-muted-foreground">{openTx.trades.length} total</span>
+              </div>
+              <div className="divide-y divide-white/[0.06]">
+                {openTx.trades.map((t, idx) => (
+                  <div key={idx} className="p-4 flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground">
+                        {t.side} · {t.shares.toLocaleString()} shares
+                      </p>
+                      <p className="text-[12px] text-muted-foreground/80 mt-0.5">{t.time}</p>
+                    </div>
+                    <p className="text-sm font-semibold text-foreground shrink-0">{t.price}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           <a
             href="#"
             className="rounded-2xl bg-white/[0.04] flex items-center gap-3 p-4"
