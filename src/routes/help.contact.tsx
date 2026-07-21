@@ -518,9 +518,19 @@ function ContactForm() {
     if (search.txId) {
       setSelectedTxId(search.txId);
     }
+    if (search.txKind && !subId) {
+      const kind = String(search.txKind).toLowerCase();
+      if (kind.includes("redemption") || kind.includes("payout") || kind.includes("pay out")) {
+        setSubId("withdrawal-delay");
+      } else if (kind.includes("flip")) {
+        setSubId("fund-split");
+      } else {
+        setSubId("investment-not-reflected");
+      }
+    }
     // Intentionally run only when search changes
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [search.category, search.txId]);
+  }, [search.category, search.txId, search.txKind]);
 
   const extraTx: RecentTx | null = useMemo(() => {
     if (!search.txId || !search.txName) return null;
