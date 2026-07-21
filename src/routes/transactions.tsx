@@ -236,17 +236,27 @@ function Transactions() {
           </div>
 
           {/* Calendar */}
-          <Calendar
-            mode="range"
-            selected={draftRange}
-            onSelect={(r) => {
-              setDraftRange(r);
-              setActivePreset(null);
-            }}
-            numberOfMonths={1}
-            defaultMonth={draftRange?.from ?? new Date()}
-            className={cn("pointer-events-auto mx-auto mb-4")}
-          />
+          <div
+            className={cn(
+              "mb-4 [&_[data-slot=calendar]]:bg-transparent",
+              "[&_[data-range-start=true]]:!bg-pill [&_[data-range-start=true]]:!text-pill-foreground",
+              "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-pill-foreground",
+              "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-pill-foreground",
+              "[&_[data-range-middle=true]]:!bg-pill/20 [&_[data-range-middle=true]]:!text-foreground",
+            )}
+          >
+            <Calendar
+              mode="range"
+              selected={draftRange}
+              onSelect={(r) => {
+                setDraftRange(r);
+                setActivePreset(null);
+              }}
+              numberOfMonths={1}
+              defaultMonth={draftRange?.from ?? new Date()}
+              className="pointer-events-auto mx-auto bg-transparent p-0"
+            />
+          </div>
 
           <div className="flex items-center gap-3">
             <button
