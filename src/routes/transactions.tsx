@@ -243,6 +243,8 @@ function Transactions() {
               "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-pill-foreground",
               "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-pill-foreground",
               "[&_[data-range-middle=true]]:!bg-pill/20 [&_[data-range-middle=true]]:!text-foreground",
+              "[&_.rdp-today_button]:!bg-transparent [&_.rdp-today_button]:ring-1 [&_.rdp-today_button]:ring-pill [&_.rdp-today_button]:rounded-full [&_.rdp-today_button]:text-foreground",
+              "[&_[data-range-start=true]_button]:!ring-0 [&_[data-range-end=true]_button]:!ring-0 [&_[data-selected-single=true]_button]:!ring-0",
             )}
           >
             <Calendar
