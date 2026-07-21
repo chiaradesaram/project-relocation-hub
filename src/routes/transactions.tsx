@@ -496,7 +496,11 @@ function Transactions() {
                   ? "bg-warning/15 text-warning"
                   : "bg-success/20 text-success"
               }`}>
-                {openTx?.status === "Pending" ? <Clock className="w-3 h-3" /> : <Check className="w-3 h-3" strokeWidth={3} />}
+                {openTx?.status === "Pending" ? (
+                  openTx?.positive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />
+                ) : (
+                  <Check className="w-3 h-3" strokeWidth={3} />
+                )}
                 {openTx?.status}
               </div>
             </div>
