@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,7 @@ const subFiltersByProduct: Record<Product, string[]> = {
   Treasuries: ["Investments", "Maturities", "Pending", "Confirmed"],
 };
 
-type Status = "Confirmed" | "Pending";
+type Status = "Confirmed" | "Pending" | "Completed";
 
 type Tx = {
   name: string;
@@ -35,7 +35,10 @@ type Tx = {
   positive: boolean;
   status: Status;
   fund?: string;
+  fromFund?: string;
+  toFund?: string;
   createdDate?: string;
+  redeemByDate?: string;
   reflectedDate?: string;
   units?: number;
   unitPrice?: string;
@@ -53,6 +56,8 @@ const transactions: Tx[] = [
   { name: "COMB.N0000", product: "Equities", kind: "Pay In", subAccount: "Personal · CDS", date: "Apr 3, 2026", value: "LKR 50,000", positive: true, status: "Confirmed" },
   { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50" },
   { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40" },
+  { name: "Growth Opportunities Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Personal · Main", date: "Apr 6, 2026", value: "LKR 80,000", positive: true, status: "Completed", fromFund: "Fixed Income Opportunities Fund", toFund: "Growth Opportunities Fund", createdDate: "Apr 6, 2026 · 10:12", redeemByDate: "Apr 8, 2026", reflectedDate: "Apr 9, 2026", units: 3333.33, unitPrice: "LKR 24.00" },
+  { name: "Money Market Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Corporate · Ops", date: "Mar 25, 2026", value: "LKR 120,000", positive: true, status: "Completed", fromFund: "Growth Opportunities Fund", toFund: "Money Market Fund", createdDate: "Mar 25, 2026 · 14:44", redeemByDate: "Mar 27, 2026", reflectedDate: "Mar 28, 2026", units: 7792.21, unitPrice: "LKR 15.40" },
   { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
   {
     name: "LOLC.N0000", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS",
@@ -87,6 +92,7 @@ const subToKinds: Record<string, string[]> = {
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
   if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
+  if (status === "Completed") return <Check className="w-4 h-4 text-success" strokeWidth={3} />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
 
@@ -162,7 +168,8 @@ function Transactions() {
       if (product === "Unit Trusts" && subAccount && tx.subAccount !== subAccount) return false;
       if (!sub) return true;
       if (sub === "Pending") return tx.status === "Pending";
-      if (sub === "Confirmed" || sub === "Completed") return tx.status === "Confirmed";
+      if (sub === "Confirmed") return tx.status === "Confirmed";
+      if (sub === "Completed") return tx.status === "Completed";
       const allowedKinds = subToKinds[sub] ?? [];
       return allowedKinds.includes(tx.kind);
     })
@@ -405,12 +412,18 @@ function Transactions() {
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
                   ? "bg-warning/15"
-                  : tx.positive
+                  : tx.kind === "Fund Flip"
+                    ? "bg-pill/20"
+                    : tx.positive
                     ? "bg-success/20"
                     : "bg-muted/40"
               }`}
             >
-              <StatusIcon status={tx.status} positive={tx.positive} />
+              {tx.kind === "Fund Flip" ? (
+                <Repeat className="w-4 h-4 text-pill" />
+              ) : (
+                <StatusIcon status={tx.status} positive={tx.positive} />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
@@ -431,7 +444,15 @@ function Transactions() {
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
                   </p>
-                  <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
+                  <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
+                    {tx.kind === "Fund Flip" && (
+                      <>
+                        <Repeat className="w-3 h-3" />
+                        <span>fund flip ·</span>
+                      </>
+                    )}
+                    <span>{tx.date}</span>
+                  </p>
                 </>
               )}
             </div>
@@ -463,7 +484,8 @@ function Transactions() {
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
               <div className="w-8 h-8 rounded-full bg-pill/20 flex items-center justify-center text-pill shrink-0">
-                {openTx?.product === "Unit Trusts" && <PieChart className="w-4 h-4" />}
+                {openTx?.product === "Unit Trusts" && openTx?.kind !== "Fund Flip" && <PieChart className="w-4 h-4" />}
+                {openTx?.kind === "Fund Flip" && <Repeat className="w-4 h-4" />}
                 {openTx?.product === "Equities" && <BarChart3 className="w-4 h-4" />}
                 {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
               </div>
@@ -483,7 +505,16 @@ function Transactions() {
           </DrawerHeader>
 
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-4">
-            {openTx?.fund && (
+            {openTx?.kind === "Fund Flip" ? (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Fund flip</p>
+                <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="truncate">{openTx?.fromFund}</span>
+                  <Repeat className="w-3.5 h-3.5 text-pill shrink-0" />
+                  <span className="truncate">{openTx?.toFund}</span>
+                </div>
+              </div>
+            ) : openTx?.fund && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Fund</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.fund}</p>
@@ -507,6 +538,12 @@ function Transactions() {
               <p className="text-sm font-semibold text-foreground">Created date</p>
               <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
             </div>
+            {openTx?.kind === "Fund Flip" && (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Redeem from fund by</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.redeemByDate ?? "—"}</p>
+              </div>
+            )}
             <div className="p-4">
               <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
               <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
