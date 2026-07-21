@@ -1318,10 +1318,11 @@ function RecentTransactionsPicker({
     .filter((t) => !productId || t.product === productId)
     .filter((t) => (subId === "investment-not-reflected" ? t.status === "Pending" : true))
     .slice(0, 3);
-  const txs =
-    extraTx && !baseTxs.some((t) => t.id === extraTx.id)
-      ? [extraTx, ...baseTxs].slice(0, 4)
-      : baseTxs;
+  // When arriving via a transaction deep link, show only that transaction.
+  const txs = extraTx
+    ? [extraTx]
+    : baseTxs;
+  const isDeepLinked = !!extraTx;
   const selectedTx = txs.find((t) => t.id === selectedTxId) ?? null;
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
@@ -1379,6 +1380,7 @@ function RecentTransactionsPicker({
             No recent transactions for this product.
           </p>
         )}
+        {!isDeepLinked && (
         <button
           type="button"
           onClick={onNotListed}
@@ -1393,6 +1395,7 @@ function RecentTransactionsPicker({
             Describe the issue and we'll look into it.
           </p>
         </button>
+        )}
       </div>
 
       {selectedTx && selectedTx.status === "Pending" && subId === "investment-not-reflected" && (
