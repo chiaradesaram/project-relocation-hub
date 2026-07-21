@@ -225,7 +225,7 @@ function Transactions() {
                   className={cn(
                     "px-3 py-1.5 rounded-full text-xs font-medium transition",
                     isActive
-                      ? "bg-foreground text-background"
+                      ? "bg-pill text-pill-foreground"
                       : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
                   )}
                 >
@@ -238,7 +238,7 @@ function Transactions() {
           {/* Calendar */}
           <div
             className={cn(
-              "mb-4 [&_[data-slot=calendar]]:bg-transparent",
+              "w-full mb-4 [&_[data-slot=calendar]]:bg-transparent",
               "[&_[data-range-start=true]]:!bg-pill [&_[data-range-start=true]]:!text-pill-foreground",
               "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-pill-foreground",
               "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-pill-foreground",
@@ -254,29 +254,18 @@ function Transactions() {
               }}
               numberOfMonths={1}
               defaultMonth={draftRange?.from ?? new Date()}
-              className="pointer-events-auto mx-auto bg-transparent p-0"
+              className="pointer-events-auto w-full bg-transparent p-0"
+              classNames={{ root: "w-full", months: "w-full", month: "w-full" }}
             />
           </div>
 
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              onClick={() => {
-                setDraftRange(undefined);
-                setActivePreset("All time");
-              }}
-              className="flex-1 py-3 rounded-full text-sm font-medium bg-white/[0.06] text-foreground hover:bg-white/[0.1] transition"
-            >
-              Reset
-            </button>
-            <button
-              type="button"
-              onClick={applyDraft}
-              className="flex-[2] py-3 rounded-full text-sm font-semibold bg-foreground text-background"
-            >
-              Apply
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={applyDraft}
+            className="w-full py-3 rounded-full text-sm font-semibold bg-pill text-pill-foreground"
+          >
+            Apply
+          </button>
         </DrawerContent>
       </Drawer>
 
