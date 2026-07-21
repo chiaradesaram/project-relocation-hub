@@ -254,7 +254,7 @@ function Transactions() {
               }}
               numberOfMonths={1}
               defaultMonth={draftRange?.from ?? new Date()}
-              className="pointer-events-auto w-full bg-transparent p-0"
+              className="pointer-events-auto w-full bg-transparent p-0 [--cell-size:2.75rem]"
               classNames={{ root: "w-full", months: "w-full", month: "w-full" }}
             />
           </div>
