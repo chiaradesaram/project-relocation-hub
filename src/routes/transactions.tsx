@@ -17,10 +17,10 @@ const productFilters = ["All", "Unit Trusts", "Equities", "Treasuries"] as const
 type Product = (typeof productFilters)[number];
 
 const subFiltersByProduct: Record<Product, string[]> = {
-  All: ["All"],
-  "Unit Trusts": ["All", "Investments", "Redemptions", "Pending"],
-  Equities: ["All", "Pay In", "Pay Out", "Dividends"],
-  Treasuries: ["All", "Investments", "Maturities", "Pending"],
+  All: [],
+  "Unit Trusts": ["Pending", "Confirmed", "Completed"],
+  Equities: ["Pay In", "Pay Out", "Stocks", "Divs", "Pending", "Confirmed"],
+  Treasuries: ["Investments", "Maturities", "Pending", "Confirmed"],
 };
 
 type Status = "Confirmed" | "Pending";
@@ -53,16 +53,17 @@ const transactions: Tx[] = [
   { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50" },
   { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40" },
   { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
+  { name: "LOLC.N0000 · Buy", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS", date: "Apr 10, 2026", value: "LKR 42,000", positive: false, status: "Confirmed", createdDate: "Apr 10, 2026 · 10:15", reflectedDate: "Apr 10, 2026" },
+  { name: "SAMP.N0000 · Sell", product: "Equities", kind: "Stock Sell", subAccount: "Personal · CDS", date: "Apr 7, 2026", value: "LKR 30,500", positive: true, status: "Confirmed", createdDate: "Apr 7, 2026 · 11:42", reflectedDate: "Apr 7, 2026" },
 ];
 
 const subToKinds: Record<string, string[]> = {
-  All: [],
   Investments: ["Investment"],
   Redemptions: ["Redemption"],
-  Pending: [], // status filter
   "Pay In": ["Pay In"],
   "Pay Out": ["Pay Out"],
-  Dividends: ["Dividend"],
+  Divs: ["Dividend"],
+  Stocks: ["Stock Buy", "Stock Sell"],
   Maturities: ["Maturity"],
 };
 
@@ -73,12 +74,25 @@ function StatusIcon({ status, positive }: { status: Status; positive: boolean })
 
 function Transactions() {
   const [product, setProduct] = useState<Product>("All");
-  const sub = "All";
+  const [sub, setSub] = useState<string | null>(null);
+  const [subAccount, setSubAccount] = useState<string | null>(null);
+  const [subAccountOpen, setSubAccountOpen] = useState(false);
   const [openTx, setOpenTx] = useState<Tx | null>(null);
   const [range, setRange] = useState<DateRange | undefined>();
   const [dateOpen, setDateOpen] = useState(false);
   const [draftRange, setDraftRange] = useState<DateRange | undefined>();
   const [activePreset, setActivePreset] = useState<string | null>("All time");
+
+  // Reset sub-filters when product changes
+  const changeProduct = (p: Product) => {
+    setProduct(p);
+    setSub(null);
+    setSubAccount(null);
+  };
+
+  const subAccountOptions = Array.from(
+    new Set(transactions.filter((t) => t.product === "Unit Trusts").map((t) => t.subAccount)),
+  );
 
   const presets = [
     { label: "Last 7 days", v: 7 as const },
@@ -127,8 +141,10 @@ function Transactions() {
         to.setHours(23, 59, 59, 999);
         if (txDate < from || txDate > to) return false;
       }
-      if (sub === "All") return true;
+      if (product === "Unit Trusts" && subAccount && tx.subAccount !== subAccount) return false;
+      if (!sub) return true;
       if (sub === "Pending") return tx.status === "Pending";
+      if (sub === "Confirmed" || sub === "Completed") return tx.status === "Confirmed";
       const allowedKinds = subToKinds[sub] ?? [];
       return allowedKinds.includes(tx.kind);
     })
@@ -147,7 +163,7 @@ function Transactions() {
         {productFilters.map((f) => (
           <button
             key={f}
-            onClick={() => setProduct(f)}
+            onClick={() => changeProduct(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               product === f
                 ? "bg-pill text-pill-foreground"
