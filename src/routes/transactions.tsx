@@ -238,7 +238,7 @@ function Transactions() {
           {/* Calendar */}
           <div
             className={cn(
-              "w-full mb-4 [&_[data-slot=calendar]]:bg-transparent",
+              "w-full -mx-5 mb-4 [&_[data-slot=calendar]]:bg-transparent",
               "[&_[data-range-start=true]]:!bg-pill [&_[data-range-start=true]]:!text-pill-foreground",
               "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-pill-foreground",
               "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-pill-foreground",
