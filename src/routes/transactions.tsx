@@ -3,7 +3,12 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { cn } from "@/lib/utils";
 import { useState } from "react";
+import { format } from "date-fns";
+import type { DateRange } from "react-day-picker";
 
 export const Route = createFileRoute("/transactions")({
   component: Transactions,
@@ -71,10 +76,40 @@ function Transactions() {
   const [product, setProduct] = useState<Product>("All");
   const sub = "All";
   const [openTx, setOpenTx] = useState<Tx | null>(null);
+  const [range, setRange] = useState<DateRange | undefined>();
+  const [dateOpen, setDateOpen] = useState(false);
+
+  const applyPreset = (days: number | "month" | "all") => {
+    if (days === "all") {
+      setRange(undefined);
+    } else if (days === "month") {
+      const now = new Date();
+      setRange({ from: new Date(now.getFullYear(), now.getMonth(), 1), to: now });
+    } else {
+      const to = new Date();
+      const from = new Date();
+      from.setDate(to.getDate() - days + 1);
+      setRange({ from, to });
+    }
+  };
+
+  const rangeLabel = range?.from
+    ? range.to && range.to.getTime() !== range.from.getTime()
+      ? `${format(range.from, "MMM d")} – ${format(range.to, "MMM d")}`
+      : format(range.from, "MMM d, yyyy")
+    : "Any date";
 
   const filtered = transactions
     .filter((tx) => {
       if (product !== "All" && tx.product !== product) return false;
+      if (range?.from) {
+        const txDate = new Date(tx.date);
+        const from = new Date(range.from);
+        from.setHours(0, 0, 0, 0);
+        const to = new Date(range.to ?? range.from);
+        to.setHours(23, 59, 59, 999);
+        if (txDate < from || txDate > to) return false;
+      }
       if (sub === "All") return true;
       if (sub === "Pending") return tx.status === "Pending";
       const allowedKinds = subToKinds[sub] ?? [];
@@ -105,6 +140,85 @@ function Transactions() {
             {f}
           </button>
         ))}
+      </div>
+
+      {/* Date Range Filter */}
+      <div className="flex items-center gap-2 px-4 mt-1">
+        <Popover open={dateOpen} onOpenChange={setDateOpen}>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className={cn(
+                "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition",
+                range?.from
+                  ? "bg-pill text-pill-foreground"
+                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
+              )}
+            >
+              <CalendarDays className="w-3.5 h-3.5" />
+              {rangeLabel}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent
+            align="start"
+            className="w-auto p-0 rounded-2xl border-none bg-[var(--surface-1)] shadow-2xl overflow-hidden"
+          >
+            <div className="flex flex-col gap-1 p-3 border-b border-white/[0.06]">
+              <div className="flex flex-wrap gap-1.5">
+                {[
+                  { label: "7 days", v: 7 as const },
+                  { label: "30 days", v: 30 as const },
+                  { label: "90 days", v: 90 as const },
+                  { label: "This month", v: "month" as const },
+                  { label: "All time", v: "all" as const },
+                ].map((p) => (
+                  <button
+                    key={p.label}
+                    type="button"
+                    onClick={() => applyPreset(p.v)}
+                    className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/[0.06] text-foreground hover:bg-white/[0.12] transition"
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+            <Calendar
+              mode="range"
+              selected={range}
+              onSelect={setRange}
+              numberOfMonths={1}
+              defaultMonth={range?.from ?? new Date()}
+              className={cn("p-3 pointer-events-auto")}
+            />
+            <div className="flex items-center justify-between gap-2 p-3 border-t border-white/[0.06]">
+              <button
+                type="button"
+                onClick={() => setRange(undefined)}
+                className="text-xs font-semibold text-muted-foreground hover:text-foreground transition"
+              >
+                Clear
+              </button>
+              <button
+                type="button"
+                onClick={() => setDateOpen(false)}
+                className="px-4 py-1.5 rounded-full text-xs font-semibold bg-pill text-pill-foreground"
+              >
+                Done
+              </button>
+            </div>
+          </PopoverContent>
+        </Popover>
+        {range?.from && (
+          <button
+            type="button"
+            onClick={() => setRange(undefined)}
+            aria-label="Clear date range"
+            className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
+          >
+            <X className="w-3.5 h-3.5" />
+          </button>
+        )}
       </div>
 
       {/* Transaction List */}
