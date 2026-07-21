@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat } from "lucide-react";
@@ -574,8 +574,29 @@ function Transactions() {
             </div>
           )}
 
-          <a
-            href="#"
+          <Link
+            to="/help/contact"
+            search={
+              openTx
+                ? {
+                    category:
+                      openTx.product === "Unit Trusts"
+                        ? "unit-trusts"
+                        : openTx.product === "Equities"
+                          ? "equities"
+                          : openTx.product === "Treasuries"
+                            ? "treasuries"
+                            : undefined,
+                    txId: `${openTx.name}-${openTx.date}`.replace(/\s+/g, "-").toLowerCase(),
+                    txName: openTx.name,
+                    txKind: openTx.kind,
+                    txDate: openTx.date,
+                    txValue: openTx.value,
+                    txStatus: openTx.status === "Completed" ? "Confirmed" : openTx.status,
+                    txSubAccount: openTx.subAccount,
+                  }
+                : {}
+            }
             className="rounded-2xl bg-white/[0.04] flex items-center gap-3 p-4"
           >
             <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
@@ -586,7 +607,7 @@ function Transactions() {
               <p className="text-xs text-muted-foreground truncate">We'll help you sort it out</p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground" />
-          </a>
+          </Link>
         </DrawerContent>
       </Drawer>
     </MobileLayout>

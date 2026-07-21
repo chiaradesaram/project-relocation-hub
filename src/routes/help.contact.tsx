@@ -398,6 +398,16 @@ const deactivateSchema = baseSchema.extend({
 });
 
 export const Route = createFileRoute("/help/contact")({
+  validateSearch: (search: Record<string, unknown>) => ({
+    category: (search.category as CategoryId | undefined) ?? undefined,
+    txId: (search.txId as string | undefined) ?? undefined,
+    txName: (search.txName as string | undefined) ?? undefined,
+    txKind: (search.txKind as string | undefined) ?? undefined,
+    txDate: (search.txDate as string | undefined) ?? undefined,
+    txValue: (search.txValue as string | undefined) ?? undefined,
+    txStatus: (search.txStatus as "Pending" | "Confirmed" | undefined) ?? undefined,
+    txSubAccount: (search.txSubAccount as string | undefined) ?? undefined,
+  }),
   head: () => ({
     meta: [
       { title: "Contact Support — CAL Invest" },
@@ -408,6 +418,7 @@ export const Route = createFileRoute("/help/contact")({
 });
 
 function ContactForm() {
+  const search = Route.useSearch();
   const [categoryId, setCategoryId] = useState<CategoryId | "">("");
   const [subId, setSubId] = useState("");
   const [productId, setProductId] = useState("");
@@ -498,6 +509,41 @@ function ContactForm() {
   useEffect(() => {
     setSelectedTxId(null);
   }, [productId]);
+
+  // Pre-fill from search params (e.g. deep-link from a transaction bottom sheet)
+  useEffect(() => {
+    if (search.category && !categoryId) {
+      setCategoryId(search.category);
+    }
+    if (search.txId) {
+      setSelectedTxId(search.txId);
+    }
+    // Intentionally run only when search changes
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [search.category, search.txId]);
+
+  const extraTx: RecentTx | null = useMemo(() => {
+    if (!search.txId || !search.txName) return null;
+    const productMap: Record<string, string> = {
+      "Unit Trusts": "unit-trusts",
+      Equities: "equities",
+      Treasuries: "treasuries",
+    };
+    return {
+      id: search.txId,
+      name: search.txName,
+      product:
+        (search.category as string) ??
+        productMap[(search.txKind as string) ?? ""] ??
+        "unit-trusts",
+      kind: search.txKind ?? "Investment",
+      date: search.txDate ?? "",
+      reflectDate: search.txDate ?? "",
+      value: search.txValue ?? "",
+      status: search.txStatus,
+      subAccount: search.txSubAccount,
+    };
+  }, [search]);
 
   const isTxFlow =
     sub?.id === "investment-not-reflected" ||
@@ -701,6 +747,7 @@ function ContactForm() {
                 subId={sub.id}
                 productId={productId}
                 selectedTxId={selectedTxId}
+                extraTx={extraTx}
                 onSelect={(id) => {
                   setSelectedTxId(id);
                   setShowForm(true);
@@ -1239,6 +1286,7 @@ function RecentTransactionsPicker({
   subId,
   productId,
   selectedTxId,
+  extraTx,
   onSelect,
   onNotListed,
   notListedSelected,
@@ -1246,14 +1294,19 @@ function RecentTransactionsPicker({
   subId: string;
   productId: string;
   selectedTxId: string | null;
+  extraTx?: RecentTx | null;
   onSelect: (id: string) => void;
   onNotListed: () => void;
   notListedSelected?: boolean;
 }) {
-  const txs = RECENT_TXS
+  const baseTxs = RECENT_TXS
     .filter((t) => !productId || t.product === productId)
     .filter((t) => (subId === "investment-not-reflected" ? t.status === "Pending" : true))
     .slice(0, 3);
+  const txs =
+    extraTx && !baseTxs.some((t) => t.id === extraTx.id)
+      ? [extraTx, ...baseTxs].slice(0, 4)
+      : baseTxs;
   const selectedTx = txs.find((t) => t.id === selectedTxId) ?? null;
   return (
     <div className="rounded-xl border border-border/40 bg-card/60 p-3">
