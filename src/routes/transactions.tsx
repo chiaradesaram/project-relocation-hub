@@ -39,6 +39,7 @@ type Tx = {
   reflectedDate?: string;
   units?: number;
   unitPrice?: string;
+  trades?: { time: string; side: "Buy" | "Sell"; shares: number; price: string }[];
 };
 
 const transactions: Tx[] = [
@@ -53,8 +54,25 @@ const transactions: Tx[] = [
   { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50" },
   { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40" },
   { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
-  { name: "LOLC.N0000 · Buy", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS", date: "Apr 10, 2026", value: "LKR 42,000", positive: false, status: "Confirmed", createdDate: "Apr 10, 2026 · 10:15", reflectedDate: "Apr 10, 2026" },
-  { name: "SAMP.N0000 · Sell", product: "Equities", kind: "Stock Sell", subAccount: "Personal · CDS", date: "Apr 7, 2026", value: "LKR 30,500", positive: true, status: "Confirmed", createdDate: "Apr 7, 2026 · 11:42", reflectedDate: "Apr 7, 2026" },
+  {
+    name: "LOLC.N0000", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS",
+    date: "Apr 10, 2026", value: "LKR 42,000", positive: false, status: "Confirmed",
+    createdDate: "Apr 10, 2026 · 10:15", reflectedDate: "Apr 10, 2026",
+    trades: [
+      { time: "09:32", side: "Buy", shares: 100, price: "LKR 140.00" },
+      { time: "10:15", side: "Buy", shares: 150, price: "LKR 141.50" },
+      { time: "13:47", side: "Buy", shares: 50, price: "LKR 142.00" },
+    ],
+  },
+  {
+    name: "SAMP.N0000", product: "Equities", kind: "Stock Sell", subAccount: "Personal · CDS",
+    date: "Apr 7, 2026", value: "LKR 30,500", positive: true, status: "Confirmed",
+    createdDate: "Apr 7, 2026 · 11:42", reflectedDate: "Apr 7, 2026",
+    trades: [
+      { time: "10:04", side: "Sell", shares: 200, price: "LKR 76.00" },
+      { time: "11:42", side: "Sell", shares: 200, price: "LKR 76.50" },
+    ],
+  },
 ];
 
 const subToKinds: Record<string, string[]> = {
@@ -402,7 +420,14 @@ function Transactions() {
                 </>
               ) : (
                 <>
-                  <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
+                    {tx.trades && tx.trades.length > 1 && (
+                      <span className="shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-pill/20 text-pill">
+                        {tx.trades.length} transactions
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
                   </p>
@@ -487,6 +512,28 @@ function Transactions() {
               <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
             </div>
           </div>
+
+          {openTx?.trades && openTx.trades.length > 0 && (
+            <div className="rounded-2xl bg-white/[0.04] mb-4 overflow-hidden">
+              <div className="px-4 pt-4 pb-2 flex items-center justify-between">
+                <p className="text-sm font-semibold text-foreground">Trades on {openTx.date}</p>
+                <span className="text-[11px] text-muted-foreground">{openTx.trades.length} total</span>
+              </div>
+              <div className="divide-y divide-white/[0.06]">
+                {openTx.trades.map((t, idx) => (
+                  <div key={idx} className="p-4 flex items-center justify-between gap-3">
+                    <div className="min-w-0">
+                      <p className="text-sm font-medium text-foreground">
+                        {t.side} · {t.shares.toLocaleString()} shares
+                      </p>
+                      <p className="text-[12px] text-muted-foreground/80 mt-0.5">{t.time}</p>
+                    </div>
+                    <p className="text-sm font-semibold text-foreground shrink-0">{t.price}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
           <a
             href="#"
