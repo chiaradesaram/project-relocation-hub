@@ -445,12 +445,7 @@ function Transactions() {
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
-                    {tx.kind === "Fund Flip" && (
-                      <>
-                        <Repeat className="w-3 h-3 text-success" />
-                        <span>fund flip ·</span>
-                      </>
-                    )}
+                    {tx.kind === "Fund Flip" && <span>fund flip ·</span>}
                     <span>{tx.date}</span>
                   </p>
                 </>
