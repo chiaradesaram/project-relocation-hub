@@ -484,7 +484,8 @@ function Transactions() {
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
               <div className="w-8 h-8 rounded-full bg-pill/20 flex items-center justify-center text-pill shrink-0">
-                {openTx?.product === "Unit Trusts" && <PieChart className="w-4 h-4" />}
+                {openTx?.product === "Unit Trusts" && openTx?.kind !== "Fund Flip" && <PieChart className="w-4 h-4" />}
+                {openTx?.kind === "Fund Flip" && <Repeat className="w-4 h-4" />}
                 {openTx?.product === "Equities" && <BarChart3 className="w-4 h-4" />}
                 {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
               </div>
@@ -504,7 +505,16 @@ function Transactions() {
           </DrawerHeader>
 
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-4">
-            {openTx?.fund && (
+            {openTx?.kind === "Fund Flip" ? (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Fund flip</p>
+                <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
+                  <span className="truncate">{openTx?.fromFund}</span>
+                  <Repeat className="w-3.5 h-3.5 text-pill shrink-0" />
+                  <span className="truncate">{openTx?.toFund}</span>
+                </div>
+              </div>
+            ) : openTx?.fund && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Fund</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.fund}</p>
@@ -528,6 +538,12 @@ function Transactions() {
               <p className="text-sm font-semibold text-foreground">Created date</p>
               <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
             </div>
+            {openTx?.kind === "Fund Flip" && (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Redeem from fund by</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.redeemByDate ?? "—"}</p>
+              </div>
+            )}
             <div className="p-4">
               <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
               <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
