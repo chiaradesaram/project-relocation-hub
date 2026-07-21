@@ -39,6 +39,7 @@ type Tx = {
   reflectedDate?: string;
   units?: number;
   unitPrice?: string;
+  trades?: { time: string; side: "Buy" | "Sell"; shares: number; price: string }[];
 };
 
 const transactions: Tx[] = [
@@ -53,8 +54,25 @@ const transactions: Tx[] = [
   { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50" },
   { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40" },
   { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
-  { name: "LOLC.N0000 · Buy", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS", date: "Apr 10, 2026", value: "LKR 42,000", positive: false, status: "Confirmed", createdDate: "Apr 10, 2026 · 10:15", reflectedDate: "Apr 10, 2026" },
-  { name: "SAMP.N0000 · Sell", product: "Equities", kind: "Stock Sell", subAccount: "Personal · CDS", date: "Apr 7, 2026", value: "LKR 30,500", positive: true, status: "Confirmed", createdDate: "Apr 7, 2026 · 11:42", reflectedDate: "Apr 7, 2026" },
+  {
+    name: "LOLC.N0000", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS",
+    date: "Apr 10, 2026", value: "LKR 42,000", positive: false, status: "Confirmed",
+    createdDate: "Apr 10, 2026 · 10:15", reflectedDate: "Apr 10, 2026",
+    trades: [
+      { time: "09:32", side: "Buy", shares: 100, price: "LKR 140.00" },
+      { time: "10:15", side: "Buy", shares: 150, price: "LKR 141.50" },
+      { time: "13:47", side: "Buy", shares: 50, price: "LKR 142.00" },
+    ],
+  },
+  {
+    name: "SAMP.N0000", product: "Equities", kind: "Stock Sell", subAccount: "Personal · CDS",
+    date: "Apr 7, 2026", value: "LKR 30,500", positive: true, status: "Confirmed",
+    createdDate: "Apr 7, 2026 · 11:42", reflectedDate: "Apr 7, 2026",
+    trades: [
+      { time: "10:04", side: "Sell", shares: 200, price: "LKR 76.00" },
+      { time: "11:42", side: "Sell", shares: 200, price: "LKR 76.50" },
+    ],
+  },
 ];
 
 const subToKinds: Record<string, string[]> = {
