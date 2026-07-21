@@ -412,12 +412,18 @@ function Transactions() {
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
                 tx.status === "Pending"
                   ? "bg-warning/15"
-                  : tx.positive
+                  : tx.kind === "Fund Flip"
+                    ? "bg-pill/20"
+                    : tx.positive
                     ? "bg-success/20"
                     : "bg-muted/40"
               }`}
             >
-              <StatusIcon status={tx.status} positive={tx.positive} />
+              {tx.kind === "Fund Flip" ? (
+                <Repeat className="w-4 h-4 text-pill" />
+              ) : (
+                <StatusIcon status={tx.status} positive={tx.positive} />
+              )}
             </div>
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
@@ -438,7 +444,15 @@ function Transactions() {
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
                   </p>
-                  <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
+                  <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
+                    {tx.kind === "Fund Flip" && (
+                      <>
+                        <Repeat className="w-3 h-3" />
+                        <span>fund flip ·</span>
+                      </>
+                    )}
+                    <span>{tx.date}</span>
+                  </p>
                 </>
               )}
             </div>
