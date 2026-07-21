@@ -395,11 +395,20 @@ function Transactions() {
               <StatusIcon status={tx.status} positive={tx.positive} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
-              <p className="text-xs text-muted-foreground truncate mt-0.5">
-                {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
-              </p>
-              <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
+              {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
+                <>
+                  <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
+                  <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
+                  <p className="text-xs text-muted-foreground truncate mt-0.5">
+                    {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
+                </>
+              )}
             </div>
             <div className="text-right shrink-0">
               <p className={`text-sm font-semibold ${tx.positive ? "text-emerald-300" : "text-foreground"}`}>
