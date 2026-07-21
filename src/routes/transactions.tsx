@@ -91,13 +91,24 @@ const subToKinds: Record<string, string[]> = {
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") {
-    return positive
-      ? <TrendingUp className="w-4 h-4 text-warning" />
-      : <TrendingDown className="w-4 h-4 text-warning" />;
-  }
-  if (status === "Completed") return <Check className="w-4 h-4 text-success" strokeWidth={3} />;
-  return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
+  void status;
+  return positive
+    ? <TrendingUp className="w-4 h-4 text-success" />
+    : <TrendingDown className="w-4 h-4 text-foreground" />;
+}
+
+function StatusPill({ status }: { status: Status }) {
+  const styles =
+    status === "Pending"
+      ? "bg-white/[0.08] text-muted-foreground"
+      : status === "Completed"
+        ? "bg-success/15 text-success"
+        : "bg-success/15 text-success";
+  return (
+    <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold ${styles}`}>
+      {status}
+    </span>
+  );
 }
 
 function Transactions() {
@@ -414,13 +425,11 @@ function Transactions() {
           >
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                tx.status === "Pending"
-                  ? "bg-warning/15"
-                  : tx.kind === "Fund Flip"
+                tx.kind === "Fund Flip"
+                  ? "bg-success/20"
+                  : tx.positive
                     ? "bg-success/20"
-                    : tx.positive
-                    ? "bg-success/20"
-                    : "bg-muted/40"
+                    : "bg-white/[0.06]"
               }`}
             >
               {tx.kind === "Fund Flip" ? (
@@ -432,7 +441,10 @@ function Transactions() {
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
                 <>
-                  <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
+                    <StatusPill status={tx.status} />
+                  </div>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
                 </>
               ) : (
@@ -444,6 +456,7 @@ function Transactions() {
                         {tx.trades.length} transactions
                       </span>
                     )}
+                    <StatusPill status={tx.status} />
                   </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
@@ -457,11 +470,7 @@ function Transactions() {
             </div>
             <div className="text-right shrink-0">
               <p className={`text-sm font-semibold ${
-                tx.status === "Pending"
-                  ? "text-warning"
-                  : tx.positive
-                    ? "text-emerald-300"
-                    : "text-foreground"
+                tx.positive ? "text-emerald-300" : "text-foreground"
               }`}>
                 {tx.positive ? "+" : "−"} {tx.value}
               </p>
@@ -497,24 +506,11 @@ function Transactions() {
                 {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
               </div>
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
-              <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
-                openTx?.status === "Pending"
-                  ? "bg-warning/15 text-warning"
-                  : "bg-success/20 text-success"
-              }`}>
-                {openTx?.status === "Pending" ? (
-                  openTx?.positive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />
-                ) : (
-                  <Check className="w-3 h-3" strokeWidth={3} />
-                )}
-                {openTx?.status}
-              </div>
+              {openTx && <StatusPill status={openTx.status} />}
             </div>
             <DrawerDescription>
               {openTx?.product} · {openTx?.subAccount} ·{" "}
-              <span className={openTx?.status === "Pending" ? "text-warning" : ""}>
-                {openTx?.positive ? "+" : "−"} {openTx?.value}
-              </span>
+              <span>{openTx?.positive ? "+" : "−"} {openTx?.value}</span>
             </DrawerDescription>
           </DrawerHeader>
 
