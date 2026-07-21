@@ -201,24 +201,17 @@ function Transactions() {
             </button>
           </div>
 
-          {/* From / To display */}
-          <div className="grid grid-cols-2 gap-3 mb-4">
-            <div className="rounded-2xl bg-white/[0.04] p-4">
-              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">From</p>
-              <p className="text-lg font-semibold text-foreground mt-1">
-                {draftRange?.from ? format(draftRange.from, "MMM d, yyyy") : "—"}
-              </p>
-            </div>
-            <div className="rounded-2xl bg-white/[0.04] p-4">
-              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">To</p>
-              <p className="text-lg font-semibold text-foreground mt-1">
-                {draftRange?.to ? format(draftRange.to, "MMM d, yyyy") : draftRange?.from ? "Pick end date" : "—"}
-              </p>
-            </div>
-          </div>
+          {/* Selected range summary */}
+          <p className="text-sm text-muted-foreground mb-4">
+            {draftRange?.from
+              ? draftRange.to && draftRange.to.getTime() !== draftRange.from.getTime()
+                ? `${format(draftRange.from, "MMM d, yyyy")} – ${format(draftRange.to, "MMM d, yyyy")}`
+                : `${format(draftRange.from, "MMM d, yyyy")} – Pick end date`
+              : "All transactions"}
+          </p>
 
           {/* Preset chips */}
-          <div className="flex flex-wrap gap-2 mb-4">
+          <div className="flex flex-wrap gap-2 mb-5">
             {presets.map((p) => {
               const isActive = activePreset === p.label;
               return (
@@ -230,10 +223,10 @@ function Transactions() {
                     setDraftRange(computePreset(p.v));
                   }}
                   className={cn(
-                    "px-3 py-1.5 rounded-full text-xs font-semibold transition",
+                    "px-3 py-1.5 rounded-full text-xs font-medium transition",
                     isActive
-                      ? "bg-pill text-pill-foreground"
-                      : "bg-white/[0.06] text-foreground hover:bg-white/[0.12]",
+                      ? "bg-foreground text-background"
+                      : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
                   )}
                 >
                   {p.label}
@@ -243,19 +236,17 @@ function Transactions() {
           </div>
 
           {/* Calendar */}
-          <div className="rounded-2xl bg-white/[0.04] mb-4 overflow-hidden">
-            <Calendar
-              mode="range"
-              selected={draftRange}
-              onSelect={(r) => {
-                setDraftRange(r);
-                setActivePreset(null);
-              }}
-              numberOfMonths={1}
-              defaultMonth={draftRange?.from ?? new Date()}
-              className={cn("p-3 pointer-events-auto mx-auto")}
-            />
-          </div>
+          <Calendar
+            mode="range"
+            selected={draftRange}
+            onSelect={(r) => {
+              setDraftRange(r);
+              setActivePreset(null);
+            }}
+            numberOfMonths={1}
+            defaultMonth={draftRange?.from ?? new Date()}
+            className={cn("pointer-events-auto mx-auto mb-4")}
+          />
 
           <div className="flex items-center gap-3">
             <button
@@ -264,16 +255,16 @@ function Transactions() {
                 setDraftRange(undefined);
                 setActivePreset("All time");
               }}
-              className="flex-1 py-3 rounded-full text-sm font-semibold bg-white/[0.06] text-foreground hover:bg-white/[0.1] transition"
+              className="flex-1 py-3 rounded-full text-sm font-medium bg-white/[0.06] text-foreground hover:bg-white/[0.1] transition"
             >
               Reset
             </button>
             <button
               type="button"
               onClick={applyDraft}
-              className="flex-[2] py-3 rounded-full text-sm font-semibold bg-pill text-pill-foreground"
+              className="flex-[2] py-3 rounded-full text-sm font-semibold bg-foreground text-background"
             >
-              Show results
+              Apply
             </button>
           </div>
         </DrawerContent>
