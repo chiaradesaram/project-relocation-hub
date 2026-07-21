@@ -506,24 +506,11 @@ function Transactions() {
                 {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
               </div>
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
-              <div className={`flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-medium ${
-                openTx?.status === "Pending"
-                  ? "bg-warning/15 text-warning"
-                  : "bg-success/20 text-success"
-              }`}>
-                {openTx?.status === "Pending" ? (
-                  openTx?.positive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />
-                ) : (
-                  <Check className="w-3 h-3" strokeWidth={3} />
-                )}
-                {openTx?.status}
-              </div>
+              {openTx && <StatusPill status={openTx.status} />}
             </div>
             <DrawerDescription>
               {openTx?.product} · {openTx?.subAccount} ·{" "}
-              <span className={openTx?.status === "Pending" ? "text-warning" : ""}>
-                {openTx?.positive ? "+" : "−"} {openTx?.value}
-              </span>
+              <span>{openTx?.positive ? "+" : "−"} {openTx?.value}</span>
             </DrawerDescription>
           </DrawerHeader>
 
