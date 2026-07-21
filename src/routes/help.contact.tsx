@@ -503,7 +503,12 @@ function ContactForm() {
   useEffect(() => {
     setShowForm(false);
     setStepId("");
-    setSelectedTxId(null);
+    if (!search.txId) {
+      setSelectedTxId(null);
+    } else {
+      setSelectedTxId(search.txId);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [subId]);
 
   useEffect(() => {
