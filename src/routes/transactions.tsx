@@ -413,14 +413,14 @@ function Transactions() {
                 tx.status === "Pending"
                   ? "bg-warning/15"
                   : tx.kind === "Fund Flip"
-                    ? "bg-pill/20"
+                    ? "bg-success/20"
                     : tx.positive
                     ? "bg-success/20"
                     : "bg-muted/40"
               }`}
             >
               {tx.kind === "Fund Flip" ? (
-                <Repeat className="w-4 h-4 text-pill" />
+                <Repeat className="w-4 h-4 text-success" />
               ) : (
                 <StatusIcon status={tx.status} positive={tx.positive} />
               )}
@@ -447,7 +447,7 @@ function Transactions() {
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
                     {tx.kind === "Fund Flip" && (
                       <>
-                        <Repeat className="w-3 h-3" />
+                        <Repeat className="w-3 h-3 text-success" />
                         <span>fund flip ·</span>
                       </>
                     )}
@@ -483,7 +483,9 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              <div className="w-8 h-8 rounded-full bg-pill/20 flex items-center justify-center text-pill shrink-0">
+              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
+                openTx?.kind === "Fund Flip" ? "bg-success/20 text-success" : "bg-pill/20 text-pill"
+              }`}>
                 {openTx?.product === "Unit Trusts" && openTx?.kind !== "Fund Flip" && <PieChart className="w-4 h-4" />}
                 {openTx?.kind === "Fund Flip" && <Repeat className="w-4 h-4" />}
                 {openTx?.product === "Equities" && <BarChart3 className="w-4 h-4" />}
@@ -510,7 +512,7 @@ function Transactions() {
                 <p className="text-sm font-semibold text-foreground">Fund flip</p>
                 <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="truncate">{openTx?.fromFund}</span>
-                  <Repeat className="w-3.5 h-3.5 text-pill shrink-0" />
+                  <Repeat className="w-3.5 h-3.5 text-success shrink-0" />
                   <span className="truncate">{openTx?.toFund}</span>
                 </div>
               </div>
