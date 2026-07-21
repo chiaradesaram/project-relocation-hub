@@ -3,7 +3,6 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
@@ -78,19 +77,37 @@ function Transactions() {
   const [openTx, setOpenTx] = useState<Tx | null>(null);
   const [range, setRange] = useState<DateRange | undefined>();
   const [dateOpen, setDateOpen] = useState(false);
+  const [draftRange, setDraftRange] = useState<DateRange | undefined>();
+  const [activePreset, setActivePreset] = useState<string | null>("All time");
 
-  const applyPreset = (days: number | "month" | "all") => {
-    if (days === "all") {
-      setRange(undefined);
-    } else if (days === "month") {
+  const presets = [
+    { label: "Last 7 days", v: 7 as const },
+    { label: "Last 30 days", v: 30 as const },
+    { label: "Last 90 days", v: 90 as const },
+    { label: "This month", v: "month" as const },
+    { label: "All time", v: "all" as const },
+  ];
+
+  const computePreset = (v: number | "month" | "all"): DateRange | undefined => {
+    if (v === "all") return undefined;
+    if (v === "month") {
       const now = new Date();
-      setRange({ from: new Date(now.getFullYear(), now.getMonth(), 1), to: now });
-    } else {
-      const to = new Date();
-      const from = new Date();
-      from.setDate(to.getDate() - days + 1);
-      setRange({ from, to });
+      return { from: new Date(now.getFullYear(), now.getMonth(), 1), to: now };
     }
+    const to = new Date();
+    const from = new Date();
+    from.setDate(to.getDate() - v + 1);
+    return { from, to };
+  };
+
+  const openDatePicker = () => {
+    setDraftRange(range);
+    setDateOpen(true);
+  };
+
+  const applyDraft = () => {
+    setRange(draftRange);
+    setDateOpen(false);
   };
 
   const rangeLabel = range?.from
@@ -144,75 +161,23 @@ function Transactions() {
 
       {/* Date Range Filter */}
       <div className="flex items-center gap-2 px-4 mt-1">
-        <Popover open={dateOpen} onOpenChange={setDateOpen}>
-          <PopoverTrigger asChild>
-            <button
-              type="button"
-              className={cn(
-                "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition",
-                range?.from
-                  ? "bg-pill text-pill-foreground"
-                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
-              )}
-            >
-              <CalendarDays className="w-3.5 h-3.5" />
-              {rangeLabel}
-            </button>
-          </PopoverTrigger>
-          <PopoverContent
-            align="start"
-            className="w-auto p-0 rounded-2xl border-none bg-[var(--surface-1)] shadow-2xl overflow-hidden"
-          >
-            <div className="flex flex-col gap-1 p-3 border-b border-white/[0.06]">
-              <div className="flex flex-wrap gap-1.5">
-                {[
-                  { label: "7 days", v: 7 as const },
-                  { label: "30 days", v: 30 as const },
-                  { label: "90 days", v: 90 as const },
-                  { label: "This month", v: "month" as const },
-                  { label: "All time", v: "all" as const },
-                ].map((p) => (
-                  <button
-                    key={p.label}
-                    type="button"
-                    onClick={() => applyPreset(p.v)}
-                    className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-white/[0.06] text-foreground hover:bg-white/[0.12] transition"
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-            <Calendar
-              mode="range"
-              selected={range}
-              onSelect={setRange}
-              numberOfMonths={1}
-              defaultMonth={range?.from ?? new Date()}
-              className={cn("p-3 pointer-events-auto")}
-            />
-            <div className="flex items-center justify-between gap-2 p-3 border-t border-white/[0.06]">
-              <button
-                type="button"
-                onClick={() => setRange(undefined)}
-                className="text-xs font-semibold text-muted-foreground hover:text-foreground transition"
-              >
-                Clear
-              </button>
-              <button
-                type="button"
-                onClick={() => setDateOpen(false)}
-                className="px-4 py-1.5 rounded-full text-xs font-semibold bg-pill text-pill-foreground"
-              >
-                Done
-              </button>
-            </div>
-          </PopoverContent>
-        </Popover>
+        <button
+          type="button"
+          onClick={openDatePicker}
+          className={cn(
+            "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition",
+            range?.from
+              ? "bg-pill text-pill-foreground"
+              : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
+          )}
+        >
+          <CalendarDays className="w-3.5 h-3.5" />
+          {rangeLabel}
+        </button>
         {range?.from && (
           <button
             type="button"
-            onClick={() => setRange(undefined)}
+            onClick={() => { setRange(undefined); setActivePreset("All time"); }}
             aria-label="Clear date range"
             className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
           >
@@ -220,6 +185,99 @@ function Transactions() {
           </button>
         )}
       </div>
+
+      {/* Wise-style Date Range Picker Drawer */}
+      <Drawer open={dateOpen} onOpenChange={setDateOpen}>
+        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6 max-h-[92vh]">
+          <div className="flex items-center justify-between pt-2 pb-3">
+            <DrawerTitle className="text-lg font-semibold">Filter by date</DrawerTitle>
+            <button
+              type="button"
+              onClick={() => setDateOpen(false)}
+              aria-label="Close"
+              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+
+          {/* From / To display */}
+          <div className="grid grid-cols-2 gap-3 mb-4">
+            <div className="rounded-2xl bg-white/[0.04] p-4">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">From</p>
+              <p className="text-lg font-semibold text-foreground mt-1">
+                {draftRange?.from ? format(draftRange.from, "MMM d, yyyy") : "—"}
+              </p>
+            </div>
+            <div className="rounded-2xl bg-white/[0.04] p-4">
+              <p className="text-[11px] font-medium text-muted-foreground uppercase tracking-wide">To</p>
+              <p className="text-lg font-semibold text-foreground mt-1">
+                {draftRange?.to ? format(draftRange.to, "MMM d, yyyy") : draftRange?.from ? "Pick end date" : "—"}
+              </p>
+            </div>
+          </div>
+
+          {/* Preset chips */}
+          <div className="flex flex-wrap gap-2 mb-4">
+            {presets.map((p) => {
+              const isActive = activePreset === p.label;
+              return (
+                <button
+                  key={p.label}
+                  type="button"
+                  onClick={() => {
+                    setActivePreset(p.label);
+                    setDraftRange(computePreset(p.v));
+                  }}
+                  className={cn(
+                    "px-3 py-1.5 rounded-full text-xs font-semibold transition",
+                    isActive
+                      ? "bg-pill text-pill-foreground"
+                      : "bg-white/[0.06] text-foreground hover:bg-white/[0.12]",
+                  )}
+                >
+                  {p.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Calendar */}
+          <div className="rounded-2xl bg-white/[0.04] mb-4 overflow-hidden">
+            <Calendar
+              mode="range"
+              selected={draftRange}
+              onSelect={(r) => {
+                setDraftRange(r);
+                setActivePreset(null);
+              }}
+              numberOfMonths={1}
+              defaultMonth={draftRange?.from ?? new Date()}
+              className={cn("p-3 pointer-events-auto mx-auto")}
+            />
+          </div>
+
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => {
+                setDraftRange(undefined);
+                setActivePreset("All time");
+              }}
+              className="flex-1 py-3 rounded-full text-sm font-semibold bg-white/[0.06] text-foreground hover:bg-white/[0.1] transition"
+            >
+              Reset
+            </button>
+            <button
+              type="button"
+              onClick={applyDraft}
+              className="flex-[2] py-3 rounded-full text-sm font-semibold bg-pill text-pill-foreground"
+            >
+              Show results
+            </button>
+          </div>
+        </DrawerContent>
+      </Drawer>
 
       {/* Transaction List */}
       <div className="px-4 mt-3 space-y-2">
