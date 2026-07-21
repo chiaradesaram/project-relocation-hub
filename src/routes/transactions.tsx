@@ -92,6 +92,7 @@ const subToKinds: Record<string, string[]> = {
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
   if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
+  if (status === "Completed") return <Check className="w-4 h-4 text-success" strokeWidth={3} />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
 
@@ -167,7 +168,8 @@ function Transactions() {
       if (product === "Unit Trusts" && subAccount && tx.subAccount !== subAccount) return false;
       if (!sub) return true;
       if (sub === "Pending") return tx.status === "Pending";
-      if (sub === "Confirmed" || sub === "Completed") return tx.status === "Confirmed";
+      if (sub === "Confirmed") return tx.status === "Confirmed";
+      if (sub === "Completed") return tx.status === "Completed";
       const allowedKinds = subToKinds[sub] ?? [];
       return allowedKinds.includes(tx.kind);
     })
