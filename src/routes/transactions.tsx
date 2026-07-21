@@ -91,13 +91,24 @@ const subToKinds: Record<string, string[]> = {
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") {
-    return positive
-      ? <TrendingUp className="w-4 h-4 text-warning" />
-      : <TrendingDown className="w-4 h-4 text-warning" />;
-  }
-  if (status === "Completed") return <Check className="w-4 h-4 text-success" strokeWidth={3} />;
-  return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
+  void status;
+  return positive
+    ? <TrendingUp className="w-4 h-4 text-success" />
+    : <TrendingDown className="w-4 h-4 text-foreground" />;
+}
+
+function StatusPill({ status }: { status: Status }) {
+  const styles =
+    status === "Pending"
+      ? "bg-white/[0.08] text-muted-foreground"
+      : status === "Completed"
+        ? "bg-success/15 text-success"
+        : "bg-success/15 text-success";
+  return (
+    <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold ${styles}`}>
+      {status}
+    </span>
+  );
 }
 
 function Transactions() {
