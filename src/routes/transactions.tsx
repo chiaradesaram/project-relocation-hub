@@ -456,7 +456,13 @@ function Transactions() {
               )}
             </div>
             <div className="text-right shrink-0">
-              <p className={`text-sm font-semibold ${tx.positive ? "text-emerald-300" : "text-foreground"}`}>
+              <p className={`text-sm font-semibold ${
+                tx.status === "Pending"
+                  ? "text-warning"
+                  : tx.positive
+                    ? "text-emerald-300"
+                    : "text-foreground"
+              }`}>
                 {tx.positive ? "+" : "−"} {tx.value}
               </p>
             </div>
@@ -505,7 +511,10 @@ function Transactions() {
               </div>
             </div>
             <DrawerDescription>
-              {openTx?.product} · {openTx?.subAccount} · {openTx?.positive ? "+" : "−"} {openTx?.value}
+              {openTx?.product} · {openTx?.subAccount} ·{" "}
+              <span className={openTx?.status === "Pending" ? "text-warning" : ""}>
+                {openTx?.positive ? "+" : "−"} {openTx?.value}
+              </span>
             </DrawerDescription>
           </DrawerHeader>
 
