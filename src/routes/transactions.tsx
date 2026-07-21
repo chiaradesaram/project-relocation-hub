@@ -254,15 +254,17 @@ function Transactions() {
               }}
               numberOfMonths={1}
               defaultMonth={draftRange?.from ?? new Date()}
-              className="pointer-events-auto w-full bg-transparent p-0"
+              className="pointer-events-auto w-full bg-transparent p-0 [--cell-size:3rem]"
               classNames={{
                 root: "w-full",
                 months: "w-full",
-                month: "w-full",
-                table: "w-full border-collapse",
-                week: "mt-2 flex w-full",
-                day: "w-full",
-                day_button: "w-full !min-w-0",
+                month: "w-full gap-3",
+                month_caption: "flex h-9 w-full items-center justify-center",
+                nav: "absolute inset-x-0 top-0 flex w-full items-center justify-between",
+                weekdays: "flex w-full",
+                weekday: "text-muted-foreground flex-1 select-none text-[0.8rem] font-normal",
+                week: "mt-1 flex w-full",
+                day: "group/day relative flex-1 aspect-square select-none p-0 text-center",
               }}
             />
           </div>
