@@ -420,7 +420,14 @@ function Transactions() {
                 </>
               ) : (
                 <>
-                  <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium text-foreground truncate">{tx.name}</p>
+                    {tx.trades && tx.trades.length > 1 && (
+                      <span className="shrink-0 px-1.5 py-0.5 rounded-full text-[10px] font-semibold bg-pill/20 text-pill">
+                        {tx.trades.length} transactions
+                      </span>
+                    )}
+                  </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
                   </p>
