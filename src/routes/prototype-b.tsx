@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Check, Clock } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 
 export const Route = createFileRoute("/prototype-b")({
   head: () => ({
@@ -48,13 +48,13 @@ function PrototypeB() {
           <div key={i} className="glass-card p-4 flex items-start gap-3 w-full">
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                tx.positive ? "bg-success/20" : "bg-white/[0.06]"
+                tx.status === "Pending" ? "bg-warning/20" : "bg-success/20"
               }`}
             >
-              {tx.positive ? (
-                <TrendingUp className="w-4 h-4 text-success" />
+              {tx.status === "Pending" ? (
+                <Clock className="w-4 h-4 text-warning" aria-label="Pending" />
               ) : (
-                <TrendingDown className="w-4 h-4 text-foreground" />
+                <Check className="w-4 h-4 text-success" strokeWidth={3} aria-label="Confirmed" />
               )}
             </div>
 
@@ -66,15 +66,10 @@ function PrototypeB() {
               <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
             </div>
 
-            <div className="flex flex-col items-end gap-1 shrink-0">
+            <div className="shrink-0">
               <p className={`text-sm font-semibold ${tx.positive ? "text-emerald-300" : "text-foreground"}`}>
                 {tx.positive ? "+" : "−"} {tx.value}
               </p>
-              {tx.status === "Pending" ? (
-                <Clock className="w-3.5 h-3.5 text-muted-foreground" aria-label="Pending" />
-              ) : (
-                <Check className="w-3.5 h-3.5 text-success" strokeWidth={3} aria-label="Confirmed" />
-              )}
             </div>
           </div>
         ))}
