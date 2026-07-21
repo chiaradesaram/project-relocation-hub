@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat } from "lucide-react";
+import { TrendingUp, TrendingDown, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -91,7 +91,11 @@ const subToKinds: Record<string, string[]> = {
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
+  if (status === "Pending") {
+    return positive
+      ? <TrendingUp className="w-4 h-4 text-warning" />
+      : <TrendingDown className="w-4 h-4 text-warning" />;
+  }
   if (status === "Completed") return <Check className="w-4 h-4 text-success" strokeWidth={3} />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
@@ -492,7 +496,11 @@ function Transactions() {
                   ? "bg-warning/15 text-warning"
                   : "bg-success/20 text-success"
               }`}>
-                {openTx?.status === "Pending" ? <Clock className="w-3 h-3" /> : <Check className="w-3 h-3" strokeWidth={3} />}
+                {openTx?.status === "Pending" ? (
+                  openTx?.positive ? <TrendingUp className="w-3 h-3" /> : <TrendingDown className="w-3 h-3" />
+                ) : (
+                  <Check className="w-3 h-3" strokeWidth={3} />
+                )}
                 {openTx?.status}
               </div>
             </div>
