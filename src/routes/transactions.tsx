@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt } from "lucide-react";
+import { TrendingUp, TrendingDown, Clock, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat, ArrowRight } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -23,7 +23,7 @@ const subFiltersByProduct: Record<Product, string[]> = {
   Treasuries: ["Investments", "Maturities", "Pending", "Confirmed"],
 };
 
-type Status = "Confirmed" | "Pending";
+type Status = "Confirmed" | "Pending" | "Completed";
 
 type Tx = {
   name: string;
@@ -35,7 +35,10 @@ type Tx = {
   positive: boolean;
   status: Status;
   fund?: string;
+  fromFund?: string;
+  toFund?: string;
   createdDate?: string;
+  redeemByDate?: string;
   reflectedDate?: string;
   units?: number;
   unitPrice?: string;
@@ -53,6 +56,8 @@ const transactions: Tx[] = [
   { name: "COMB.N0000", product: "Equities", kind: "Pay In", subAccount: "Personal · CDS", date: "Apr 3, 2026", value: "LKR 50,000", positive: true, status: "Confirmed" },
   { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50" },
   { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40" },
+  { name: "Growth Opportunities Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Personal · Main", date: "Apr 6, 2026", value: "LKR 80,000", positive: true, status: "Completed", fromFund: "Fixed Income Opportunities Fund", toFund: "Growth Opportunities Fund", createdDate: "Apr 6, 2026 · 10:12", redeemByDate: "Apr 8, 2026", reflectedDate: "Apr 9, 2026", units: 3333.33, unitPrice: "LKR 24.00" },
+  { name: "Money Market Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Corporate · Ops", date: "Mar 25, 2026", value: "LKR 120,000", positive: true, status: "Completed", fromFund: "Growth Opportunities Fund", toFund: "Money Market Fund", createdDate: "Mar 25, 2026 · 14:44", redeemByDate: "Mar 27, 2026", reflectedDate: "Mar 28, 2026", units: 7792.21, unitPrice: "LKR 15.40" },
   { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
   {
     name: "LOLC.N0000", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS",
