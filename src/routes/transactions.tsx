@@ -425,13 +425,11 @@ function Transactions() {
           >
             <div
               className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                tx.status === "Pending"
-                  ? "bg-warning/15"
-                  : tx.kind === "Fund Flip"
+                tx.kind === "Fund Flip"
+                  ? "bg-success/20"
+                  : tx.positive
                     ? "bg-success/20"
-                    : tx.positive
-                    ? "bg-success/20"
-                    : "bg-muted/40"
+                    : "bg-white/[0.06]"
               }`}
             >
               {tx.kind === "Fund Flip" ? (
@@ -443,7 +441,10 @@ function Transactions() {
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
                 <>
-                  <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
+                  <div className="flex items-center gap-1.5">
+                    <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
+                    <StatusPill status={tx.status} />
+                  </div>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
                 </>
               ) : (
@@ -455,6 +456,7 @@ function Transactions() {
                         {tx.trades.length} transactions
                       </span>
                     )}
+                    <StatusPill status={tx.status} />
                   </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
@@ -468,11 +470,7 @@ function Transactions() {
             </div>
             <div className="text-right shrink-0">
               <p className={`text-sm font-semibold ${
-                tx.status === "Pending"
-                  ? "text-warning"
-                  : tx.positive
-                    ? "text-emerald-300"
-                    : "text-foreground"
+                tx.positive ? "text-emerald-300" : "text-foreground"
               }`}>
                 {tx.positive ? "+" : "−"} {tx.value}
               </p>
