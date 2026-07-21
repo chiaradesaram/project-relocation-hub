@@ -267,6 +267,7 @@ function Transactions() {
                 weekday: "text-muted-foreground flex-1 select-none text-[0.8rem] font-normal",
                 week: "mt-1 flex w-full",
                 day: "group/day relative flex-1 aspect-square select-none p-0 text-center",
+                today: "!bg-transparent rounded-full ring-1 ring-pill text-foreground data-[selected=true]:ring-0",
               }}
             />
           </div>
