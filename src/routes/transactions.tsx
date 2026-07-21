@@ -91,7 +91,11 @@ const subToKinds: Record<string, string[]> = {
 };
 
 function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  if (status === "Pending") return <Clock className="w-4 h-4 text-warning" />;
+  if (status === "Pending") {
+    return positive
+      ? <TrendingUp className="w-4 h-4 text-warning" />
+      : <TrendingDown className="w-4 h-4 text-warning" />;
+  }
   if (status === "Completed") return <Check className="w-4 h-4 text-success" strokeWidth={3} />;
   return positive ? <TrendingUp className="w-4 h-4 text-success" /> : <TrendingDown className="w-4 h-4 text-muted-foreground" />;
 }
