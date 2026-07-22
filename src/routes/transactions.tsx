@@ -47,24 +47,27 @@ type Tx = {
   bankAccount: string;
 };
 
+const calBank = { name: "CAL Deutsche Bank", account: "DE89 3704 0044 0532 0130 00" };
+
 const transactions: Tx[] = [
-  { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending", fund: "Fixed Income Opportunities Fund", createdDate: "Apr 12, 2026 · 09:24", reflectedDate: "Apr 15, 2026", units: 3421.52, unitPrice: "LKR 17.54" },
-  { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending", createdDate: "Apr 2, 2026 · 14:10", reflectedDate: "Apr 5, 2026" },
-  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026" },
-  { name: "CAL Growth Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 13, 2026", value: "LKR 125,000", positive: true, status: "Confirmed", fund: "Growth Opportunities Fund", units: 5208.33, unitPrice: "LKR 24.00" },
-  { name: "Treasury Bill 91D", product: "Treasuries", kind: "Maturity", subAccount: "Personal · Main", date: "Apr 12, 2026", value: "LKR 105,000", positive: true, status: "Confirmed" },
-  { name: "CAL Equity Fund", product: "Unit Trusts", kind: "Redemption", subAccount: "Personal · Main", date: "Apr 8, 2026", value: "LKR 75,000", positive: false, status: "Confirmed", fund: "Equity Fund", units: 2142.86, unitPrice: "LKR 35.00" },
-  { name: "JKH.N0000", product: "Equities", kind: "Dividend", subAccount: "Personal · CDS", date: "Apr 5, 2026", value: "LKR 3,200", positive: true, status: "Confirmed" },
-  { name: "COMB.N0000", product: "Equities", kind: "Pay In", subAccount: "Personal · CDS", date: "Apr 3, 2026", value: "LKR 50,000", positive: true, status: "Confirmed" },
-  { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50" },
-  { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40" },
-  { name: "Growth Opportunities Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Personal · Main", date: "Apr 6, 2026", value: "LKR 80,000", positive: true, status: "Completed", fromFund: "Fixed Income Opportunities Fund", toFund: "Growth Opportunities Fund", createdDate: "Apr 6, 2026 · 10:12", redeemByDate: "Apr 8, 2026", reflectedDate: "Apr 9, 2026", units: 3333.33, unitPrice: "LKR 24.00" },
-  { name: "Money Market Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Corporate · Ops", date: "Mar 25, 2026", value: "LKR 120,000", positive: true, status: "Completed", fromFund: "Growth Opportunities Fund", toFund: "Money Market Fund", createdDate: "Mar 25, 2026 · 14:44", redeemByDate: "Mar 27, 2026", reflectedDate: "Mar 28, 2026", units: 7792.21, unitPrice: "LKR 15.40" },
-  { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed" },
+  { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending", fund: "Fixed Income Opportunities Fund", createdDate: "Apr 12, 2026 · 09:24", reflectedDate: "Apr 15, 2026", units: 3421.52, unitPrice: "LKR 17.54", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending", createdDate: "Apr 2, 2026 · 14:10", reflectedDate: "Apr 5, 2026", bankName: "Sampath Bank", bankAccount: "1100568832" },
+  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "CAL Growth Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 13, 2026", value: "LKR 125,000", positive: true, status: "Confirmed", fund: "Growth Opportunities Fund", units: 5208.33, unitPrice: "LKR 24.00", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "Treasury Bill 91D", product: "Treasuries", kind: "Maturity", subAccount: "Personal · Main", date: "Apr 12, 2026", value: "LKR 105,000", positive: true, status: "Confirmed", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "CAL Equity Fund", product: "Unit Trusts", kind: "Redemption", subAccount: "Personal · Main", date: "Apr 8, 2026", value: "LKR 75,000", positive: false, status: "Confirmed", fund: "Equity Fund", units: 2142.86, unitPrice: "LKR 35.00", bankName: "Sampath Bank", bankAccount: "1100568832" },
+  { name: "JKH.N0000", product: "Equities", kind: "Dividend", subAccount: "Personal · CDS", date: "Apr 5, 2026", value: "LKR 3,200", positive: true, status: "Confirmed", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "COMB.N0000", product: "Equities", kind: "Pay In", subAccount: "Personal · CDS", date: "Apr 3, 2026", value: "LKR 50,000", positive: true, status: "Confirmed", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "CAL Balanced Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 1, 2026", value: "LKR 250,000", positive: true, status: "Confirmed", fund: "Balanced Fund", units: 8771.93, unitPrice: "LKR 28.50", bankName: "Sampath Bank", bankAccount: "1100568832" },
+  { name: "CAL Money Market", product: "Unit Trusts", kind: "Investment", subAccount: "Corporate · Ops", date: "Mar 28, 2026", value: "LKR 200,000", positive: true, status: "Confirmed", fund: "Money Market Fund", units: 12987.01, unitPrice: "LKR 15.40", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "Growth Opportunities Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Personal · Main", date: "Apr 6, 2026", value: "LKR 80,000", positive: true, status: "Completed", fromFund: "Fixed Income Opportunities Fund", toFund: "Growth Opportunities Fund", createdDate: "Apr 6, 2026 · 10:12", redeemByDate: "Apr 8, 2026", reflectedDate: "Apr 9, 2026", units: 3333.33, unitPrice: "LKR 24.00", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "Money Market Fund", product: "Unit Trusts", kind: "Fund Flip", subAccount: "Corporate · Ops", date: "Mar 25, 2026", value: "LKR 120,000", positive: true, status: "Completed", fromFund: "Growth Opportunities Fund", toFund: "Money Market Fund", createdDate: "Mar 25, 2026 · 14:44", redeemByDate: "Mar 27, 2026", reflectedDate: "Mar 28, 2026", units: 7792.21, unitPrice: "LKR 15.40", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "DIAL.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Mar 22, 2026", value: "LKR 18,000", positive: false, status: "Confirmed", bankName: "Sampath Bank", bankAccount: "1100568832" },
   {
     name: "LOLC.N0000", product: "Equities", kind: "Stock Buy", subAccount: "Personal · CDS",
     date: "Apr 10, 2026", value: "LKR 42,000", positive: false, status: "Confirmed",
     createdDate: "Apr 10, 2026 · 10:15", reflectedDate: "Apr 10, 2026",
+    bankName: "Commercial Bank", bankAccount: "8001234521",
     trades: [
       { time: "09:32", side: "Buy", shares: 100, price: "LKR 140.00" },
       { time: "10:15", side: "Buy", shares: 150, price: "LKR 141.50" },
@@ -75,6 +78,7 @@ const transactions: Tx[] = [
     name: "SAMP.N0000", product: "Equities", kind: "Stock Sell", subAccount: "Personal · CDS",
     date: "Apr 7, 2026", value: "LKR 30,500", positive: true, status: "Confirmed",
     createdDate: "Apr 7, 2026 · 11:42", reflectedDate: "Apr 7, 2026",
+    bankName: "HNB", bankAccount: "0452201209",
     trades: [
       { time: "10:04", side: "Sell", shares: 200, price: "LKR 76.00" },
       { time: "11:42", side: "Sell", shares: 200, price: "LKR 76.50" },
