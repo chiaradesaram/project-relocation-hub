@@ -43,6 +43,8 @@ type Tx = {
   units?: number;
   unitPrice?: string;
   trades?: { time: string; side: "Buy" | "Sell"; shares: number; price: string }[];
+  bankName: string;
+  bankAccount: string;
 };
 
 const transactions: Tx[] = [
