@@ -112,11 +112,27 @@ function StateIcon({ status }: { status: Status }) {
   );
 }
 
+function StatusPill({ status }: { status: Status }) {
+  const styles =
+    status === "Pending"
+      ? "bg-warning/20 text-warning"
+      : status === "Completed"
+        ? "bg-success/20 text-success"
+        : "bg-success/10 text-success ring-1 ring-success/60";
+  return (
+    <span className={cn("px-2 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wide", styles)}>
+      {status}
+    </span>
+  );
+}
+
 function Transactions() {
   const [product, setProduct] = useState<Product>("All");
   const [sub, setSub] = useState<string | null>(null);
   const [subAccount, setSubAccount] = useState<string | null>(null);
   const [subAccountOpen, setSubAccountOpen] = useState(false);
+  const [fund, setFund] = useState<string | null>(null);
+  const [fundOpen, setFundOpen] = useState(false);
   const [openTx, setOpenTx] = useState<Tx | null>(null);
   const [range, setRange] = useState<DateRange | undefined>();
   const [dateOpen, setDateOpen] = useState(false);
@@ -128,10 +144,18 @@ function Transactions() {
     setProduct(p);
     setSub(null);
     setSubAccount(null);
+    setFund(null);
   };
 
   const subAccountOptions = Array.from(
     new Set(transactions.filter((t) => t.product === "Unit Trusts").map((t) => t.subAccount)),
+  );
+  const fundOptions = Array.from(
+    new Set(
+      transactions
+        .filter((t) => t.product === "Unit Trusts" && t.fund)
+        .map((t) => t.fund as string),
+    ),
   );
 
   const presets = [
@@ -182,6 +206,7 @@ function Transactions() {
         if (txDate < from || txDate > to) return false;
       }
       if (product === "Unit Trusts" && subAccount && tx.subAccount !== subAccount) return false;
+      if (product === "Unit Trusts" && fund && tx.fund !== fund) return false;
       if (!sub) return true;
       if (sub === "Pending") return tx.status === "Pending";
       if (sub === "Confirmed") return tx.status === "Confirmed";
@@ -261,6 +286,21 @@ function Transactions() {
               <ChevronRight className="w-3 h-3 rotate-90" />
             </button>
           )}
+          {product === "Unit Trusts" && (
+            <button
+              type="button"
+              onClick={() => setFundOpen(true)}
+              className={cn(
+                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition",
+                fund
+                  ? "bg-pill text-pill-foreground"
+                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
+              )}
+            >
+              {fund ?? "Fund"}
+              <ChevronRight className="w-3 h-3 rotate-90" />
+            </button>
+          )}
           {subFiltersByProduct[product].map((f) => {
             const active = sub === f;
             return (
@@ -313,6 +353,43 @@ function Transactions() {
               >
                 <span>{s}</span>
                 {subAccount === s && <Check className="w-4 h-4 text-pill" strokeWidth={3} />}
+              </button>
+            ))}
+          </div>
+        </DrawerContent>
+      </Drawer>
+
+      {/* Fund picker drawer */}
+      <Drawer open={fundOpen} onOpenChange={setFundOpen}>
+        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6">
+          <div className="flex items-center justify-between pt-2 pb-3">
+            <DrawerTitle className="text-lg font-semibold">Fund</DrawerTitle>
+            <button
+              type="button"
+              onClick={() => setFundOpen(false)}
+              aria-label="Close"
+              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
+            <button
+              type="button"
+              onClick={() => { setFund(null); setFundOpen(false); }}
+              className="w-full text-left p-4 text-sm font-medium text-foreground"
+            >
+              All funds
+            </button>
+            {fundOptions.map((f) => (
+              <button
+                key={f}
+                type="button"
+                onClick={() => { setFund(f); setFundOpen(false); }}
+                className="w-full text-left p-4 text-sm font-medium text-foreground flex items-center justify-between"
+              >
+                <span>{f}</span>
+                {fund === f && <Check className="w-4 h-4 text-pill" strokeWidth={3} />}
               </button>
             ))}
           </div>
@@ -444,7 +521,13 @@ function Transactions() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
-                    {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
+                    {tx.product === "Equities" || tx.product === "Treasuries"
+                      ? product === "All"
+                        ? tx.product
+                        : null
+                      : product === "All"
+                        ? `${tx.product} · ${tx.subAccount}`
+                        : tx.subAccount}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
                     {tx.kind === "Fund Flip" && <span>fund flip ·</span>}
@@ -484,9 +567,14 @@ function Transactions() {
             <div className="flex items-center gap-2 flex-wrap">
               {openTx && <StateIcon status={openTx.status} />}
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
+              {openTx && <StatusPill status={openTx.status} />}
             </div>
             <DrawerDescription>
-              {openTx?.product} · {openTx?.subAccount} ·{" "}
+              {openTx?.product}
+              {openTx && openTx.product !== "Equities" && openTx.product !== "Treasuries"
+                ? ` · ${openTx.subAccount}`
+                : ""}
+              {" · "}
               <span>{openTx?.positive ? "+" : "−"} {openTx?.value}</span>
             </DrawerDescription>
           </DrawerHeader>
@@ -534,6 +622,14 @@ function Transactions() {
             <div className="p-4">
               <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
               <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
+            </div>
+            <div className="p-4">
+              <p className="text-sm font-semibold text-foreground">
+                {openTx?.positive ? "Transfer from bank account" : "Transfer to bank account"}
+              </p>
+              <p className="text-xs text-muted-foreground truncate">
+                {openTx?.positive ? "Received from linked bank account" : "Sent to linked bank account"}
+              </p>
             </div>
           </div>
 
