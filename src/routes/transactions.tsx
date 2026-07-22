@@ -374,9 +374,9 @@ function Transactions() {
               type="button"
               onClick={() => setFundOpen(false)}
               aria-label="Close"
-              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
