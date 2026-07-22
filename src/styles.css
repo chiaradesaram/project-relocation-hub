@@ -106,7 +106,7 @@
   --input: oklch(0.34 0.09 265);
   --ring: oklch(0.55 0.22 265);
 
-  --success: oklch(0.7 0.18 155);
+  --success: oklch(0.6 0.1 155);
   --success-foreground: oklch(1 0 0);
   --warning: oklch(0.77 0.17 70);
   --warning-foreground: oklch(1 0 0);
