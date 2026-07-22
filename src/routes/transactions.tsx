@@ -93,7 +93,7 @@ const subToKinds: Record<string, string[]> = {
 function StateIcon({ status }: { status: Status }) {
   if (status === "Pending") {
     return (
-      <div className="w-9 h-9 rounded-full bg-warning/10 ring-2 ring-warning flex items-center justify-center shrink-0">
+      <div className="w-9 h-9 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
         <Clock className="w-4 h-4 text-warning" strokeWidth={2.5} />
       </div>
     );
