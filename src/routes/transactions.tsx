@@ -591,7 +591,7 @@ function Transactions() {
                 <p className="text-sm font-semibold text-foreground">Fund flip</p>
                 <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="truncate">{openTx?.fromFund}</span>
-                  <Repeat className="w-3.5 h-3.5 text-success shrink-0" />
+                  <Repeat className="w-4 h-4 text-success shrink-0" />
                   <span className="truncate">{openTx?.toFund}</span>
                 </div>
               </div>
