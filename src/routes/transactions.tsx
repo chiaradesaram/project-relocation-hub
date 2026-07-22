@@ -259,7 +259,7 @@ function Transactions() {
               : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
           )}
         >
-          <CalendarDays className="w-3.5 h-3.5" />
+          <CalendarDays className="w-4 h-4" />
           {rangeLabel}
         </button>
         {range?.from && (
@@ -267,7 +267,7 @@ function Transactions() {
             type="button"
             onClick={() => { setRange(undefined); setActivePreset("All time"); }}
             aria-label="Clear date range"
-            className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
+            className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
           >
             <X className="w-3.5 h-3.5" />
           </button>
