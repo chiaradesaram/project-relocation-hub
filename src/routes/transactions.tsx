@@ -289,7 +289,7 @@ function Transactions() {
               )}
             >
               {subAccount ?? "Sub Account"}
-              <ChevronRight className="w-3 h-3 rotate-90" />
+              <ChevronRight className="w-4 h-4 rotate-90" />
             </button>
           )}
           {product === "Unit Trusts" && (
@@ -304,7 +304,7 @@ function Transactions() {
               )}
             >
               {fund ?? "Fund"}
-              <ChevronRight className="w-3 h-3 rotate-90" />
+              <ChevronRight className="w-4 h-4 rotate-90" />
             </button>
           )}
           {subFiltersByProduct[product].map((f) => {
