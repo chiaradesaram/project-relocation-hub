@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat } from "lucide-react";
+import { Check, Clock, X, CalendarDays, LifeBuoy, ChevronRight, Repeat } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -90,24 +90,25 @@ const subToKinds: Record<string, string[]> = {
   Maturities: ["Maturity"],
 };
 
-function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  void status;
-  return positive
-    ? <TrendingUp className="w-4 h-4 text-success" />
-    : <TrendingDown className="w-4 h-4 text-foreground" />;
-}
-
-function StatusPill({ status }: { status: Status }) {
-  const styles =
-    status === "Pending"
-      ? "bg-white/[0.08] text-muted-foreground"
-      : status === "Completed"
-        ? "bg-success/15 text-success"
-        : "bg-success/15 text-success";
+function StateIcon({ status }: { status: Status }) {
+  if (status === "Pending") {
+    return (
+      <div className="w-9 h-9 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
+        <Clock className="w-4 h-4 text-warning" />
+      </div>
+    );
+  }
+  if (status === "Confirmed") {
+    return (
+      <div className="w-9 h-9 rounded-full bg-white/[0.08] ring-1 ring-success flex items-center justify-center shrink-0">
+        <Check className="w-4 h-4 text-success" strokeWidth={3} />
+      </div>
+    );
+  }
   return (
-    <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold ${styles}`}>
-      {status}
-    </span>
+    <div className="w-9 h-9 rounded-full bg-success flex items-center justify-center shrink-0">
+      <Check className="w-4 h-4 text-success-foreground" strokeWidth={3} />
+    </div>
   );
 }
 
@@ -423,27 +424,12 @@ function Transactions() {
             onClick={() => setOpenTx(tx)}
             className="glass-card p-4 flex items-start gap-3 w-full text-left hover:bg-white/[0.03] transition"
           >
-            <div
-              className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                tx.kind === "Fund Flip"
-                  ? "bg-success/20"
-                  : tx.positive
-                    ? "bg-success/20"
-                    : "bg-white/[0.06]"
-              }`}
-            >
-              {tx.kind === "Fund Flip" ? (
-                <Repeat className="w-4 h-4 text-success" />
-              ) : (
-                <StatusIcon status={tx.status} positive={tx.positive} />
-              )}
-            </div>
+            <StateIcon status={tx.status} />
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
                 <>
                   <div className="flex items-center gap-1.5">
                     <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
-                    <StatusPill status={tx.status} />
                   </div>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
                 </>
@@ -456,7 +442,6 @@ function Transactions() {
                         {tx.trades.length} transactions
                       </span>
                     )}
-                    <StatusPill status={tx.status} />
                   </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
@@ -497,16 +482,8 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                openTx?.kind === "Fund Flip" ? "bg-success/20 text-success" : "bg-pill/20 text-pill"
-              }`}>
-                {openTx?.product === "Unit Trusts" && openTx?.kind !== "Fund Flip" && <PieChart className="w-4 h-4" />}
-                {openTx?.kind === "Fund Flip" && <Repeat className="w-4 h-4" />}
-                {openTx?.product === "Equities" && <BarChart3 className="w-4 h-4" />}
-                {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
-              </div>
+              {openTx && <StateIcon status={openTx.status} />}
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
-              {openTx && <StatusPill status={openTx.status} />}
             </div>
             <DrawerDescription>
               {openTx?.product} · {openTx?.subAccount} ·{" "}
