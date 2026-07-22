@@ -99,20 +99,20 @@ const subToKinds: Record<string, string[]> = {
 function StateIcon({ status }: { status: Status }) {
   if (status === "Pending") {
     return (
-      <div className="w-9 h-9 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
+      <div className="w-8 h-8 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
         <Clock className="w-4 h-4 text-warning" strokeWidth={2.5} />
       </div>
     );
   }
   if (status === "Confirmed") {
     return (
-      <div className="w-9 h-9 rounded-full bg-success/10 ring-2 ring-success flex items-center justify-center shrink-0">
+      <div className="w-8 h-8 rounded-full bg-success/10 ring-2 ring-success flex items-center justify-center shrink-0">
         <Check className="w-4 h-4 text-success" strokeWidth={3} />
       </div>
     );
   }
   return (
-    <div className="w-9 h-9 rounded-full bg-success/20 flex items-center justify-center shrink-0">
+    <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center shrink-0">
       <Check className="w-4 h-4 text-success" strokeWidth={3} />
     </div>
   );
@@ -259,7 +259,7 @@ function Transactions() {
               : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
           )}
         >
-          <CalendarDays className="w-3.5 h-3.5" />
+          <CalendarDays className="w-4 h-4" />
           {rangeLabel}
         </button>
         {range?.from && (
@@ -267,9 +267,9 @@ function Transactions() {
             type="button"
             onClick={() => { setRange(undefined); setActivePreset("All time"); }}
             aria-label="Clear date range"
-            className="w-7 h-7 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
+            className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
           >
-            <X className="w-3.5 h-3.5" />
+            <X className="w-4 h-4" />
           </button>
         )}
       </div>
@@ -289,7 +289,7 @@ function Transactions() {
               )}
             >
               {subAccount ?? "Sub Account"}
-              <ChevronRight className="w-3 h-3 rotate-90" />
+              <ChevronRight className="w-4 h-4 rotate-90" />
             </button>
           )}
           {product === "Unit Trusts" && (
@@ -304,7 +304,7 @@ function Transactions() {
               )}
             >
               {fund ?? "Fund"}
-              <ChevronRight className="w-3 h-3 rotate-90" />
+              <ChevronRight className="w-4 h-4 rotate-90" />
             </button>
           )}
           {subFiltersByProduct[product].map((f) => {
@@ -337,9 +337,9 @@ function Transactions() {
               type="button"
               onClick={() => setSubAccountOpen(false)}
               aria-label="Close"
-              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
@@ -374,9 +374,9 @@ function Transactions() {
               type="button"
               onClick={() => setFundOpen(false)}
               aria-label="Close"
-              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
           <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
@@ -411,9 +411,9 @@ function Transactions() {
               type="button"
               onClick={() => setDateOpen(false)}
               aria-label="Close"
-              className="w-9 h-9 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
@@ -563,9 +563,9 @@ function Transactions() {
               type="button"
               onClick={() => setOpenTx(null)}
               aria-label="Close"
-              className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
@@ -591,7 +591,7 @@ function Transactions() {
                 <p className="text-sm font-semibold text-foreground">Fund flip</p>
                 <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">
                   <span className="truncate">{openTx?.fromFund}</span>
-                  <Repeat className="w-3.5 h-3.5 text-success shrink-0" />
+                  <Repeat className="w-4 h-4 text-success shrink-0" />
                   <span className="truncate">{openTx?.toFund}</span>
                 </div>
               </div>
