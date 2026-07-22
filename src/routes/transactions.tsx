@@ -424,27 +424,12 @@ function Transactions() {
             onClick={() => setOpenTx(tx)}
             className="glass-card p-4 flex items-start gap-3 w-full text-left hover:bg-white/[0.03] transition"
           >
-            <div
-              className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
-                tx.kind === "Fund Flip"
-                  ? "bg-success/20"
-                  : tx.positive
-                    ? "bg-success/20"
-                    : "bg-white/[0.06]"
-              }`}
-            >
-              {tx.kind === "Fund Flip" ? (
-                <Repeat className="w-4 h-4 text-success" />
-              ) : (
-                <StatusIcon status={tx.status} positive={tx.positive} />
-              )}
-            </div>
+            <StateIcon status={tx.status} />
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
                 <>
                   <div className="flex items-center gap-1.5">
                     <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
-                    <StatusPill status={tx.status} />
                   </div>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
                 </>
@@ -457,7 +442,6 @@ function Transactions() {
                         {tx.trades.length} transactions
                       </span>
                     )}
-                    <StatusPill status={tx.status} />
                   </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? `${tx.product} · ${tx.subAccount}` : tx.subAccount}
@@ -498,16 +482,8 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              <div className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
-                openTx?.kind === "Fund Flip" ? "bg-success/20 text-success" : "bg-pill/20 text-pill"
-              }`}>
-                {openTx?.product === "Unit Trusts" && openTx?.kind !== "Fund Flip" && <PieChart className="w-4 h-4" />}
-                {openTx?.kind === "Fund Flip" && <Repeat className="w-4 h-4" />}
-                {openTx?.product === "Equities" && <BarChart3 className="w-4 h-4" />}
-                {openTx?.product === "Treasuries" && <Receipt className="w-4 h-4" />}
-              </div>
+              {openTx && <StateIcon status={openTx.status} />}
               <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
-              {openTx && <StatusPill status={openTx.status} />}
             </div>
             <DrawerDescription>
               {openTx?.product} · {openTx?.subAccount} ·{" "}
