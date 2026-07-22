@@ -106,14 +106,14 @@ function StateIcon({ status }: { status: Status }) {
   }
   if (status === "Confirmed") {
     return (
-      <div className="w-8 h-8 rounded-full bg-success/10 ring-2 ring-success flex items-center justify-center shrink-0">
-        <Check className="w-4 h-4 text-success" strokeWidth={3} />
+      <div className="w-8 h-8 rounded-full bg-success/10 border-2 border-success flex items-center justify-center shrink-0">
+        <Check className="w-4 h-4 text-success" strokeWidth={2.5} />
       </div>
     );
   }
   return (
     <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center shrink-0">
-      <Check className="w-4 h-4 text-success" strokeWidth={3} />
+      <Check className="w-4 h-4 text-success" strokeWidth={2.5} />
     </div>
   );
 }
