@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { TrendingUp, TrendingDown, Check, X, CalendarDays, CalendarCheck2, LifeBuoy, ChevronRight, Hash, Tag, PieChart, BarChart3, Receipt, Repeat } from "lucide-react";
+import { Check, Clock, X, CalendarDays, LifeBuoy, ChevronRight, Repeat } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -90,24 +90,25 @@ const subToKinds: Record<string, string[]> = {
   Maturities: ["Maturity"],
 };
 
-function StatusIcon({ status, positive }: { status: Status; positive: boolean }) {
-  void status;
-  return positive
-    ? <TrendingUp className="w-4 h-4 text-success" />
-    : <TrendingDown className="w-4 h-4 text-foreground" />;
-}
-
-function StatusPill({ status }: { status: Status }) {
-  const styles =
-    status === "Pending"
-      ? "bg-white/[0.08] text-muted-foreground"
-      : status === "Completed"
-        ? "bg-success/15 text-success"
-        : "bg-success/15 text-success";
+function StateIcon({ status }: { status: Status }) {
+  if (status === "Pending") {
+    return (
+      <div className="w-9 h-9 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
+        <Clock className="w-4 h-4 text-warning" />
+      </div>
+    );
+  }
+  if (status === "Confirmed") {
+    return (
+      <div className="w-9 h-9 rounded-full bg-white/[0.08] ring-1 ring-success flex items-center justify-center shrink-0">
+        <Check className="w-4 h-4 text-success" strokeWidth={3} />
+      </div>
+    );
+  }
   return (
-    <span className={`shrink-0 px-2 py-0.5 rounded-full text-[10px] font-semibold ${styles}`}>
-      {status}
-    </span>
+    <div className="w-9 h-9 rounded-full bg-success flex items-center justify-center shrink-0">
+      <Check className="w-4 h-4 text-success-foreground" strokeWidth={3} />
+    </div>
   );
 }
 
