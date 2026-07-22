@@ -563,9 +563,9 @@ function Transactions() {
               type="button"
               onClick={() => setOpenTx(null)}
               aria-label="Close"
-              className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-foreground"
+              className="w-8 h-8 rounded-full bg-white/5 flex items-center justify-center text-foreground"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
           </div>
 
