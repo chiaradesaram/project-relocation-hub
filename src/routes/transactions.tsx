@@ -20,7 +20,7 @@ const subFiltersByProduct: Record<Product, string[]> = {
   All: [],
   "Unit Trusts": ["Pending", "Confirmed", "Completed"],
   Equities: ["Pay In", "Pay Out", "Stocks", "Divs", "Pending", "Confirmed"],
-  Treasuries: ["Investments", "Maturities", "Pending", "Confirmed"],
+  Treasuries: [],
 };
 
 type Status = "Confirmed" | "Pending" | "Completed";
@@ -52,9 +52,15 @@ const calBank = { name: "CAL Deutsche Bank", account: "DE89 3704 0044 0532 0130 
 const transactions: Tx[] = [
   { name: "CAL Income Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Joint · Spouse", date: "Apr 12, 2026", value: "LKR 60,000", positive: true, status: "Pending", fund: "Fixed Income Opportunities Fund", createdDate: "Apr 12, 2026 · 09:24", reflectedDate: "Apr 15, 2026", units: 3421.52, unitPrice: "LKR 17.54", bankName: "Commercial Bank", bankAccount: "8001234521" },
   { name: "HNB.N0000", product: "Equities", kind: "Pay Out", subAccount: "Personal · CDS", date: "Apr 2, 2026", value: "LKR 25,000", positive: false, status: "Pending", createdDate: "Apr 2, 2026 · 14:10", reflectedDate: "Apr 5, 2026", bankName: "Sampath Bank", bankAccount: "1100568832" },
-  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Investment", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Bond Purchase", subAccount: "Personal · Main", date: "Mar 30, 2026", value: "LKR 500,000", positive: true, status: "Pending", createdDate: "Mar 30, 2026 · 11:02", reflectedDate: "Apr 3, 2026", bankName: "HNB", bankAccount: "0452201209" },
   { name: "CAL Growth Fund", product: "Unit Trusts", kind: "Investment", subAccount: "Personal · Main", date: "Apr 13, 2026", value: "LKR 125,000", positive: true, status: "Confirmed", fund: "Growth Opportunities Fund", units: 5208.33, unitPrice: "LKR 24.00", bankName: "Commercial Bank", bankAccount: "8001234521" },
-  { name: "Treasury Bill 91D", product: "Treasuries", kind: "Maturity", subAccount: "Personal · Main", date: "Apr 12, 2026", value: "LKR 105,000", positive: true, status: "Confirmed", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "Treasury Bill 91D", product: "Treasuries", kind: "Bill Purchase", subAccount: "Personal · Main", date: "Apr 12, 2026", value: "LKR 105,000", positive: true, status: "Confirmed", createdDate: "Apr 12, 2026 · 10:15", reflectedDate: "Apr 14, 2026", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Coupon Received", subAccount: "Personal · Main", date: "Apr 10, 2026", value: "LKR 32,500", positive: true, status: "Confirmed", createdDate: "Apr 10, 2026 · 08:05", reflectedDate: "Apr 10, 2026", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "Treasury Bond 5Y", product: "Treasuries", kind: "Coupon Paid Out", subAccount: "Personal · Main", date: "Apr 11, 2026", value: "LKR 32,500", positive: false, status: "Completed", createdDate: "Apr 11, 2026 · 09:30", reflectedDate: "Apr 11, 2026", bankName: "HNB", bankAccount: "0452201209" },
+  { name: "Treasury Bond 10Y", product: "Treasuries", kind: "Coupon Received", subAccount: "Personal · Main", date: "Mar 15, 2026", value: "LKR 48,750", positive: true, status: "Completed", createdDate: "Mar 15, 2026 · 08:02", reflectedDate: "Mar 15, 2026", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "Treasury Bond 10Y", product: "Treasuries", kind: "Coupon Paid Out", subAccount: "Personal · Main", date: "Mar 16, 2026", value: "LKR 48,750", positive: false, status: "Completed", createdDate: "Mar 16, 2026 · 09:12", reflectedDate: "Mar 16, 2026", bankName: "Commercial Bank", bankAccount: "8001234521" },
+  { name: "Repo · 30 Days", product: "Treasuries", kind: "Repo Placement", subAccount: "Personal · Main", date: "Mar 20, 2026", value: "LKR 300,000", positive: true, status: "Confirmed", createdDate: "Mar 20, 2026 · 11:40", reflectedDate: "Mar 20, 2026", bankName: "Sampath Bank", bankAccount: "1100568832" },
+  { name: "Repo · 30 Days", product: "Treasuries", kind: "Repo Maturity", subAccount: "Personal · Main", date: "Apr 19, 2026", value: "LKR 307,200", positive: false, status: "Pending", createdDate: "Apr 19, 2026 · 09:00", reflectedDate: "Apr 21, 2026", bankName: "Sampath Bank", bankAccount: "1100568832" },
   { name: "CAL Equity Fund", product: "Unit Trusts", kind: "Redemption", subAccount: "Personal · Main", date: "Apr 8, 2026", value: "LKR 75,000", positive: false, status: "Confirmed", fund: "Equity Fund", units: 2142.86, unitPrice: "LKR 35.00", bankName: "Sampath Bank", bankAccount: "1100568832" },
   { name: "JKH.N0000", product: "Equities", kind: "Dividend", subAccount: "Personal · CDS", date: "Apr 5, 2026", value: "LKR 3,200", positive: true, status: "Confirmed", bankName: "Commercial Bank", bankAccount: "8001234521" },
   { name: "COMB.N0000", product: "Equities", kind: "Pay In", subAccount: "Personal · CDS", date: "Apr 3, 2026", value: "LKR 50,000", positive: true, status: "Confirmed", bankName: "HNB", bankAccount: "0452201209" },
@@ -537,6 +543,7 @@ function Transactions() {
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
                     {tx.kind === "Fund Flip" && <span>fund flip ·</span>}
+                    {tx.product === "Treasuries" && <span>{tx.kind} ·</span>}
                     <span>{tx.date}</span>
                   </p>
                 </>
