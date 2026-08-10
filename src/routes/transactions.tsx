@@ -750,22 +750,26 @@ function Transactions() {
                 <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
               </div>
             )}
-            <div className="p-4">
-              <p className="text-sm font-semibold text-foreground">Transfer From</p>
-              <p className="text-xs text-muted-foreground truncate">
-                {openTx?.positive
-                  ? `${openTx?.bankName} · ${openTx?.bankAccount}`
-                  : `${calBank.name} · ${calBank.account}`}
-              </p>
-            </div>
-            <div className="p-4">
-              <p className="text-sm font-semibold text-foreground">Transfer To</p>
-              <p className="text-xs text-muted-foreground truncate">
-                {openTx?.positive
-                  ? `${calBank.name} · ${calBank.account}`
-                  : `${openTx?.bankName} · ${openTx?.bankAccount}`}
-              </p>
-            </div>
+            {openTx?.kind !== "Coupon Received" && openTx?.kind !== "Coupon Paid Out" && (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Transfer From</p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {openTx?.positive
+                    ? `${openTx?.bankName} · ${openTx?.bankAccount}`
+                    : `${calBank.name} · ${calBank.account}`}
+                </p>
+              </div>
+            )}
+            {openTx?.kind !== "Coupon Received" && (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Transfer To</p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {openTx?.positive
+                    ? `${calBank.name} · ${calBank.account}`
+                    : `${openTx?.bankName} · ${openTx?.bankAccount}`}
+                </p>
+              </div>
+            )}
           </div>
 
           {openTx?.trades && openTx.trades.length > 0 && (
