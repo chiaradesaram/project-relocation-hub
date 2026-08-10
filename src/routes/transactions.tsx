@@ -598,10 +598,13 @@ function Transactions() {
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
               {openTx && <StateIcon status={openTx.status} />}
-              <DrawerTitle className="text-xl font-semibold">{openTx?.name}</DrawerTitle>
+              <DrawerTitle className="text-xl font-semibold">
+                {openTx?.product === "Treasuries" ? openTx?.kind : openTx?.name}
+              </DrawerTitle>
               {openTx && <StatusPill status={openTx.status} />}
             </div>
             <DrawerDescription>
+              {openTx?.product === "Treasuries" ? `${openTx?.name} · ` : ""}
               {openTx?.product}
               {openTx && openTx.product !== "Equities" && openTx.product !== "Treasuries"
                 ? ` · ${openTx.subAccount}`
