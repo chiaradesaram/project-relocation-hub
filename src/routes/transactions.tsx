@@ -281,7 +281,7 @@ function Transactions() {
       </div>
 
       {/* Sub filters (per product) */}
-      {product !== "All" && (
+      {product !== "All" && subFiltersByProduct[product].length > 0 && (
         <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-1">
           {product === "Unit Trusts" && (
             <button
