@@ -643,12 +643,6 @@ function Transactions() {
             )}
             {openTx?.product === "Treasuries" && (
               <>
-                {openTx.isin && (
-                  <div className="p-4">
-                    <p className="text-sm font-semibold text-foreground">ISIN</p>
-                    <p className="text-xs text-muted-foreground truncate">{openTx.isin}</p>
-                  </div>
-                )}
                 {openTx.faceValue && (
                   <div className="p-4">
                     <p className="text-sm font-semibold text-foreground">Face value</p>
@@ -738,20 +732,24 @@ function Transactions() {
                 )}
               </>
             )}
-            <div className="p-4">
-              <p className="text-sm font-semibold text-foreground">Created date</p>
-              <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
-            </div>
+            {openTx?.product !== "Treasuries" && (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Created date</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
+              </div>
+            )}
             {openTx?.kind === "Fund Flip" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Redeem from fund by</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.redeemByDate ?? "—"}</p>
               </div>
             )}
-            <div className="p-4">
-              <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
-              <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
-            </div>
+            {openTx?.product !== "Treasuries" && (
+              <div className="p-4">
+                <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
+                <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
+              </div>
+            )}
             <div className="p-4">
               <p className="text-sm font-semibold text-foreground">Transfer From</p>
               <p className="text-xs text-muted-foreground truncate">
