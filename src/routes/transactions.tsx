@@ -641,6 +641,103 @@ function Transactions() {
                 </div>
               </>
             )}
+            {openTx?.product === "Treasuries" && (
+              <>
+                {openTx.isin && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">ISIN</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.isin}</p>
+                  </div>
+                )}
+                {openTx.faceValue && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Face value</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.faceValue}</p>
+                  </div>
+                )}
+                {openTx.purchasePrice && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Purchase price</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.purchasePrice}</p>
+                  </div>
+                )}
+                {openTx.discount && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Discount at issue</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.discount}</p>
+                  </div>
+                )}
+                {openTx.yieldRate && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Yield</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.yieldRate}</p>
+                  </div>
+                )}
+                {openTx.couponRate && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Coupon rate</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {openTx.couponRate}
+                      {openTx.couponFrequency ? ` · ${openTx.couponFrequency}` : ""}
+                    </p>
+                  </div>
+                )}
+                {typeof openTx.couponsPaid === "number" && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Coupons paid so far</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {openTx.couponsPaid} paid
+                      {openTx.couponsPaidValue ? ` · ${openTx.couponsPaidValue}` : ""}
+                    </p>
+                  </div>
+                )}
+                {typeof openTx.couponsRemaining === "number" && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Coupons left till maturity</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.couponsRemaining} remaining</p>
+                  </div>
+                )}
+                {openTx.nextCouponDate && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Next coupon date</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.nextCouponDate}</p>
+                  </div>
+                )}
+                {openTx.repoRate && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Repo rate</p>
+                    <p className="text-xs text-muted-foreground truncate">
+                      {openTx.repoRate}
+                      {openTx.repoTenor ? ` · ${openTx.repoTenor}` : ""}
+                    </p>
+                  </div>
+                )}
+                {openTx.collateral && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Collateral</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.collateral}</p>
+                  </div>
+                )}
+                {openTx.interestEarned && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Interest earned</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.interestEarned}</p>
+                  </div>
+                )}
+                {openTx.issueDate && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Issue date</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.issueDate}</p>
+                  </div>
+                )}
+                {openTx.maturityDate && (
+                  <div className="p-4">
+                    <p className="text-sm font-semibold text-foreground">Maturity date</p>
+                    <p className="text-xs text-muted-foreground truncate">{openTx.maturityDate}</p>
+                  </div>
+                )}
+              </>
+            )}
             <div className="p-4">
               <p className="text-sm font-semibold text-foreground">Created date</p>
               <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
@@ -693,6 +790,27 @@ function Transactions() {
                 ))}
               </div>
             </div>
+          )}
+
+          {openTx?.product === "Treasuries" && openTx?.reinvestable && (
+            <Link
+              to="/invest"
+              className="rounded-2xl bg-white/[0.04] flex items-center gap-3 p-4 mb-4"
+            >
+              <div className="w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center text-success shrink-0">
+                <Repeat className="w-5 h-5" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-semibold text-foreground">
+                  {openTx.kind === "Repo Maturity" ? "Roll over this repo" : "Reinvest this payout"}
+                </p>
+                <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
+                  {openTx.kind === "Repo Maturity"
+                    ? `Place ${openTx.value} into a new repo`
+                    : `Put ${openTx.value} into a new bill, bond or repo`}
+                </p>
+              </div>
+            </Link>
           )}
 
           <Link
