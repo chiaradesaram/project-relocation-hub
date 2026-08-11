@@ -599,7 +599,11 @@ function Transactions() {
             <div className="flex items-center gap-2 flex-wrap">
               {openTx && <StateIcon status={openTx.status} />}
               <DrawerTitle className="text-xl font-semibold">
-                {openTx?.product === "Treasuries" ? openTx?.kind : openTx?.name}
+                {openTx?.product === "Treasuries"
+                  ? openTx?.kind
+                  : openTx?.kind === "Pay In" || openTx?.kind === "Pay Out"
+                    ? openTx?.kind
+                    : openTx?.name}
               </DrawerTitle>
               {openTx && <StatusPill status={openTx.status} />}
             </div>
