@@ -739,7 +739,7 @@ function Transactions() {
                 )}
               </>
             )}
-            {openTx?.product !== "Treasuries" && (
+            {openTx?.product !== "Treasuries" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Created date</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
@@ -751,7 +751,7 @@ function Transactions() {
                 <p className="text-xs text-muted-foreground truncate">{openTx?.redeemByDate ?? "—"}</p>
               </div>
             )}
-            {openTx?.product !== "Treasuries" && (
+            {openTx?.product !== "Treasuries" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
