@@ -599,7 +599,11 @@ function Transactions() {
             <div className="flex items-center gap-2 flex-wrap">
               {openTx && <StateIcon status={openTx.status} />}
               <DrawerTitle className="text-xl font-semibold">
-                {openTx?.product === "Treasuries" ? openTx?.kind : openTx?.name}
+                {openTx?.product === "Treasuries"
+                  ? openTx?.kind
+                  : openTx?.kind === "Pay In" || openTx?.kind === "Pay Out"
+                    ? openTx?.kind
+                    : openTx?.name}
               </DrawerTitle>
               {openTx && <StatusPill status={openTx.status} />}
             </div>
@@ -735,7 +739,7 @@ function Transactions() {
                 )}
               </>
             )}
-            {openTx?.product !== "Treasuries" && (
+            {openTx?.product !== "Treasuries" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Created date</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
@@ -747,13 +751,13 @@ function Transactions() {
                 <p className="text-xs text-muted-foreground truncate">{openTx?.redeemByDate ?? "—"}</p>
               </div>
             )}
-            {openTx?.product !== "Treasuries" && (
+            {openTx?.product !== "Treasuries" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Reflected on the portal by</p>
                 <p className="text-xs text-muted-foreground truncate">{openTx?.reflectedDate ?? openTx?.date}</p>
               </div>
             )}
-            {openTx?.kind !== "Coupon Received" && openTx?.kind !== "Coupon Paid Out" && (
+            {openTx?.kind !== "Coupon Received" && openTx?.kind !== "Coupon Paid Out" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Transfer From</p>
                 <p className="text-xs text-muted-foreground truncate">
@@ -763,7 +767,7 @@ function Transactions() {
                 </p>
               </div>
             )}
-            {openTx?.kind !== "Coupon Received" && (
+            {openTx?.kind !== "Coupon Received" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Transfer To</p>
                 <p className="text-xs text-muted-foreground truncate">
