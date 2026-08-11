@@ -776,7 +776,7 @@ function Transactions() {
                 </p>
               </div>
             )}
-            {openTx?.kind !== "Coupon Received" && openTx?.kind !== "Coupon Paid Out" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && openTx?.kind !== "Pay Out" && (
+            {openTx?.kind !== "Coupon Received" && openTx?.kind !== "Coupon Paid Out" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Transfer To</p>
                 <p className="text-xs text-muted-foreground truncate">
