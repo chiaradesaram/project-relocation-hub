@@ -116,8 +116,6 @@ const subToKinds: Record<string, string[]> = {
   Redemptions: ["Redemption"],
   "Pay In": ["Pay In"],
   "Pay Out": ["Pay Out"],
-  "Pay In": ["Pay In"],
-  "Pay Out": ["Pay Out"],
   Stocks: ["Stock Buy", "Stock Sell"],
   Maturities: ["Maturity"],
 };
