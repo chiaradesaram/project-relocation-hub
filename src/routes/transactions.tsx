@@ -19,7 +19,7 @@ type Product = (typeof productFilters)[number];
 const subFiltersByProduct: Record<Product, string[]> = {
   All: [],
   "Unit Trusts": ["Pending", "Confirmed", "Completed"],
-  Equities: ["Pay In", "Pay Out", "Stocks", "Divs", "Pending", "Confirmed"],
+  Equities: ["Pay In", "Pay Out", "Stocks", "Pending", "Confirmed"],
   Treasuries: [],
 };
 
@@ -116,7 +116,6 @@ const subToKinds: Record<string, string[]> = {
   Redemptions: ["Redemption"],
   "Pay In": ["Pay In"],
   "Pay Out": ["Pay Out"],
-  Divs: ["Dividend"],
   Stocks: ["Stock Buy", "Stock Sell"],
   Maturities: ["Maturity"],
 };
@@ -561,7 +560,7 @@ function Transactions() {
                         : tx.subAccount}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
-                    {tx.kind === "Fund Flip" && <span>fund flip ·</span>}
+                    {tx.kind === "Fund Flip" && <span>Fund flip ·</span>}
                     {tx.product === "Treasuries" && <span>{tx.kind} ·</span>}
                     <span>{tx.date}</span>
                   </p>
@@ -748,7 +747,9 @@ function Transactions() {
               <>
                 {openTx?.product !== "Treasuries" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
                   <div className="p-4">
-                    <p className="text-sm font-semibold text-foreground">Created date</p>
+                    <p className="text-sm font-semibold text-foreground">
+                      {openTx?.product === "Unit Trusts" && openTx?.status === "Pending" ? "Estimated Creation date" : "Created date"}
+                    </p>
                     <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
                   </div>
                 )}
