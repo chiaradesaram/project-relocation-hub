@@ -19,7 +19,7 @@ type Product = (typeof productFilters)[number];
 const subFiltersByProduct: Record<Product, string[]> = {
   All: [],
   "Unit Trusts": ["Pending", "Confirmed", "Completed"],
-  Equities: ["Pay In", "Pay Out", "Stocks", "Divs", "Pending", "Confirmed"],
+  Equities: ["Pay In", "Pay Out", "Stocks", "Pending", "Confirmed"],
   Treasuries: [],
 };
 
@@ -116,7 +116,8 @@ const subToKinds: Record<string, string[]> = {
   Redemptions: ["Redemption"],
   "Pay In": ["Pay In"],
   "Pay Out": ["Pay Out"],
-  Divs: ["Dividend"],
+  "Pay In": ["Pay In"],
+  "Pay Out": ["Pay Out"],
   Stocks: ["Stock Buy", "Stock Sell"],
   Maturities: ["Maturity"],
 };
@@ -561,7 +562,7 @@ function Transactions() {
                         : tx.subAccount}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
-                    {tx.kind === "Fund Flip" && <span>fund flip ·</span>}
+                    {tx.kind === "Fund Flip" && <span>Fund flip ·</span>}
                     {tx.product === "Treasuries" && <span>{tx.kind} ·</span>}
                     <span>{tx.date}</span>
                   </p>
