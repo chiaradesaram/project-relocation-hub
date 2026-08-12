@@ -747,7 +747,9 @@ function Transactions() {
               <>
                 {openTx?.product !== "Treasuries" && openTx?.kind !== "Stock Buy" && openTx?.kind !== "Stock Sell" && (
                   <div className="p-4">
-                    <p className="text-sm font-semibold text-foreground">Created date</p>
+                    <p className="text-sm font-semibold text-foreground">
+                      {openTx?.product === "Unit Trusts" && openTx?.status === "Pending" ? "Estimated Creation date" : "Created date"}
+                    </p>
                     <p className="text-xs text-muted-foreground truncate">{openTx?.createdDate ?? openTx?.date}</p>
                   </div>
                 )}
