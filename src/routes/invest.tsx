@@ -73,6 +73,7 @@ const DIRECT_INVEST_LIMIT = 149950;
 function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
+  const isEquities = search.product === "equities";
 
   // Method picker landing
   if (!search.method) {
@@ -81,7 +82,28 @@ function Invest() {
       icon: typeof Zap;
       label: string;
       desc: string;
-    }[] = [
+    }[] = isEquities
+      ? [
+          {
+            id: "payin",
+            icon: Wallet,
+            label: "Pay in",
+            desc: "Add cash to your equity account from your bank.",
+          },
+          {
+            id: "instant",
+            icon: Zap,
+            label: "Direct Invest",
+            desc: "Instant bank rail. Max LKR 149,950 per transfer.",
+          },
+          {
+            id: "utflip",
+            icon: ArrowLeftRight,
+            label: "Transfer from Unit Trusts",
+            desc: "Move money from a unit trust into your equity account.",
+          },
+        ]
+      : [
       {
         id: "instant",
         icon: Zap,
@@ -148,6 +170,9 @@ function Invest() {
     );
   }
 
+  if (isEquities) return <EquitiesForm method={search.method} />;
+  if (search.method === "payin" || search.method === "utflip")
+    return <EquitiesForm method={search.method} />;
   return <MethodForm method={search.method} />;
 }
 
