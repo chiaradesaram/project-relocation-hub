@@ -352,6 +352,13 @@ function MethodForm({
         )}
       </div>
 
+      {/* Recurring — Direct Invest only */}
+      {isInstant && (
+        <div className="mx-4 mt-4">
+          <RecurringToggle value={recurring} onChange={setRecurring} />
+        </div>
+      )}
+
       {/* Proof of payment — Bank transfer, non-Deutsche */}
       {needsProof && (
         <div className="mx-4 mt-6">
