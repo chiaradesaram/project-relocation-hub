@@ -178,7 +178,11 @@ function Invest() {
 
 type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
 
-function MethodForm({ method }: { method: InvestMethod }) {
+function MethodForm({
+  method,
+}: {
+  method: Exclude<InvestMethod, "payin" | "utflip">;
+}) {
   const navigate = useNavigate();
 
   const [amount, setAmount] = useState("");
@@ -194,6 +198,7 @@ function MethodForm({ method }: { method: InvestMethod }) {
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
+  const [recurring, setRecurring] = useState(false);
 
   const title =
     method === "instant"
