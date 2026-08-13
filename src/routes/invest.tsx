@@ -13,7 +13,14 @@ import {
   X,
   Image as ImageIcon,
   Check,
+  Wallet,
+  CalendarDays,
+  ArrowDown,
+  PieChart,
+  BarChart3,
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Calendar } from "@/components/ui/calendar";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
   Sheet,
@@ -22,15 +29,19 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-type InvestMethod = "instant" | "bank" | "flip";
+type InvestMethod = "instant" | "bank" | "flip" | "payin" | "utflip";
 
 export const Route = createFileRoute("/invest")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { product?: string; method?: InvestMethod } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
       search.method === "bank" ||
-      search.method === "flip"
+      search.method === "flip" ||
+      search.method === "payin" ||
+      search.method === "utflip"
         ? (search.method as InvestMethod)
         : undefined,
   }),
@@ -62,6 +73,7 @@ const DIRECT_INVEST_LIMIT = 149950;
 function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
+  const isEquities = search.product === "equities";
 
   // Method picker landing
   if (!search.method) {
@@ -70,7 +82,28 @@ function Invest() {
       icon: typeof Zap;
       label: string;
       desc: string;
-    }[] = [
+    }[] = isEquities
+      ? [
+          {
+            id: "payin",
+            icon: Wallet,
+            label: "Pay in",
+            desc: "Add cash to your equity account from your bank.",
+          },
+          {
+            id: "instant",
+            icon: Zap,
+            label: "Direct Invest",
+            desc: "Instant bank rail. Max LKR 149,950 per transfer.",
+          },
+          {
+            id: "utflip",
+            icon: ArrowLeftRight,
+            label: "Transfer from Unit Trusts",
+            desc: "Move money from a unit trust into your equity account.",
+          },
+        ]
+      : [
       {
         id: "instant",
         icon: Zap,
@@ -137,12 +170,19 @@ function Invest() {
     );
   }
 
+  if (isEquities) return <EquitiesForm method={search.method} />;
+  if (search.method === "payin" || search.method === "utflip")
+    return <EquitiesForm method={search.method} />;
   return <MethodForm method={search.method} />;
 }
 
 type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
 
-function MethodForm({ method }: { method: InvestMethod }) {
+function MethodForm({
+  method,
+}: {
+  method: Exclude<InvestMethod, "payin" | "utflip">;
+}) {
   const navigate = useNavigate();
 
   const [amount, setAmount] = useState("");
@@ -158,6 +198,7 @@ function MethodForm({ method }: { method: InvestMethod }) {
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
+  const [recurring, setRecurring] = useState(false);
 
   const title =
     method === "instant"
@@ -310,6 +351,13 @@ function MethodForm({ method }: { method: InvestMethod }) {
           />
         )}
       </div>
+
+      {/* Recurring — Direct Invest only */}
+      {isInstant && (
+        <div className="mx-4 mt-4">
+          <RecurringToggle value={recurring} onChange={setRecurring} />
+        </div>
+      )}
 
       {/* Proof of payment — Bank transfer, non-Deutsche */}
       {needsProof && (
@@ -531,5 +579,431 @@ function PickerRow({
       </span>
       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
     </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Shared bits                                                         */
+/* ------------------------------------------------------------------ */
+
+function RecurringToggle({
+  value,
+  onChange,
+}: {
+  value: boolean;
+  onChange: (v: boolean) => void;
+}) {
+  return (
+    <div className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3">
+      <div
+        className="w-9 h-9 rounded-lg flex items-center justify-center shrink-0"
+        style={{
+          background: "color-mix(in oklch, var(--pill) 25%, transparent)",
+        }}
+      >
+        <CalendarDays className="w-4 h-4" style={{ color: "var(--pill)" }} />
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold text-foreground leading-tight">
+          Set recurring
+        </p>
+        <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
+          Repeat this investment automatically each month
+        </p>
+      </div>
+      <Switch checked={value} onCheckedChange={onChange} />
+    </div>
+  );
+}
+
+function DateRow({
+  label,
+  date,
+  onClick,
+}: {
+  label: string;
+  date: Date;
+  onClick: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted/10 border-b border-border/20 last:border-b-0"
+    >
+      <span className="text-sm text-muted-foreground shrink-0">{label}</span>
+      <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
+        {date.toLocaleDateString("en-GB", {
+          day: "2-digit",
+          month: "short",
+          year: "numeric",
+        })}
+      </span>
+      <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+    </button>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* Equities                                                            */
+/* ------------------------------------------------------------------ */
+
+const equityFundSources = [
+  { name: "CAL Growth Fund", sub: "Chiara's wealth account", value: "LKR 150,000.00" },
+  { name: "CAL Income Fund", sub: "Personal account", value: "LKR 84,300.00" },
+  { name: "CAL Money Market Fund", sub: "Personal account", value: "LKR 32,100.00" },
+];
+
+function EquitiesForm({ method }: { method: InvestMethod }) {
+  const navigate = useNavigate();
+
+  const [amount, setAmount] = useState("");
+  const [date, setDate] = useState<Date>(new Date());
+  const [dateOpen, setDateOpen] = useState(false);
+  const [bank, setBank] = useState("Commercial Bank ****2849");
+  const [payTo, setPayTo] = useState("CAL Securities Account");
+  const [proofName, setProofName] = useState<string | null>(null);
+  const [recurring, setRecurring] = useState(false);
+  const [sourceFund, setSourceFund] = useState(equityFundSources[0]!.name);
+  const [picker, setPicker] = useState<
+    null | "bank" | "payTo" | "sourceFund"
+  >(null);
+
+  const isPayIn = method === "payin";
+  const isDirect = method === "instant";
+  const isUtFlip = method === "utflip";
+
+  const title = isPayIn
+    ? "Pay in"
+    : isDirect
+      ? "Direct Invest"
+      : "Transfer from Unit Trust";
+
+  const amountNum = parseFloat(amount || "0") || 0;
+
+  const handleAmountChange = (raw: string) => {
+    const sanitized = sanitizeAmountInput(raw);
+    if (isDirect) {
+      const n = parseFloat(sanitized || "0") || 0;
+      if (n > DIRECT_INVEST_LIMIT) {
+        setAmount(String(DIRECT_INVEST_LIMIT));
+        return;
+      }
+    }
+    setAmount(sanitized);
+  };
+
+  const canReview = (() => {
+    if (amountNum <= 0) return false;
+    if (isPayIn) return !!bank && !!payTo && !!proofName;
+    if (isDirect) return !!bank;
+    return !!sourceFund;
+  })();
+
+  const handleReview = () =>
+    navigate({
+      to: "/invest-summary",
+      search: {
+        method: isUtFlip ? "flip" : isDirect ? "instant" : "bank",
+        amount: amount || "0",
+        fund: isUtFlip ? sourceFund : "Equity Account",
+        account: "Equity Account",
+        bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
+      },
+    });
+
+  const source = equityFundSources.find((f) => f.name === sourceFund)!;
+
+  const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
+    bank: banks,
+    payTo: calBankAccounts.map((a) => a.label),
+    sourceFund: equityFundSources.map((f) => f.name),
+  };
+  const pickerTitles: Record<"bank" | "payTo" | "sourceFund", string> = {
+    bank: "Transfer from",
+    payTo: "Transfer to",
+    sourceFund: "Transfer from unit trust",
+  };
+  const selectedFor = (kind: "bank" | "payTo" | "sourceFund") =>
+    kind === "bank" ? bank : kind === "payTo" ? payTo : sourceFund;
+
+  return (
+    <MobileLayout>
+      <PageHeader title={title} showBack helpTopic="invest" />
+
+      {/* Unit trust -> equity account visual */}
+      {isUtFlip && (
+        <div className="mx-4 mt-3 space-y-2">
+          <button
+            type="button"
+            onClick={() => setPicker("sourceFund")}
+            className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
+          >
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background:
+                  "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
+              }}
+            >
+              <PieChart className="w-5 h-5" style={{ color: "var(--pill)" }} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground leading-tight">
+                {source.name}
+              </p>
+              <p className="text-[12px] text-muted-foreground mt-0.5">
+                {source.sub}
+              </p>
+              <p className="text-[12px] text-muted-foreground">{source.value}</p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </button>
+
+          <div className="pl-5">
+            <ArrowDown className="w-4 h-4 text-muted-foreground" />
+          </div>
+
+          <div className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3">
+            <div
+              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background:
+                  "color-mix(in oklch, var(--pill) 25%, transparent)",
+              }}
+            >
+              <BarChart3 className="w-5 h-5" style={{ color: "var(--pill)" }} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground leading-tight">
+                Equity Account
+              </p>
+              <p className="text-[12px] text-muted-foreground mt-0.5">
+                LKR 25,000.00
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setPicker("bank")}
+            className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-3.5 text-left transition hover:bg-muted/10"
+          >
+            <span className="text-sm text-muted-foreground shrink-0">
+              Bank Account
+            </span>
+            <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
+              {bank}
+            </span>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </button>
+        </div>
+      )}
+
+      {/* Amount hero */}
+      <div className="px-4 pt-6 pb-6 text-center">
+        <div className="inline-flex items-baseline gap-2">
+          <span className="text-[18px] font-medium text-muted-foreground">
+            LKR
+          </span>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={formatAmountDisplay(amount)}
+            onChange={(e) => handleAmountChange(e.target.value)}
+            placeholder="0"
+            className="bg-transparent text-[44px] font-bold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none text-center"
+            style={{
+              width: `${Math.max(2, (formatAmountDisplay(amount) || "0").length)}ch`,
+            }}
+          />
+        </div>
+        <p className="mt-3 text-[12px] text-muted-foreground">
+          {isDirect
+            ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
+            : isPayIn
+              ? "Amount to pay in"
+              : "Amount to transfer"}
+        </p>
+      </div>
+
+      {/* Details */}
+      {!isUtFlip && (
+        <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+          <DateRow label="Date" date={date} onClick={() => setDateOpen(true)} />
+          <PickerRow
+            label="Transfer from"
+            value={bank}
+            placeholder="Select bank account"
+            onClick={() => setPicker("bank")}
+          />
+          {isPayIn && (
+            <PickerRow
+              label="Transfer to"
+              value={payTo}
+              placeholder="Select CAL account"
+              onClick={() => setPicker("payTo")}
+            />
+          )}
+        </div>
+      )}
+
+      {/* Recurring — Direct Invest only */}
+      {isDirect && (
+        <div className="mx-4 mt-4">
+          <RecurringToggle value={recurring} onChange={setRecurring} />
+        </div>
+      )}
+
+      {/* Attach proof — Pay in */}
+      {isPayIn && (
+        <div className="mx-4 mt-6">
+          <p className="px-1 mb-2 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+            Attach proof
+          </p>
+          {proofName ? (
+            <>
+              <div className="rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 flex items-center gap-3">
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--portfolio-blue) 28%, transparent)",
+                  }}
+                >
+                  <ImageIcon className="w-5 h-5 text-muted-foreground" />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground truncate">
+                    {proofName}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground">
+                    1.2 MB · Image
+                  </p>
+                </div>
+                <button
+                  onClick={() => setProofName(null)}
+                  className="w-7 h-7 rounded-full bg-muted/30 flex items-center justify-center text-muted-foreground hover:text-foreground"
+                  aria-label="Remove"
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
+              </div>
+              <div className="mt-2 flex items-center gap-1.5 px-1">
+                <Check className="w-3.5 h-3.5 text-success" />
+                <span className="text-[12px] font-medium text-success">
+                  Receipt attached
+                </span>
+              </div>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setProofName("transfer_receipt.jpg")}
+              className="w-full rounded-2xl bg-card/60 backdrop-blur-md py-6 flex flex-col items-center gap-2 transition hover:bg-muted/10"
+            >
+              <Upload className="w-5 h-5 text-muted-foreground" />
+              <span className="text-[12px] text-muted-foreground">
+                Tap to upload receipt
+              </span>
+            </button>
+          )}
+        </div>
+      )}
+
+      {/* Review CTA */}
+      <div className="mx-4 mt-8 mb-8">
+        <button
+          disabled={!canReview}
+          onClick={handleReview}
+          className="w-full py-4 rounded-full text-[15px] font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
+          style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
+        >
+          Review
+        </button>
+      </div>
+
+      {/* Date sheet */}
+      <Sheet open={dateOpen} onOpenChange={setDateOpen}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
+        >
+          <SheetHeader className="px-5 pb-0">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-base font-semibold text-foreground">
+                Select date
+              </SheetTitle>
+              <button
+                onClick={() => setDateOpen(false)}
+                className="rounded-full p-1 hover:bg-muted/20 transition"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="px-3 mt-2 flex justify-center">
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={(d) => {
+                if (d) setDate(d);
+                setDateOpen(false);
+              }}
+              className="p-3 pointer-events-auto"
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Picker sheet */}
+      <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
+        >
+          <SheetHeader className="px-5 pb-0">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-base font-semibold text-foreground">
+                {picker ? pickerTitles[picker] : ""}
+              </SheetTitle>
+              <button
+                onClick={() => setPicker(null)}
+                className="rounded-full p-1 hover:bg-muted/20 transition"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="px-5 mt-4 space-y-2">
+            {picker &&
+              pickerOptions[picker].map((opt) => {
+                const isSelected = selectedFor(picker) === opt;
+                return (
+                  <button
+                    key={opt}
+                    onClick={() => {
+                      if (picker === "bank") setBank(opt);
+                      if (picker === "payTo") setPayTo(opt);
+                      if (picker === "sourceFund") setSourceFund(opt);
+                      setPicker(null);
+                    }}
+                    className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+                      isSelected
+                        ? "bg-muted/20"
+                        : "bg-background/40 hover:bg-muted/10"
+                    }`}
+                  >
+                    <span className="text-sm text-foreground">{opt}</span>
+                    {isSelected && (
+                      <Check className="w-4 h-4" style={{ color: "var(--pill)" }} />
+                    )}
+                  </button>
+                );
+              })}
+          </div>
+        </SheetContent>
+      </Sheet>
+    </MobileLayout>
   );
 }

@@ -398,7 +398,18 @@ const deactivateSchema = baseSchema.extend({
 });
 
 export const Route = createFileRoute("/help/contact")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): {
+    category?: CategoryId;
+    txId?: string;
+    txName?: string;
+    txKind?: string;
+    txDate?: string;
+    txValue?: string;
+    txStatus?: "Pending" | "Confirmed";
+    txSubAccount?: string;
+  } => ({
     category: (search.category as CategoryId | undefined) ?? undefined,
     txId: (search.txId as string | undefined) ?? undefined,
     txName: (search.txName as string | undefined) ?? undefined,
