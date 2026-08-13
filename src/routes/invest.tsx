@@ -13,7 +13,14 @@ import {
   X,
   Image as ImageIcon,
   Check,
+  Wallet,
+  CalendarDays,
+  ArrowDown,
+  PieChart,
+  BarChart3,
 } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Calendar } from "@/components/ui/calendar";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
   Sheet,
@@ -25,7 +32,9 @@ import {
 type InvestMethod = "instant" | "bank" | "flip" | "payin" | "utflip";
 
 export const Route = createFileRoute("/invest")({
-  validateSearch: (search: Record<string, unknown>) => ({
+  validateSearch: (
+    search: Record<string, unknown>,
+  ): { product?: string; method?: InvestMethod } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
