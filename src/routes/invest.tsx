@@ -22,7 +22,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-type InvestMethod = "instant" | "bank" | "flip";
+type InvestMethod = "instant" | "bank" | "flip" | "payin" | "utflip";
 
 export const Route = createFileRoute("/invest")({
   validateSearch: (search: Record<string, unknown>) => ({
@@ -30,7 +30,9 @@ export const Route = createFileRoute("/invest")({
     method:
       search.method === "instant" ||
       search.method === "bank" ||
-      search.method === "flip"
+      search.method === "flip" ||
+      search.method === "payin" ||
+      search.method === "utflip"
         ? (search.method as InvestMethod)
         : undefined,
   }),
