@@ -733,7 +733,7 @@ function ContactForm() {
                     to={q.to}
                     className={`flex items-center gap-3 rounded-xl p-3 transition-colors ${
                       isHighlighted
-                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                        ? "bg-primary/25 text-primary-foreground hover:bg-primary/35"
                         : "bg-form-card hover:bg-secondary/80"
                     }`}
                   >
