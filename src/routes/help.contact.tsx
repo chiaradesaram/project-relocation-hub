@@ -84,6 +84,7 @@ const ACCOUNT_OPENING_LINKS: QuickLink[] = [
     to: "/get-started",
     description: "Begin your account opening online",
     icon: Compass,
+    highlight: true,
   },
 ];
 
