@@ -739,7 +739,7 @@ function ContactForm() {
                   >
                     <div
                       className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
-                        isHighlighted ? "bg-white/20" : "bg-primary/15"
+                        isHighlighted ? "bg-primary/25 text-white" : "bg-primary/15"
                       }`}
                     >
                       <Icon className={`h-4 w-4 ${isHighlighted ? "text-white" : "text-primary"}`} />
