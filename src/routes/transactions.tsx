@@ -790,7 +790,7 @@ function Transactions() {
           </div>
 
           {openTx?.trades && openTx.trades.length > 0 && (
-            <div className="rounded-2xl bg-white/[0.04] mb-4 overflow-hidden">
+            <div className="rounded-2xl bg-[#221E52] mb-4 overflow-hidden">
               <div className="px-4 pt-4 pb-2 flex items-center justify-between">
                 <p className="text-sm font-semibold text-foreground">Trades on {openTx.date}</p>
                 <span className="text-[11px] text-muted-foreground">{openTx.trades.length} total</span>
@@ -814,7 +814,7 @@ function Transactions() {
           {openTx?.product === "Treasuries" && openTx?.reinvestable && (
             <Link
               to="/invest"
-              className="rounded-2xl bg-white/[0.04] flex items-center gap-3 p-4 mb-4"
+              className="rounded-2xl bg-[#2A2660] flex items-center gap-3 p-4 mb-4"
             >
               <div className="w-10 h-10 rounded-xl bg-success/20 flex items-center justify-center text-success shrink-0">
                 <Repeat className="w-5 h-5" />
@@ -855,7 +855,7 @@ function Transactions() {
                   }
                 : {}
             }
-            className="rounded-2xl bg-white/[0.04] flex items-center gap-3 p-4"
+            className="rounded-2xl bg-[#2A2660] flex items-center gap-3 p-4"
           >
             <div className="w-10 h-10 rounded-xl bg-pill/90 flex items-center justify-center text-pill-foreground">
               <LifeBuoy className="w-5 h-5" />
