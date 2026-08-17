@@ -465,7 +465,7 @@ function Transactions() {
                   className={cn(
                     "px-3 py-1.5 rounded-full text-xs font-medium transition",
                     isActive
-                      ? "bg-pill text-pill-foreground"
+                      ? "bg-pill text-white"
                       : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
                   )}
                 >
@@ -479,9 +479,9 @@ function Transactions() {
           <div
             className={cn(
               "w-full mb-4 [&_[data-slot=calendar]]:bg-transparent",
-              "[&_[data-range-start=true]]:!bg-pill [&_[data-range-start=true]]:!text-pill-foreground",
-              "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-pill-foreground",
-              "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-pill-foreground",
+              "[&_[data-range-start=true]]:!bg-pill [&_[data-range-start=true]]:!text-white",
+              "[&_[data-range-end=true]]:!bg-pill [&_[data-range-end=true]]:!text-white",
+              "[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-white",
               "[&_[data-range-middle=true]]:!bg-pill/20 [&_[data-range-middle=true]]:!text-foreground",
               "[&_.rdp-today_button]:!bg-transparent [&_.rdp-today_button]:ring-1 [&_.rdp-today_button]:ring-pill [&_.rdp-today_button]:rounded-full [&_.rdp-today_button]:text-foreground",
               "[&_[data-range-start=true]_button]:!ring-0 [&_[data-range-end=true]_button]:!ring-0 [&_[data-selected-single=true]_button]:!ring-0",
@@ -515,7 +515,7 @@ function Transactions() {
           <button
             type="button"
             onClick={applyDraft}
-            className="w-full py-3 rounded-full text-sm font-semibold bg-pill text-pill-foreground"
+            className="w-full py-3 rounded-full text-sm font-semibold bg-pill text-white"
           >
             Apply
           </button>
