@@ -336,7 +336,7 @@ function HelpIndexPage() {
               <MessageCircle className="w-4.5 h-4.5 text-white" />
             </div>
             <div className="flex-1">
-              <p className="text-[14px] font-semibold text-white">Contact us</p>
+              <p className="text-[15px] font-bold text-white">Contact us</p>
               <p className="text-[12px] text-white/90">Usually replies in 2 business days.</p>
             </div>
             <ChevronRight className="w-4 h-4 text-white/80" />
