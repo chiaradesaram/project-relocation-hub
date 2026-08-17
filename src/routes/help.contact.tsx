@@ -40,6 +40,8 @@ interface QuickLink {
   to: string;
   description: string;
   icon: IconCmp;
+  /** Make the whole card the primary blue colour. */
+  highlight?: boolean;
 }
 
 interface Sub {
