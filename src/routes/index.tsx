@@ -358,8 +358,8 @@ function Dashboard() {
       </div>
       )}
 
-      {/* Quick actions */}
-      {isVisible("quick") && (
+      {/* Quick actions — hidden */}
+      {false && isVisible("quick") && (
       <div className="mx-4 mt-3.5">
         <div className="rounded-2xl bg-card backdrop-blur-md overflow-hidden p-2.5">
           <div className="flex items-center justify-between px-1 pb-1.5">
