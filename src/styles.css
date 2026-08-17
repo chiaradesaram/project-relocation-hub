@@ -118,6 +118,8 @@
 
   --accent-cyan: oklch(0.69 0.14 231);
   --accent-magenta: oklch(0.60 0.24 359);
+  --accent-purple: #7B5EA7;
+
 
   --chart-1: oklch(0.646 0.222 41.116);
   --chart-2: oklch(0.6 0.118 184.704);
