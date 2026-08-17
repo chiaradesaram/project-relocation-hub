@@ -329,17 +329,17 @@ function HelpIndexPage() {
       <div className="mx-5 mt-2 mb-8">
         <Link
           to="/help/contact"
-          className="block rounded-2xl bg-primary p-4 hover:bg-primary/90 transition-colors"
+          className="block rounded-2xl bg-accent-purple p-4 hover:bg-accent-purple/90 transition-colors"
         >
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-primary-foreground/15 flex items-center justify-center shrink-0">
-              <MessageCircle className="w-4.5 h-4.5 text-primary-foreground" />
+            <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center shrink-0">
+              <MessageCircle className="w-4.5 h-4.5 text-white" />
             </div>
             <div className="flex-1">
-              <p className="text-[14px] font-semibold text-primary-foreground">Contact us</p>
-              <p className="text-[12px] text-primary-foreground/80">Usually replies in 2 business days.</p>
+              <p className="text-[14px] font-semibold text-white">Contact us</p>
+              <p className="text-[12px] text-white/80">Usually replies in 2 business days.</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-primary-foreground/70" />
+            <ChevronRight className="w-4 h-4 text-white/70" />
           </div>
         </Link>
       </div>
