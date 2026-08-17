@@ -262,7 +262,7 @@ function Transactions() {
             onClick={() => changeProduct(f)}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
               product === f
-                ? "bg-pill text-pill-foreground"
+                ? "bg-pill text-white"
                 : "bg-pill/20 text-pill"
             }`}
           >
@@ -279,7 +279,7 @@ function Transactions() {
           className={cn(
             "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition",
             range?.from
-              ? "bg-pill text-pill-foreground"
+              ? "bg-pill text-white"
               : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
           )}
         >
@@ -308,7 +308,7 @@ function Transactions() {
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition",
                 subAccount
-                  ? "bg-pill text-pill-foreground"
+                  ? "bg-pill text-white"
                   : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
               )}
             >
@@ -323,7 +323,7 @@ function Transactions() {
               className={cn(
                 "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition",
                 fund
-                  ? "bg-pill text-pill-foreground"
+                  ? "bg-pill text-white"
                   : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
               )}
             >
@@ -341,7 +341,7 @@ function Transactions() {
                 className={cn(
                   "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition",
                   active
-                    ? "bg-pill text-pill-foreground"
+                    ? "bg-pill text-white"
                     : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
                 )}
               >
@@ -569,7 +569,7 @@ function Transactions() {
             </div>
             <div className="text-right shrink-0">
               <p className={`text-sm font-semibold ${
-                tx.positive ? "text-emerald-300" : "text-foreground"
+                tx.positive ? "text-success" : "text-foreground"
               }`}>
                 {tx.positive ? "+" : "−"} {tx.value}
               </p>
