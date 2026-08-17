@@ -731,9 +731,9 @@ function ContactForm() {
                   <Link
                     key={q.to + q.label}
                     to={q.to}
-                    className={`flex items-center gap-3 rounded-xl p-3 transition-colors ${
+                    className={`flex items-center gap-3 rounded-xl p-3 transition-colors border border-primary/20 ${
                       isHighlighted
-                        ? "bg-primary/25 text-primary-foreground hover:bg-primary/35"
+                        ? "bg-primary/15 text-primary-foreground hover:bg-primary/25"
                         : "bg-form-card hover:bg-secondary/80"
                     }`}
                   >
