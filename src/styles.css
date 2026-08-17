@@ -83,7 +83,7 @@
   --surface-2: #221E52;
   --form-card: #2A2660;
 
-  --card: var(--surface-1);
+  --card: var(--surface-2);
   --card-foreground: oklch(0.97 0 0);
 
   --popover: var(--surface-2);
