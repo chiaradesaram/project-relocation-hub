@@ -76,7 +76,7 @@
   --background: #130d35;
   --foreground: oklch(0.97 0 0);
 
-  --pill: #218FB7;
+  --pill: #00A3E0;
   --pill-foreground: #130d35;
 
   --surface-1: #1F1A50;
@@ -89,7 +89,7 @@
   --popover: var(--surface-2);
   --popover-foreground: oklch(0.97 0 0);
 
-  --primary: #218FB7;
+  --primary: #00A3E0;
   --primary-foreground: oklch(1 0 0);
 
   --secondary: oklch(0.38 0.09 265);

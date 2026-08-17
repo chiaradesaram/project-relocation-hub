@@ -260,7 +260,7 @@ function Transactions() {
           <button
             key={f}
             onClick={() => changeProduct(f)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition ${
+            className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${
               product === f
                 ? "bg-pill text-white"
                 : "bg-pill/20 text-pill"
