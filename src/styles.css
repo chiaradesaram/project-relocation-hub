@@ -54,6 +54,7 @@
   --color-portfolio-pink: var(--portfolio-pink);
   --color-accent-cyan: var(--accent-cyan);
   --color-accent-magenta: var(--accent-magenta);
+  --color-accent-purple: var(--accent-purple);
   --color-pill: var(--pill);
   --color-pill-foreground: var(--pill-foreground);
   --animate-fade-in: fade-in 0.3s ease-out;
