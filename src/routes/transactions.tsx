@@ -617,7 +617,7 @@ function Transactions() {
             </DrawerDescription>
           </DrawerHeader>
 
-          <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-4">
+          <div className="rounded-2xl bg-[#221E52] divide-y divide-white/[0.06] mb-4">
             {openTx?.kind === "Fund Flip" ? (
               <div className="p-4">
                 <p className="text-sm font-semibold text-foreground">Fund flip</p>
