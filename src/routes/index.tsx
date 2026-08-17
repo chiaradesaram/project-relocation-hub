@@ -403,8 +403,8 @@ function Dashboard() {
       </div>
       )}
 
-      {/* Watchlist */}
-      {isVisible("watchlist") && (
+      {/* Watchlist — hidden */}
+      {false && isVisible("watchlist") && (
         <div className="mx-4 mt-3.5">
           <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.05 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
@@ -446,8 +446,8 @@ function Dashboard() {
         </div>
       )}
 
-      {/* ASPI snapshot */}
-      {isVisible("aspi") && (
+      {/* ASPI snapshot — hidden */}
+      {false && isVisible("aspi") && (
         <div className="mx-4 mt-3.5">
           <button
             onClick={() => navigate({ to: "/rates" })}
@@ -495,8 +495,8 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Rates to watch */}
-      {isVisible("rates") && (
+      {/* Rates to watch — hidden */}
+      {false && isVisible("rates") && (
         <div className="mx-4 mt-3.5">
           <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.05 275)" }}>
             <div className="flex items-center justify-between pb-2.5">
@@ -541,8 +541,8 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Latest transactions */}
-      {isVisible("transactions") && (
+      {/* Latest transactions — hidden */}
+      {false && isVisible("transactions") && (
         <div className="mx-4 mt-3.5">
           <div className="rounded-2xl bg-card backdrop-blur-md overflow-hidden">
             <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
@@ -585,7 +585,8 @@ function Dashboard() {
       )}
 
 
-      {/* Customize entry */}
+      {/* Customize entry — hidden */}
+      {false && (
       <div className="mx-4 mt-2 mb-4 flex justify-center">
         <button
           onClick={() => setCustomizing(true)}
@@ -595,6 +596,7 @@ function Dashboard() {
           Customize dashboard
         </button>
       </div>
+      )}
 
       {customizing && (
         <div className="fixed inset-0 z-50 flex items-end">
