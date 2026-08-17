@@ -1354,10 +1354,10 @@ function RecentTransactionsPicker({
               key={tx.id}
               type="button"
               onClick={() => onSelect(tx.id)}
-              className={`w-full rounded-lg border p-2.5 text-left transition-colors ${
+              className={`w-full rounded-lg p-2.5 text-left transition-colors ${
                 active
-                  ? "border-primary/50 bg-primary/10"
-                  : "border-border/40 bg-muted/20 hover:bg-muted/30"
+                  ? "bg-primary/15 text-foreground"
+                  : "bg-muted/20 hover:bg-muted/30"
               }`}
             >
               <div className="flex items-center justify-between gap-2">
