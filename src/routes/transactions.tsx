@@ -354,7 +354,7 @@ function Transactions() {
 
       {/* Sub Account picker drawer */}
       <Drawer open={subAccountOpen} onOpenChange={setSubAccountOpen}>
-        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6">
+        <DrawerContent className="bg-[var(--surface-2)] border-none rounded-t-[28px] px-5 pb-6">
           <div className="flex items-center justify-between pt-2 pb-3">
             <DrawerTitle className="text-lg font-semibold">Sub Account</DrawerTitle>
             <button
@@ -391,7 +391,7 @@ function Transactions() {
 
       {/* Fund picker drawer */}
       <Drawer open={fundOpen} onOpenChange={setFundOpen}>
-        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6">
+        <DrawerContent className="bg-[var(--surface-2)] border-none rounded-t-[28px] px-5 pb-6">
           <div className="flex items-center justify-between pt-2 pb-3">
             <DrawerTitle className="text-lg font-semibold">Fund</DrawerTitle>
             <button
@@ -428,7 +428,7 @@ function Transactions() {
 
       {/* Wise-style Date Range Picker Drawer */}
       <Drawer open={dateOpen} onOpenChange={setDateOpen}>
-        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-6 max-h-[92vh]">
+        <DrawerContent className="bg-[var(--surface-2)] border-none rounded-t-[28px] px-5 pb-6 max-h-[92vh]">
           <div className="flex items-center justify-between pt-2 pb-3">
             <DrawerTitle className="text-lg font-semibold">Filter by date</DrawerTitle>
             <button
@@ -582,7 +582,7 @@ function Transactions() {
       </div>
 
       <Drawer open={!!openTx} onOpenChange={(o) => !o && setOpenTx(null)}>
-        <DrawerContent className="bg-[var(--surface-1)] border-none rounded-t-[28px] px-5 pb-8">
+        <DrawerContent className="bg-[var(--surface-2)] border-none rounded-t-[28px] px-5 pb-8">
           <div className="flex justify-end pt-2 pb-4">
             <button
               type="button"
