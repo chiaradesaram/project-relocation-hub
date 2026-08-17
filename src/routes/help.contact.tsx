@@ -40,6 +40,8 @@ interface QuickLink {
   to: string;
   description: string;
   icon: IconCmp;
+  /** Make the whole card the primary blue colour. */
+  highlight?: boolean;
 }
 
 interface Sub {
@@ -82,6 +84,7 @@ const ACCOUNT_OPENING_LINKS: QuickLink[] = [
     to: "/get-started",
     description: "Begin your account opening online",
     icon: Compass,
+    highlight: true,
   },
 ];
 
@@ -723,22 +726,33 @@ function ContactForm() {
             <div className="space-y-2">
               {quickLinks.map((q) => {
                 const Icon = q.icon;
+                const isHighlighted = q.highlight;
                 return (
                   <Link
                     key={q.to + q.label}
                     to={q.to}
-                    className="flex items-center gap-3 rounded-xl bg-form-card p-3 transition-colors hover:bg-secondary/80"
+                    className={`flex items-center gap-3 rounded-xl p-3 transition-colors ${
+                      isHighlighted
+                        ? "bg-primary text-primary-foreground hover:bg-primary/90"
+                        : "bg-form-card hover:bg-secondary/80"
+                    }`}
                   >
-                    <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/15">
-                      <Icon className="h-4 w-4 text-primary" />
+                    <div
+                      className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${
+                        isHighlighted ? "bg-white/20" : "bg-primary/15"
+                      }`}
+                    >
+                      <Icon className={`h-4 w-4 ${isHighlighted ? "text-white" : "text-primary"}`} />
                     </div>
                     <div className="flex-1">
-                      <p className="text-[13px] font-semibold text-foreground">{q.label}</p>
-                      <p className="text-[12px] leading-relaxed text-muted-foreground">
+                      <p className={`text-[13px] font-semibold ${isHighlighted ? "text-white" : "text-foreground"}`}>
+                        {q.label}
+                      </p>
+                      <p className={`text-[12px] leading-relaxed ${isHighlighted ? "text-white/80" : "text-muted-foreground"}`}>
                         {q.description}
                       </p>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    <ChevronRight className={`h-4 w-4 ${isHighlighted ? "text-white/80" : "text-muted-foreground"}`} />
                   </Link>
                 );
               })}
