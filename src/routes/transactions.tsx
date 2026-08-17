@@ -366,7 +366,7 @@ function Transactions() {
               <X className="w-4 h-4" />
             </button>
           </div>
-          <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
+          <div className="rounded-2xl bg-[#2A2660] divide-y divide-white/[0.06] mb-2">
             <button
               type="button"
               onClick={() => { setSubAccount(null); setSubAccountOpen(false); }}
@@ -403,7 +403,7 @@ function Transactions() {
               <X className="w-4 h-4" />
             </button>
           </div>
-          <div className="rounded-2xl bg-white/[0.04] divide-y divide-white/[0.06] mb-2">
+          <div className="rounded-2xl bg-[#2A2660] divide-y divide-white/[0.06] mb-2">
             <button
               type="button"
               onClick={() => { setFund(null); setFundOpen(false); }}
