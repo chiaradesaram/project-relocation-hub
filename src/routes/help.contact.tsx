@@ -660,7 +660,7 @@ function ContactForm() {
           <div className="mt-4 grid grid-cols-2 gap-2">
             <Link
               to="/help"
-              className="rounded-xl border border-border/40 bg-card/60 py-2.5 text-center text-[12px] font-medium text-foreground transition-colors hover:bg-muted/30"
+              className="rounded-xl bg-form-card py-2.5 text-center text-[12px] font-medium text-foreground transition-colors hover:bg-secondary/80"
             >
               Back to Help
             </Link>
@@ -727,7 +727,7 @@ function ContactForm() {
                   <Link
                     key={q.to + q.label}
                     to={q.to}
-                    className="flex items-center gap-3 rounded-xl bg-card p-3 transition-colors hover:bg-secondary"
+                    className="flex items-center gap-3 rounded-xl bg-form-card p-3 transition-colors hover:bg-secondary/80"
                   >
                     <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-pill/90">
                       <Icon className="h-4 w-4 text-pill-foreground" />
@@ -747,7 +747,7 @@ function ContactForm() {
 
           {/* Smart suggestions (hidden in tx flows — they go straight to picker) */}
           {sub && productReady && hasSuggestions && !isTxFlow && (!showForm || resolveOnly) && (
-            <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+            <div className="rounded-xl bg-form-card p-3">
               <div className="mb-2 flex items-center gap-1.5">
                 <Lightbulb className="h-3.5 w-3.5 text-primary" />
                 <p className="text-[13px] font-semibold text-foreground">
@@ -910,7 +910,7 @@ function ContactForm() {
                     />
                   </Field>
 
-                  <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
+                  <label className="flex cursor-pointer items-center gap-2 rounded-xl bg-form-card px-3 py-2.5 transition-colors hover:bg-secondary/80">
                     <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
                     <span className="flex-1 text-[12px] text-muted-foreground">
                       {fileName ?? "Attach documents (optional)"}
@@ -1149,7 +1149,7 @@ function FormDifficultyPicker({
   const step = FORM_STEPS.find((s) => s.id === stepId) ?? null;
   const isOther = stepId === "other";
   return (
-    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+    <div className="rounded-xl bg-form-card p-3">
       <p className="text-[13px] font-semibold text-foreground">Which step are you stuck on?</p>
       <p className="mt-0.5 text-[12px] text-muted-foreground">
         Pick a step and we'll show tips to help you get through it.
@@ -1239,7 +1239,7 @@ function CreationPlanPicker({
   errors: Record<string, string>;
 }) {
   return (
-    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+    <div className="rounded-xl bg-form-card p-3">
       <p className="text-[13px] font-semibold text-foreground">What would you like to do?</p>
       <div className="mt-2">
         <SelectInput value={stepId} onChange={setStepId} placeholder="Pick an option">
@@ -1336,7 +1336,7 @@ function RecentTransactionsPicker({
   const isDeepLinked = !!extraTx;
   const selectedTx = txs.find((t) => t.id === selectedTxId) ?? null;
   return (
-    <div className="rounded-xl border border-border/40 bg-card/60 p-3">
+    <div className="rounded-xl bg-form-card p-3">
       <p className="text-[13px] font-semibold text-foreground">
         Which transaction are you referring to?
       </p>
@@ -1456,7 +1456,7 @@ function NicUpload({
       <p className="mb-1 text-[12px] font-semibold tracking-wider text-muted-foreground">
         {label.toUpperCase()}
       </p>
-      <label className="flex cursor-pointer items-center gap-2 rounded-xl border border-dashed border-border/50 bg-card/40 px-3 py-2.5 transition-colors hover:bg-muted/20">
+      <label className="flex cursor-pointer items-center gap-2 rounded-xl bg-form-card px-3 py-2.5 transition-colors hover:bg-secondary/80">
         <Paperclip className="h-3.5 w-3.5 text-muted-foreground" />
         <span className="flex-1 text-[12px] text-muted-foreground">
           {fileName ?? "Tap to upload (JPG / PNG, max 5 MB)"}
@@ -1494,7 +1494,7 @@ function Field({
           {label.toUpperCase()}
         </p>
       )}
-      <div className="rounded-xl border border-border/40 bg-card/60 px-3 py-2.5 backdrop-blur-md">
+      <div className="rounded-xl bg-form-card px-3 py-2.5">
         {children}
       </div>
       {error && <p className="mt-1 text-[12px] text-destructive">{error}</p>}
