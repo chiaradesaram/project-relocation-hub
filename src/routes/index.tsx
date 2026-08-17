@@ -295,17 +295,17 @@ function Dashboard() {
       <div className="mx-4 mt-2.5 flex gap-2">
         <button
           onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-pill/60 py-2.5 transition hover:bg-pill/75"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 transition hover:bg-primary/90"
         >
-          <Plus className="h-3.5 w-3.5 text-pill-foreground" strokeWidth={3} />
-          <span className="text-[12px] font-semibold text-pill-foreground">Invest</span>
+          <Plus className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
+          <span className="text-[12px] font-semibold text-primary-foreground">Invest</span>
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-pill/15 py-2.5 transition hover:bg-pill/25"
+          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 transition hover:bg-primary/90"
         >
-          <Minus className="h-3.5 w-3.5 text-pill" strokeWidth={3} />
-          <span className="text-[12px] font-semibold text-pill">Redeem</span>
+          <Minus className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
+          <span className="text-[12px] font-semibold text-primary-foreground">Redeem</span>
         </button>
       </div>
 
