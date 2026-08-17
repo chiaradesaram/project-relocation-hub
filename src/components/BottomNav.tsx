@@ -50,7 +50,9 @@ const BottomNav = () => {
                 }}
                 className="w-full flex items-center gap-3 p-4 bg-secondary rounded-xl hover:bg-muted/50 transition mb-2"
               >
-                <Icon className="w-5 h-5 text-primary" />
+                <div className="w-9 h-9 rounded-full bg-primary/15 flex items-center justify-center shrink-0">
+                  <Icon className="w-5 h-5 text-primary" />
+                </div>
                 <span className="text-sm font-medium text-foreground">{label}</span>
               </button>
             ))}
