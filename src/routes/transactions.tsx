@@ -7,7 +7,8 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { format } from "date-fns";
-import type { DateRange } from "react-day-picker";
+import { useDayPicker, UI } from "react-day-picker";
+import type { DateRange, NavProps, MonthCaptionProps } from "react-day-picker";
 
 export const Route = createFileRoute("/transactions")({
   component: Transactions,
@@ -168,6 +169,7 @@ function Transactions() {
   const [dateOpen, setDateOpen] = useState(false);
   const [draftRange, setDraftRange] = useState<DateRange | undefined>();
   const [activePreset, setActivePreset] = useState<string | null>("All time");
+  const [displayMonth, setDisplayMonth] = useState<Date>(draftRange?.from ?? new Date());
 
   // Reset sub-filters when product changes
   const changeProduct = (p: Product) => {
@@ -495,19 +497,72 @@ function Transactions() {
                 setActivePreset(null);
               }}
               numberOfMonths={1}
-              defaultMonth={draftRange?.from ?? new Date()}
+              month={displayMonth}
+              onMonthChange={setDisplayMonth}
               className="pointer-events-auto w-full bg-transparent p-0 [--cell-size:3rem]"
               classNames={{
                 root: "w-full",
                 months: "w-full",
-                month: "w-full gap-3",
-                month_caption: "flex h-9 w-full items-center justify-center",
-                nav: "absolute inset-x-0 top-0 flex w-full items-center justify-between",
+                month: "w-full gap-3 relative",
+                month_caption: "hidden",
+                nav: "relative flex w-full items-center justify-center h-9 gap-3",
+                button_previous: "h-8 w-8 p-0",
+                button_next: "h-8 w-8 p-0",
                 weekdays: "flex w-full",
                 weekday: "text-muted-foreground flex-1 select-none text-[0.8rem] font-normal",
                 week: "mt-1 flex w-full",
                 day: "group/day relative flex-1 aspect-square select-none p-0 text-center",
                 today: "!bg-transparent rounded-full ring-1 ring-pill text-foreground data-[selected=true]:ring-0",
+              }}
+              components={{
+                Nav: ({
+                  onPreviousClick,
+                  onNextClick,
+                  previousMonth,
+                  nextMonth,
+                }: NavProps) => {
+                  const { components, classNames, labels } = useDayPicker();
+                  return (
+                    <div className="flex items-center justify-center gap-3">
+                      <components.PreviousMonthButton
+                        type="button"
+                        className={classNames[UI.PreviousMonthButton]}
+                        tabIndex={previousMonth ? undefined : -1}
+                        aria-disabled={previousMonth ? undefined : true}
+                        aria-label={labels.labelPrevious(previousMonth)}
+                        onClick={onPreviousClick}
+                      >
+                        <components.Chevron
+                          disabled={previousMonth ? undefined : true}
+                          className={classNames[UI.Chevron]}
+                          orientation="left"
+                        />
+                      </components.PreviousMonthButton>
+                      <span className="text-sm font-semibold text-foreground">
+                        {format(displayMonth, "MMMM yyyy")}
+                      </span>
+                      <components.NextMonthButton
+                        type="button"
+                        className={classNames[UI.NextMonthButton]}
+                        tabIndex={nextMonth ? undefined : -1}
+                        aria-disabled={nextMonth ? undefined : true}
+                        aria-label={labels.labelNext(nextMonth)}
+                        onClick={onNextClick}
+                      >
+                        <components.Chevron
+                          disabled={nextMonth ? undefined : true}
+                          className={classNames[UI.Chevron]}
+                          orientation="right"
+                        />
+                      </components.NextMonthButton>
+                    </div>
+                  );
+                },
+                MonthCaption: ({ children }: MonthCaptionProps) => (
+                  <div className="hidden" aria-hidden="true">
+                    {children}
+                  </div>
+                ),
               }}
             />
           </div>
