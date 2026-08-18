@@ -655,6 +655,22 @@ const equityFundSources = [
   { name: "CAL Money Market Fund", sub: "Personal account", value: "LKR 32,100.00" },
 ];
 
+const equityFundSubAccounts: Record<string, { name: string; value: string }[]> = {
+  "CAL Growth Fund": [
+    { name: "Chiara's wealth account", value: "LKR 150,000.00" },
+    { name: "Retirement", value: "LKR 92,500.00" },
+    { name: "General", value: "LKR 41,200.00" },
+  ],
+  "CAL Income Fund": [
+    { name: "Personal account", value: "LKR 84,300.00" },
+    { name: "Emergency", value: "LKR 36,700.00" },
+  ],
+  "CAL Money Market Fund": [
+    { name: "Personal account", value: "LKR 32,100.00" },
+    { name: "Short term", value: "LKR 18,450.00" },
+  ],
+};
+
 function EquitiesForm({ method }: { method: InvestMethod }) {
   const navigate = useNavigate();
 
