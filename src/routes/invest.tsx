@@ -1010,7 +1010,69 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             </div>
           </SheetHeader>
           <div className="px-5 mt-4 space-y-2">
-            {picker &&
+            {picker === "sourceFund" ? (
+              <div className="space-y-4 pb-2">
+                <div>
+                  <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+                    Fund
+                  </p>
+                  <ModernSelect
+                    value={draftFund}
+                    onChange={(e) => {
+                      const f = e.target.value;
+                      setDraftFund(f);
+                      setDraftSub(equityFundSubAccounts[f]?.[0]?.name ?? "");
+                    }}
+                    placeholder="Select fund"
+                  >
+                    {equityFundSources.map((f) => (
+                      <option key={f.name} value={f.name}>
+                        {f.name}
+                      </option>
+                    ))}
+                  </ModernSelect>
+                </div>
+                <div>
+                  <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
+                    Sub account
+                  </p>
+                  <ModernSelect
+                    value={draftSub}
+                    onChange={(e) => setDraftSub(e.target.value)}
+                    placeholder="Select sub account"
+                  >
+                    {draftSubOptions.map((s) => (
+                      <option key={s.name} value={s.name}>
+                        {s.name}
+                      </option>
+                    ))}
+                  </ModernSelect>
+                  {draftSub && (
+                    <p className="mt-2 px-1 text-[12px] text-muted-foreground">
+                      Available{" "}
+                      {draftSubOptions.find((s) => s.name === draftSub)?.value}
+                    </p>
+                  )}
+                </div>
+                <button
+                  type="button"
+                  disabled={!draftFund || !draftSub}
+                  onClick={() => {
+                    setSourceFund(draftFund);
+                    setSourceSub(draftSub);
+                    setPicker(null);
+                  }}
+                  className="w-full py-3.5 rounded-full text-[15px] font-semibold transition disabled:opacity-40"
+                  style={{
+                    background: "var(--pill)",
+                    color: "var(--pill-foreground)",
+                  }}
+                >
+                  Confirm
+                </button>
+              </div>
+            ) : (
+              picker &&
               pickerOptions[picker].map((opt) => {
                 const isSelected = selectedFor(picker) === opt;
                 return (
@@ -1019,7 +1081,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                     onClick={() => {
                       if (picker === "bank") setBank(opt);
                       if (picker === "payTo") setPayTo(opt);
-                      if (picker === "sourceFund") setSourceFund(opt);
                       setPicker(null);
                     }}
                     className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
@@ -1034,7 +1095,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                     )}
                   </button>
                 );
-              })}
+              })
+            )}
           </div>
         </SheetContent>
       </Sheet>
