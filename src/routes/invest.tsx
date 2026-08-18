@@ -20,6 +20,7 @@ import {
   BarChart3,
 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import ModernSelect from "@/components/ModernSelect";
 import { Calendar } from "@/components/ui/calendar";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
