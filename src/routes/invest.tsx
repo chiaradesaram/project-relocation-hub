@@ -682,9 +682,20 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [proofName, setProofName] = useState<string | null>(null);
   const [recurring, setRecurring] = useState(false);
   const [sourceFund, setSourceFund] = useState(equityFundSources[0]!.name);
+  const [sourceSub, setSourceSub] = useState(
+    equityFundSubAccounts[equityFundSources[0]!.name]![0]!.name,
+  );
+  const [draftFund, setDraftFund] = useState(sourceFund);
+  const [draftSub, setDraftSub] = useState(sourceSub);
   const [picker, setPicker] = useState<
     null | "bank" | "payTo" | "sourceFund"
   >(null);
+
+  const openFundPicker = () => {
+    setDraftFund(sourceFund);
+    setDraftSub(sourceSub);
+    setPicker("sourceFund");
+  };
 
   const isPayIn = method === "payin";
   const isDirect = method === "instant";
