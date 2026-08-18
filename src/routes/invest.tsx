@@ -741,6 +741,10 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     });
 
   const source = equityFundSources.find((f) => f.name === sourceFund)!;
+  const sourceSubAccounts = equityFundSubAccounts[sourceFund] ?? [];
+  const selectedSub =
+    sourceSubAccounts.find((s) => s.name === sourceSub) ?? sourceSubAccounts[0];
+  const draftSubOptions = equityFundSubAccounts[draftFund] ?? [];
 
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
@@ -764,7 +768,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         <div className="mx-4 mt-3 space-y-2">
           <button
             type="button"
-            onClick={() => setPicker("sourceFund")}
+            onClick={openFundPicker}
             className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
           >
             <div
@@ -781,9 +785,11 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                 {source.name}
               </p>
               <p className="text-[12px] text-muted-foreground mt-0.5">
-                {source.sub}
+                {selectedSub?.name ?? source.sub}
               </p>
-              <p className="text-[12px] text-muted-foreground">{source.value}</p>
+              <p className="text-[12px] text-muted-foreground">
+                {selectedSub?.value ?? source.value}
+              </p>
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </button>
