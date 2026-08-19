@@ -796,9 +796,23 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               <p className="text-[12px] text-muted-foreground mt-0.5">
                 {selectedSub?.name ?? source.sub}
               </p>
-              <p className="text-[12px] text-muted-foreground">
-                {selectedSub?.value ?? source.value}
-              </p>
+              {showPreview ? (
+                <p className="text-[12px] flex items-center gap-1.5">
+                  <span className="text-muted-foreground/60 line-through">
+                    {selectedSub?.value ?? source.value}
+                  </span>
+                  <span className="font-medium text-foreground">
+                    {fmtLkr(sourceBalance - transferAmt)}
+                  </span>
+                  <span className="text-muted-foreground">
+                    (−{fmtLkr(transferAmt).replace("LKR ", "")})
+                  </span>
+                </p>
+              ) : (
+                <p className="text-[12px] text-muted-foreground">
+                  {selectedSub?.value ?? source.value}
+                </p>
+              )}
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </button>
@@ -821,9 +835,23 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               <p className="text-sm font-semibold text-foreground leading-tight">
                 Equity Account
               </p>
-              <p className="text-[12px] text-muted-foreground mt-0.5">
-                LKR 25,000.00
-              </p>
+              {showPreview ? (
+                <p className="text-[12px] mt-0.5 flex items-center gap-1.5">
+                  <span className="text-muted-foreground/60 line-through">
+                    {fmtLkr(equityBalance)}
+                  </span>
+                  <span className="font-medium text-success">
+                    {fmtLkr(equityBalance + transferAmt)}
+                  </span>
+                  <span className="text-success/80">
+                    (+{fmtLkr(transferAmt).replace("LKR ", "")})
+                  </span>
+                </p>
+              ) : (
+                <p className="text-[12px] text-muted-foreground mt-0.5">
+                  {fmtLkr(equityBalance)}
+                </p>
+              )}
             </div>
           </div>
 
