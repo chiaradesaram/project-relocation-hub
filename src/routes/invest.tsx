@@ -828,16 +828,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                 Equity Account
               </p>
               {showPreview ? (
-                <p className="text-[12px] mt-0.5 flex items-center gap-1.5">
-                  <span className="text-muted-foreground/60 line-through">
-                    {fmtLkr(equityBalance)}
-                  </span>
-                  <span className="font-medium text-success">
-                    {fmtLkr(equityBalance + transferAmt)}
-                  </span>
-                  <span className="text-success/80">
-                    (+{fmtLkr(transferAmt).replace("LKR ", "")})
-                  </span>
+                <p className="text-[12px] font-medium text-success mt-0.5">
+                  {fmtLkr(equityBalance + transferAmt)}
                 </p>
               ) : (
                 <p className="text-[12px] text-muted-foreground mt-0.5">
