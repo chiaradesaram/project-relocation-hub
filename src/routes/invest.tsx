@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -673,6 +673,7 @@ const equityFundSubAccounts: Record<string, { name: string; value: string }[]> =
 
 function EquitiesForm({ method }: { method: InvestMethod }) {
   const navigate = useNavigate();
+  const amountRef = useRef<HTMLDivElement>(null);
 
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState<Date>(new Date());
@@ -709,6 +710,31 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
   const amountNum = parseFloat(amount || "0") || 0;
 
+  const source = equityFundSources.find((f) => f.name === sourceFund)!;
+  const sourceSubAccounts = equityFundSubAccounts[sourceFund] ?? [];
+  const selectedSub =
+    sourceSubAccounts.find((s) => s.name === sourceSub) ?? sourceSubAccounts[0];
+  const draftSubOptions = equityFundSubAccounts[draftFund] ?? [];
+
+  // Live balance preview for the unit trust -> equity transfer
+  const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
+  const fmtLkr = (n: number) =>
+    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const sourceBalance = parseLkr(selectedSub?.value ?? source.value);
+  const equityBalance = 25000;
+  const projectedSourceBalance = sourceBalance - amountNum;
+  const isOverBalance = isUtFlip && projectedSourceBalance < 0;
+
+  // Wobble the amount field when the user types over their unit trust balance
+  useEffect(() => {
+    if (isOverBalance && amountRef.current) {
+      const el = amountRef.current;
+      el.classList.remove("animate-wobble");
+      void el.offsetWidth;
+      el.classList.add("animate-wobble");
+    }
+  }, [amount, isOverBalance]);
+
   const handleAmountChange = (raw: string) => {
     const sanitized = sanitizeAmountInput(raw);
     if (isDirect) {
@@ -721,8 +747,12 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     setAmount(sanitized);
   };
 
+  const transferAmt = isUtFlip ? amountNum : 0;
+  const showPreview = isUtFlip && amountNum > 0;
+
   const canReview = (() => {
     if (amountNum <= 0) return false;
+    if (isUtFlip && isOverBalance) return false;
     if (isPayIn) return !!bank && !!payTo && !!proofName;
     if (isDirect) return !!bank;
     return !!sourceFund;
@@ -739,21 +769,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
       },
     });
-
-  const source = equityFundSources.find((f) => f.name === sourceFund)!;
-  const sourceSubAccounts = equityFundSubAccounts[sourceFund] ?? [];
-  const selectedSub =
-    sourceSubAccounts.find((s) => s.name === sourceSub) ?? sourceSubAccounts[0];
-  const draftSubOptions = equityFundSubAccounts[draftFund] ?? [];
-
-  // Live balance preview for the unit trust -> equity transfer
-  const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
-  const fmtLkr = (n: number) =>
-    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  const sourceBalance = parseLkr(selectedSub?.value ?? source.value);
-  const equityBalance = 25000;
-  const transferAmt = Math.min(amountNum, sourceBalance);
-  const showPreview = isUtFlip && amountNum > 0;
 
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
@@ -797,8 +812,14 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                 {selectedSub?.name ?? source.sub}
               </p>
               {showPreview ? (
-                <p className="text-[12px] font-medium text-foreground mt-0.5">
-                  {fmtLkr(sourceBalance - transferAmt)}
+                <p
+                  className={`text-[12px] font-medium mt-0.5 ${
+                    isOverBalance ? "text-destructive" : "text-foreground"
+                  }`}
+                >
+                  {isOverBalance
+                    ? `−${fmtLkr(Math.abs(projectedSourceBalance))}`
+                    : fmtLkr(projectedSourceBalance)}
                 </p>
               ) : (
                 <p className="text-[12px] text-muted-foreground">
@@ -839,25 +860,12 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setPicker("bank")}
-            className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-3.5 text-left transition hover:bg-muted/10"
-          >
-            <span className="text-sm text-muted-foreground shrink-0">
-              Bank Account
-            </span>
-            <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
-              {bank}
-            </span>
-            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-          </button>
         </div>
       )}
 
       {/* Amount hero */}
       <div className="px-4 pt-6 pb-6 text-center">
-        <div className="inline-flex items-baseline gap-2">
+        <div ref={amountRef} className="inline-flex items-baseline gap-2">
           <span className="text-[18px] font-medium text-muted-foreground">
             LKR
           </span>
@@ -873,13 +881,20 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             }}
           />
         </div>
-        <p className="mt-3 text-[12px] text-muted-foreground">
-          {isDirect
-            ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
-            : isPayIn
-              ? "Amount to pay in"
-              : "Amount to transfer"}
-        </p>
+        {isUtFlip && isOverBalance ? (
+          <p className="mt-3 text-[12px] font-medium text-destructive">
+            Your balance is too low. The most you can move is{" "}
+            {fmtLkr(sourceBalance)}.
+          </p>
+        ) : (
+          <p className="mt-3 text-[12px] text-muted-foreground">
+            {isDirect
+              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
+              : isPayIn
+                ? "Amount to pay in"
+                : "Amount to transfer"}
+          </p>
+        )}
       </div>
 
       {/* Details */}
