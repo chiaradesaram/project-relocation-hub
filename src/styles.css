@@ -60,6 +60,7 @@
   --color-pill-foreground: var(--pill-foreground);
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-slide-up: slide-up 0.4s ease-out;
+  --animate-wobble: wobble 0.4s ease-in-out;
 }
 
 @keyframes fade-in {
@@ -70,6 +71,22 @@
 @keyframes slide-up {
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes wobble {
+  0% { transform: translateX(0); }
+  15% { transform: translateX(-6px) rotate(-2deg); }
+  30% { transform: translateX(4px) rotate(2deg); }
+  45% { transform: translateX(-4px) rotate(-1deg); }
+  60% { transform: translateX(2px) rotate(1deg); }
+  75% { transform: translateX(-1px) rotate(0); }
+  100% { transform: translateX(0); }
+}
+
+@layer utilities {
+  .animate-wobble {
+    animation: wobble 0.4s ease-in-out;
+  }
 }
 
 :root {
