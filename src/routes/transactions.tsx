@@ -875,13 +875,9 @@ function Transactions() {
                 <Repeat className="w-5 h-5" />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-semibold text-foreground">
-                  {openTx.kind === "Repo Maturity" ? "Roll over this repo" : "Reinvest this payout"}
-                </p>
+                <p className="text-sm font-semibold text-foreground">Reinvest this payout</p>
                 <p className="text-[12px] text-muted-foreground mt-0.5 truncate">
-                  {openTx.kind === "Repo Maturity"
-                    ? `Place ${openTx.value} into a new repo`
-                    : `Put ${openTx.value} into a new bill, bond or repo`}
+                  Put {openTx.value} into a new bill or bond
                 </p>
               </div>
             </Link>
