@@ -844,6 +844,7 @@ function Transactions() {
               </div>
             )}
           </div>
+          )}
 
           {openTx?.trades && openTx.trades.length > 0 && (
             <div className="rounded-2xl bg-[#221E52] mb-4 overflow-hidden">
