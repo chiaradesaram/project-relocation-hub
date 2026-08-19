@@ -868,7 +868,7 @@ function Transactions() {
             </div>
           )}
 
-          {openTx?.product === "Treasuries" && openTx?.reinvestable && (
+          {openTx?.product === "Treasuries" && openTx?.reinvestable && openTx?.kind !== "Cash In" && openTx?.kind !== "Cash Out" && (
             <Link
               to="/invest"
               className="rounded-2xl bg-[#2A2660] flex items-center gap-3 p-4 mb-4"
