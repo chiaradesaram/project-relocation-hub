@@ -797,16 +797,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                 {selectedSub?.name ?? source.sub}
               </p>
               {showPreview ? (
-                <p className="text-[12px] flex items-center gap-1.5">
-                  <span className="text-muted-foreground/60 line-through">
-                    {selectedSub?.value ?? source.value}
-                  </span>
-                  <span className="font-medium text-foreground">
-                    {fmtLkr(sourceBalance - transferAmt)}
-                  </span>
-                  <span className="text-muted-foreground">
-                    (−{fmtLkr(transferAmt).replace("LKR ", "")})
-                  </span>
+                <p className="text-[12px] font-medium text-foreground mt-0.5">
+                  {fmtLkr(sourceBalance - transferAmt)}
                 </p>
               ) : (
                 <p className="text-[12px] text-muted-foreground">
