@@ -673,6 +673,7 @@ const equityFundSubAccounts: Record<string, { name: string; value: string }[]> =
 
 function EquitiesForm({ method }: { method: InvestMethod }) {
   const navigate = useNavigate();
+  const amountRef = useRef<HTMLDivElement>(null);
 
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState<Date>(new Date());
@@ -709,6 +710,31 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
   const amountNum = parseFloat(amount || "0") || 0;
 
+  const source = equityFundSources.find((f) => f.name === sourceFund)!;
+  const sourceSubAccounts = equityFundSubAccounts[sourceFund] ?? [];
+  const selectedSub =
+    sourceSubAccounts.find((s) => s.name === sourceSub) ?? sourceSubAccounts[0];
+  const draftSubOptions = equityFundSubAccounts[draftFund] ?? [];
+
+  // Live balance preview for the unit trust -> equity transfer
+  const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
+  const fmtLkr = (n: number) =>
+    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const sourceBalance = parseLkr(selectedSub?.value ?? source.value);
+  const equityBalance = 25000;
+  const projectedSourceBalance = sourceBalance - amountNum;
+  const isOverBalance = isUtFlip && projectedSourceBalance < 0;
+
+  // Wobble the amount field when the user types over their unit trust balance
+  useEffect(() => {
+    if (isOverBalance && amountRef.current) {
+      const el = amountRef.current;
+      el.classList.remove("animate-wobble");
+      void el.offsetWidth;
+      el.classList.add("animate-wobble");
+    }
+  }, [amount, isOverBalance]);
+
   const handleAmountChange = (raw: string) => {
     const sanitized = sanitizeAmountInput(raw);
     if (isDirect) {
@@ -721,8 +747,12 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     setAmount(sanitized);
   };
 
+  const transferAmt = isUtFlip ? amountNum : 0;
+  const showPreview = isUtFlip && amountNum > 0;
+
   const canReview = (() => {
     if (amountNum <= 0) return false;
+    if (isUtFlip && isOverBalance) return false;
     if (isPayIn) return !!bank && !!payTo && !!proofName;
     if (isDirect) return !!bank;
     return !!sourceFund;
@@ -739,21 +769,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
       },
     });
-
-  const source = equityFundSources.find((f) => f.name === sourceFund)!;
-  const sourceSubAccounts = equityFundSubAccounts[sourceFund] ?? [];
-  const selectedSub =
-    sourceSubAccounts.find((s) => s.name === sourceSub) ?? sourceSubAccounts[0];
-  const draftSubOptions = equityFundSubAccounts[draftFund] ?? [];
-
-  // Live balance preview for the unit trust -> equity transfer
-  const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
-  const fmtLkr = (n: number) =>
-    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-  const sourceBalance = parseLkr(selectedSub?.value ?? source.value);
-  const equityBalance = 25000;
-  const transferAmt = Math.min(amountNum, sourceBalance);
-  const showPreview = isUtFlip && amountNum > 0;
 
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
