@@ -812,8 +812,14 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                 {selectedSub?.name ?? source.sub}
               </p>
               {showPreview ? (
-                <p className="text-[12px] font-medium text-foreground mt-0.5">
-                  {fmtLkr(sourceBalance - transferAmt)}
+                <p
+                  className={`text-[12px] font-medium mt-0.5 ${
+                    isOverBalance ? "text-destructive" : "text-foreground"
+                  }`}
+                >
+                  {isOverBalance
+                    ? `−${fmtLkr(Math.abs(projectedSourceBalance))}`
+                    : fmtLkr(projectedSourceBalance)}
                 </p>
               ) : (
                 <p className="text-[12px] text-muted-foreground">
