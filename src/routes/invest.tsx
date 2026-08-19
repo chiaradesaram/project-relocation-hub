@@ -746,6 +746,15 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     sourceSubAccounts.find((s) => s.name === sourceSub) ?? sourceSubAccounts[0];
   const draftSubOptions = equityFundSubAccounts[draftFund] ?? [];
 
+  // Live balance preview for the unit trust -> equity transfer
+  const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
+  const fmtLkr = (n: number) =>
+    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const sourceBalance = parseLkr(selectedSub?.value ?? source.value);
+  const equityBalance = 25000;
+  const transferAmt = Math.min(amountNum, sourceBalance);
+  const showPreview = isUtFlip && amountNum > 0;
+
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
     payTo: calBankAccounts.map((a) => a.label),
