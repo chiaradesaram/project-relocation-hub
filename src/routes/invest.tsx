@@ -865,7 +865,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
       {/* Amount hero */}
       <div className="px-4 pt-6 pb-6 text-center">
-        <div className="inline-flex items-baseline gap-2">
+        <div ref={amountRef} className="inline-flex items-baseline gap-2">
           <span className="text-[18px] font-medium text-muted-foreground">
             LKR
           </span>
@@ -881,13 +881,20 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             }}
           />
         </div>
-        <p className="mt-3 text-[12px] text-muted-foreground">
-          {isDirect
-            ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
-            : isPayIn
-              ? "Amount to pay in"
-              : "Amount to transfer"}
-        </p>
+        {isUtFlip && isOverBalance ? (
+          <p className="mt-3 text-[12px] font-medium text-destructive">
+            Your balance is too low. The most you can move is{" "}
+            {fmtLkr(sourceBalance)}.
+          </p>
+        ) : (
+          <p className="mt-3 text-[12px] text-muted-foreground">
+            {isDirect
+              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
+              : isPayIn
+                ? "Amount to pay in"
+                : "Amount to transfer"}
+          </p>
+        )}
       </div>
 
       {/* Details */}
