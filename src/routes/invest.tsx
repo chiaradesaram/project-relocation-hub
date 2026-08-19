@@ -860,19 +860,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={() => setPicker("bank")}
-            className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-3.5 text-left transition hover:bg-muted/10"
-          >
-            <span className="text-sm text-muted-foreground shrink-0">
-              Bank Account
-            </span>
-            <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
-              {bank}
-            </span>
-            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-          </button>
         </div>
       )}
 
