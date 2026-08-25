@@ -332,14 +332,14 @@ function HelpIndexPage() {
           className="block rounded-2xl bg-primary p-4 hover:bg-primary/90 transition-colors"
         >
           <div className="flex items-center gap-3.5">
-            <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center shrink-0">
-              <MessageCircle className="w-4.5 h-4.5 text-white" />
+            <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center shrink-0">
+              <MessageCircle className="w-4.5 h-4.5 text-black" />
             </div>
             <div className="flex-1">
-              <p className="text-[15px] font-bold text-white">Contact us</p>
-              <p className="text-[12px] text-white/90">Usually replies in 2 business days.</p>
+              <p className="text-[15px] font-bold text-black">Contact us</p>
+              <p className="text-[12px] text-black/70">Usually replies in 2 business days.</p>
             </div>
-            <ChevronRight className="w-4 h-4 text-white/80" />
+            <ChevronRight className="w-4 h-4 text-black/60" />
           </div>
         </Link>
       </div>
