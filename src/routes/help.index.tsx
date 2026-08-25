@@ -333,7 +333,7 @@ function HelpIndexPage() {
         >
           <div className="flex items-center gap-3.5">
             <div className="w-10 h-10 rounded-full bg-black/10 flex items-center justify-center shrink-0">
-              <MessageCircle className="w-4.5 h-4.5 text-black" />
+              <MessageCircle className="w-4.5 h-4.5 text-white" />
             </div>
             <div className="flex-1">
               <p className="text-[15px] font-bold text-black">Contact us</p>
