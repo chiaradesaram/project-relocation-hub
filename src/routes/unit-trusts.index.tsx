@@ -4,6 +4,7 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import { funds } from "@/data/unitTrusts";
+import { isPopularFund, DEFAULT_UNIT_TRUST_FUND } from "@/lib/fundMeta";
 import {
   ChevronRight,
   ChevronDown,
@@ -278,8 +279,18 @@ function UnitTrustPortfolio() {
                     className="flex w-full items-center justify-between rounded-xl border border-border/30 bg-background/40 px-4 py-3 transition hover:bg-muted/10"
                   >
                     <div className="text-left">
-                      <p className="text-sm font-medium text-foreground">
+                      <p className="flex items-center gap-1.5 text-sm font-medium text-foreground">
                         {fund.name}
+                        {isPopularFund(fund.name) && (
+                          <span className="rounded-full bg-accent-magenta/15 px-1.5 py-px text-[10px] font-medium text-accent-magenta">
+                            Popular
+                          </span>
+                        )}
+                        {fund.name === DEFAULT_UNIT_TRUST_FUND && (
+                          <span className="rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
+                            Default
+                          </span>
+                        )}
                       </p>
                       <p className="text-[12px] text-muted-foreground">
                         {fund.returnPct} return · {fund.subAccounts.length} sub-accounts
