@@ -525,6 +525,10 @@ function MethodForm({
                     opt === (isFlip ? selectedFund : selectedBank)) ||
                   (picker === "payTo" && opt === selectedPayTo) ||
                   (picker === "flipTo" && opt === selectedFlipTo);
+                const isFundPicker =
+                  picker === "fund" ||
+                  picker === "flipTo" ||
+                  (picker === "payFrom" && isFlip);
                 return (
                   <button
                     key={opt}
@@ -535,10 +539,22 @@ function MethodForm({
                         : "bg-background/40 hover:bg-muted/10"
                     }`}
                   >
-                    <span className="text-sm text-foreground">{opt}</span>
+                    <span className="flex items-center gap-1.5 min-w-0">
+                      <span className="text-sm text-foreground truncate">{opt}</span>
+                      {isFundPicker && isPopularFund(opt) && (
+                        <span className="shrink-0 rounded-full bg-accent-magenta/15 px-1.5 py-px text-[10px] font-medium text-accent-magenta">
+                          Popular
+                        </span>
+                      )}
+                      {isFundPicker && opt === DEFAULT_INVEST_FUND && (
+                        <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
+                          Default
+                        </span>
+                      )}
+                    </span>
                     {isSelected && (
                       <Check
-                        className="w-4 h-4"
+                        className="w-4 h-4 shrink-0"
                         style={{ color: "var(--pill)" }}
                       />
                     )}
