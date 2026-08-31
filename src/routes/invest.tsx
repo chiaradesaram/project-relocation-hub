@@ -49,6 +49,8 @@ export const Route = createFileRoute("/invest")({
   component: Invest,
 });
 
+import { isPopularFund, DEFAULT_INVEST_FUND } from "@/lib/fundMeta";
+
 const funds = [
   "CAL Growth Fund",
   "CAL Income Fund",
@@ -1080,6 +1082,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                     {equityFundSources.map((f) => (
                       <option key={f.name} value={f.name}>
                         {f.name}
+                        {isPopularFund(f.name) ? " · Popular" : ""}
+                        {f.name === DEFAULT_INVEST_FUND ? " · Default" : ""}
                       </option>
                     ))}
                   </ModernSelect>
