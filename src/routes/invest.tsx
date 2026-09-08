@@ -30,7 +30,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-type InvestMethod = "instant" | "bank" | "flip" | "payin" | "utflip";
+type InvestMethod =
+  | "instant"
+  | "bank"
+  | "flip"
+  | "payin"
+  | "utflip"
+  | "default";
 
 export const Route = createFileRoute("/invest")({
   validateSearch: (
@@ -42,7 +48,8 @@ export const Route = createFileRoute("/invest")({
       search.method === "bank" ||
       search.method === "flip" ||
       search.method === "payin" ||
-      search.method === "utflip"
+      search.method === "utflip" ||
+      search.method === "default"
         ? (search.method as InvestMethod)
         : undefined,
   }),
@@ -126,7 +133,15 @@ function Invest() {
         label: "Flip",
         desc: "Move funds between your CAL accounts instantly. No fees.",
       },
+      {
+        id: "default",
+        icon: Star,
+        label: "Default fund",
+        desc:
+          "Set a default fund and sub account so every transfer is allocated automatically.",
+      },
     ];
+
 
     return (
       <MobileLayout>
@@ -173,6 +188,7 @@ function Invest() {
     );
   }
 
+  if (search.method === "default") return <DefaultFundForm />;
   if (isEquities) return <EquitiesForm method={search.method} />;
   if (search.method === "payin" || search.method === "utflip")
     return <EquitiesForm method={search.method} />;
@@ -184,7 +200,7 @@ type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
 function MethodForm({
   method,
 }: {
-  method: Exclude<InvestMethod, "payin" | "utflip">;
+  method: Exclude<InvestMethod, "payin" | "utflip" | "default">;
 }) {
   const navigate = useNavigate();
 
@@ -1156,6 +1172,123 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           </div>
         </SheetContent>
       </Sheet>
+    </MobileLayout>
+  );
+}
+
+function DefaultFundForm() {
+  const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
+  const [account, setAccount] = useState(accounts[0]);
+  const [saved, setSaved] = useState(false);
+
+  const steps = [
+    "Select your preferred fund and sub account from the dropdowns.",
+    "Transfer funds to your CAL Deutsche Bank account.",
+    "Your transfer is automatically allocated to your default fund — no extra steps needed.",
+  ];
+
+  return (
+    <MobileLayout>
+      <PageHeader title="Default fund" showBack helpTopic="invest" />
+
+      <div className="mx-4 mt-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
+        <p className="text-sm font-semibold text-foreground">
+          Investing just got easier!
+        </p>
+        <p className="mt-1.5 text-[12px] leading-snug text-muted-foreground">
+          Set your default fund and sub account once, and every transfer is
+          automatically allocated for you. No need to raise a separate request
+          each time.
+        </p>
+        <div className="mt-3.5 space-y-2.5">
+          {steps.map((s, i) => (
+            <div key={s} className="flex items-start gap-2.5">
+              <span
+                className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold"
+                style={{
+                  background:
+                    "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
+                  color: "var(--pill)",
+                }}
+              >
+                {i + 1}
+              </span>
+              <p className="text-[12px] leading-snug text-muted-foreground">
+                {s}
+              </p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <div className="mx-4 mt-4 space-y-3">
+        <div>
+          <label className="mb-1.5 block text-[12px] text-muted-foreground">
+            Default fund
+          </label>
+          <ModernSelect
+            value={fund}
+            onChange={(e) => {
+              setFund(e.target.value);
+              setSaved(false);
+            }}
+          >
+            {funds.map((f) => (
+              <option
+                key={f}
+                value={f}
+                data-pill={isPopularFund(f) ? "Popular" : undefined}
+              >
+                {f}
+              </option>
+            ))}
+          </ModernSelect>
+        </div>
+
+        <div>
+          <label className="mb-1.5 block text-[12px] text-muted-foreground">
+            Default sub account
+          </label>
+          <ModernSelect
+            value={account}
+            onChange={(e) => {
+              setAccount(e.target.value);
+              setSaved(false);
+            }}
+          >
+            {accounts.map((a) => (
+              <option key={a} value={a}>
+                {a}
+              </option>
+            ))}
+          </ModernSelect>
+        </div>
+      </div>
+
+      <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
+        <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
+        <p className="text-[12px] leading-snug text-muted-foreground">
+          Current default:{" "}
+          <span className="font-medium text-foreground">{fund}</span> ·{" "}
+          <span className="font-medium text-foreground">{account}</span>
+        </p>
+      </div>
+
+      <div className="mx-4 mt-5 mb-8">
+        <button
+          onClick={() => setSaved(true)}
+          className="w-full rounded-xl py-3 text-sm font-semibold transition"
+          style={{ background: "var(--pill)", color: "#000" }}
+        >
+          {saved ? "Default saved" : "Save default"}
+        </button>
+        {saved && (
+          <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
+            <Check className="h-3.5 w-3.5" /> Future transfers will be allocated
+            automatically.
+          </p>
+        )}
+      </div>
     </MobileLayout>
   );
 }
