@@ -188,6 +188,7 @@ function Invest() {
     );
   }
 
+  if (search.method === "default") return <DefaultFundForm />;
   if (isEquities) return <EquitiesForm method={search.method} />;
   if (search.method === "payin" || search.method === "utflip")
     return <EquitiesForm method={search.method} />;
