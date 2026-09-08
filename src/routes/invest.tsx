@@ -30,7 +30,13 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 
-type InvestMethod = "instant" | "bank" | "flip" | "payin" | "utflip";
+type InvestMethod =
+  | "instant"
+  | "bank"
+  | "flip"
+  | "payin"
+  | "utflip"
+  | "default";
 
 export const Route = createFileRoute("/invest")({
   validateSearch: (
