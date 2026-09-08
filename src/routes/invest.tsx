@@ -200,7 +200,7 @@ type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
 function MethodForm({
   method,
 }: {
-  method: Exclude<InvestMethod, "payin" | "utflip">;
+  method: Exclude<InvestMethod, "payin" | "utflip" | "default">;
 }) {
   const navigate = useNavigate();
 
