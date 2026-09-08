@@ -133,7 +133,15 @@ function Invest() {
         label: "Flip",
         desc: "Move funds between your CAL accounts instantly. No fees.",
       },
+      {
+        id: "default",
+        icon: Star,
+        label: "Default fund",
+        desc:
+          "Set a default fund and sub account so every transfer is allocated automatically.",
+      },
     ];
+
 
     return (
       <MobileLayout>
