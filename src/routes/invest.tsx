@@ -48,7 +48,8 @@ export const Route = createFileRoute("/invest")({
       search.method === "bank" ||
       search.method === "flip" ||
       search.method === "payin" ||
-      search.method === "utflip"
+      search.method === "utflip" ||
+      search.method === "default"
         ? (search.method as InvestMethod)
         : undefined,
   }),
