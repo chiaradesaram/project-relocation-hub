@@ -1223,7 +1223,30 @@ function DefaultFundForm() {
         </div>
       </div>
 
-      <div className="mx-4 mt-4 space-y-3">
+      <div className="mx-4 mt-4 flex items-center justify-between gap-3 rounded-2xl bg-card/60 px-4 py-3.5 backdrop-blur-md">
+        <div>
+          <p className="text-sm font-semibold text-foreground">
+            Default fund
+          </p>
+          <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
+            {enabled
+              ? "Future transfers will be applied automatically."
+              : "Turn on to apply transfers to a default fund automatically."}
+          </p>
+        </div>
+        <Switch
+          checked={enabled}
+          onCheckedChange={(v) => {
+            setEnabled(v);
+            setSaved(false);
+          }}
+          aria-label="Toggle default fund"
+        />
+      </div>
+
+      <div
+        className={`mx-4 mt-3 space-y-3 transition-opacity ${enabled ? "" : "pointer-events-none opacity-40"}`}
+      >
         <div>
           <label className="mb-1.5 block text-[12px] text-muted-foreground">
             Default fund
