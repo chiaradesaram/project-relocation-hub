@@ -1181,11 +1181,12 @@ function DefaultFundForm() {
   const [account, setAccount] = useState(accounts[0]);
   const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
+  const [picker, setPicker] = useState<"fund" | "account" | null>(null);
 
   const steps = [
-    "Select your preferred fund and sub account from the dropdowns.",
+    "Select your preferred fund and sub account.",
     "Transfer funds to your CAL Deutsche Bank account.",
-    "Your transfer is automatically applied to your default fund — no extra steps needed.",
+    "Your transfer is automatically applied to your default fund, no extra steps needed.",
   ];
 
   return (
