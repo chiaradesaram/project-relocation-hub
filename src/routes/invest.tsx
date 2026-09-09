@@ -74,8 +74,8 @@ const banks = [
 ];
 const calBankAccounts = [
   { label: "CAL Securities Account", note: "Deutsche Bank · Auto-verified" },
-  { label: "CAL — Commercial Bank", note: "8001 2345 678" },
-  { label: "CAL — HNB", note: "7700 1234 567 · Closing soon" },
+  { label: "CAL · Commercial Bank", note: "8001 2345 678" },
+  { label: "CAL · HNB", note: "7700 1234 567 · Closing soon" },
 ];
 
 const DIRECT_INVEST_LIMIT = 149950;
@@ -1329,7 +1329,7 @@ function DefaultFundForm() {
               <span className="font-medium text-foreground">{account}</span>
             </>
           ) : (
-            "Default fund is off — transfers won't be applied automatically."
+            "Default fund is off. Transfers won't be applied automatically."
           )}
         </p>
       </div>
@@ -1368,7 +1368,7 @@ function DefaultFundForm() {
             <Check className="h-3.5 w-3.5" />{" "}
             {enabled
               ? "Future transfers will be applied to this fund automatically."
-              : "Default fund disabled — you'll need to raise a request for each transfer."}
+              : "Default fund disabled. You'll need to raise a request for each transfer."}
           </p>
         )}
       </div>
