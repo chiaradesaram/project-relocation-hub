@@ -118,30 +118,36 @@ function Invest() {
         ]
       : [
       {
-        id: "instant",
-        icon: Zap,
-        label: "Direct Invest",
-        desc: "Instant bank rail. Max LKR 149,950 per transfer.",
-      },
-      {
         id: "bank",
         icon: Building2,
         label: "Bank Transfer",
+        desc: "Transfer funds to your CAL account and make a creation request.",
+      },
+      {
+        id: "instant",
+        icon: Zap,
+        label: "Direct Invest",
         desc:
-          "Any amount. 1–2 business days. Upload proof unless paying Deutsche Bank.",
+          "Use JustPay to make an investment, with the money debited directly from your linked bank account.",
       },
       {
         id: "flip",
         icon: ArrowLeftRight,
-        label: "Flip",
-        desc: "Move funds between your CAL accounts instantly. No fees.",
+        label: "Fund Flip",
+        desc: "Move your investment from one fund to another.",
+      },
+      {
+        id: "recurring",
+        icon: CalendarDays,
+        label: "Recurring Investment",
+        desc: "Set up regular investments to be made automatically.",
       },
       {
         id: "default",
         icon: Star,
-        label: "Default fund",
+        label: "Default Fund",
         desc:
-          "Set your default fund and sub account once, and we'll apply your future transfers to them automatically.",
+          "Set a default fund, so when you transfer money to CAL, you don't need to make a separate creation request.",
       },
     ];
 
