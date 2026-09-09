@@ -138,7 +138,7 @@ function Invest() {
         icon: Star,
         label: "Default fund",
         desc:
-          "Set a default fund and sub account so every transfer is allocated automatically.",
+          "Set your default fund and sub account once, and we'll apply your future transfers to them automatically.",
       },
     ];
 
