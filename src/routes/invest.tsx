@@ -1283,8 +1283,8 @@ function DefaultFundForm() {
         </button>
         {saved && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
-            <Check className="h-3.5 w-3.5" /> Future transfers will be allocated
-            automatically.
+            <Check className="h-3.5 w-3.5" /> Future transfers will be applied
+            to this fund automatically.
           </p>
         )}
       </div>
