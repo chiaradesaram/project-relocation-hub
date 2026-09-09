@@ -37,7 +37,8 @@ type InvestMethod =
   | "flip"
   | "payin"
   | "utflip"
-  | "default";
+  | "default"
+  | "recurring";
 
 export const Route = createFileRoute("/invest")({
   validateSearch: (
@@ -50,7 +51,8 @@ export const Route = createFileRoute("/invest")({
       search.method === "flip" ||
       search.method === "payin" ||
       search.method === "utflip" ||
-      search.method === "default"
+      search.method === "default" ||
+      search.method === "recurring"
         ? (search.method as InvestMethod)
         : undefined,
   }),
@@ -116,30 +118,36 @@ function Invest() {
         ]
       : [
       {
-        id: "instant",
-        icon: Zap,
-        label: "Direct Invest",
-        desc: "Instant bank rail. Max LKR 149,950 per transfer.",
-      },
-      {
         id: "bank",
         icon: Building2,
         label: "Bank Transfer",
+        desc: "Transfer funds to your CAL account and make a creation request.",
+      },
+      {
+        id: "instant",
+        icon: Zap,
+        label: "Direct Invest",
         desc:
-          "Any amount. 1–2 business days. Upload proof unless paying Deutsche Bank.",
+          "Use JustPay to make an investment, with the money debited directly from your linked bank account.",
       },
       {
         id: "flip",
         icon: ArrowLeftRight,
-        label: "Flip",
-        desc: "Move funds between your CAL accounts instantly. No fees.",
+        label: "Fund Flip",
+        desc: "Move your investment from one fund to another.",
+      },
+      {
+        id: "recurring",
+        icon: CalendarDays,
+        label: "Recurring Investment",
+        desc: "Set up regular investments to be made automatically.",
       },
       {
         id: "default",
         icon: Star,
-        label: "Default fund",
+        label: "Default Fund",
         desc:
-          "Set your default fund and sub account once, and we'll apply your future transfers to them automatically.",
+          "Set a default fund, so when you transfer money to CAL, you don't need to make a separate creation request.",
       },
     ];
 
@@ -218,18 +226,21 @@ function MethodForm({
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
-  const [recurring, setRecurring] = useState(false);
+  const isRecurringMethod = method === "recurring";
+  const [recurring, setRecurring] = useState(isRecurringMethod);
 
   const title =
     method === "instant"
       ? "Direct Invest"
       : method === "bank"
         ? "Bank transfer"
-        : "Flip";
+        : method === "recurring"
+          ? "Recurring Investment"
+          : "Fund Flip";
 
   const isBank = method === "bank";
   const isFlip = method === "flip";
-  const isInstant = method === "instant";
+  const isInstant = method === "instant" || isRecurringMethod;
 
   const amountNum = parseFloat(amount || "0") || 0;
 
