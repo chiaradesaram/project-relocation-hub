@@ -1179,6 +1179,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 function DefaultFundForm() {
   const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
   const [account, setAccount] = useState(accounts[0]);
+  const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
 
   const steps = [
@@ -1222,7 +1223,30 @@ function DefaultFundForm() {
         </div>
       </div>
 
-      <div className="mx-4 mt-4 space-y-3">
+      <div className="mx-4 mt-4 flex items-center justify-between gap-3 rounded-2xl bg-card/60 px-4 py-3.5 backdrop-blur-md">
+        <div>
+          <p className="text-sm font-semibold text-foreground">
+            Default fund
+          </p>
+          <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
+            {enabled
+              ? "Future transfers will be applied automatically."
+              : "Turn on to apply transfers to a default fund automatically."}
+          </p>
+        </div>
+        <Switch
+          checked={enabled}
+          onCheckedChange={(v) => {
+            setEnabled(v);
+            setSaved(false);
+          }}
+          aria-label="Toggle default fund"
+        />
+      </div>
+
+      <div
+        className={`mx-4 mt-3 space-y-3 transition-opacity ${enabled ? "" : "pointer-events-none opacity-40"}`}
+      >
         <div>
           <label className="mb-1.5 block text-[12px] text-muted-foreground">
             Default fund
@@ -1269,9 +1293,15 @@ function DefaultFundForm() {
       <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
         <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
         <p className="text-[12px] leading-snug text-muted-foreground">
-          Current default:{" "}
-          <span className="font-medium text-foreground">{fund}</span> ·{" "}
-          <span className="font-medium text-foreground">{account}</span>
+          {enabled ? (
+            <>
+              Current default:{" "}
+              <span className="font-medium text-foreground">{fund}</span> ·{" "}
+              <span className="font-medium text-foreground">{account}</span>
+            </>
+          ) : (
+            "Default fund is off — transfers won't be applied automatically."
+          )}
         </p>
       </div>
 
@@ -1281,12 +1311,14 @@ function DefaultFundForm() {
           className="w-full rounded-xl py-3 text-sm font-semibold transition"
           style={{ background: "var(--pill)", color: "#000" }}
         >
-          {saved ? "Default saved" : "Save default"}
+          {saved ? "Saved" : enabled ? "Save default" : "Disable default fund"}
         </button>
         {saved && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
-            <Check className="h-3.5 w-3.5" /> Future transfers will be applied
-            to this fund automatically.
+            <Check className="h-3.5 w-3.5" />{" "}
+            {enabled
+              ? "Future transfers will be applied to this fund automatically."
+              : "Default fund disabled — you'll need to raise a request for each transfer."}
           </p>
         )}
       </div>
