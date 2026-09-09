@@ -5,7 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import { Info, CheckCircle2, Lightbulb } from "lucide-react";
 
 type SummarySearch = {
-  method?: "instant" | "bank" | "flip";
+  method?: "instant" | "bank" | "flip" | "recurring";
   amount?: string;
   fund?: string;
   account?: string;
@@ -30,8 +30,9 @@ function InvestSummary() {
   const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
   const isInstant = method === "instant";
+  const isRecurring = method === "recurring";
   const amountNum = parseFloat(amount || "0") || 0;
-  const serviceCharge = isInstant ? 50 : 0;
+  const serviceCharge = isInstant || isRecurring ? 50 : 0;
   const total = amountNum + serviceCharge;
   const fmtDate = (d: Date) =>
     d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
@@ -39,6 +40,8 @@ function InvestSummary() {
   const txDate = fmtDate(today);
   const creationDate = fmtDate(new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000));
   const reflectedDate = fmtDate(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
+
+  const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
 
   return (
     <MobileLayout>
@@ -49,7 +52,7 @@ function InvestSummary() {
         <p className="text-[12px] font-semibold text-muted-foreground tracking-wider">TOTAL</p>
         <p className="mt-1 text-2xl font-bold text-foreground">LKR {total.toLocaleString()}</p>
         <p className="text-[12px] text-muted-foreground mt-0.5">
-          {isInstant ? "Direct Invest" : "Bank Transfer"}
+          {methodLabel}
         </p>
       </div>
 
