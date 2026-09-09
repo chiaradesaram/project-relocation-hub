@@ -1184,7 +1184,7 @@ function DefaultFundForm() {
   const steps = [
     "Select your preferred fund and sub account from the dropdowns.",
     "Transfer funds to your CAL Deutsche Bank account.",
-    "Your transfer is automatically allocated to your default fund — no extra steps needed.",
+    "Your transfer is automatically applied to your default fund — no extra steps needed.",
   ];
 
   return (
@@ -1196,9 +1196,8 @@ function DefaultFundForm() {
           Investing just got easier!
         </p>
         <p className="mt-1.5 text-[12px] leading-snug text-muted-foreground">
-          Set your default fund and sub account once, and every transfer is
-          automatically allocated for you. No need to raise a separate request
-          each time.
+          Set a default fund and every time you transfer we will automatically
+          apply your transfer to this fund — no need to raise a request.
         </p>
         <div className="mt-3.5 space-y-2.5">
           {steps.map((s, i) => (
@@ -1284,8 +1283,8 @@ function DefaultFundForm() {
         </button>
         {saved && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
-            <Check className="h-3.5 w-3.5" /> Future transfers will be allocated
-            automatically.
+            <Check className="h-3.5 w-3.5" /> Future transfers will be applied
+            to this fund automatically.
           </p>
         )}
       </div>
