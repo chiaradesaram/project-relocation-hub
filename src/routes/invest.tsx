@@ -1179,6 +1179,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 function DefaultFundForm() {
   const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
   const [account, setAccount] = useState(accounts[0]);
+  const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
 
   const steps = [
