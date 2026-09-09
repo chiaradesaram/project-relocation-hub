@@ -1232,44 +1232,92 @@ function DefaultFundForm() {
           <label className="mb-1.5 block text-[12px] text-muted-foreground">
             Default fund
           </label>
-          <ModernSelect
-            value={fund}
-            onChange={(e) => {
-              setFund(e.target.value);
-              setSaved(false);
-            }}
+          <button
+            type="button"
+            onClick={() => setPicker("fund")}
+            className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
-            {funds.map((f) => (
-              <option
-                key={f}
-                value={f}
-                data-pill={isPopularFund(f) ? "Popular" : undefined}
-              >
-                {f}
-              </option>
-            ))}
-          </ModernSelect>
+            <span className="flex items-center gap-2">
+              {fund}
+              {isPopularFund(fund) && (
+                <span
+                  className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--pill) 20%, transparent)",
+                    color: "var(--pill)",
+                  }}
+                >
+                  Popular
+                </span>
+              )}
+            </span>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </button>
         </div>
 
         <div>
           <label className="mb-1.5 block text-[12px] text-muted-foreground">
             Default sub account
           </label>
-          <ModernSelect
-            value={account}
-            onChange={(e) => {
-              setAccount(e.target.value);
-              setSaved(false);
-            }}
+          <button
+            type="button"
+            onClick={() => setPicker("account")}
+            className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
-            {accounts.map((a) => (
-              <option key={a} value={a}>
-                {a}
-              </option>
-            ))}
-          </ModernSelect>
+            <span>{account}</span>
+            <ChevronRight className="h-4 w-4 text-muted-foreground" />
+          </button>
         </div>
       </div>
+
+      <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHeader>
+            <SheetTitle>
+              {picker === "fund" ? "Select fund" : "Select sub account"}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="mt-3 space-y-1.5 pb-6">
+            {(picker === "fund" ? funds : accounts).map((opt) => {
+              const isSelected = picker === "fund" ? opt === fund : opt === account;
+              return (
+                <button
+                  key={opt}
+                  onClick={() => {
+                    if (picker === "fund") setFund(opt);
+                    else setAccount(opt);
+                    setSaved(false);
+                    setPicker(null);
+                  }}
+                  className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+                    isSelected ? "bg-muted/20" : "bg-background/40 hover:bg-muted/10"
+                  }`}
+                >
+                  <span className="flex items-center gap-2 text-sm text-foreground">
+                    {opt}
+                    {picker === "fund" && isPopularFund(opt) && (
+                      <span
+                        className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                        style={{
+                          background:
+                            "color-mix(in oklch, var(--pill) 20%, transparent)",
+                          color: "var(--pill)",
+                        }}
+                      >
+                        Popular
+                      </span>
+                    )}
+                  </span>
+                  {isSelected && (
+                    <Check className="h-4 w-4" style={{ color: "var(--pill)" }} />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </SheetContent>
+      </Sheet>
 
       <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
         <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
