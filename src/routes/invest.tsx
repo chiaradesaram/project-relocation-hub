@@ -226,18 +226,21 @@ function MethodForm({
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
-  const [recurring, setRecurring] = useState(false);
+  const isRecurringMethod = method === "recurring";
+  const [recurring, setRecurring] = useState(isRecurringMethod);
 
   const title =
     method === "instant"
       ? "Direct Invest"
       : method === "bank"
         ? "Bank transfer"
-        : "Flip";
+        : method === "recurring"
+          ? "Recurring Investment"
+          : "Fund Flip";
 
   const isBank = method === "bank";
   const isFlip = method === "flip";
-  const isInstant = method === "instant";
+  const isInstant = method === "instant" || isRecurringMethod;
 
   const amountNum = parseFloat(amount || "0") || 0;
 
