@@ -1196,8 +1196,10 @@ function DefaultFundForm() {
           Investing just got easier!
         </p>
         <p className="mt-1.5 text-[12px] leading-snug text-muted-foreground">
-          Set a default fund and every time you transfer we will automatically
-          apply your transfer to this fund — no need to raise a request.
+          Set a default fund and we'll automatically apply your transfers to it
+          — no need to raise a request. If you raise a request to another fund,
+          that request will override your default for that day. We check for
+          requests at 9 AM each day; if none exist, your default fund is applied.
         </p>
         <div className="mt-3.5 space-y-2.5">
           {steps.map((s, i) => (
