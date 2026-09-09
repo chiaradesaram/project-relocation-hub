@@ -37,7 +37,8 @@ type InvestMethod =
   | "flip"
   | "payin"
   | "utflip"
-  | "default";
+  | "default"
+  | "recurring";
 
 export const Route = createFileRoute("/invest")({
   validateSearch: (
@@ -50,7 +51,8 @@ export const Route = createFileRoute("/invest")({
       search.method === "flip" ||
       search.method === "payin" ||
       search.method === "utflip" ||
-      search.method === "default"
+      search.method === "default" ||
+      search.method === "recurring"
         ? (search.method as InvestMethod)
         : undefined,
   }),
