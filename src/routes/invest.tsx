@@ -1183,6 +1183,7 @@ function DefaultFundForm() {
   const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
+  const [instructionsOpen, setInstructionsOpen] = useState(true);
 
   const steps = [
     "Select your preferred fund and sub account.",
@@ -1195,35 +1196,49 @@ function DefaultFundForm() {
       <PageHeader title="Default fund" showBack helpTopic="invest" />
 
       <div className="mx-4 mt-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
-        <p className="text-sm font-semibold text-foreground">
-          Investing just got easier!
-        </p>
-        <p className="mt-1.5 text-[12px] leading-snug text-muted-foreground">
-          Set a default fund and we'll automatically apply your transfers to
-          it, no need to raise a request. If you raise a request to another
-          fund, that request will override your default for that day. We check
-          for requests at 9 AM each day; if none exist, your default fund is
-          applied.
-        </p>
-        <div className="mt-3.5 space-y-2.5">
-          {steps.map((s, i) => (
-            <div key={s} className="flex items-start gap-2.5">
-              <span
-                className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold"
-                style={{
-                  background:
-                    "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
-                  color: "var(--pill)",
-                }}
-              >
-                {i + 1}
-              </span>
-              <p className="text-[12px] leading-snug text-muted-foreground">
-                {s}
-              </p>
+        <button
+          type="button"
+          onClick={() => setInstructionsOpen((o) => !o)}
+          className="flex w-full items-center justify-between text-left"
+          aria-expanded={instructionsOpen}
+        >
+          <p className="text-sm font-semibold text-foreground">
+            Investing just got easier!
+          </p>
+          <ChevronDown
+            className={`h-4 w-4 text-muted-foreground transition-transform ${instructionsOpen ? "rotate-180" : ""}`}
+          />
+        </button>
+        {instructionsOpen && (
+          <>
+            <p className="mt-1.5 text-[12px] leading-snug text-muted-foreground">
+              Set a default fund and we'll automatically apply your transfers to
+              it, no need to raise a request. If you raise a request to another
+              fund, that request will override your default for that day. We check
+              for requests at 9 AM each day; if none exist, your default fund is
+              applied.
+            </p>
+            <div className="mt-3.5 space-y-2.5">
+              {steps.map((s, i) => (
+                <div key={s} className="flex items-start gap-2.5">
+                  <span
+                    className="mt-px flex h-5 w-5 shrink-0 items-center justify-center rounded-full text-[11px] font-semibold"
+                    style={{
+                      background:
+                        "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
+                      color: "var(--pill)",
+                    }}
+                  >
+                    {i + 1}
+                  </span>
+                  <p className="text-[12px] leading-snug text-muted-foreground">
+                    {s}
+                  </p>
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </>
+        )}
       </div>
 
       <div
