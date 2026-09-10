@@ -1189,9 +1189,9 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 }
 
 function DefaultFundForm() {
-  // Default fund is enabled by default so users can set it immediately.
-  const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
-  const [account, setAccount] = useState(accounts[0]);
+  // Default fund is enabled by default, but fund/sub-account start empty.
+  const [fund, setFund] = useState("");
+  const [account, setAccount] = useState("");
   const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
@@ -1202,6 +1202,8 @@ function DefaultFundForm() {
     "Transfer funds to your CAL Deutsche Bank account.",
     "Your transfer is automatically applied to your default fund, no extra steps needed.",
   ];
+
+  const canSave = enabled && !!fund && !!account;
 
   return (
     <MobileLayout>
@@ -1266,18 +1268,24 @@ function DefaultFundForm() {
             className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
             <span className="flex items-center gap-2">
-              {fund}
-              {isPopularFund(fund) && (
-                <span
-                  className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
-                  style={{
-                    background:
-                      "color-mix(in oklch, var(--pill) 20%, transparent)",
-                    color: "var(--pill)",
-                  }}
-                >
-                  Popular
-                </span>
+              {fund ? (
+                <>
+                  {fund}
+                  {isPopularFund(fund) && (
+                    <span
+                      className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                      style={{
+                        background:
+                          "color-mix(in oklch, var(--pill) 20%, transparent)",
+                        color: "var(--pill)",
+                      }}
+                    >
+                      Popular
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="text-muted-foreground">Select a fund</span>
               )}
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -1293,7 +1301,13 @@ function DefaultFundForm() {
             onClick={() => enabled && setPicker("account")}
             className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
-            <span>{account}</span>
+            <span>
+              {account ? (
+                account
+              ) : (
+                <span className="text-muted-foreground">Select sub account</span>
+              )}
+            </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
@@ -1347,7 +1361,7 @@ function DefaultFundForm() {
         </SheetContent>
       </Sheet>
 
-      {enabled && (
+      {enabled && fund && account && (
         <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
           <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
           <p className="text-[12px] leading-snug text-muted-foreground">
@@ -1382,7 +1396,8 @@ function DefaultFundForm() {
       <div className="mx-4 mt-5 mb-8">
         <button
           onClick={() => setSaved(true)}
-          className="w-full rounded-xl py-3 text-sm font-semibold transition"
+          disabled={!canSave}
+          className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "var(--pill)", color: "#000" }}
         >
           {saved ? "Saved" : "Save default"}
