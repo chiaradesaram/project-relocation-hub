@@ -1361,7 +1361,7 @@ function DefaultFundForm() {
         </SheetContent>
       </Sheet>
 
-      {enabled && (
+      {enabled && fund && account && (
         <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
           <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
           <p className="text-[12px] leading-snug text-muted-foreground">
@@ -1396,7 +1396,8 @@ function DefaultFundForm() {
       <div className="mx-4 mt-5 mb-8">
         <button
           onClick={() => setSaved(true)}
-          className="w-full rounded-xl py-3 text-sm font-semibold transition"
+          disabled={!canSave}
+          className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "var(--pill)", color: "#000" }}
         >
           {saved ? "Saved" : "Save default"}
