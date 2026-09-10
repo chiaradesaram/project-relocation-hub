@@ -1253,27 +1253,6 @@ function DefaultFundForm() {
         )}
       </div>
 
-      {/* Empty state when default fund is not enabled */}
-      {!enabled && (
-        <div className="mx-4 mt-4 rounded-2xl bg-card/40 px-4 py-6 text-center">
-          <div
-            className="mx-auto flex h-12 w-12 items-center justify-center rounded-full"
-            style={{
-              background:
-                "color-mix(in oklch, var(--portfolio-blue) 25%, transparent)",
-            }}
-          >
-            <Star className="h-5 w-5" style={{ color: "var(--pill)" }} />
-          </div>
-          <p className="mt-3 text-sm font-semibold text-foreground">
-            No default fund set
-          </p>
-          <p className="mt-1 px-4 text-[12px] leading-snug text-muted-foreground">
-            Turn on Default fund below to choose your fund and sub account.
-          </p>
-        </div>
-      )}
-
       <div
         className={`mx-4 mt-4 space-y-3 transition-opacity ${enabled ? "" : "pointer-events-none opacity-40"}`}
       >
