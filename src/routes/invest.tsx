@@ -1366,7 +1366,7 @@ function DefaultFundForm() {
           <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
             {enabled
               ? "Future transfers will be applied automatically."
-              : "Turn on to apply transfers to a default fund automatically."}
+              : "Default fund is off. Turn it on to apply transfers automatically."}
           </p>
         </div>
         <Switch
@@ -1382,11 +1382,10 @@ function DefaultFundForm() {
       <div className="mx-4 mt-5 mb-8">
         <button
           onClick={() => setSaved(true)}
-          disabled={!enabled}
-          className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full rounded-xl py-3 text-sm font-semibold transition"
           style={{ background: "var(--pill)", color: "#000" }}
         >
-          {saved ? "Saved" : enabled ? "Save default" : "Turn on to save"}
+          {saved ? "Saved" : "Save default"}
         </button>
         {saved && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
