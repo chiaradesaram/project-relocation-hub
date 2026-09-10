@@ -1189,14 +1189,17 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 }
 
 function DefaultFundForm() {
+  // First-time customer experience: default fund is not yet enabled.
+  // They must turn the toggle on, then pick a fund and sub-account.
   const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
   const [account, setAccount] = useState(accounts[0]);
-  const [enabled, setEnabled] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const [saved, setSaved] = useState(false);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
   const [instructionsOpen, setInstructionsOpen] = useState(true);
 
   const steps = [
+    "Turn on Default fund.",
     "Select your preferred fund and sub account.",
     "Transfer funds to your CAL Deutsche Bank account.",
     "Your transfer is automatically applied to your default fund, no extra steps needed.",
@@ -1252,6 +1255,27 @@ function DefaultFundForm() {
         )}
       </div>
 
+      {/* Empty state when default fund is not enabled */}
+      {!enabled && (
+        <div className="mx-4 mt-4 rounded-2xl bg-card/40 px-4 py-6 text-center">
+          <div
+            className="mx-auto flex h-12 w-12 items-center justify-center rounded-full"
+            style={{
+              background:
+                "color-mix(in oklch, var(--portfolio-blue) 25%, transparent)",
+            }}
+          >
+            <Star className="h-5 w-5" style={{ color: "var(--pill)" }} />
+          </div>
+          <p className="mt-3 text-sm font-semibold text-foreground">
+            No default fund set
+          </p>
+          <p className="mt-1 px-4 text-[12px] leading-snug text-muted-foreground">
+            Turn on Default fund below to choose your fund and sub account.
+          </p>
+        </div>
+      )}
+
       <div
         className={`mx-4 mt-4 space-y-3 transition-opacity ${enabled ? "" : "pointer-events-none opacity-40"}`}
       >
@@ -1261,7 +1285,7 @@ function DefaultFundForm() {
           </label>
           <button
             type="button"
-            onClick={() => setPicker("fund")}
+            onClick={() => enabled && setPicker("fund")}
             className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
             <span className="flex items-center gap-2">
@@ -1289,7 +1313,7 @@ function DefaultFundForm() {
           </label>
           <button
             type="button"
-            onClick={() => setPicker("account")}
+            onClick={() => enabled && setPicker("account")}
             className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
             <span>{account}</span>
@@ -1346,20 +1370,16 @@ function DefaultFundForm() {
         </SheetContent>
       </Sheet>
 
-      <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
-        <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
-        <p className="text-[12px] leading-snug text-muted-foreground">
-          {enabled ? (
-            <>
-              Current default:{" "}
-              <span className="font-medium text-foreground">{fund}</span> ·{" "}
-              <span className="font-medium text-foreground">{account}</span>
-            </>
-          ) : (
-            "Default fund is off. Transfers won't be applied automatically."
-          )}
-        </p>
-      </div>
+      {enabled && (
+        <div className="mx-4 mt-4 flex items-start gap-2.5 rounded-2xl bg-card/40 px-4 py-3">
+          <Star className="mt-px h-4 w-4 shrink-0" style={{ color: "var(--pill)" }} />
+          <p className="text-[12px] leading-snug text-muted-foreground">
+            Current default:{" "}
+            <span className="font-medium text-foreground">{fund}</span> ·{" "}
+            <span className="font-medium text-foreground">{account}</span>
+          </p>
+        </div>
+      )}
 
       <div className="mx-4 mt-3 flex items-center justify-between gap-3 rounded-2xl bg-card/60 px-4 py-3.5 backdrop-blur-md">
         <div>
@@ -1385,10 +1405,11 @@ function DefaultFundForm() {
       <div className="mx-4 mt-5 mb-8">
         <button
           onClick={() => setSaved(true)}
-          className="w-full rounded-xl py-3 text-sm font-semibold transition"
+          disabled={!enabled}
+          className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "var(--pill)", color: "#000" }}
         >
-          {saved ? "Saved" : enabled ? "Save default" : "Disable default fund"}
+          {saved ? "Saved" : enabled ? "Save default" : "Turn on to save"}
         </button>
         {saved && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
