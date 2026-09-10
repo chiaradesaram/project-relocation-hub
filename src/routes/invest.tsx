@@ -1189,9 +1189,9 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 }
 
 function DefaultFundForm() {
-  // Default fund is enabled by default so users can set it immediately.
-  const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
-  const [account, setAccount] = useState(accounts[0]);
+  // Default fund is enabled by default, but fund/sub-account start empty.
+  const [fund, setFund] = useState("");
+  const [account, setAccount] = useState("");
   const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
@@ -1202,6 +1202,8 @@ function DefaultFundForm() {
     "Transfer funds to your CAL Deutsche Bank account.",
     "Your transfer is automatically applied to your default fund, no extra steps needed.",
   ];
+
+  const canSave = enabled && !!fund && !!account;
 
   return (
     <MobileLayout>
