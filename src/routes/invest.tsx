@@ -1189,17 +1189,15 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 }
 
 function DefaultFundForm() {
-  // First-time customer experience: default fund is not yet enabled.
-  // They must turn the toggle on, then pick a fund and sub-account.
+  // Default fund is enabled by default so users can set it immediately.
   const [fund, setFund] = useState(DEFAULT_INVEST_FUND);
   const [account, setAccount] = useState(accounts[0]);
-  const [enabled, setEnabled] = useState(false);
+  const [enabled, setEnabled] = useState(true);
   const [saved, setSaved] = useState(false);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
   const [instructionsOpen, setInstructionsOpen] = useState(true);
 
   const steps = [
-    "Turn on Default fund.",
     "Select your preferred fund and sub account.",
     "Transfer funds to your CAL Deutsche Bank account.",
     "Your transfer is automatically applied to your default fund, no extra steps needed.",
@@ -1254,27 +1252,6 @@ function DefaultFundForm() {
           </>
         )}
       </div>
-
-      {/* Empty state when default fund is not enabled */}
-      {!enabled && (
-        <div className="mx-4 mt-4 rounded-2xl bg-card/40 px-4 py-6 text-center">
-          <div
-            className="mx-auto flex h-12 w-12 items-center justify-center rounded-full"
-            style={{
-              background:
-                "color-mix(in oklch, var(--portfolio-blue) 25%, transparent)",
-            }}
-          >
-            <Star className="h-5 w-5" style={{ color: "var(--pill)" }} />
-          </div>
-          <p className="mt-3 text-sm font-semibold text-foreground">
-            No default fund set
-          </p>
-          <p className="mt-1 px-4 text-[12px] leading-snug text-muted-foreground">
-            Turn on Default fund below to choose your fund and sub account.
-          </p>
-        </div>
-      )}
 
       <div
         className={`mx-4 mt-4 space-y-3 transition-opacity ${enabled ? "" : "pointer-events-none opacity-40"}`}
@@ -1389,7 +1366,7 @@ function DefaultFundForm() {
           <p className="mt-0.5 text-[12px] leading-snug text-muted-foreground">
             {enabled
               ? "Future transfers will be applied automatically."
-              : "Turn on to apply transfers to a default fund automatically."}
+              : "Default fund is off. Turn it on to apply transfers automatically."}
           </p>
         </div>
         <Switch
@@ -1405,11 +1382,10 @@ function DefaultFundForm() {
       <div className="mx-4 mt-5 mb-8">
         <button
           onClick={() => setSaved(true)}
-          disabled={!enabled}
-          className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
+          className="w-full rounded-xl py-3 text-sm font-semibold transition"
           style={{ background: "var(--pill)", color: "#000" }}
         >
-          {saved ? "Saved" : enabled ? "Save default" : "Turn on to save"}
+          {saved ? "Saved" : "Save default"}
         </button>
         {saved && (
           <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
