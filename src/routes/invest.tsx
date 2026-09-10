@@ -1268,18 +1268,24 @@ function DefaultFundForm() {
             className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
             <span className="flex items-center gap-2">
-              {fund}
-              {isPopularFund(fund) && (
-                <span
-                  className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
-                  style={{
-                    background:
-                      "color-mix(in oklch, var(--pill) 20%, transparent)",
-                    color: "var(--pill)",
-                  }}
-                >
-                  Popular
-                </span>
+              {fund ? (
+                <>
+                  {fund}
+                  {isPopularFund(fund) && (
+                    <span
+                      className="rounded px-1.5 py-0.5 text-[11px] font-semibold"
+                      style={{
+                        background:
+                          "color-mix(in oklch, var(--pill) 20%, transparent)",
+                        color: "var(--pill)",
+                      }}
+                    >
+                      Popular
+                    </span>
+                  )}
+                </>
+              ) : (
+                <span className="text-muted-foreground">Select a fund</span>
               )}
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
@@ -1295,7 +1301,13 @@ function DefaultFundForm() {
             onClick={() => enabled && setPicker("account")}
             className="flex w-full items-center justify-between rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] text-foreground backdrop-blur-md transition hover:border-primary/40"
           >
-            <span>{account}</span>
+            <span>
+              {account ? (
+                account
+              ) : (
+                <span className="text-muted-foreground">Select sub account</span>
+              )}
+            </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
