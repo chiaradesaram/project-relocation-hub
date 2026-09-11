@@ -732,6 +732,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [sourceSub, setSourceSub] = useState(
     equityFundSubAccounts[equityFundSources[0]!.name]![0]!.name,
   );
+  const [authorized, setAuthorized] = useState(false);
   const [draftFund, setDraftFund] = useState(sourceFund);
   const [draftSub, setDraftSub] = useState(sourceSub);
   const [picker, setPicker] = useState<
