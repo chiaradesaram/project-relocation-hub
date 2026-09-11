@@ -1217,7 +1217,7 @@ function DefaultFundForm() {
           aria-expanded={instructionsOpen}
         >
           <p className="text-sm font-semibold text-foreground">
-            Investing just got easier!
+            Investing just got easier with default funds
           </p>
           <ChevronDown
             className={`h-4 w-4 text-muted-foreground transition-transform ${instructionsOpen ? "rotate-180" : ""}`}
@@ -1227,10 +1227,12 @@ function DefaultFundForm() {
           <>
             <p className="mt-1.5 text-[12px] leading-snug text-muted-foreground">
               Set a default fund and we'll automatically apply your transfers to
-              it, no need to raise a request. If you raise a request to another
-              fund, that request will override your default for that day. We check
-              for requests at 9 AM each day; if none exist, your default fund is
-              applied.
+              it, no need to raise a request.
+            </p>
+            <p className="mt-2 text-[12px] leading-snug text-muted-foreground">
+              If you raise a request to another fund, that request will override
+              your default for that day. We check for requests at 9 AM each day;
+              if none exist, your default fund is applied.
             </p>
             <div className="mt-3.5 space-y-2.5">
               {steps.map((s, i) => (
