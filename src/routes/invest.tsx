@@ -799,7 +799,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
   const canReview = (() => {
     if (amountNum <= 0) return false;
-    if (isUtFlip && isOverBalance) return false;
+    if (isUtFlip && (isOverBalance || !authorized)) return false;
     if (isPayIn) return !!bank && !!payTo && !!proofName;
     if (isDirect) return !!bank;
     return !!sourceFund;
