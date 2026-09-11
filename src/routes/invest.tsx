@@ -732,6 +732,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [sourceSub, setSourceSub] = useState(
     equityFundSubAccounts[equityFundSources[0]!.name]![0]!.name,
   );
+  const [authorized, setAuthorized] = useState(false);
   const [draftFund, setDraftFund] = useState(sourceFund);
   const [draftSub, setDraftSub] = useState(sourceSub);
   const [picker, setPicker] = useState<
@@ -798,7 +799,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
   const canReview = (() => {
     if (amountNum <= 0) return false;
-    if (isUtFlip && isOverBalance) return false;
+    if (isUtFlip && (isOverBalance || !authorized)) return false;
     if (isPayIn) return !!bank && !!payTo && !!proofName;
     if (isDirect) return !!bank;
     return !!sourceFund;
@@ -1024,6 +1025,24 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               </span>
             </button>
           )}
+        </div>
+      )}
+
+      {/* Authorization — Unit Trust to equity only */}
+      {isUtFlip && (
+        <div className="mx-4 mt-5">
+          <label className="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={authorized}
+              onChange={(e) => setAuthorized(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded accent-primary shrink-0"
+            />
+            <span className="text-[12px] text-muted-foreground leading-snug">
+              I/We hereby authorize Capital Alliance Securities to allow
+              auto-settle equity trades from the Unit Trust.
+            </span>
+          </label>
         </div>
       )}
 
