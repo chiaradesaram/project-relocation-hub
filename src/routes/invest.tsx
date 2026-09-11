@@ -1028,6 +1028,24 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         </div>
       )}
 
+      {/* Authorization — Unit Trust to equity only */}
+      {isUtFlip && (
+        <div className="mx-4 mt-5">
+          <label className="flex items-start gap-2.5 cursor-pointer">
+            <input
+              type="checkbox"
+              checked={authorized}
+              onChange={(e) => setAuthorized(e.target.checked)}
+              className="mt-0.5 w-4 h-4 rounded accent-primary shrink-0"
+            />
+            <span className="text-[12px] text-muted-foreground leading-snug">
+              I/We hereby authorize Capital Alliance Securities to allow
+              auto-settle equity trades from the Unit Trust.
+            </span>
+          </label>
+        </div>
+      )}
+
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
         <button
