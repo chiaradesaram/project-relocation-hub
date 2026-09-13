@@ -4,7 +4,7 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "@tanstack/react-router";
-import { Fingerprint, KeyRound, Smartphone, Eye, Download, Trash2, ChevronRight, ShieldAlert } from "lucide-react";
+import { Fingerprint, KeyRound, Eye, Trash2, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/settings/privacy")({
   component: PrivacySecurity,
@@ -13,7 +13,6 @@ export const Route = createFileRoute("/settings/privacy")({
 function PrivacySecurity() {
   const [biometrics, setBiometrics] = useState(true);
   const [hideBalances, setHideBalances] = useState(false);
-  const [analytics, setAnalytics] = useState(true);
 
   const toggleRow = (
     Icon: any,
@@ -56,7 +55,7 @@ function PrivacySecurity() {
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
           {toggleRow(Fingerprint, "Biometric unlock", "Use Face ID or fingerprint to sign in", biometrics, setBiometrics)}
           {linkRow(KeyRound, "Change passcode", "Last changed 3 months ago")}
-          {linkRow(Smartphone, "Trusted devices", "2 devices currently signed in")}
+          {linkRow(KeyRound, "Change Login PIN", "Update your 6-digit login PIN")}
         </div>
       </div>
 
@@ -64,14 +63,12 @@ function PrivacySecurity() {
         <p className="px-1 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">PRIVACY</p>
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
           {toggleRow(Eye, "Hide balances", "Mask amounts on the home screen", hideBalances, setHideBalances)}
-          {toggleRow(ShieldAlert, "Share usage data", "Help us improve with anonymised analytics", analytics, setAnalytics)}
         </div>
       </div>
 
       <div className="mx-4 mt-4">
         <p className="px-1 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">YOUR DATA</p>
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
-          {linkRow(Download, "Download your data", "Get a copy of your account data")}
           {linkRow(Trash2, "Close account", "Permanently close your CAL Online account", "/settings/privacy", true)}
         </div>
       </div>
