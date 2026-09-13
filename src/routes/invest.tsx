@@ -19,7 +19,9 @@ import {
   ArrowDown,
   PieChart,
   BarChart3,
+  CheckCircle2,
 } from "lucide-react";
+import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import { Switch } from "@/components/ui/switch";
 import ModernSelect from "@/components/ModernSelect";
 import { Calendar } from "@/components/ui/calendar";
