@@ -4,7 +4,7 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Switch } from "@/components/ui/switch";
 import { Link } from "@tanstack/react-router";
-import { Fingerprint, KeyRound, Smartphone, Eye, Download, Trash2, ChevronRight, ShieldAlert } from "lucide-react";
+import { Fingerprint, KeyRound, Eye, Trash2, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/settings/privacy")({
   component: PrivacySecurity,
