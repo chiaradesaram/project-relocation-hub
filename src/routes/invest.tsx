@@ -771,13 +771,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [picker, setPicker] = useState<
     null | "bank" | "payTo" | "sourceFund"
   >(null);
-  const [equitySettlementEnabled, setEquitySettlementEnabled] = useState(false);
-
-  useEffect(() => {
-    setEquitySettlementEnabled(
-      localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled",
-    );
-  }, []);
 
   const openFundPicker = () => {
     setDraftFund(sourceFund);
