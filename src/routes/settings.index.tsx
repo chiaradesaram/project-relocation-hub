@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Link } from "@tanstack/react-router";
-import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette } from "lucide-react";
+import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette, ArrowLeftRight } from "lucide-react";
+import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 
 export const Route = createFileRoute("/settings/")({
   component: Settings,
