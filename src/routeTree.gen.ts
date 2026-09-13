@@ -28,6 +28,7 @@ import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
 import { Route as SettingsIndexRouteImport } from './routes/settings.index'
+import { Route as RequestsIndexRouteImport } from './routes/requests.index'
 import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
@@ -132,6 +133,11 @@ const SettingsIndexRoute = SettingsIndexRouteImport.update({
   path: '/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RequestsIndexRoute = RequestsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RequestsRoute,
+} as any)
 const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
   id: '/notifications/',
   path: '/notifications/',
@@ -200,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
+  '/requests/': typeof RequestsIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
@@ -216,7 +223,6 @@ export interface FileRoutesByTo {
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
-  '/requests': typeof RequestsRouteWithChildren
   '/transactions': typeof TransactionsRoute
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
@@ -227,6 +233,7 @@ export interface FileRoutesByTo {
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help': typeof HelpIndexRoute
   '/notifications': typeof NotificationsIndexRoute
+  '/requests': typeof RequestsIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/unit-trusts': typeof UnitTrustsIndexRoute
 }
@@ -257,6 +264,7 @@ export interface FileRoutesById {
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
   '/help/': typeof HelpIndexRoute
   '/notifications/': typeof NotificationsIndexRoute
+  '/requests/': typeof RequestsIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/unit-trusts/': typeof UnitTrustsIndexRoute
 }
@@ -288,6 +296,7 @@ export interface FileRouteTypes {
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
+    | '/requests/'
     | '/settings/'
     | '/unit-trusts/'
   fileRoutesByTo: FileRoutesByTo
@@ -304,7 +313,6 @@ export interface FileRouteTypes {
     | '/prototype-b'
     | '/rates'
     | '/redeem'
-    | '/requests'
     | '/transactions'
     | '/vstock'
     | '/help/contact'
@@ -315,6 +323,7 @@ export interface FileRouteTypes {
     | '/unit-trusts/$subAccountId'
     | '/help'
     | '/notifications'
+    | '/requests'
     | '/settings'
     | '/unit-trusts'
   id:
@@ -344,6 +353,7 @@ export interface FileRouteTypes {
     | '/unit-trusts/$subAccountId'
     | '/help/'
     | '/notifications/'
+    | '/requests/'
     | '/settings/'
     | '/unit-trusts/'
   fileRoutesById: FileRoutesById
@@ -508,6 +518,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/requests/': {
+      id: '/requests/'
+      path: '/'
+      fullPath: '/requests/'
+      preLoaderRoute: typeof RequestsIndexRouteImport
+      parentRoute: typeof RequestsRoute
+    }
     '/notifications/': {
       id: '/notifications/'
       path: '/notifications'
@@ -581,10 +598,12 @@ const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
 interface RequestsRouteChildren {
   RequestsEquitySettlementRoute: typeof RequestsEquitySettlementRoute
+  RequestsIndexRoute: typeof RequestsIndexRoute
 }
 
 const RequestsRouteChildren: RequestsRouteChildren = {
   RequestsEquitySettlementRoute: RequestsEquitySettlementRoute,
+  RequestsIndexRoute: RequestsIndexRoute,
 }
 
 const RequestsRouteWithChildren = RequestsRoute._addFileChildren(
