@@ -33,6 +33,7 @@ import { Route as HelpIndexRouteImport } from './routes/help.index'
 import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
 import { Route as SettingsLegalRouteImport } from './routes/settings.legal'
+import { Route as RequestsEquitySettlementRouteImport } from './routes/requests.equity-settlement'
 import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
@@ -156,6 +157,12 @@ const SettingsLegalRoute = SettingsLegalRouteImport.update({
   path: '/settings/legal',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RequestsEquitySettlementRoute =
+  RequestsEquitySettlementRouteImport.update({
+    id: '/equity-settlement',
+    path: '/equity-settlement',
+    getParentRoute: () => RequestsRoute,
+  } as any)
 const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
   id: '/notifications/settings',
   path: '/notifications/settings',
@@ -181,12 +188,13 @@ export interface FileRoutesByFullPath {
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
-  '/requests': typeof RequestsRoute
+  '/requests': typeof RequestsRouteWithChildren
   '/transactions': typeof TransactionsRoute
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/requests/equity-settlement': typeof RequestsEquitySettlementRoute
   '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
@@ -208,11 +216,12 @@ export interface FileRoutesByTo {
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
-  '/requests': typeof RequestsRoute
+  '/requests': typeof RequestsRouteWithChildren
   '/transactions': typeof TransactionsRoute
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/requests/equity-settlement': typeof RequestsEquitySettlementRoute
   '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
@@ -236,12 +245,13 @@ export interface FileRoutesById {
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
-  '/requests': typeof RequestsRoute
+  '/requests': typeof RequestsRouteWithChildren
   '/transactions': typeof TransactionsRoute
   '/unit-trusts': typeof UnitTrustsRouteWithChildren
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/requests/equity-settlement': typeof RequestsEquitySettlementRoute
   '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
   '/unit-trusts/$subAccountId': typeof UnitTrustsSubAccountIdRoute
@@ -272,6 +282,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/requests/equity-settlement'
     | '/settings/legal'
     | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
@@ -298,6 +309,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/requests/equity-settlement'
     | '/settings/legal'
     | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
@@ -326,6 +338,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/requests/equity-settlement'
     | '/settings/legal'
     | '/settings/privacy'
     | '/unit-trusts/$subAccountId'
@@ -349,7 +362,7 @@ export interface RootRouteChildren {
   PrototypeBRoute: typeof PrototypeBRoute
   RatesRoute: typeof RatesRoute
   RedeemRoute: typeof RedeemRoute
-  RequestsRoute: typeof RequestsRoute
+  RequestsRoute: typeof RequestsRouteWithChildren
   TransactionsRoute: typeof TransactionsRoute
   UnitTrustsRoute: typeof UnitTrustsRouteWithChildren
   VstockRoute: typeof VstockRoute
@@ -530,6 +543,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsLegalRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/requests/equity-settlement': {
+      id: '/requests/equity-settlement'
+      path: '/equity-settlement'
+      fullPath: '/requests/equity-settlement'
+      preLoaderRoute: typeof RequestsEquitySettlementRouteImport
+      parentRoute: typeof RequestsRoute
+    }
     '/notifications/settings': {
       id: '/notifications/settings'
       path: '/notifications/settings'
@@ -559,6 +579,18 @@ const HelpRouteChildren: HelpRouteChildren = {
 
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
+interface RequestsRouteChildren {
+  RequestsEquitySettlementRoute: typeof RequestsEquitySettlementRoute
+}
+
+const RequestsRouteChildren: RequestsRouteChildren = {
+  RequestsEquitySettlementRoute: RequestsEquitySettlementRoute,
+}
+
+const RequestsRouteWithChildren = RequestsRoute._addFileChildren(
+  RequestsRouteChildren,
+)
+
 interface UnitTrustsRouteChildren {
   UnitTrustsSubAccountIdRoute: typeof UnitTrustsSubAccountIdRoute
   UnitTrustsIndexRoute: typeof UnitTrustsIndexRoute
@@ -587,7 +619,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrototypeBRoute: PrototypeBRoute,
   RatesRoute: RatesRoute,
   RedeemRoute: RedeemRoute,
-  RequestsRoute: RequestsRoute,
+  RequestsRoute: RequestsRouteWithChildren,
   TransactionsRoute: TransactionsRoute,
   UnitTrustsRoute: UnitTrustsRouteWithChildren,
   VstockRoute: VstockRoute,

@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Link } from "@tanstack/react-router";
-import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette } from "lucide-react";
+import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette, ArrowLeftRight } from "lucide-react";
+import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 
 export const Route = createFileRoute("/settings/")({
   component: Settings,
@@ -27,14 +28,18 @@ const sections = [
 ];
 
 function Settings() {
+  const settlementOn = localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled";
   return (
     <MobileLayout>
       <PageHeader title="Settings" showBack />
       {sections.map((section) => (
         <div key={section.title} className="mx-4 mt-4">
           <p className="px-1 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{section.title}</p>
-          <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
-            {section.items.map(({ icon: Icon, label, description, to }) => (
+        <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
+          {(section.title === "ACCOUNT"
+            ? [...section.items.slice(0, 2), { icon: ArrowLeftRight, label: "Equity settlement", description: settlementOn ? "Active · auto-settle from unit trust" : "Off · auto-settle from unit trust", to: "/requests/equity-settlement" }, ...section.items.slice(2)]
+            : section.items
+          ).map(({ icon: Icon, label, description, to }) => (
               <Link
                 key={label}
                 to={to}
