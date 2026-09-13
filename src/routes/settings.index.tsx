@@ -4,8 +4,9 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Link } from "@tanstack/react-router";
 import { Switch } from "@/components/ui/switch";
-import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette, ArrowLeftRight } from "lucide-react";
+import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette, ArrowLeftRight, Wallet } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
+import { EQUITY_FUNDING_KEY } from "./requests.equity-funding";
 
 export const Route = createFileRoute("/settings/")({
   component: Settings,

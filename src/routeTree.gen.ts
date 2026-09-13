@@ -35,6 +35,7 @@ import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts
 import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
 import { Route as SettingsLegalRouteImport } from './routes/settings.legal'
 import { Route as RequestsEquitySettlementRouteImport } from './routes/requests.equity-settlement'
+import { Route as RequestsEquityFundingRouteImport } from './routes/requests.equity-funding'
 import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
 
@@ -169,6 +170,11 @@ const RequestsEquitySettlementRoute =
     path: '/equity-settlement',
     getParentRoute: () => RequestsRoute,
   } as any)
+const RequestsEquityFundingRoute = RequestsEquityFundingRouteImport.update({
+  id: '/equity-funding',
+  path: '/equity-funding',
+  getParentRoute: () => RequestsRoute,
+} as any)
 const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
   id: '/notifications/settings',
   path: '/notifications/settings',
@@ -200,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/requests/equity-funding': typeof RequestsEquityFundingRoute
   '/requests/equity-settlement': typeof RequestsEquitySettlementRoute
   '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/requests/equity-funding': typeof RequestsEquityFundingRoute
   '/requests/equity-settlement': typeof RequestsEquitySettlementRoute
   '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
@@ -258,6 +266,7 @@ export interface FileRoutesById {
   '/vstock': typeof VstockRoute
   '/help/contact': typeof HelpContactRoute
   '/notifications/settings': typeof NotificationsSettingsRoute
+  '/requests/equity-funding': typeof RequestsEquityFundingRoute
   '/requests/equity-settlement': typeof RequestsEquitySettlementRoute
   '/settings/legal': typeof SettingsLegalRoute
   '/settings/privacy': typeof SettingsPrivacyRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/requests/equity-funding'
     | '/requests/equity-settlement'
     | '/settings/legal'
     | '/settings/privacy'
@@ -317,6 +327,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/requests/equity-funding'
     | '/requests/equity-settlement'
     | '/settings/legal'
     | '/settings/privacy'
@@ -347,6 +358,7 @@ export interface FileRouteTypes {
     | '/vstock'
     | '/help/contact'
     | '/notifications/settings'
+    | '/requests/equity-funding'
     | '/requests/equity-settlement'
     | '/settings/legal'
     | '/settings/privacy'
@@ -567,6 +579,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestsEquitySettlementRouteImport
       parentRoute: typeof RequestsRoute
     }
+    '/requests/equity-funding': {
+      id: '/requests/equity-funding'
+      path: '/equity-funding'
+      fullPath: '/requests/equity-funding'
+      preLoaderRoute: typeof RequestsEquityFundingRouteImport
+      parentRoute: typeof RequestsRoute
+    }
     '/notifications/settings': {
       id: '/notifications/settings'
       path: '/notifications/settings'
@@ -597,11 +616,13 @@ const HelpRouteChildren: HelpRouteChildren = {
 const HelpRouteWithChildren = HelpRoute._addFileChildren(HelpRouteChildren)
 
 interface RequestsRouteChildren {
+  RequestsEquityFundingRoute: typeof RequestsEquityFundingRoute
   RequestsEquitySettlementRoute: typeof RequestsEquitySettlementRoute
   RequestsIndexRoute: typeof RequestsIndexRoute
 }
 
 const RequestsRouteChildren: RequestsRouteChildren = {
+  RequestsEquityFundingRoute: RequestsEquityFundingRoute,
   RequestsEquitySettlementRoute: RequestsEquitySettlementRoute,
   RequestsIndexRoute: RequestsIndexRoute,
 }
