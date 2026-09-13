@@ -170,6 +170,29 @@ function Invest() {
             How would you like to invest?
           </p>
         </div>
+
+        {isEquities && equitySettlementEnabled && (
+          <div className="mx-4 mt-3 rounded-2xl border border-primary/20 bg-card/60 backdrop-blur-md p-3.5 flex items-start gap-3">
+            <div
+              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background:
+                  "color-mix(in oklch, var(--pill) 22%, transparent)",
+              }}
+            >
+              <CheckCircle2 className="w-4 h-4" style={{ color: "var(--pill)" }} />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-[13px] font-semibold text-foreground leading-tight">
+                Equity auto settlements are turned on
+              </p>
+              <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+                When your cash balance does not meet the stock settlement amount, it will be auto debited from your unit trust account.
+              </p>
+            </div>
+          </div>
+        )}
+
         <div className="mx-4 mt-4 space-y-2.5">
           {methodCards.map(({ id, icon: Icon, label, desc }) => (
             <button
