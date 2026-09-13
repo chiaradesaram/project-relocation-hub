@@ -11,10 +11,12 @@ export const Route = createFileRoute("/requests/equity-settlement")({
 export const EQUITY_SETTLEMENT_KEY = "equitySettlementFromUT";
 
 function EquitySettlementRequest() {
-  const [enabled, setEnabled] = useState(false);
+  const [state, setState] = useState<string | null>(null);
   useEffect(() => {
-    setEnabled(localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled");
+    setState(localStorage.getItem(EQUITY_SETTLEMENT_KEY));
   }, []);
+  const enabled = state === "enabled";
+  const paused = state === "disabled";
   const [agreed, setAgreed] = useState(false);
   const [signature, setSignature] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -23,16 +25,19 @@ function EquitySettlementRequest() {
 
   const submit = () => {
     localStorage.setItem(EQUITY_SETTLEMENT_KEY, "enabled");
-    setEnabled(true);
+    setState("enabled");
     setSubmitted(true);
   };
 
   const disable = () => {
-    localStorage.removeItem(EQUITY_SETTLEMENT_KEY);
-    setEnabled(false);
+    localStorage.setItem(EQUITY_SETTLEMENT_KEY, "disabled");
+    setState("disabled");
     setSubmitted(false);
-    setAgreed(false);
-    setSignature("");
+  };
+
+  const reEnable = () => {
+    localStorage.setItem(EQUITY_SETTLEMENT_KEY, "enabled");
+    setState("enabled");
   };
 
   return (
