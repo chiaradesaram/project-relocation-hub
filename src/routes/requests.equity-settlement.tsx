@@ -1,5 +1,5 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { ArrowLeftRight, CheckCircle2, PenLine } from "lucide-react";
@@ -11,10 +11,10 @@ export const Route = createFileRoute("/requests/equity-settlement")({
 export const EQUITY_SETTLEMENT_KEY = "equitySettlementFromUT";
 
 function EquitySettlementRequest() {
-  const navigate = useNavigate();
-  const [enabled, setEnabled] = useState(
-    () => localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled"
-  );
+  const [enabled, setEnabled] = useState(false);
+  useEffect(() => {
+    setEnabled(localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled");
+  }, []);
   const [agreed, setAgreed] = useState(false);
   const [signature, setSignature] = useState("");
   const [submitted, setSubmitted] = useState(false);
