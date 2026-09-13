@@ -30,10 +30,17 @@ const sections = [
 ];
 
 function Settings() {
-  const [settlementOn, setSettlementOn] = useState(false);
+  const [settlementState, setSettlementState] = useState<string | null>(null);
   useEffect(() => {
-    setSettlementOn(localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled");
+    setSettlementState(localStorage.getItem(EQUITY_SETTLEMENT_KEY));
   }, []);
+  const signedUp = settlementState !== null;
+  const settlementOn = settlementState === "enabled";
+  const toggleSettlement = (on: boolean) => {
+    const value = on ? "enabled" : "disabled";
+    localStorage.setItem(EQUITY_SETTLEMENT_KEY, value);
+    setSettlementState(value);
+  };
   return (
     <MobileLayout>
       <PageHeader title="Settings" showBack />
@@ -42,7 +49,7 @@ function Settings() {
           <p className="px-1 pb-2 text-[12px] font-medium uppercase tracking-wider text-muted-foreground">{section.title}</p>
         <div className="rounded-2xl border border-border/40 bg-card backdrop-blur-md overflow-hidden divide-y divide-border/20">
           {(section.title === "ACCOUNT"
-            ? [...section.items.slice(0, 2), { icon: ArrowLeftRight, label: "Equity settlement", description: settlementOn ? "Active · auto-settle from unit trust" : "Off · auto-settle from unit trust", to: "/requests/equity-settlement" }, ...section.items.slice(2)]
+            ? [...section.items.slice(0, 2), { icon: ArrowLeftRight, label: "Equity settlement", description: !signedUp ? "Auto-settle equity trades from unit trust" : settlementOn ? "Active · auto-settle from unit trust" : "Paused · auto-settle from unit trust", to: "/requests/equity-settlement" }, ...section.items.slice(2)]
             : section.items
           ).map(({ icon: Icon, label, description, to }) => (
               <Link
@@ -57,7 +64,13 @@ function Settings() {
                   <p className="text-[13px] font-semibold text-foreground leading-tight">{label}</p>
                   <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">{description}</p>
                 </div>
-                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                {label === "Equity settlement" && signedUp ? (
+                  <span onClick={(e) => e.preventDefault()}>
+                    <Switch checked={settlementOn} onCheckedChange={toggleSettlement} />
+                  </span>
+                ) : (
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                )}
               </Link>
             ))}
           </div>
