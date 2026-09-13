@@ -35,14 +35,14 @@ const requestTypes = [
   },
   {
     icon: ArrowLeftRight,
-    label: "Equity Settlement from Unit Trust",
-    description: "Settle equity trades automatically from your unit trust account",
+    label: "Enable equity settlement from unit trust",
+    description: "Enable the ability to settle equity trades automatically from your unit trust account",
     path: "/requests/equity-settlement",
   },
   {
     icon: Wallet,
-    label: "Funding Equity Account from Unit Trust",
-    description: "Move part of your unit trust balance into your equity cash balance",
+    label: "Enable funding equity account from unit trust",
+    description: "Enable the ability to move part of your unit trust balance into your equity cash balance",
     path: "/requests/equity-funding",
   },
 ];
