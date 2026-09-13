@@ -89,6 +89,13 @@ function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const isEquities = search.product === "equities";
+  const [equitySettlementEnabled, setEquitySettlementEnabled] = useState(false);
+
+  useEffect(() => {
+    setEquitySettlementEnabled(
+      localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled",
+    );
+  }, []);
 
   // Method picker landing
   if (!search.method) {
