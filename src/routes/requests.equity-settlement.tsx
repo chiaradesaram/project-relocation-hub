@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { ArrowLeftRight, CheckCircle2, PenLine } from "lucide-react";
+import { ArrowLeftRight, CheckCircle2, PauseCircle, PenLine } from "lucide-react";
 
 export const Route = createFileRoute("/requests/equity-settlement")({
   component: EquitySettlementRequest,
