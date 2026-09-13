@@ -121,14 +121,15 @@ function Invest() {
         id: "bank",
         icon: Building2,
         label: "Bank Transfer",
-        desc: "Transfer funds to your CAL account and make a creation request.",
+        desc:
+          "Transfer funds to your CAL account and make a Pay In request to fund your cash balance.",
       },
       {
         id: "instant",
         icon: Zap,
         label: "Direct Invest",
         desc:
-          "Use JustPay to make an investment, with the money debited directly from your linked bank account.",
+          "Use Justpay to fund your cash balance with money debited directly from your linked bank account.",
       },
       {
         id: "flip",
