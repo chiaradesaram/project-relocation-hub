@@ -13,7 +13,6 @@ export const Route = createFileRoute("/settings/privacy")({
 function PrivacySecurity() {
   const [biometrics, setBiometrics] = useState(true);
   const [hideBalances, setHideBalances] = useState(false);
-  const [analytics, setAnalytics] = useState(true);
 
   const toggleRow = (
     Icon: any,
