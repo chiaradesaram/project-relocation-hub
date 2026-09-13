@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { useNavigate } from "@tanstack/react-router";
-import { Stamp, ClipboardList, Users, ChevronRight, FileText, ArrowLeftRight } from "lucide-react";
+import { Stamp, ClipboardList, Users, ChevronRight, FileText, ArrowLeftRight, Wallet } from "lucide-react";
 
 export const Route = createFileRoute("/requests/")({
   component: Requests,
@@ -38,6 +38,12 @@ const requestTypes = [
     label: "Equity Settlement from Unit Trust",
     description: "Settle equity trades automatically from your unit trust account",
     path: "/requests/equity-settlement",
+  },
+  {
+    icon: Wallet,
+    label: "Funding Equity Account from Unit Trust",
+    description: "Move part of your unit trust balance into your equity cash balance",
+    path: "/requests/equity-funding",
   },
 ];
 
