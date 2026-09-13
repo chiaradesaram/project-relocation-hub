@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Link } from "@tanstack/react-router";
@@ -28,7 +29,10 @@ const sections = [
 ];
 
 function Settings() {
-  const settlementOn = localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled";
+  const [settlementOn, setSettlementOn] = useState(false);
+  useEffect(() => {
+    setSettlementOn(localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled");
+  }, []);
   return (
     <MobileLayout>
       <PageHeader title="Settings" showBack />
