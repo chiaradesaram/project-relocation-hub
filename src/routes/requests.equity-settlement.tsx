@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { ArrowLeftRight, CheckCircle2, PenLine } from "lucide-react";
+import { ArrowLeftRight, CheckCircle2, PauseCircle, PenLine } from "lucide-react";
 
 export const Route = createFileRoute("/requests/equity-settlement")({
   component: EquitySettlementRequest,
@@ -11,10 +11,12 @@ export const Route = createFileRoute("/requests/equity-settlement")({
 export const EQUITY_SETTLEMENT_KEY = "equitySettlementFromUT";
 
 function EquitySettlementRequest() {
-  const [enabled, setEnabled] = useState(false);
+  const [state, setState] = useState<string | null>(null);
   useEffect(() => {
-    setEnabled(localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled");
+    setState(localStorage.getItem(EQUITY_SETTLEMENT_KEY));
   }, []);
+  const enabled = state === "enabled";
+  const paused = state === "disabled";
   const [agreed, setAgreed] = useState(false);
   const [signature, setSignature] = useState("");
   const [submitted, setSubmitted] = useState(false);
@@ -23,16 +25,19 @@ function EquitySettlementRequest() {
 
   const submit = () => {
     localStorage.setItem(EQUITY_SETTLEMENT_KEY, "enabled");
-    setEnabled(true);
+    setState("enabled");
     setSubmitted(true);
   };
 
   const disable = () => {
-    localStorage.removeItem(EQUITY_SETTLEMENT_KEY);
-    setEnabled(false);
+    localStorage.setItem(EQUITY_SETTLEMENT_KEY, "disabled");
+    setState("disabled");
     setSubmitted(false);
-    setAgreed(false);
-    setSignature("");
+  };
+
+  const reEnable = () => {
+    localStorage.setItem(EQUITY_SETTLEMENT_KEY, "enabled");
+    setState("enabled");
   };
 
   return (
@@ -66,13 +71,29 @@ function EquitySettlementRequest() {
                 : "Equity trades are being auto-settled from your unit trust account."}
             </p>
             <p className="text-[12px] text-muted-foreground leading-snug">
-              You can manage this anytime from Settings.
+              You can pause this anytime from Settings.
             </p>
             <button
               onClick={disable}
               className="w-full rounded-xl border border-border/40 py-2.5 text-xs font-medium text-muted-foreground hover:bg-muted/30 transition"
             >
-              Disable equity settlement
+              Disable temporarily
+            </button>
+          </div>
+        ) : paused ? (
+          <div className="glass-card p-4 space-y-3">
+            <div className="flex items-center gap-2">
+              <PauseCircle className="w-4 h-4 text-muted-foreground" />
+              <p className="text-xs font-semibold text-foreground">Equity settlement is paused</p>
+            </div>
+            <p className="text-[12px] text-muted-foreground leading-snug">
+              Auto-settlement from your unit trust account is temporarily disabled. Your authorization stays in place and you can turn it back on at any time.
+            </p>
+            <button
+              onClick={reEnable}
+              className="w-full rounded-xl bg-primary py-2.5 text-xs font-semibold text-primary-foreground transition"
+            >
+              Re-enable equity settlement
             </button>
           </div>
         ) : (
