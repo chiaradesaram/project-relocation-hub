@@ -20,50 +20,6 @@ const preferencesItems = [
 ];
 
 function Settings() {
-  const [settlementState, setSettlementState] = useState<string | null>(null);
-  const [fundingState, setFundingState] = useState<string | null>(null);
-  useEffect(() => {
-    setSettlementState(localStorage.getItem(EQUITY_SETTLEMENT_KEY));
-    setFundingState(localStorage.getItem(EQUITY_FUNDING_KEY));
-  }, []);
-
-  const makeToggle = (key: string, setter: (v: string) => void) => (on: boolean) => {
-    const value = on ? "enabled" : "disabled";
-    localStorage.setItem(key, value);
-    setter(value);
-  };
-
-  const equityItems = [
-    {
-      icon: ArrowLeftRight,
-      label: "Equity settlement",
-      description:
-        settlementState === null
-          ? "Auto-settle equity trades from unit trust"
-          : settlementState === "enabled"
-            ? "Active · auto-settle from unit trust"
-            : "Paused · auto-settle from unit trust",
-      to: "/requests/equity-settlement",
-      signedUp: settlementState !== null,
-      on: settlementState === "enabled",
-      onToggle: makeToggle(EQUITY_SETTLEMENT_KEY, setSettlementState),
-    },
-    {
-      icon: Wallet,
-      label: "Funding equity account",
-      description:
-        fundingState === null
-          ? "Fund your equity cash balance from unit trust"
-          : fundingState === "enabled"
-            ? "Active · fund equity cash from unit trust"
-            : "Paused · fund equity cash from unit trust",
-      to: "/requests/equity-funding",
-      signedUp: fundingState !== null,
-      on: fundingState === "enabled",
-      onToggle: makeToggle(EQUITY_FUNDING_KEY, setFundingState),
-    },
-  ];
-
   return (
     <MobileLayout>
       <PageHeader title="Settings" showBack />
