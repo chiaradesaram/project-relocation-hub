@@ -110,13 +110,15 @@ function Invest() {
             id: "payin",
             icon: Wallet,
             label: "Pay in",
-            desc: "Add cash to your equity account from your bank.",
+            desc:
+              "Transfer funds to your CAL account and make a Pay In request to fund your cash balance.",
           },
           {
             id: "instant",
             icon: Zap,
             label: "Direct Invest",
-            desc: "Instant bank rail. Max LKR 149,950 per transfer.",
+            desc:
+              "Use Justpay to fund your cash balance with money debited directly from your linked bank account.",
           },
           {
             id: "utflip",
