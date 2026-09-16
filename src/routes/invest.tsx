@@ -62,7 +62,7 @@ export const Route = createFileRoute("/invest")({
 });
 
 import { isPopularFund, DEFAULT_INVEST_FUND } from "@/lib/fundMeta";
-import { toast } from "sonner";
+
 
 const funds = [
   "CAL Growth Fund",
@@ -97,6 +97,7 @@ function Invest() {
   const [settlementFund, setSettlementFund] = useState("");
   const [settlementAccount, setSettlementAccount] = useState("");
   const [settlementSheet, setSettlementSheet] = useState(false);
+  const [settlementSaved, setSettlementSaved] = useState(false);
   const [settlementPicker, setSettlementPicker] = useState<
     null | "fund" | "account"
   >(null);
