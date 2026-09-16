@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { useNavigate } from "@tanstack/react-router";
-import { Stamp, ClipboardList, Users, ChevronRight, FileText, ArrowLeftRight, Wallet } from "lucide-react";
+import { Stamp, ClipboardList, Users, ChevronRight, FileText, ArrowLeftRight } from "lucide-react";
 
 export const Route = createFileRoute("/requests/")({
   component: Requests,
