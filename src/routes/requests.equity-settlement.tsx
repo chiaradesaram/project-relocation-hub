@@ -122,7 +122,7 @@ function EquitySettlementRequest() {
           <div>
             <p className="text-xs font-semibold text-foreground">Settle equities from your Unit Trust</p>
             <p className="text-[12px] text-foreground mt-1 leading-snug">
-              By enabling this, you agree that your equity trades may be settled automatically using funds from your unit trust account when your cash balance is insufficient.
+              If your cash balance falls short, we'll use your unit trust to settle the trade.
             </p>
           </div>
         </div>
@@ -166,9 +166,9 @@ function EquitySettlementRequest() {
             <div className="glass-card p-4 space-y-3">
               <p className="text-[12px] font-medium uppercase tracking-wider text-foreground">What you're agreeing to</p>
               <ul className="space-y-2 text-[12px] text-foreground leading-snug list-disc pl-4">
-                <li>Equity purchases will be settled by redeeming units from your unit trust account when your cash balance is insufficient.</li>
-                <li>Redemptions follow the unit trust's standard settlement timelines and applicable fees.</li>
-                <li>This also allows you to transfer funds from your unit trust to equities.</li>
+                <li>Not enough cash? We redeem units from your unit trust to cover the trade.</li>
+                <li>Standard settlement times and fees apply.</li>
+                <li>You can also move money from your unit trust to your equity account.</li>
               </ul>
             </div>
 
