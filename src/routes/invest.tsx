@@ -225,9 +225,9 @@ function Invest() {
           <>
             <button
               onClick={() => setSettlementSheet(true)}
-              className="w-full text-left mx-0 px-4 mt-2"
+              className="w-full text-left mx-0 mt-2"
             >
-              <div className="px-4 py-4 flex items-center gap-3.5 transition-colors active:bg-card/40 rounded-2xl">
+              <div className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4 flex items-center gap-3.5 transition hover:bg-muted/10">
                 <div
                   className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
                   style={{
