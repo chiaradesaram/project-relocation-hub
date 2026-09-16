@@ -11,6 +11,7 @@ import {
   Upload,
   AlertTriangle,
   Star,
+  RefreshCw,
   X,
   Image as ImageIcon,
   Check,
@@ -224,14 +225,26 @@ function Invest() {
           <>
             <button
               onClick={() => setSettlementSheet(true)}
-              className="w-full text-left mx-0 px-4 mt-4"
+              className="w-full text-left mx-0 px-4 mt-2"
             >
-              <div className="rounded-2xl border border-border/40 bg-card/40 backdrop-blur-md px-4 py-3.5 flex items-center gap-3">
+              <div className="px-4 py-4 flex items-center gap-3.5 transition-colors active:bg-card/40 rounded-2xl">
+                <div
+                  className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--pill) 22%, transparent)",
+                  }}
+                >
+                  <RefreshCw
+                    className="w-4.5 h-4.5"
+                    style={{ color: "var(--pill)" }}
+                  />
+                </div>
                 <div className="min-w-0 flex-1">
                   <p className="text-[13px] font-medium text-foreground leading-tight">
                     Equity auto settlements
                   </p>
-                  <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
+                  <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
                     {equitySettlementEnabled
                       ? settlementFund
                         ? `Settling from ${settlementFund}${
@@ -267,15 +280,18 @@ function Invest() {
                   <SheetTitle>Equity auto settlements</SheetTitle>
                 </SheetHeader>
                   {settlementSaved ? (
-                    <div className="px-1 pb-8 pt-4 flex flex-col items-center text-center">
+                    <div className="px-1 pb-10 pt-6 flex flex-col items-center text-center">
                       <div
-                        className="w-14 h-14 rounded-full flex items-center justify-center"
-                        style={{ background: "var(--pill)" }}
+                        className="w-16 h-16 rounded-full flex items-center justify-center"
+                        style={{
+                          background:
+                            "color-mix(in oklch, var(--success) 22%, transparent)",
+                        }}
                       >
                         <Check
-                          className="w-7 h-7"
-                          strokeWidth={3}
-                          style={{ color: "var(--background)" }}
+                          className="w-8 h-8"
+                          strokeWidth={2.5}
+                          style={{ color: "var(--success)" }}
                         />
                       </div>
                       <p className="text-base font-semibold text-foreground mt-4">
