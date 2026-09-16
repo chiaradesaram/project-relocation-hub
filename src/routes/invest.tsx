@@ -351,17 +351,11 @@ function Invest() {
 
                   <button
                     onClick={() => {
-                      setSettlementSheet(false);
-                      toast.success(
-                        equitySettlementEnabled
-                          ? "Auto settlements saved"
-                          : "Auto settlements turned off",
-                        {
-                          description: equitySettlementEnabled
-                            ? `Settling from ${settlementFund} · ${settlementAccount}`
-                            : "You can turn this back on anytime.",
-                        },
-                      );
+                      setSettlementSaved(true);
+                      window.setTimeout(() => {
+                        setSettlementSheet(false);
+                        setSettlementSaved(false);
+                      }, 1300);
                     }}
                     disabled={
                       equitySettlementEnabled &&
@@ -376,6 +370,7 @@ function Invest() {
                     Done
                   </button>
                 </div>
+                  )}
               </SheetContent>
             </Sheet>
 
