@@ -90,11 +90,19 @@ function Invest() {
   const search = Route.useSearch();
   const isEquities = search.product === "equities";
   const [equitySettlementEnabled, setEquitySettlementEnabled] = useState(false);
+  const [settlementFund, setSettlementFund] = useState("");
+  const [settlementAccount, setSettlementAccount] = useState("");
+  const [settlementSheet, setSettlementSheet] = useState(false);
+  const [settlementPicker, setSettlementPicker] = useState<
+    null | "fund" | "account"
+  >(null);
 
   useEffect(() => {
     setEquitySettlementEnabled(
       localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled",
     );
+    setSettlementFund(localStorage.getItem(SETTLEMENT_FUND_KEY) ?? "");
+    setSettlementAccount(localStorage.getItem(SETTLEMENT_ACCOUNT_KEY) ?? "");
   }, []);
 
   // Method picker landing
