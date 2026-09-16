@@ -85,6 +85,9 @@ const calBankAccounts = [
 
 const DIRECT_INVEST_LIMIT = 149950;
 
+const SETTLEMENT_FUND_KEY = "equitySettlementFund";
+const SETTLEMENT_ACCOUNT_KEY = "equitySettlementAccount";
+
 function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
