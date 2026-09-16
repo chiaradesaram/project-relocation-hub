@@ -85,16 +85,27 @@ const calBankAccounts = [
 
 const DIRECT_INVEST_LIMIT = 149950;
 
+const SETTLEMENT_FUND_KEY = "equitySettlementFund";
+const SETTLEMENT_ACCOUNT_KEY = "equitySettlementAccount";
+
 function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const isEquities = search.product === "equities";
   const [equitySettlementEnabled, setEquitySettlementEnabled] = useState(false);
+  const [settlementFund, setSettlementFund] = useState("");
+  const [settlementAccount, setSettlementAccount] = useState("");
+  const [settlementSheet, setSettlementSheet] = useState(false);
+  const [settlementPicker, setSettlementPicker] = useState<
+    null | "fund" | "account"
+  >(null);
 
   useEffect(() => {
     setEquitySettlementEnabled(
       localStorage.getItem(EQUITY_SETTLEMENT_KEY) === "enabled",
     );
+    setSettlementFund(localStorage.getItem(SETTLEMENT_FUND_KEY) ?? "");
+    setSettlementAccount(localStorage.getItem(SETTLEMENT_ACCOUNT_KEY) ?? "");
   }, []);
 
   // Method picker landing
@@ -208,24 +219,184 @@ function Invest() {
         </div>
 
         {isEquities && (
-          <div className="mx-4 mt-4 rounded-2xl border border-border/40 bg-card/40 backdrop-blur-md px-4 py-3.5 flex items-center gap-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-[13px] font-medium text-foreground leading-tight">
-                Equity auto settlements
-              </p>
-              <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
-                Auto debit from unit trust when cash balance is insufficient.
-              </p>
-            </div>
-            <Switch
-              checked={equitySettlementEnabled}
-              onCheckedChange={(on) => {
-                const value = on ? "enabled" : "disabled";
-                localStorage.setItem(EQUITY_SETTLEMENT_KEY, value);
-                setEquitySettlementEnabled(on);
-              }}
-            />
-          </div>
+          <>
+            <button
+              onClick={() => setSettlementSheet(true)}
+              className="w-full text-left mx-0 px-4 mt-4"
+            >
+              <div className="rounded-2xl border border-border/40 bg-card/40 backdrop-blur-md px-4 py-3.5 flex items-center gap-3">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[13px] font-medium text-foreground leading-tight">
+                    Equity auto settlements
+                  </p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
+                    {equitySettlementEnabled
+                      ? settlementFund
+                        ? `Settling from ${settlementFund}${
+                            settlementAccount ? ` · ${settlementAccount}` : ""
+                          }`
+                        : "On · choose a unit trust fund to settle from"
+                      : "Auto debit from unit trust when cash balance is insufficient."}
+                  </p>
+                </div>
+                <span
+                  className="text-[11px] font-medium px-2 py-0.5 rounded-full shrink-0"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--pill) 20%, transparent)",
+                    color: "var(--pill)",
+                  }}
+                >
+                  {equitySettlementEnabled ? "On" : "Off"}
+                </span>
+                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              </div>
+            </button>
+
+            <Sheet open={settlementSheet} onOpenChange={setSettlementSheet}>
+              <SheetContent side="bottom" className="rounded-t-3xl">
+                <SheetHeader>
+                  <SheetTitle>Equity auto settlements</SheetTitle>
+                </SheetHeader>
+                <div className="px-1 pb-6 space-y-3">
+                  <p className="text-[12px] text-muted-foreground leading-snug">
+                    When your cash balance doesn't cover a stock settlement,
+                    we'll auto debit the shortfall from the unit trust fund you
+                    choose below.
+                  </p>
+
+                  <div className="rounded-2xl bg-card/60 px-4 py-3 flex items-center gap-3">
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[13px] font-medium text-foreground">
+                        Auto settlements
+                      </p>
+                      <p className="text-[12px] text-muted-foreground mt-0.5">
+                        {equitySettlementEnabled ? "Turned on" : "Turned off"}
+                      </p>
+                    </div>
+                    <Switch
+                      checked={equitySettlementEnabled}
+                      onCheckedChange={(on) => {
+                        localStorage.setItem(
+                          EQUITY_SETTLEMENT_KEY,
+                          on ? "enabled" : "disabled",
+                        );
+                        setEquitySettlementEnabled(on);
+                      }}
+                    />
+                  </div>
+
+                  {equitySettlementEnabled && (
+                    <div className="rounded-2xl bg-card/60 divide-y divide-border/40">
+                      <button
+                        onClick={() => setSettlementPicker("fund")}
+                        className="w-full px-4 py-3.5 flex items-center gap-3 text-left"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[12px] text-muted-foreground">
+                            Settle from fund
+                          </p>
+                          <p className="text-sm text-foreground mt-0.5 truncate">
+                            {settlementFund || "Select a fund"}
+                          </p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                      </button>
+                      <button
+                        onClick={() => setSettlementPicker("account")}
+                        className="w-full px-4 py-3.5 flex items-center gap-3 text-left"
+                      >
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[12px] text-muted-foreground">
+                            Sub account
+                          </p>
+                          <p className="text-sm text-foreground mt-0.5 truncate">
+                            {settlementAccount || "Select a sub account"}
+                          </p>
+                        </div>
+                        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+                      </button>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => setSettlementSheet(false)}
+                    disabled={
+                      equitySettlementEnabled &&
+                      (!settlementFund || !settlementAccount)
+                    }
+                    className="w-full h-12 rounded-full text-sm font-semibold disabled:opacity-40"
+                    style={{
+                      background: "var(--pill)",
+                      color: "var(--background)",
+                    }}
+                  >
+                    Done
+                  </button>
+                </div>
+              </SheetContent>
+            </Sheet>
+
+            <Sheet
+              open={settlementPicker !== null}
+              onOpenChange={(o) => !o && setSettlementPicker(null)}
+            >
+              <SheetContent side="bottom" className="rounded-t-3xl">
+                <SheetHeader>
+                  <SheetTitle>
+                    {settlementPicker === "account"
+                      ? "Select sub account"
+                      : "Select fund"}
+                  </SheetTitle>
+                </SheetHeader>
+                <div className="pb-6 space-y-1.5">
+                  {(settlementPicker === "account" ? accounts : funds).map(
+                    (option) => {
+                      const selected =
+                        settlementPicker === "account"
+                          ? settlementAccount === option
+                          : settlementFund === option;
+                      return (
+                        <button
+                          key={option}
+                          onClick={() => {
+                            if (settlementPicker === "account") {
+                              setSettlementAccount(option);
+                              localStorage.setItem(
+                                SETTLEMENT_ACCOUNT_KEY,
+                                option,
+                              );
+                            } else {
+                              setSettlementFund(option);
+                              localStorage.setItem(SETTLEMENT_FUND_KEY, option);
+                            }
+                            setSettlementPicker(null);
+                          }}
+                          className="w-full rounded-2xl bg-card/60 px-4 py-3.5 flex items-center gap-3 text-left"
+                        >
+                          <span className="flex-1 text-sm text-foreground truncate">
+                            {option}
+                          </span>
+                          {settlementPicker === "fund" &&
+                            isPopularFund(option) && (
+                              <span className="text-[10px] text-muted-foreground shrink-0">
+                                Popular
+                              </span>
+                            )}
+                          {selected && (
+                            <Check
+                              className="w-4 h-4 shrink-0"
+                              style={{ color: "var(--pill)" }}
+                            />
+                          )}
+                        </button>
+                      );
+                    },
+                  )}
+                </div>
+              </SheetContent>
+            </Sheet>
+          </>
         )}
       </MobileLayout>
     );
