@@ -51,7 +51,7 @@ function EquityFundingRequest() {
           </div>
           <div>
             <p className="text-xs font-semibold text-foreground">Fund your equity account from your Unit Trust</p>
-            <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+            <p className="text-[12px] text-foreground mt-1 leading-snug">
               By enabling this, you agree that units from your unit trust account may be redeemed to top up your equity cash balance when you request funding.
             </p>
           </div>
@@ -65,17 +65,17 @@ function EquityFundingRequest() {
                 {submitted ? "Request submitted" : "Equity funding is active"}
               </p>
             </div>
-            <p className="text-[12px] text-muted-foreground leading-snug">
+            <p className="text-[12px] text-foreground leading-snug">
               {submitted
                 ? "Your request has been received. Once approved, you can move your unit trust balance into your equity cash balance."
                 : "You can move your unit trust balance into your equity cash balance."}
             </p>
-            <p className="text-[12px] text-muted-foreground leading-snug">
+            <p className="text-[12px] text-foreground leading-snug">
               You can pause this anytime from Settings.
             </p>
             <button
               onClick={disable}
-              className="w-full rounded-xl border border-border/40 py-2.5 text-xs font-medium text-muted-foreground hover:bg-muted/30 transition"
+              className="w-full rounded-xl border border-border/40 py-2.5 text-xs font-medium text-foreground hover:bg-muted/30 transition"
             >
               Disable temporarily
             </button>
@@ -83,10 +83,10 @@ function EquityFundingRequest() {
         ) : paused ? (
           <div className="glass-card p-4 space-y-3">
             <div className="flex items-center gap-2">
-              <PauseCircle className="w-4 h-4 text-muted-foreground" />
+              <PauseCircle className="w-4 h-4 text-foreground" />
               <p className="text-xs font-semibold text-foreground">Equity funding is paused</p>
             </div>
-            <p className="text-[12px] text-muted-foreground leading-snug">
+            <p className="text-[12px] text-foreground leading-snug">
               Funding your equity cash balance from your unit trust account is temporarily disabled. Your authorization stays in place and you can turn it back on at any time.
             </p>
             <button
@@ -99,11 +99,11 @@ function EquityFundingRequest() {
         ) : (
           <>
             <div className="glass-card p-4 space-y-3">
-              <p className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">What you're agreeing to</p>
-              <ul className="space-y-2 text-[12px] text-muted-foreground leading-snug list-disc pl-4">
+              <p className="text-[12px] font-medium uppercase tracking-wider text-foreground">What you're agreeing to</p>
+              <ul className="space-y-2 text-[12px] text-foreground leading-snug list-disc pl-4">
                 <li>Units from your unit trust account will be redeemed and credited to your equity cash balance when you request funding.</li>
                 <li>Redemptions follow the unit trust's standard settlement timelines and applicable fees.</li>
-                <li>You can withdraw this authorization at any time from Settings.</li>
+                <li>This also allows you to transfer funds from your unit trust to equities.</li>
               </ul>
             </div>
 
@@ -114,7 +114,7 @@ function EquityFundingRequest() {
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 w-4 h-4 rounded accent-primary shrink-0"
               />
-              <span className="text-[12px] text-muted-foreground leading-snug">
+              <span className="text-[12px] text-foreground leading-snug">
                 I/We hereby authorize Capital Alliance Securities to redeem units from my unit trust account to fund my equity cash balance, and agree to the terms above.
               </span>
             </label>
@@ -127,7 +127,7 @@ function EquityFundingRequest() {
                 value={signature}
                 onChange={(e) => setSignature(e.target.value)}
                 placeholder="Type your full name to sign"
-                className="w-full bg-muted/30 border border-border/40 rounded-xl px-3 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary/50"
+                className="w-full bg-muted/30 border border-border/40 rounded-xl px-3 py-2.5 text-xs text-foreground placeholder:text-foreground/50 outline-none focus:border-primary/50"
               />
             </div>
 

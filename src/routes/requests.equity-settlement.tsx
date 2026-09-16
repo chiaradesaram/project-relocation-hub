@@ -88,24 +88,24 @@ function EquitySettlementRequest() {
         className="w-full px-4 py-3.5 flex items-center gap-3 text-left"
       >
         <div className="min-w-0 flex-1">
-          <p className="text-[12px] text-muted-foreground">Settle from fund</p>
+          <p className="text-[12px] text-foreground">Settle from fund</p>
           <p className="text-sm text-foreground mt-0.5 truncate">
             {fund || "Select a fund"}
           </p>
         </div>
-        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+        <ChevronRight className="w-4 h-4 text-foreground shrink-0" />
       </button>
       <button
         onClick={() => setPicker("account")}
         className="w-full px-4 py-3.5 flex items-center gap-3 text-left"
       >
         <div className="min-w-0 flex-1">
-          <p className="text-[12px] text-muted-foreground">Sub account</p>
+          <p className="text-[12px] text-foreground">Sub account</p>
           <p className="text-sm text-foreground mt-0.5 truncate">
             {account || "Select a sub account"}
           </p>
         </div>
-        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+        <ChevronRight className="w-4 h-4 text-foreground shrink-0" />
       </button>
     </div>
   );
@@ -121,7 +121,7 @@ function EquitySettlementRequest() {
           </div>
           <div>
             <p className="text-xs font-semibold text-foreground">Settle equities from your Unit Trust</p>
-            <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+            <p className="text-[12px] text-foreground mt-1 leading-snug">
               By enabling this, you agree that your equity trades may be settled automatically using funds from your unit trust account when your cash balance is insufficient.
             </p>
           </div>
@@ -134,7 +134,7 @@ function EquitySettlementRequest() {
                 {enabled ? (
                   <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
                 ) : (
-                  <PauseCircle className="w-4 h-4 text-muted-foreground shrink-0" />
+                  <PauseCircle className="w-4 h-4 text-foreground shrink-0" />
                 )}
                 <div className="min-w-0 flex-1">
                   <p className="text-xs font-semibold text-foreground">
@@ -144,13 +144,13 @@ function EquitySettlementRequest() {
                         : "Equity settlement is active"
                       : "Equity settlement is paused"}
                   </p>
-                  <p className="text-[12px] text-muted-foreground mt-0.5">
+                  <p className="text-[12px] text-foreground mt-0.5">
                     {enabled ? "Turned on" : "Turned off"}
                   </p>
                 </div>
                 <Switch checked={enabled} onCheckedChange={toggle} />
               </div>
-              <p className="text-[12px] text-muted-foreground leading-snug">
+              <p className="text-[12px] text-foreground leading-snug">
                 {enabled
                   ? submitted
                     ? "Your request has been received. Once approved, equity trades will be auto-settled from your chosen unit trust fund."
@@ -164,11 +164,11 @@ function EquitySettlementRequest() {
         ) : (
           <>
             <div className="glass-card p-4 space-y-3">
-              <p className="text-[12px] font-medium uppercase tracking-wider text-muted-foreground">What you're agreeing to</p>
-              <ul className="space-y-2 text-[12px] text-muted-foreground leading-snug list-disc pl-4">
+              <p className="text-[12px] font-medium uppercase tracking-wider text-foreground">What you're agreeing to</p>
+              <ul className="space-y-2 text-[12px] text-foreground leading-snug list-disc pl-4">
                 <li>Equity purchases will be settled by redeeming units from your unit trust account when your cash balance is insufficient.</li>
                 <li>Redemptions follow the unit trust's standard settlement timelines and applicable fees.</li>
-                <li>You can withdraw this authorization at any time from Settings.</li>
+                <li>This also allows you to transfer funds from your unit trust to equities.</li>
               </ul>
             </div>
 
@@ -181,7 +181,7 @@ function EquitySettlementRequest() {
                 onChange={(e) => setAgreed(e.target.checked)}
                 className="mt-0.5 w-4 h-4 rounded accent-primary shrink-0"
               />
-              <span className="text-[12px] text-muted-foreground leading-snug">
+              <span className="text-[12px] text-foreground leading-snug">
                 I/We hereby authorize Capital Alliance Securities to auto-settle my equity trades from my unit trust account, and agree to the terms above.
               </span>
             </label>
@@ -194,7 +194,7 @@ function EquitySettlementRequest() {
                 value={signature}
                 onChange={(e) => setSignature(e.target.value)}
                 placeholder="Type your full name to sign"
-                className="w-full bg-muted/30 border border-border/40 rounded-xl px-3 py-2.5 text-xs text-foreground placeholder:text-muted-foreground/60 outline-none focus:border-primary/50"
+                className="w-full bg-muted/30 border border-border/40 rounded-xl px-3 py-2.5 text-xs text-foreground placeholder:text-foreground/50 outline-none focus:border-primary/50"
               />
             </div>
 
@@ -230,7 +230,7 @@ function EquitySettlementRequest() {
                     {option}
                   </span>
                   {picker === "fund" && isPopularFund(option) && (
-                    <span className="text-[10px] text-muted-foreground shrink-0">
+                    <span className="text-[10px] text-foreground shrink-0">
                       Popular
                     </span>
                   )}
