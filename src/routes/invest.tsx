@@ -268,6 +268,7 @@ function Invest() {
                 <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
               </div>
             </button>
+            </div>
 
             <Sheet
               open={settlementSheet}
