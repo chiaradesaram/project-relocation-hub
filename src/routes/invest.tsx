@@ -223,9 +223,10 @@ function Invest() {
 
         {isEquities && (
           <>
+            <div className="mx-4 mt-2.5">
             <button
               onClick={() => setSettlementSheet(true)}
-              className="w-full text-left mx-0 mt-2"
+              className="w-full text-left"
             >
               <div className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4 flex items-center gap-3.5 transition hover:bg-muted/10">
                 <div
