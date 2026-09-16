@@ -256,7 +256,7 @@ function Invest() {
                   </p>
                 </div>
                 <span
-                  className="text-[11px] font-medium px-2 py-0.5 rounded-full shrink-0"
+                  className="text-xs font-semibold px-3 py-1 rounded-full shrink-0"
                   style={{
                     background:
                       "color-mix(in oklch, var(--pill) 20%, transparent)",
