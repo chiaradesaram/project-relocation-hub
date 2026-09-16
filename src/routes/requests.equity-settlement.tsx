@@ -2,7 +2,26 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { ArrowLeftRight, CheckCircle2, PauseCircle, PenLine } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  ArrowLeftRight,
+  Check,
+  CheckCircle2,
+  ChevronRight,
+  PauseCircle,
+  PenLine,
+} from "lucide-react";
+import { isPopularFund } from "@/lib/fundMeta";
+import {
+  SETTLEMENT_FUND_KEY,
+  SETTLEMENT_ACCOUNT_KEY,
+} from "@/routes/invest";
 
 export const Route = createFileRoute("/requests/equity-settlement")({
   component: EquitySettlementRequest,
@@ -10,35 +29,86 @@ export const Route = createFileRoute("/requests/equity-settlement")({
 
 export const EQUITY_SETTLEMENT_KEY = "equitySettlementFromUT";
 
+const funds = [
+  "CAL Growth Fund",
+  "CAL Income Fund",
+  "CAL Balanced Fund",
+  "CAL Money Market Fund",
+];
+const accounts = ["Main Account", "Joint Account", "Minor Account"];
+
 function EquitySettlementRequest() {
   const [state, setState] = useState<string | null>(null);
+  const [fund, setFund] = useState("");
+  const [account, setAccount] = useState("");
   useEffect(() => {
     setState(localStorage.getItem(EQUITY_SETTLEMENT_KEY));
+    setFund(localStorage.getItem(SETTLEMENT_FUND_KEY) ?? "");
+    setAccount(localStorage.getItem(SETTLEMENT_ACCOUNT_KEY) ?? "");
   }, []);
   const enabled = state === "enabled";
   const paused = state === "disabled";
   const [agreed, setAgreed] = useState(false);
   const [signature, setSignature] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [picker, setPicker] = useState<null | "fund" | "account">(null);
 
-  const canSubmit = agreed && signature.trim().length > 1;
+  const canSubmit =
+    agreed && signature.trim().length > 1 && !!fund && !!account;
 
   const submit = () => {
     localStorage.setItem(EQUITY_SETTLEMENT_KEY, "enabled");
+    localStorage.setItem(SETTLEMENT_FUND_KEY, fund);
+    localStorage.setItem(SETTLEMENT_ACCOUNT_KEY, account);
     setState("enabled");
     setSubmitted(true);
   };
 
-  const disable = () => {
-    localStorage.setItem(EQUITY_SETTLEMENT_KEY, "disabled");
-    setState("disabled");
-    setSubmitted(false);
+  const toggle = (on: boolean) => {
+    localStorage.setItem(EQUITY_SETTLEMENT_KEY, on ? "enabled" : "disabled");
+    setState(on ? "enabled" : "disabled");
+    if (on) setSubmitted(false);
   };
 
-  const reEnable = () => {
-    localStorage.setItem(EQUITY_SETTLEMENT_KEY, "enabled");
-    setState("enabled");
+  const pick = (option: string) => {
+    if (picker === "account") {
+      setAccount(option);
+      localStorage.setItem(SETTLEMENT_ACCOUNT_KEY, option);
+    } else {
+      setFund(option);
+      localStorage.setItem(SETTLEMENT_FUND_KEY, option);
+    }
+    setPicker(null);
   };
+
+  const pickerCard = (
+    <div className="rounded-2xl bg-card/60 backdrop-blur-md border border-border/40 divide-y divide-border/40 overflow-hidden">
+      <button
+        onClick={() => setPicker("fund")}
+        className="w-full px-4 py-3.5 flex items-center gap-3 text-left"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="text-[12px] text-muted-foreground">Settle from fund</p>
+          <p className="text-sm text-foreground mt-0.5 truncate">
+            {fund || "Select a fund"}
+          </p>
+        </div>
+        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+      </button>
+      <button
+        onClick={() => setPicker("account")}
+        className="w-full px-4 py-3.5 flex items-center gap-3 text-left"
+      >
+        <div className="min-w-0 flex-1">
+          <p className="text-[12px] text-muted-foreground">Sub account</p>
+          <p className="text-sm text-foreground mt-0.5 truncate">
+            {account || "Select a sub account"}
+          </p>
+        </div>
+        <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+      </button>
+    </div>
+  );
 
   return (
     <MobileLayout>
@@ -57,45 +127,40 @@ function EquitySettlementRequest() {
           </div>
         </div>
 
-        {enabled ? (
-          <div className="glass-card p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-4 h-4 text-primary" />
-              <p className="text-xs font-semibold text-foreground">
-                {submitted ? "Request submitted" : "Equity settlement is active"}
+        {enabled || paused ? (
+          <>
+            <div className="glass-card p-4 space-y-3">
+              <div className="flex items-center gap-3">
+                {enabled ? (
+                  <CheckCircle2 className="w-4 h-4 text-primary shrink-0" />
+                ) : (
+                  <PauseCircle className="w-4 h-4 text-muted-foreground shrink-0" />
+                )}
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-semibold text-foreground">
+                    {enabled
+                      ? submitted
+                        ? "Request submitted"
+                        : "Equity settlement is active"
+                      : "Equity settlement is paused"}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5">
+                    {enabled ? "Turned on" : "Turned off"}
+                  </p>
+                </div>
+                <Switch checked={enabled} onCheckedChange={toggle} />
+              </div>
+              <p className="text-[12px] text-muted-foreground leading-snug">
+                {enabled
+                  ? submitted
+                    ? "Your request has been received. Once approved, equity trades will be auto-settled from your chosen unit trust fund."
+                    : "Equity trades are being auto-settled from your chosen unit trust fund."
+                  : "Auto-settlement from your unit trust account is temporarily disabled. Your authorization and fund selection stay in place — turn it back on anytime."}
               </p>
             </div>
-            <p className="text-[12px] text-muted-foreground leading-snug">
-              {submitted
-                ? "Your request has been received. Once approved, equity trades will be auto-settled from your unit trust account."
-                : "Equity trades are being auto-settled from your unit trust account."}
-            </p>
-            <p className="text-[12px] text-muted-foreground leading-snug">
-              You can pause this anytime from Settings.
-            </p>
-            <button
-              onClick={disable}
-              className="w-full rounded-xl border border-border/40 py-2.5 text-xs font-medium text-muted-foreground hover:bg-muted/30 transition"
-            >
-              Disable temporarily
-            </button>
-          </div>
-        ) : paused ? (
-          <div className="glass-card p-4 space-y-3">
-            <div className="flex items-center gap-2">
-              <PauseCircle className="w-4 h-4 text-muted-foreground" />
-              <p className="text-xs font-semibold text-foreground">Equity settlement is paused</p>
-            </div>
-            <p className="text-[12px] text-muted-foreground leading-snug">
-              Auto-settlement from your unit trust account is temporarily disabled. Your authorization stays in place and you can turn it back on at any time.
-            </p>
-            <button
-              onClick={reEnable}
-              className="w-full rounded-xl bg-primary py-2.5 text-xs font-semibold text-primary-foreground transition"
-            >
-              Re-enable equity settlement
-            </button>
-          </div>
+
+            {enabled && pickerCard}
+          </>
         ) : (
           <>
             <div className="glass-card p-4 space-y-3">
@@ -106,6 +171,8 @@ function EquitySettlementRequest() {
                 <li>You can withdraw this authorization at any time from Settings.</li>
               </ul>
             </div>
+
+            {pickerCard}
 
             <label className="glass-card p-4 flex items-start gap-3 cursor-pointer">
               <input
@@ -141,6 +208,44 @@ function EquitySettlementRequest() {
           </>
         )}
       </div>
+
+      <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHeader>
+            <SheetTitle>
+              {picker === "account" ? "Select sub account" : "Select fund"}
+            </SheetTitle>
+          </SheetHeader>
+          <div className="pb-6 space-y-1.5">
+            {(picker === "account" ? accounts : funds).map((option) => {
+              const selected =
+                picker === "account" ? account === option : fund === option;
+              return (
+                <button
+                  key={option}
+                  onClick={() => pick(option)}
+                  className="w-full rounded-2xl bg-card/60 px-4 py-3.5 flex items-center gap-3 text-left"
+                >
+                  <span className="flex-1 text-sm text-foreground truncate">
+                    {option}
+                  </span>
+                  {picker === "fund" && isPopularFund(option) && (
+                    <span className="text-[10px] text-muted-foreground shrink-0">
+                      Popular
+                    </span>
+                  )}
+                  {selected && (
+                    <Check
+                      className="w-4 h-4 shrink-0"
+                      style={{ color: "var(--pill)" }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
   );
 }
