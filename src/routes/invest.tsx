@@ -255,7 +255,13 @@ function Invest() {
               </div>
             </button>
 
-            <Sheet open={settlementSheet} onOpenChange={setSettlementSheet}>
+            <Sheet
+              open={settlementSheet}
+              onOpenChange={(o) => {
+                setSettlementSheet(o);
+                if (o) setSettlementSaved(false);
+              }}
+            >
               <SheetContent side="bottom" className="rounded-t-3xl">
                 <SheetHeader>
                   <SheetTitle>Equity auto settlements</SheetTitle>
