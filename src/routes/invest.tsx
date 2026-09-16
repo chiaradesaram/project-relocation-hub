@@ -266,7 +266,29 @@ function Invest() {
                 <SheetHeader>
                   <SheetTitle>Equity auto settlements</SheetTitle>
                 </SheetHeader>
-                <div className="px-1 pb-6 space-y-3">
+                  {settlementSaved ? (
+                    <div className="px-1 pb-8 pt-4 flex flex-col items-center text-center">
+                      <div
+                        className="w-14 h-14 rounded-full flex items-center justify-center"
+                        style={{ background: "var(--pill)" }}
+                      >
+                        <Check
+                          className="w-7 h-7"
+                          strokeWidth={3}
+                          style={{ color: "var(--background)" }}
+                        />
+                      </div>
+                      <p className="text-base font-semibold text-foreground mt-4">
+                        Saved
+                      </p>
+                      <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+                        {equitySettlementEnabled
+                          ? `Settling from ${settlementFund} · ${settlementAccount}`
+                          : "Auto settlements turned off"}
+                      </p>
+                    </div>
+                  ) : (
+                  <div className="px-1 pb-6 space-y-3">
                   <p className="text-[12px] text-muted-foreground leading-snug">
                     When your cash balance doesn't cover a stock settlement,
                     we'll auto debit the shortfall from the unit trust fund you
