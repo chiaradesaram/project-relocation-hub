@@ -1593,12 +1593,11 @@ function DefaultFundForm() {
               return (
                 <button
                   key={opt}
-                  onClick={() => {
-                    if (picker === "fund") setFund(opt);
-                    else setAccount(opt);
-                    setSaved(false);
-                    setPicker(null);
-                  }}
+                   onClick={() => {
+                     if (picker === "fund") setFund(opt);
+                     else setAccount(opt);
+                     setPicker(null);
+                   }}
                   className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition ${
                     isSelected ? "bg-muted/20" : "bg-background/40 hover:bg-muted/10"
                   }`}
@@ -1654,7 +1653,6 @@ function DefaultFundForm() {
           checked={enabled}
           onCheckedChange={(v) => {
             setEnabled(v);
-            setSaved(false);
           }}
           aria-label="Toggle default fund"
         />
@@ -1662,22 +1660,37 @@ function DefaultFundForm() {
 
       <div className="mx-4 mt-5 mb-8">
         <button
-          onClick={() => setSaved(true)}
+          onClick={() => {
+            if (confirmTimer.current) window.clearTimeout(confirmTimer.current);
+            setConfirmOpen(true);
+            confirmTimer.current = window.setTimeout(() => {
+              setConfirmOpen(false);
+              confirmTimer.current = null;
+            }, 1300);
+          }}
           disabled={!canSave}
           className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "var(--pill)", color: "#000" }}
         >
-          {saved ? "Saved" : "Save default"}
+          Save default
         </button>
-        {saved && (
-          <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
-            <Check className="h-3.5 w-3.5" />{" "}
-            {enabled
-              ? "Future transfers will be applied to this fund automatically."
-              : "Default fund disabled. You'll need to raise a request for each transfer."}
-          </p>
-        )}
       </div>
+
+      {/* Saved confirmation sheet */}
+      <Sheet open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHeader>
+            <SheetTitle>Default fund</SheetTitle>
+          </SheetHeader>
+          <SavedConfirmation
+            summary={
+              enabled
+                ? `Future transfers will be applied to ${fund} · ${account}`
+                : "Default fund turned off"
+            }
+          />
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
   );
 }
