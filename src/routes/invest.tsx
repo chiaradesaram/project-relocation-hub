@@ -23,6 +23,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
+import SavedConfirmation from "@/components/SavedConfirmation";
 import { Switch } from "@/components/ui/switch";
 import ModernSelect from "@/components/ModernSelect";
 import { Calendar } from "@/components/ui/calendar";
@@ -282,29 +283,13 @@ function Invest() {
                   <SheetTitle>Equity auto settlements</SheetTitle>
                 </SheetHeader>
                   {settlementSaved ? (
-                    <div className="px-1 pb-10 pt-6 flex flex-col items-center text-center">
-                      <div
-                        className="w-16 h-16 rounded-full flex items-center justify-center"
-                        style={{
-                          background:
-                            "color-mix(in oklch, var(--success) 22%, transparent)",
-                        }}
-                      >
-                        <Check
-                          className="w-8 h-8"
-                          strokeWidth={2.5}
-                          style={{ color: "var(--success)" }}
-                        />
-                      </div>
-                      <p className="text-base font-semibold text-foreground mt-4">
-                        Saved
-                      </p>
-                      <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
-                        {equitySettlementEnabled
+                    <SavedConfirmation
+                      summary={
+                        equitySettlementEnabled
                           ? `Settling from ${settlementFund} · ${settlementAccount}`
-                          : "Auto settlements turned off"}
-                      </p>
-                    </div>
+                          : "Auto settlements turned off"
+                      }
+                    />
                   ) : (
                   <div className="px-1 pb-6 space-y-3">
                   <p className="text-[12px] text-muted-foreground leading-snug">
@@ -1472,7 +1457,8 @@ function DefaultFundForm() {
   const [fund, setFund] = useState("");
   const [account, setAccount] = useState("");
   const [enabled, setEnabled] = useState(true);
-  const [saved, setSaved] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const confirmTimer = useRef<number | null>(null);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
   const [instructionsOpen, setInstructionsOpen] = useState(true);
 
@@ -1607,12 +1593,11 @@ function DefaultFundForm() {
               return (
                 <button
                   key={opt}
-                  onClick={() => {
-                    if (picker === "fund") setFund(opt);
-                    else setAccount(opt);
-                    setSaved(false);
-                    setPicker(null);
-                  }}
+                   onClick={() => {
+                     if (picker === "fund") setFund(opt);
+                     else setAccount(opt);
+                     setPicker(null);
+                   }}
                   className={`flex w-full items-center justify-between rounded-xl px-4 py-3 text-left transition ${
                     isSelected ? "bg-muted/20" : "bg-background/40 hover:bg-muted/10"
                   }`}
@@ -1668,7 +1653,6 @@ function DefaultFundForm() {
           checked={enabled}
           onCheckedChange={(v) => {
             setEnabled(v);
-            setSaved(false);
           }}
           aria-label="Toggle default fund"
         />
@@ -1676,22 +1660,37 @@ function DefaultFundForm() {
 
       <div className="mx-4 mt-5 mb-8">
         <button
-          onClick={() => setSaved(true)}
+          onClick={() => {
+            if (confirmTimer.current) window.clearTimeout(confirmTimer.current);
+            setConfirmOpen(true);
+            confirmTimer.current = window.setTimeout(() => {
+              setConfirmOpen(false);
+              confirmTimer.current = null;
+            }, 1300);
+          }}
           disabled={!canSave}
           className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "var(--pill)", color: "#000" }}
         >
-          {saved ? "Saved" : "Save default"}
+          Save default
         </button>
-        {saved && (
-          <p className="mt-2 flex items-center justify-center gap-1.5 text-[12px] text-success">
-            <Check className="h-3.5 w-3.5" />{" "}
-            {enabled
-              ? "Future transfers will be applied to this fund automatically."
-              : "Default fund disabled. You'll need to raise a request for each transfer."}
-          </p>
-        )}
       </div>
+
+      {/* Saved confirmation sheet */}
+      <Sheet open={confirmOpen} onOpenChange={setConfirmOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHeader>
+            <SheetTitle>Default fund</SheetTitle>
+          </SheetHeader>
+          <SavedConfirmation
+            summary={
+              enabled
+                ? `Future transfers will be applied to ${fund} · ${account}`
+                : "Default fund turned off"
+            }
+          />
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
   );
 }
