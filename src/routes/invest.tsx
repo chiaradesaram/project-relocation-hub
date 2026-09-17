@@ -282,29 +282,13 @@ function Invest() {
                   <SheetTitle>Equity auto settlements</SheetTitle>
                 </SheetHeader>
                   {settlementSaved ? (
-                    <div className="px-1 pb-10 pt-6 flex flex-col items-center text-center">
-                      <div
-                        className="w-16 h-16 rounded-full flex items-center justify-center"
-                        style={{
-                          background:
-                            "color-mix(in oklch, var(--success) 22%, transparent)",
-                        }}
-                      >
-                        <Check
-                          className="w-8 h-8"
-                          strokeWidth={2.5}
-                          style={{ color: "var(--success)" }}
-                        />
-                      </div>
-                      <p className="text-base font-semibold text-foreground mt-4">
-                        Saved
-                      </p>
-                      <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
-                        {equitySettlementEnabled
+                    <SavedConfirmation
+                      summary={
+                        equitySettlementEnabled
                           ? `Settling from ${settlementFund} · ${settlementAccount}`
-                          : "Auto settlements turned off"}
-                      </p>
-                    </div>
+                          : "Auto settlements turned off"
+                      }
+                    />
                   ) : (
                   <div className="px-1 pb-6 space-y-3">
                   <p className="text-[12px] text-muted-foreground leading-snug">
