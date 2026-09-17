@@ -23,6 +23,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
+import SavedConfirmation from "@/components/SavedConfirmation";
 import { Switch } from "@/components/ui/switch";
 import ModernSelect from "@/components/ModernSelect";
 import { Calendar } from "@/components/ui/calendar";
@@ -1456,7 +1457,8 @@ function DefaultFundForm() {
   const [fund, setFund] = useState("");
   const [account, setAccount] = useState("");
   const [enabled, setEnabled] = useState(true);
-  const [saved, setSaved] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const confirmTimer = useRef<number | null>(null);
   const [picker, setPicker] = useState<"fund" | "account" | null>(null);
   const [instructionsOpen, setInstructionsOpen] = useState(true);
 
