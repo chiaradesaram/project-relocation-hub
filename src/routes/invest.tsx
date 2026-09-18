@@ -148,7 +148,7 @@ function Invest() {
         icon: Building2,
         label: "Bank Transfer",
         desc:
-          "Transfer funds to your CAL account and make a Pay In request to fund your cash balance.",
+          "Transfer funds to CAL's bank account and make a Creation Request.",
       },
       {
         id: "instant",
