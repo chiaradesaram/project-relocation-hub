@@ -64,7 +64,8 @@ export const Route = createFileRoute("/invest")({
   component: Invest,
 });
 
-import { isPopularFund, DEFAULT_INVEST_FUND } from "@/lib/fundMeta";
+import { isPopularFund } from "@/lib/fundMeta";
+import { ViewRatesLink } from "@/components/ViewRates";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
 import deutscheLogo from "@/assets/banks/deutsche.png";
@@ -428,6 +429,11 @@ function Invest() {
                       : "Select fund"}
                   </SheetTitle>
                 </SheetHeader>
+                {settlementPicker === "fund" && (
+                  <div className="px-5 pt-3 flex justify-end">
+                    <ViewRatesLink />
+                  </div>
+                )}
                 <div className="pb-6 space-y-1.5">
                   {(settlementPicker === "account" ? accounts : funds).map(
                     (option) => {
@@ -458,7 +464,7 @@ function Invest() {
                           </span>
                           {settlementPicker === "fund" &&
                             isPopularFund(option) && (
-                              <span className="text-[10px] text-muted-foreground shrink-0">
+                              <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
                                 Popular
                               </span>
                             )}
@@ -899,6 +905,14 @@ function MethodForm({
               </button>
             </div>
           </SheetHeader>
+          {picker &&
+            (picker === "fund" ||
+              picker === "flipTo" ||
+              (picker === "payFrom" && isFlip)) && (
+              <div className="px-5 mt-3 flex justify-end">
+                <ViewRatesLink />
+              </div>
+            )}
           <div className="px-5 mt-4 space-y-2">
             {picker &&
               pickerOptions[picker].map((opt) => {
@@ -937,13 +951,8 @@ function MethodForm({
                       <span className="flex items-center gap-1.5 min-w-0">
                         <span className="text-sm text-foreground truncate">{opt}</span>
                         {isFundPicker && isPopularFund(opt) && (
-                          <span className="shrink-0 rounded-full bg-accent-magenta/15 px-1.5 py-px text-[10px] font-medium text-accent-magenta">
-                            Popular
-                          </span>
-                        )}
-                        {isFundPicker && opt === DEFAULT_INVEST_FUND && (
                           <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
-                            Default
+                            Popular
                           </span>
                         )}
                       </span>
@@ -1514,7 +1523,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                       <option key={f.name} value={f.name}>
                         {f.name}
                         {isPopularFund(f.name) ? " · Popular" : ""}
-                        {f.name === DEFAULT_INVEST_FUND ? " · Default" : ""}
                       </option>
                     ))}
                   </ModernSelect>
@@ -1755,6 +1763,11 @@ function DefaultFundForm() {
               {picker === "fund" ? "Select fund" : "Select sub account"}
             </SheetTitle>
           </SheetHeader>
+          {picker === "fund" && (
+            <div className="px-5 flex justify-end">
+              <ViewRatesLink />
+            </div>
+          )}
           <div className="mt-3 space-y-1.5 pb-6">
             {(picker === "fund" ? funds : accounts).map((opt) => {
               const isSelected = picker === "fund" ? opt === fund : opt === account;
