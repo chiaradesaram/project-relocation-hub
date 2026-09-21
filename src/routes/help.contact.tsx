@@ -636,7 +636,7 @@ function ContactForm() {
 
     if (!result.success) {
       const next: Record<string, string> = {};
-      result.error.issues.forEach((i) => {
+      result.error.issues.forEach((i: Issue) => {
         const k = i.path[0]?.toString() ?? "form";
         if (!next[k]) next[k] = i.message;
       });
