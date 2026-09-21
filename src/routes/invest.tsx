@@ -66,6 +66,43 @@ export const Route = createFileRoute("/invest")({
 
 import { isPopularFund, DEFAULT_INVEST_FUND } from "@/lib/fundMeta";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
+import commercialLogo from "@/assets/banks/commercial.png";
+import deutscheLogo from "@/assets/banks/deutsche.png";
+import sampathLogo from "@/assets/banks/sampath.png";
+import hnbLogo from "@/assets/banks/hnb.png";
+import bocLogo from "@/assets/banks/boc.png";
+
+const bankLogos: Record<string, string> = {
+  "Commercial Bank": commercialLogo,
+  "Deutsche Bank": deutscheLogo,
+  "Sampath Bank": sampathLogo,
+  HNB: hnbLogo,
+  BOC: bocLogo,
+};
+
+const bankLogoFor = (opt: string) =>
+  Object.entries(bankLogos).find(([name]) => opt.startsWith(name))?.[1];
+
+function RadioDot({ selected }: { selected: boolean }) {
+  return (
+    <span
+      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition"
+      style={{
+        borderColor: selected ? "var(--pill)" : "var(--border)",
+        backgroundColor: selected
+          ? "color-mix(in oklch, var(--pill) 15%, transparent)"
+          : "transparent",
+      }}
+    >
+      {selected && (
+        <span
+          className="h-2.5 w-2.5 rounded-full"
+          style={{ backgroundColor: "var(--pill)" }}
+        />
+      )}
+    </span>
+  );
+}
 
 
 const funds = [
@@ -876,6 +913,8 @@ function MethodForm({
                   picker === "fund" ||
                   picker === "flipTo" ||
                   (picker === "payFrom" && isFlip);
+                const isBankPicker = picker === "payFrom" && !isFlip;
+                const logo = isBankPicker ? bankLogoFor(opt) : undefined;
                 return (
                   <button
                     key={opt}
@@ -886,24 +925,38 @@ function MethodForm({
                         : "bg-background/40 hover:bg-muted/10"
                     }`}
                   >
-                    <span className="flex items-center gap-1.5 min-w-0">
-                      <span className="text-sm text-foreground truncate">{opt}</span>
-                      {isFundPicker && isPopularFund(opt) && (
-                        <span className="shrink-0 rounded-full bg-accent-magenta/15 px-1.5 py-px text-[10px] font-medium text-accent-magenta">
-                          Popular
-                        </span>
+                    <span className="flex items-center gap-3 min-w-0">
+                      {logo && (
+                        <img
+                          src={logo}
+                          alt=""
+                          loading="lazy"
+                          className="h-8 w-8 shrink-0 rounded-lg"
+                        />
                       )}
-                      {isFundPicker && opt === DEFAULT_INVEST_FUND && (
-                        <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
-                          Default
-                        </span>
-                      )}
+                      <span className="flex items-center gap-1.5 min-w-0">
+                        <span className="text-sm text-foreground truncate">{opt}</span>
+                        {isFundPicker && isPopularFund(opt) && (
+                          <span className="shrink-0 rounded-full bg-accent-magenta/15 px-1.5 py-px text-[10px] font-medium text-accent-magenta">
+                            Popular
+                          </span>
+                        )}
+                        {isFundPicker && opt === DEFAULT_INVEST_FUND && (
+                          <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
+                            Default
+                          </span>
+                        )}
+                      </span>
                     </span>
-                    {isSelected && (
-                      <Check
-                        className="w-4 h-4 shrink-0"
-                        style={{ color: "var(--pill)" }}
-                      />
+                    {isBankPicker ? (
+                      <RadioDot selected={isSelected} />
+                    ) : (
+                      isSelected && (
+                        <Check
+                          className="w-4 h-4 shrink-0"
+                          style={{ color: "var(--pill)" }}
+                        />
+                      )
                     )}
                   </button>
                 );
@@ -1509,6 +1562,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               picker &&
               pickerOptions[picker].map((opt) => {
                 const isSelected = selectedFor(picker) === opt;
+                const logo = picker === "bank" ? bankLogoFor(opt) : undefined;
                 return (
                   <button
                     key={opt}
@@ -1523,9 +1577,23 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                         : "bg-background/40 hover:bg-muted/10"
                     }`}
                   >
-                    <span className="text-sm text-foreground">{opt}</span>
-                    {isSelected && (
-                      <Check className="w-4 h-4" style={{ color: "var(--pill)" }} />
+                    <span className="flex items-center gap-3 min-w-0">
+                      {logo && (
+                        <img
+                          src={logo}
+                          alt=""
+                          loading="lazy"
+                          className="h-8 w-8 shrink-0 rounded-lg"
+                        />
+                      )}
+                      <span className="text-sm text-foreground">{opt}</span>
+                    </span>
+                    {picker === "bank" ? (
+                      <RadioDot selected={isSelected} />
+                    ) : (
+                      isSelected && (
+                        <Check className="w-4 h-4" style={{ color: "var(--pill)" }} />
+                      )
                     )}
                   </button>
                 );
