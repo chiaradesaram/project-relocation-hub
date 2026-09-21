@@ -908,6 +908,20 @@ function MethodForm({
                   </button>
                 );
               })}
+            {picker === "payFrom" && !isFlip && (
+              <button
+                onClick={() => {
+                  setPicker(null);
+                  navigate({ to: "/bank-accounts" });
+                }}
+                className="w-full flex items-center gap-3 rounded-xl border border-dashed border-border/40 bg-background/30 px-4 py-3 text-left transition hover:bg-muted/10"
+              >
+                <Plus className="w-4 h-4 shrink-0" style={{ color: "var(--pill)" }} />
+                <span className="text-sm font-medium" style={{ color: "var(--pill)" }}>
+                  Add bank account
+                </span>
+              </button>
+            )}
           </div>
         </SheetContent>
       </Sheet>
@@ -1516,6 +1530,20 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                   </button>
                 );
               })
+            )}
+            {picker === "bank" && (
+              <button
+                onClick={() => {
+                  setPicker(null);
+                  navigate({ to: "/bank-accounts" });
+                }}
+                className="w-full flex items-center gap-3 rounded-xl border border-dashed border-border/40 bg-background/30 px-4 py-3 text-left transition hover:bg-muted/10"
+              >
+                <Plus className="w-4 h-4 shrink-0" style={{ color: "var(--pill)" }} />
+                <span className="text-sm font-medium" style={{ color: "var(--pill)" }}>
+                  Add bank account
+                </span>
+              </button>
             )}
           </div>
         </SheetContent>
