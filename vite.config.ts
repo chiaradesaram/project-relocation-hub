@@ -9,17 +9,7 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 export default defineConfig({
   vite: {
     optimizeDeps: {
-      include: [
-        "lucide-react",
-        "react",
-        "react-dom",
-        "@tanstack/react-router",
-        "@tanstack/react-start",
-        "@tanstack/router-core",
-        "@tanstack/start-client-core",
-        "@tanstack/react-start-client",
-        "cookie-es",
-      ],
+      include: ["lucide-react", "react", "react-dom"],
     },
   },
 });
