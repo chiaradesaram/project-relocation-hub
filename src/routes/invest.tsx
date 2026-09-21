@@ -64,6 +64,7 @@ export const Route = createFileRoute("/invest")({
 });
 
 import { isPopularFund, DEFAULT_INVEST_FUND } from "@/lib/fundMeta";
+import bankTransferInfo from "@/assets/bank-transfer-info.png";
 
 
 const funds = [
