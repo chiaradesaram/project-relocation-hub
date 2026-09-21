@@ -458,7 +458,7 @@ function Invest() {
                           </span>
                           {settlementPicker === "fund" &&
                             isPopularFund(option) && (
-                              <span className="text-[10px] text-muted-foreground shrink-0">
+                              <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
                                 Popular
                               </span>
                             )}
@@ -937,13 +937,8 @@ function MethodForm({
                       <span className="flex items-center gap-1.5 min-w-0">
                         <span className="text-sm text-foreground truncate">{opt}</span>
                         {isFundPicker && isPopularFund(opt) && (
-                          <span className="shrink-0 rounded-full bg-accent-magenta/15 px-1.5 py-px text-[10px] font-medium text-accent-magenta">
-                            Popular
-                          </span>
-                        )}
-                        {isFundPicker && opt === DEFAULT_INVEST_FUND && (
                           <span className="shrink-0 rounded-full bg-pill/15 px-1.5 py-px text-[10px] font-medium text-pill">
-                            Default
+                            Popular
                           </span>
                         )}
                       </span>
@@ -1514,7 +1509,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                       <option key={f.name} value={f.name}>
                         {f.name}
                         {isPopularFund(f.name) ? " · Popular" : ""}
-                        {f.name === DEFAULT_INVEST_FUND ? " · Default" : ""}
                       </option>
                     ))}
                   </ModernSelect>
