@@ -568,6 +568,44 @@ function MethodForm({
     <MobileLayout>
       <PageHeader title={title} showBack helpTopic="invest" />
 
+      {/* Bank transfer instructions */}
+      {isBank && (
+        <div className="mx-4 mt-4 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
+          <div className="flex items-start gap-3">
+            <div
+              className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
+              style={{
+                background: "color-mix(in oklch, var(--pill) 24%, transparent)",
+                color: "var(--pill)",
+              }}
+            >
+              1
+            </div>
+            <p className="text-[13px] text-foreground leading-snug pt-0.5">
+              Transfer to CAL's Deutsche Bank account
+            </p>
+          </div>
+          <div className="flex items-start gap-3 mt-3">
+            <div
+              className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
+              style={{
+                background: "color-mix(in oklch, var(--pill) 24%, transparent)",
+                color: "var(--pill)",
+              }}
+            >
+              2
+            </div>
+            <p className="text-[13px] text-foreground leading-snug pt-0.5">
+              Raise a request here
+            </p>
+          </div>
+          <p className="mt-3 pt-3 border-t border-white/5 text-[12px] text-muted-foreground leading-snug">
+            Requests before 9 will be confirmed on the same working day. After
+            9, they'll be confirmed the next working day.
+          </p>
+        </div>
+      )}
+
       {/* Amount hero */}
       <div className="px-4 pt-6 pb-6 text-center">
         <div className="inline-flex items-baseline gap-2">
