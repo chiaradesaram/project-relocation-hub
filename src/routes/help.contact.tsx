@@ -606,29 +606,19 @@ function ContactForm() {
     sub?.id === "fund-split";
 
   function submitForm() {
-    let result;
+    let result: Result;
     if (specialForm === "nic") {
-      result = nicSchema.safeParse({
-        categoryId,
-        subId,
-        nicNumber,
-        nicName,
-        issueDate,
-        description,
-      });
+      result = validate(
+        { categoryId, subId, nicNumber, nicName, issueDate, description },
+        nicRules,
+      );
     } else if (specialForm === "deactivate") {
-      result = deactivateSchema.safeParse({
-        categoryId,
-        subId,
-        reason: deactivateReason,
-      });
+      result = validate({ categoryId, subId, reason: deactivateReason }, deactivateRules);
     } else {
-      result = ticketSchema.safeParse({
-        categoryId,
-        subId,
-        description,
-        product: needsProduct ? productId : undefined,
-      });
+      result = validate(
+        { categoryId, subId, description, product: needsProduct ? productId : undefined },
+        ticketRules,
+      );
       if (result.success && needsProduct && !productId) {
         setErrors({ product: "Pick a product" });
         return;
