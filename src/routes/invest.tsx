@@ -21,6 +21,7 @@ import {
   PieChart,
   BarChart3,
   CheckCircle2,
+  Plus,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
@@ -75,11 +76,11 @@ const funds = [
 ];
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
 const banks = [
-  "Commercial Bank ****2849",
-  "Deutsche Bank ****1122",
-  "Sampath Bank ****9034",
-  "HNB ****4507",
-  "BOC ****7781",
+  "Commercial Bank · 8001 2345 21",
+  "Deutsche Bank · 9004 5561 12",
+  "Sampath Bank · 1100 5688 32",
+  "HNB · 0452 2012 09",
+  "BOC · 7700 8934 81",
 ];
 const calBankAccounts = [
   { label: "CAL Securities Account", note: "Deutsche Bank · Auto-verified" },
@@ -463,7 +464,7 @@ function MethodForm({
   const [selectedFund, setSelectedFund] = useState("");
   const [selectedAccount, setSelectedAccount] = useState("Personal Account");
   const [selectedBank, setSelectedBank] = useState(
-    method === "bank" ? "Commercial Bank ****2849" : "",
+    method === "bank" ? "Commercial Bank · 8001 2345 21" : "",
   );
   const [selectedPayTo, setSelectedPayTo] = useState(
     method === "bank" ? "CAL Securities Account" : "",
@@ -1040,7 +1041,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [amount, setAmount] = useState("");
   const [date, setDate] = useState<Date>(new Date());
   const [dateOpen, setDateOpen] = useState(false);
-  const [bank, setBank] = useState("Commercial Bank ****2849");
+  const [bank, setBank] = useState("Commercial Bank · 8001 2345 21");
   const [payTo, setPayTo] = useState("CAL Securities Account");
   const [proofName, setProofName] = useState<string | null>(null);
   const [recurring, setRecurring] = useState(false);
