@@ -64,7 +64,8 @@ export const Route = createFileRoute("/invest")({
   component: Invest,
 });
 
-import { isPopularFund, DEFAULT_INVEST_FUND } from "@/lib/fundMeta";
+import { isPopularFund } from "@/lib/fundMeta";
+import { ViewRatesLink } from "@/components/ViewRates";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
 import deutscheLogo from "@/assets/banks/deutsche.png";
@@ -428,6 +429,11 @@ function Invest() {
                       : "Select fund"}
                   </SheetTitle>
                 </SheetHeader>
+                {settlementPicker === "fund" && (
+                  <div className="px-5 pt-3 flex justify-end">
+                    <ViewRatesLink />
+                  </div>
+                )}
                 <div className="pb-6 space-y-1.5">
                   {(settlementPicker === "account" ? accounts : funds).map(
                     (option) => {
@@ -899,6 +905,14 @@ function MethodForm({
               </button>
             </div>
           </SheetHeader>
+          {picker &&
+            (picker === "fund" ||
+              picker === "flipTo" ||
+              (picker === "payFrom" && isFlip)) && (
+              <div className="px-5 mt-3 flex justify-end">
+                <ViewRatesLink />
+              </div>
+            )}
           <div className="px-5 mt-4 space-y-2">
             {picker &&
               pickerOptions[picker].map((opt) => {
