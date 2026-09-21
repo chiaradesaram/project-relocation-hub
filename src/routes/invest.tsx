@@ -126,7 +126,7 @@ function Invest() {
             icon: Wallet,
             label: "Pay in",
             desc:
-              "Transfer funds to your CAL account and make a Pay In request to fund your cash balance.",
+              "Transfer funds to CAL's bank account and make a Pay In request to fund your cash balance.",
           },
           {
             id: "instant",
