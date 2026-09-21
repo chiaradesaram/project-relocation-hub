@@ -1,7 +1,6 @@
 import { ModernSelect } from "@/components/ModernSelect";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
-import { z } from "zod";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -370,35 +369,61 @@ const CATEGORIES: Category[] = [
   },
 ];
 
-const baseSchema = z.object({
-  categoryId: z.string().min(1, "Pick a topic"),
-  subId: z.string().min(1, "Pick what best describes it"),
-});
+type Issue = { path: string[]; message: string };
+type Result = { success: boolean; error: { issues: Issue[] } };
 
-const ticketSchema = baseSchema.extend({
-  description: z
-    .string()
-    .trim()
-    .min(10, "Please describe the issue (10+ chars)")
-    .max(2000, "Keep description under 2000 characters"),
-  product: z.string().trim().max(40).optional(),
-});
+function validate(
+  fields: Record<string, string | undefined>,
+  rules: { key: string; min?: number; max?: number; pattern?: RegExp; message: string; patternMessage?: string }[],
+): Result {
+  const issues: Issue[] = [];
+  for (const r of rules) {
+    const v = (fields[r.key] ?? "").trim();
+    if (r.min !== undefined && v.length < r.min) {
+      issues.push({ path: [r.key], message: r.message });
+      continue;
+    }
+    if (r.max !== undefined && v.length > r.max) {
+      issues.push({ path: [r.key], message: `Keep this under ${r.max} characters` });
+      continue;
+    }
+    if (r.pattern && v && !r.pattern.test(v)) {
+      issues.push({ path: [r.key], message: r.patternMessage ?? r.message });
+    }
+  }
+  return { success: issues.length === 0, error: { issues } };
+}
 
-const nicSchema = baseSchema.extend({
-  nicNumber: z
-    .string()
-    .trim()
-    .min(10, "Enter your new NIC number")
-    .max(20, "NIC number too long")
-    .regex(/^[0-9A-Za-z]+$/, "Letters and numbers only"),
-  nicName: z.string().trim().min(2, "Enter the name on NIC").max(120),
-  issueDate: z.string().trim().min(1, "Enter the issue date"),
-  description: z.string().trim().max(2000).optional(),
-});
+const BASE_RULES = [
+  { key: "categoryId", min: 1, message: "Pick a topic" },
+  { key: "subId", min: 1, message: "Pick what best describes it" },
+];
 
-const deactivateSchema = baseSchema.extend({
-  reason: z.string().trim().min(10, "Tell us why so we can improve").max(2000),
-});
+const ticketRules = [
+  ...BASE_RULES,
+  { key: "description", min: 10, max: 2000, message: "Please describe the issue (10+ chars)" },
+  { key: "product", max: 40, message: "" },
+];
+
+const nicRules = [
+  ...BASE_RULES,
+  {
+    key: "nicNumber",
+    min: 10,
+    max: 20,
+    pattern: /^[0-9A-Za-z]+$/,
+    message: "Enter your new NIC number",
+    patternMessage: "Letters and numbers only",
+  },
+  { key: "nicName", min: 2, max: 120, message: "Enter the name on NIC" },
+  { key: "issueDate", min: 1, message: "Enter the issue date" },
+  { key: "description", max: 2000, message: "" },
+];
+
+const deactivateRules = [
+  ...BASE_RULES,
+  { key: "reason", min: 10, max: 2000, message: "Tell us why so we can improve" },
+];
 
 export const Route = createFileRoute("/help/contact")({
   validateSearch: (
@@ -580,29 +605,19 @@ function ContactForm() {
     sub?.id === "fund-split";
 
   function submitForm() {
-    let result;
+    let result: Result;
     if (specialForm === "nic") {
-      result = nicSchema.safeParse({
-        categoryId,
-        subId,
-        nicNumber,
-        nicName,
-        issueDate,
-        description,
-      });
+      result = validate(
+        { categoryId, subId, nicNumber, nicName, issueDate, description },
+        nicRules,
+      );
     } else if (specialForm === "deactivate") {
-      result = deactivateSchema.safeParse({
-        categoryId,
-        subId,
-        reason: deactivateReason,
-      });
+      result = validate({ categoryId, subId, reason: deactivateReason }, deactivateRules);
     } else {
-      result = ticketSchema.safeParse({
-        categoryId,
-        subId,
-        description,
-        product: needsProduct ? productId : undefined,
-      });
+      result = validate(
+        { categoryId, subId, description, product: needsProduct ? productId : undefined },
+        ticketRules,
+      );
       if (result.success && needsProduct && !productId) {
         setErrors({ product: "Pick a product" });
         return;
@@ -620,7 +635,7 @@ function ContactForm() {
 
     if (!result.success) {
       const next: Record<string, string> = {};
-      result.error.issues.forEach((i) => {
+      result.error.issues.forEach((i: Issue) => {
         const k = i.path[0]?.toString() ?? "form";
         if (!next[k]) next[k] = i.message;
       });

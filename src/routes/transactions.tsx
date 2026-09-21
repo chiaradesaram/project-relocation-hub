@@ -6,7 +6,7 @@ import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } f
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
-import { format } from "date-fns";
+import { formatMonthDay, formatMonthDayYear, formatMonthYear } from "@/lib/date";
 import { useDayPicker, UI } from "react-day-picker";
 import type { DateRange, NavProps, MonthCaptionProps } from "react-day-picker";
 
@@ -222,8 +222,8 @@ function Transactions() {
 
   const rangeLabel = range?.from
     ? range.to && range.to.getTime() !== range.from.getTime()
-      ? `${format(range.from, "MMM d")} – ${format(range.to, "MMM d")}`
-      : format(range.from, "MMM d, yyyy")
+      ? `${formatMonthDay(range.from)} – ${formatMonthDay(range.to)}`
+      : formatMonthDayYear(range.from)
     : "Any date";
 
   const filtered = transactions
@@ -447,8 +447,8 @@ function Transactions() {
           <p className="text-sm text-muted-foreground mb-4">
             {draftRange?.from
               ? draftRange.to && draftRange.to.getTime() !== draftRange.from.getTime()
-                ? `${format(draftRange.from, "MMM d, yyyy")} – ${format(draftRange.to, "MMM d, yyyy")}`
-                : `${format(draftRange.from, "MMM d, yyyy")} – Pick end date`
+                ? `${formatMonthDayYear(draftRange.from)} – ${formatMonthDayYear(draftRange.to)}`
+                : `${formatMonthDayYear(draftRange.from)} – Pick end date`
               : "All transactions"}
           </p>
 
@@ -539,7 +539,7 @@ function Transactions() {
                         />
                       </components.PreviousMonthButton>
                       <span className="text-sm font-semibold text-foreground">
-                        {format(displayMonth, "MMMM yyyy")}
+                        {formatMonthYear(displayMonth)}
                       </span>
                       <components.NextMonthButton
                         type="button"
