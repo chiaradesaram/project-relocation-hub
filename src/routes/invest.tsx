@@ -133,7 +133,7 @@ function Invest() {
             icon: Zap,
             label: "Direct Invest",
             desc:
-              "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically, with no banking app needed (using Justpay).",
+              "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically (using Justpay).",
           },
           {
             id: "utflip",
@@ -155,7 +155,7 @@ function Invest() {
         icon: Zap,
         label: "Direct Invest",
         desc:
-          "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically, with no banking app needed (using Justpay).",
+          "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically (using Justpay).",
       },
       {
         id: "flip",
