@@ -155,7 +155,7 @@ function Invest() {
         icon: Zap,
         label: "Direct Invest",
         desc:
-          "Use Justpay to fund your cash balance with money debited directly from your linked bank account.",
+          "Transfer and Create: Invest directly from your bank account through the CAL app, your account is debited automatically, with no need to log in to your banking app (using Justpay).",
       },
       {
         id: "flip",
