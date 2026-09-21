@@ -486,6 +486,7 @@ function MethodForm({
   const isBank = method === "bank";
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
+  const [bankInfoOpen, setBankInfoOpen] = useState(false);
 
   const amountNum = parseFloat(amount || "0") || 0;
 
