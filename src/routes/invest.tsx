@@ -1763,6 +1763,11 @@ function DefaultFundForm() {
               {picker === "fund" ? "Select fund" : "Select sub account"}
             </SheetTitle>
           </SheetHeader>
+          {picker === "fund" && (
+            <div className="px-5 flex justify-end">
+              <ViewRatesLink />
+            </div>
+          )}
           <div className="mt-3 space-y-1.5 pb-6">
             {(picker === "fund" ? funds : accounts).map((opt) => {
               const isSelected = picker === "fund" ? opt === fund : opt === account;
