@@ -930,37 +930,39 @@ function MethodForm({
         </div>
       )}
 
-      {/* Link to a goal */}
-      <div className="mx-4 mt-4">
-        <button
-          type="button"
-          onClick={() =>
-            setLinkedGoal(linkedGoal ? null : "New car")
-          }
-          className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
-        >
-          <div
-            className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
-            style={{
-              background:
-                "color-mix(in oklch, var(--success) 30%, transparent)",
-            }}
+      {/* Link to a goal — hidden for now */}
+      {false && (
+        <div className="mx-4 mt-4">
+          <button
+            type="button"
+            onClick={() =>
+              setLinkedGoal(linkedGoal ? null : "New car")
+            }
+            className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
           >
-            <Star className="w-5 h-5 text-success" />
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="text-sm font-semibold text-foreground leading-tight">
-              {linkedGoal ? linkedGoal : "Link to a goal"}
-            </p>
-            <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
-              {linkedGoal
-                ? "Tap to change goal"
-                : "Tag this investment to a savings goal"}
-            </p>
-          </div>
-          <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-        </button>
-      </div>
+            <div
+              className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0"
+              style={{
+                background:
+                  "color-mix(in oklch, var(--success) 30%, transparent)",
+              }}
+            >
+              <Star className="w-5 h-5 text-success" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-foreground leading-tight">
+                {linkedGoal ? linkedGoal : "Link to a goal"}
+              </p>
+              <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
+                {linkedGoal
+                  ? "Tap to change goal"
+                  : "Tag this investment to a savings goal"}
+              </p>
+            </div>
+            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+          </button>
+        </div>
+      )}
 
       {/* Bank transfer warning */}
       {isBank && (
