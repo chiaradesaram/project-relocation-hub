@@ -832,9 +832,6 @@ function MethodForm({
         )}
       </div>
 
-      {/* Split transfers — Direct Invest above the per-transfer limit */}
-      {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
-
       {/* Details card */}
       {!isFlip && (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
@@ -997,6 +994,9 @@ function MethodForm({
           </div>
         </div>
       )}
+
+      {/* Split transfers — Direct Invest above the per-transfer limit */}
+      {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
@@ -1759,9 +1759,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         )}
       </div>
 
-      {/* Split transfers — Direct Invest above the per-transfer limit */}
-      {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
-
       {/* Details */}
       {!isUtFlip && (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
@@ -1866,6 +1863,9 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           </label>
         </div>
       )}
+
+      {/* Split transfers — Direct Invest above the per-transfer limit */}
+      {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
