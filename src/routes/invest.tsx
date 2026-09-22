@@ -557,13 +557,15 @@ function MethodForm({
     const sanitized = sanitizeAmountInput(raw);
     if (isInstant) {
       const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT) {
-        setAmount(String(DIRECT_INVEST_LIMIT));
+      if (n > DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS) {
+        setAmount(String(DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS));
         return;
       }
     }
     setAmount(sanitized);
   };
+
+  const splits = isInstant ? directInvestSplits(amountNum) : [];
 
   const payFromLabel = isFlip ? "Transfer from" : "Paying from";
   const payFromValue = isFlip ? selectedFund : selectedBank;
