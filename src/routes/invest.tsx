@@ -598,6 +598,7 @@ function MethodForm({
         fund: selectedFund,
         account: selectedAccount,
         bank: isFlip ? selectedFlipTo : isInstant ? selectedBank : selectedPayTo,
+        repeats: String(Math.max(1, splits.length)),
       },
     });
   };
@@ -725,10 +726,14 @@ function MethodForm({
         </div>
         {isInstant && (
           <p className="mt-3 text-[12px] text-muted-foreground">
-            Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transfer
+            Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger
+            amounts split into up to {DIRECT_INVEST_MAX_TRANSFERS}
           </p>
         )}
       </div>
+
+      {/* Split transfers — Direct Invest above the per-transfer limit */}
+      {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Details card */}
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
