@@ -760,6 +760,49 @@ function MethodForm({
       )}
 
 
+      {/* Fund Flip — transfer from / transfer to with balances */}
+      {isFlip && (
+        <div className="mx-4 mt-3 space-y-2">
+          <FlipAccountCard
+            label="Transfer from"
+            fund={flipFromFund}
+            sub={flipFromSub}
+            balance={
+              showFlipPreview
+                ? isOverBalance
+                  ? `−${fmtLkr(Math.abs(projectedFrom))}`
+                  : fmtLkr(projectedFrom)
+                : fmtLkr(flipFromBalance)
+            }
+            tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
+            onClick={() => openFlipPicker("from")}
+          />
+
+          <div className="pl-5">
+            <ArrowDown className="w-4 h-4 text-muted-foreground" />
+          </div>
+
+          <FlipAccountCard
+            label="Transfer to"
+            fund={flipToFund}
+            sub={flipToSub}
+            balance={
+              showFlipPreview
+                ? fmtLkr(flipToBalance + amountNum)
+                : fmtLkr(flipToBalance)
+            }
+            tone={showFlipPreview ? "success" : "muted"}
+            onClick={() => openFlipPicker("to")}
+          />
+
+          {isSameAccount && (
+            <p className="px-1 pt-1 text-[12px] text-destructive">
+              Pick a different fund or sub account to transfer to.
+            </p>
+          )}
+        </div>
+      )}
+
       {/* Amount hero */}
       <div className="px-4 pt-6 pb-6 text-center">
         <div className="inline-flex items-baseline gap-2">
