@@ -1053,6 +1053,41 @@ function PickerRow({
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
+function SplitTransfersCard({ splits }: { splits: number[] }) {
+  return (
+    <div className="mx-4 mt-2 rounded-2xl bg-card/60 backdrop-blur-md p-4">
+      <div className="flex items-center gap-3">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+          style={{ background: "color-mix(in oklch, var(--pill) 18%, transparent)" }}
+        >
+          <Split className="w-5 h-5" style={{ color: "var(--pill)" }} />
+        </div>
+        <div>
+          <p className="text-[13px] font-semibold text-foreground">
+            Split into {splits.length} transfers
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            Each is debited separately, with its own LKR 50 Justpay charge
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5">
+        {splits.map((part, i) => (
+          <div key={i} className="flex items-center justify-between">
+            <span className="text-[12px] text-muted-foreground">
+              Transfer {i + 1}
+            </span>
+            <span className="text-[12px] font-medium text-foreground tabular-nums">
+              LKR {part.toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function RecurringToggle({
   value,
   onChange,
