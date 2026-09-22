@@ -1350,13 +1350,15 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     const sanitized = sanitizeAmountInput(raw);
     if (isDirect) {
       const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT) {
-        setAmount(String(DIRECT_INVEST_LIMIT));
+      if (n > DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS) {
+        setAmount(String(DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS));
         return;
       }
     }
     setAmount(sanitized);
   };
+
+  const splits = isDirect ? directInvestSplits(amountNum) : [];
 
   const transferAmt = isUtFlip ? amountNum : 0;
   const showPreview = isUtFlip && amountNum > 0;
@@ -1378,6 +1380,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         fund: isUtFlip ? sourceFund : "Equity Account",
         account: "Equity Account",
         bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
+        repeats: String(Math.max(1, splits.length)),
       },
     });
 
