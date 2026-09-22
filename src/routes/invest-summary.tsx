@@ -66,10 +66,22 @@ function InvestSummary() {
         <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">INVESTMENT DETAILS</p>
         <div className="space-y-2">
           <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
+          {splits.length > 1 && (
+            <>
+              <Row label="Split into" value={`${splits.length} transfers`} />
+              {splits.map((part, i) => (
+                <Row
+                  key={i}
+                  label={`Transfer ${i + 1}`}
+                  value={`LKR ${part.toLocaleString()}`}
+                />
+              ))}
+            </>
+          )}
           {isInstant && (
             <div className="flex items-start justify-between gap-2">
               <span className="text-[12px] text-muted-foreground flex items-center gap-1">
-                Justpay service charge
+                Justpay service charge{splits.length > 1 ? ` × ${splits.length}` : ""}
                 <button type="button" onClick={() => setShowJustpayInfo(!showJustpayInfo)} aria-label="About Justpay charge">
                   <Info className="w-3 h-3 text-muted-foreground" />
                 </button>
