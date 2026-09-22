@@ -114,6 +114,30 @@ const funds = [
   "CAL Money Market Fund",
 ];
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
+
+// Sub accounts with available balances, used by Fund Flip (transfer from / to)
+const fundSubAccounts: Record<string, { name: string; value: string }[]> = {
+  "CAL Growth Fund": [
+    { name: "Chiara's wealth account", value: "LKR 150,000.00" },
+    { name: "Retirement", value: "LKR 92,500.00" },
+    { name: "General", value: "LKR 41,200.00" },
+  ],
+  "CAL Income Fund": [
+    { name: "Personal account", value: "LKR 84,300.00" },
+    { name: "Emergency", value: "LKR 36,700.00" },
+  ],
+  "CAL Balanced Fund": [
+    { name: "Personal account", value: "LKR 61,800.00" },
+    { name: "New car", value: "LKR 24,950.00" },
+  ],
+  "CAL Money Market Fund": [
+    { name: "Personal account", value: "LKR 32,100.00" },
+    { name: "Short term", value: "LKR 18,450.00" },
+  ],
+};
+const subAccountsOf = (fund: string) => fundSubAccounts[fund] ?? [];
+const balanceOf = (fund: string, sub: string) =>
+  subAccountsOf(fund).find((s) => s.name === sub)?.value ?? "LKR 0.00";
 const banks = [
   "Commercial Bank · 8001 2345 21",
   "Deutsche Bank · 9004 5561 12",
