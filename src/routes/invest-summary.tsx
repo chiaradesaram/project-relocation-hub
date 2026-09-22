@@ -3,6 +3,7 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Info, CheckCircle2, Lightbulb } from "lucide-react";
+import { directInvestSplits } from "./invest";
 
 type SummarySearch = {
   method?: "instant" | "bank" | "flip" | "recurring";
@@ -10,6 +11,7 @@ type SummarySearch = {
   fund?: string;
   account?: string;
   bank?: string;
+  repeats?: string;
 };
 
 export const Route = createFileRoute("/invest-summary")({
@@ -19,20 +21,23 @@ export const Route = createFileRoute("/invest-summary")({
     fund: (search.fund as string) ?? "",
     account: (search.account as string) ?? "",
     bank: (search.bank as string) ?? "",
+    repeats: (search.repeats as string) ?? "1",
   }),
   component: InvestSummary,
 });
 
 function InvestSummary() {
   const navigate = useNavigate();
-  const { method, amount, fund, account, bank } = Route.useSearch();
+  const { method, amount, fund, account, bank, repeats } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
   const amountNum = parseFloat(amount || "0") || 0;
-  const serviceCharge = isInstant || isRecurring ? 50 : 0;
+  const repeatsNum = Math.min(3, Math.max(1, parseInt(repeats || "1", 10) || 1));
+  const splits = isInstant && repeatsNum > 1 ? directInvestSplits(amountNum) : [];
+  const serviceCharge = isInstant || isRecurring ? 50 * repeatsNum : 0;
   const total = amountNum + serviceCharge;
   const fmtDate = (d: Date) =>
     d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
