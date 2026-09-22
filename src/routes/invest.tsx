@@ -128,6 +128,22 @@ const calBankAccounts = [
 ];
 
 const DIRECT_INVEST_LIMIT = 149950;
+const DIRECT_INVEST_MAX_TRANSFERS = 3;
+
+// Splits a direct invest amount into transfers of at most DIRECT_INVEST_LIMIT.
+// Returns a single-part array when the amount fits in one transfer.
+function directInvestSplits(amountNum: number): number[] {
+  if (amountNum <= 0) return [];
+  const repeats = Math.min(
+    DIRECT_INVEST_MAX_TRANSFERS,
+    Math.ceil(amountNum / DIRECT_INVEST_LIMIT),
+  );
+  return Array.from({ length: repeats }, (_, i) =>
+    i < repeats - 1
+      ? DIRECT_INVEST_LIMIT
+      : amountNum - DIRECT_INVEST_LIMIT * (repeats - 1),
+  );
+}
 
 export const SETTLEMENT_FUND_KEY = "equitySettlementFund";
 export const SETTLEMENT_ACCOUNT_KEY = "equitySettlementAccount";
