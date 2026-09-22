@@ -554,6 +554,16 @@ function MethodForm({
     method === "bank" ? "CAL Securities Account" : "",
   );
   const [selectedFlipTo, setSelectedFlipTo] = useState("");
+  // Fund Flip: source and destination fund + sub account
+  const [flipFromFund, setFlipFromFund] = useState(funds[0]!);
+  const [flipFromSub, setFlipFromSub] = useState(
+    subAccountsOf(funds[0]!)[0]!.name,
+  );
+  const [flipToFund, setFlipToFund] = useState(funds[1]!);
+  const [flipToSub, setFlipToSub] = useState(subAccountsOf(funds[1]!)[0]!.name);
+  const [flipPicker, setFlipPicker] = useState<null | "from" | "to">(null);
+  const [draftFund, setDraftFund] = useState(funds[0]!);
+  const [draftSub, setDraftSub] = useState(subAccountsOf(funds[0]!)[0]!.name);
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
