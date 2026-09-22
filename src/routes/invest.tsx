@@ -127,12 +127,12 @@ const calBankAccounts = [
   { label: "CAL · HNB", note: "7700 1234 567 · Closing soon" },
 ];
 
-const DIRECT_INVEST_LIMIT = 149950;
-const DIRECT_INVEST_MAX_TRANSFERS = 3;
+export const DIRECT_INVEST_LIMIT = 149950;
+export const DIRECT_INVEST_MAX_TRANSFERS = 3;
 
 // Splits a direct invest amount into transfers of at most DIRECT_INVEST_LIMIT.
 // Returns a single-part array when the amount fits in one transfer.
-function directInvestSplits(amountNum: number): number[] {
+export function directInvestSplits(amountNum: number): number[] {
   if (amountNum <= 0) return [];
   const repeats = Math.min(
     DIRECT_INVEST_MAX_TRANSFERS,
