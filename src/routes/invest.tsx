@@ -793,36 +793,36 @@ function MethodForm({
       {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Details card */}
-      <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
-        <PickerRow
-          label="Fund"
-          value={selectedFund}
-          placeholder="Select a fund"
-          onClick={() => setPicker("fund")}
-        />
-        {!isFlip && (
+      {!isFlip && (
+        <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+          <PickerRow
+            label="Fund"
+            value={selectedFund}
+            placeholder="Select a fund"
+            onClick={() => setPicker("fund")}
+          />
           <PickerRow
             label="Sub-account"
             value={selectedAccount}
             placeholder="Select sub-account"
             onClick={() => setPicker("account")}
           />
-        )}
-        <PickerRow
-          label={payFromLabel}
-          value={payFromValue}
-          placeholder={payFromPlaceholder}
-          onClick={() => setPicker("payFrom")}
-        />
-        {(isBank || isFlip) && (
           <PickerRow
-            label={sendToLabel}
-            value={sendToValue}
-            placeholder={sendToPlaceholder}
-            onClick={() => setPicker(isFlip ? "flipTo" : "payTo")}
+            label={payFromLabel}
+            value={payFromValue}
+            placeholder={payFromPlaceholder}
+            onClick={() => setPicker("payFrom")}
           />
-        )}
-      </div>
+          {isBank && (
+            <PickerRow
+              label={sendToLabel}
+              value={sendToValue}
+              placeholder={sendToPlaceholder}
+              onClick={() => setPicker("payTo")}
+            />
+          )}
+        </div>
+      )}
 
       {/* Recurring — Direct Invest only */}
       {isInstant && (
