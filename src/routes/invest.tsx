@@ -614,9 +614,28 @@ function MethodForm({
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
   const needsProof = isBank && !isDeutsche;
 
+  // ---- Fund Flip balances ----
+  const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
+  const fmtLkr = (n: number) =>
+    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const flipFromBalance = parseLkr(balanceOf(flipFromFund, flipFromSub));
+  const flipToBalance = parseLkr(balanceOf(flipToFund, flipToSub));
+  const projectedFrom = flipFromBalance - amountNum;
+  const isOverBalance = isFlip && projectedFrom < 0;
+  const isSameAccount =
+    isFlip && flipFromFund === flipToFund && flipFromSub === flipToSub;
+  const showFlipPreview = isFlip && amountNum > 0;
+
+  const openFlipPicker = (which: "from" | "to") => {
+    setDraftFund(which === "from" ? flipFromFund : flipToFund);
+    setDraftSub(which === "from" ? flipFromSub : flipToSub);
+    setFlipPicker(which);
+  };
+  const draftSubOptions = subAccountsOf(draftFund);
+
   const canReview = (() => {
     if (amountNum <= 0) return false;
-    if (isFlip) return !!selectedFund && !!selectedFlipTo;
+    if (isFlip) return !isOverBalance && !isSameAccount;
     if (!selectedFund || !selectedAccount) return false;
     if (isInstant) return !!selectedBank;
     if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
@@ -629,9 +648,13 @@ function MethodForm({
       search: {
         method,
         amount: amount || "0",
-        fund: selectedFund,
-        account: selectedAccount,
-        bank: isFlip ? selectedFlipTo : isInstant ? selectedBank : selectedPayTo,
+        fund: isFlip ? flipFromFund : selectedFund,
+        account: isFlip ? flipFromSub : selectedAccount,
+        bank: isFlip
+          ? `${flipToFund} · ${flipToSub}`
+          : isInstant
+            ? selectedBank
+            : selectedPayTo,
         repeats: String(Math.max(1, splits.length)),
       },
     });
