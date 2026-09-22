@@ -745,9 +745,12 @@ function MethodForm({
 
       {/* Recurring — Direct Invest only */}
       {isInstant && (
-        <div className="mx-4 mt-4">
-          <RecurringToggle value={recurring} onChange={setRecurring} />
-        </div>
+        <>
+          <div className="mx-4 mt-4">
+            <RecurringToggle value={recurring} onChange={setRecurring} />
+          </div>
+          {recurring && <RecurringOptions />}
+        </>
       )}
 
       {/* Proof of payment — Bank transfer, non-Deutsche */}
@@ -1084,9 +1087,118 @@ function DateRow({
   );
 }
 
-/* ------------------------------------------------------------------ */
-/* Equities                                                            */
-/* ------------------------------------------------------------------ */
+/**
+ * RecurringOptions — shown under the "Set recurring" toggle when it's on.
+ * Lets the user pick a start date (calendar sheet) and a frequency
+ * (bottom-sheet picker, Monthly default).
+ */
+function RecurringOptions() {
+  const [startDate, setStartDate] = useState(new Date());
+  const [dateOpen, setDateOpen] = useState(false);
+  const [frequency, setFrequency] = useState("Monthly");
+  const [freqOpen, setFreqOpen] = useState(false);
+
+  return (
+    <>
+      <div className="mx-4 mt-2 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+        <DateRow
+          label="Start date"
+          date={startDate}
+          onClick={() => setDateOpen(true)}
+        />
+        <PickerRow
+          label="Frequency"
+          value={frequency}
+          placeholder="Select frequency"
+          onClick={() => setFreqOpen(true)}
+        />
+      </div>
+
+      {/* Start date sheet */}
+      <Sheet open={dateOpen} onOpenChange={setDateOpen}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
+        >
+          <SheetHeader className="px-5 pb-0">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-base font-semibold text-foreground">
+                Start date
+              </SheetTitle>
+              <button
+                onClick={() => setDateOpen(false)}
+                className="rounded-full p-1 hover:bg-muted/20 transition"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="px-3 mt-2 flex justify-center">
+            <Calendar
+              mode="single"
+              selected={startDate}
+              onSelect={(d) => {
+                if (d) setStartDate(d);
+                setDateOpen(false);
+              }}
+              className="p-3 pointer-events-auto"
+            />
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Frequency sheet */}
+      <Sheet open={freqOpen} onOpenChange={setFreqOpen}>
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
+        >
+          <SheetHeader className="px-5 pb-0">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-base font-semibold text-foreground">
+                Frequency
+              </SheetTitle>
+              <button
+                onClick={() => setFreqOpen(false)}
+                className="rounded-full p-1 hover:bg-muted/20 transition"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="px-5 mt-4 space-y-2">
+            {["Monthly"].map((opt) => (
+              <button
+                key={opt}
+                onClick={() => {
+                  setFrequency(opt);
+                  setFreqOpen(false);
+                }}
+                className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+                  frequency === opt
+                    ? "bg-muted/20"
+                    : "bg-background/40 hover:bg-muted/10"
+                }`}
+              >
+                <span className="text-sm text-foreground">{opt}</span>
+                {frequency === opt && (
+                  <Check
+                    className="w-4 h-4 shrink-0"
+                    style={{ color: "var(--pill)" }}
+                  />
+                )}
+              </button>
+            ))}
+            <p className="pt-1 text-[12px] text-muted-foreground leading-snug">
+              We'll invest the same amount on this date every month.
+            </p>
+          </div>
+        </SheetContent>
+      </Sheet>
+    </>
+  );
+}
+
 
 const equityFundSources = [
   { name: "CAL Growth Fund", sub: "Chiara's wealth account", value: "LKR 150,000.00" },
@@ -1360,9 +1472,12 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
       {/* Recurring — Direct Invest only */}
       {isDirect && (
-        <div className="mx-4 mt-4">
-          <RecurringToggle value={recurring} onChange={setRecurring} />
-        </div>
+        <>
+          <div className="mx-4 mt-4">
+            <RecurringToggle value={recurring} onChange={setRecurring} />
+          </div>
+          {recurring && <RecurringOptions />}
+        </>
       )}
 
       {/* Attach proof — Pay in */}
