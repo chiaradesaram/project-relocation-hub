@@ -1503,13 +1503,16 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         ) : (
           <p className="mt-3 text-[12px] text-muted-foreground">
             {isDirect
-              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
+              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger amounts split into up to ${DIRECT_INVEST_MAX_TRANSFERS}`
               : isPayIn
                 ? "Amount to pay in"
                 : "Amount to transfer"}
           </p>
         )}
       </div>
+
+      {/* Split transfers — Direct Invest above the per-transfer limit */}
+      {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Details */}
       {!isUtFlip && (
