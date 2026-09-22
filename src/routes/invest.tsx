@@ -22,6 +22,7 @@ import {
   BarChart3,
   CheckCircle2,
   Plus,
+  Split,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
@@ -126,7 +127,23 @@ const calBankAccounts = [
   { label: "CAL · HNB", note: "7700 1234 567 · Closing soon" },
 ];
 
-const DIRECT_INVEST_LIMIT = 149950;
+export const DIRECT_INVEST_LIMIT = 149950;
+export const DIRECT_INVEST_MAX_TRANSFERS = 3;
+
+// Splits a direct invest amount into transfers of at most DIRECT_INVEST_LIMIT.
+// Returns a single-part array when the amount fits in one transfer.
+export function directInvestSplits(amountNum: number): number[] {
+  if (amountNum <= 0) return [];
+  const repeats = Math.min(
+    DIRECT_INVEST_MAX_TRANSFERS,
+    Math.ceil(amountNum / DIRECT_INVEST_LIMIT),
+  );
+  return Array.from({ length: repeats }, (_, i) =>
+    i < repeats - 1
+      ? DIRECT_INVEST_LIMIT
+      : amountNum - DIRECT_INVEST_LIMIT * (repeats - 1),
+  );
+}
 
 export const SETTLEMENT_FUND_KEY = "equitySettlementFund";
 export const SETTLEMENT_ACCOUNT_KEY = "equitySettlementAccount";
@@ -540,13 +557,15 @@ function MethodForm({
     const sanitized = sanitizeAmountInput(raw);
     if (isInstant) {
       const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT) {
-        setAmount(String(DIRECT_INVEST_LIMIT));
+      if (n > DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS) {
+        setAmount(String(DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS));
         return;
       }
     }
     setAmount(sanitized);
   };
+
+  const splits = isInstant ? directInvestSplits(amountNum) : [];
 
   const payFromLabel = isFlip ? "Transfer from" : "Paying from";
   const payFromValue = isFlip ? selectedFund : selectedBank;
@@ -579,6 +598,7 @@ function MethodForm({
         fund: selectedFund,
         account: selectedAccount,
         bank: isFlip ? selectedFlipTo : isInstant ? selectedBank : selectedPayTo,
+        repeats: String(Math.max(1, splits.length)),
       },
     });
   };
@@ -706,10 +726,14 @@ function MethodForm({
         </div>
         {isInstant && (
           <p className="mt-3 text-[12px] text-muted-foreground">
-            Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transfer
+            Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger
+            amounts split into up to {DIRECT_INVEST_MAX_TRANSFERS}
           </p>
         )}
       </div>
+
+      {/* Split transfers — Direct Invest above the per-transfer limit */}
+      {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Details card */}
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
@@ -1029,6 +1053,41 @@ function PickerRow({
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
+function SplitTransfersCard({ splits }: { splits: number[] }) {
+  return (
+    <div className="mx-4 mt-2 rounded-2xl bg-card/60 backdrop-blur-md p-4">
+      <div className="flex items-center gap-3">
+        <div
+          className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+          style={{ background: "color-mix(in oklch, var(--pill) 18%, transparent)" }}
+        >
+          <Split className="w-5 h-5" style={{ color: "var(--pill)" }} />
+        </div>
+        <div>
+          <p className="text-[13px] font-semibold text-foreground">
+            Split into {splits.length} transfers
+          </p>
+          <p className="text-[11px] text-muted-foreground">
+            Each is debited separately, with its own LKR 50 Justpay charge
+          </p>
+        </div>
+      </div>
+      <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5">
+        {splits.map((part, i) => (
+          <div key={i} className="flex items-center justify-between">
+            <span className="text-[12px] text-muted-foreground">
+              Transfer {i + 1}
+            </span>
+            <span className="text-[12px] font-medium text-foreground tabular-nums">
+              LKR {part.toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function RecurringToggle({
   value,
   onChange,
@@ -1291,13 +1350,15 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     const sanitized = sanitizeAmountInput(raw);
     if (isDirect) {
       const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT) {
-        setAmount(String(DIRECT_INVEST_LIMIT));
+      if (n > DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS) {
+        setAmount(String(DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS));
         return;
       }
     }
     setAmount(sanitized);
   };
+
+  const splits = isDirect ? directInvestSplits(amountNum) : [];
 
   const transferAmt = isUtFlip ? amountNum : 0;
   const showPreview = isUtFlip && amountNum > 0;
@@ -1319,6 +1380,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         fund: isUtFlip ? sourceFund : "Equity Account",
         account: "Equity Account",
         bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
+        repeats: String(Math.max(1, splits.length)),
       },
     });
 
@@ -1441,13 +1503,16 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         ) : (
           <p className="mt-3 text-[12px] text-muted-foreground">
             {isDirect
-              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer`
+              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger amounts split into up to ${DIRECT_INVEST_MAX_TRANSFERS}`
               : isPayIn
                 ? "Amount to pay in"
                 : "Amount to transfer"}
           </p>
         )}
       </div>
+
+      {/* Split transfers — Direct Invest above the per-transfer limit */}
+      {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
 
       {/* Details */}
       {!isUtFlip && (
