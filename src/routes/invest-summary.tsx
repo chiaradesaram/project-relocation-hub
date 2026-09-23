@@ -11,6 +11,7 @@ type SummarySearch = {
   fund?: string;
   account?: string;
   bank?: string;
+  fromBank?: string;
   repeats?: string;
 };
 
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/invest-summary")({
     fund: (search.fund as string) ?? "",
     account: (search.account as string) ?? "",
     bank: (search.bank as string) ?? "",
+    fromBank: (search.fromBank as string) ?? "",
     repeats: (search.repeats as string) ?? "1",
   }),
   component: InvestSummary,
