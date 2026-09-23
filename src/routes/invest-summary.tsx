@@ -133,16 +133,6 @@ function InvestSummary() {
         </div>
       </div>
 
-      {/* Fund Info */}
-      <div className="mx-4 mt-3 glass-card p-3">
-        <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">FUND INFO</p>
-        <div className="space-y-2">
-          <Row label="Fund name" value={fund || "—"} />
-          <Row label="Sub account" value={account || "—"} />
-          <Row label={isInstant ? "Pay from" : "Pay to"} value={bank || "—"} />
-        </div>
-      </div>
-
       {/* Quick check before you submit — bank transfer */}
       {method === "bank" && (
         <div
