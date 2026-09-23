@@ -614,9 +614,9 @@ function RecurringInvestments() {
           <button
             type="button"
             onClick={() => setManageOpen(true)}
-            className="mt-2 w-full rounded-2xl bg-card/60 p-4 text-left backdrop-blur-md transition hover:bg-muted/10"
+            className="mt-2 w-full rounded-2xl bg-card/60 px-4 py-3.5 text-left backdrop-blur-md transition hover:bg-muted/10"
           >
-            <div className="flex items-start gap-3">
+            <div className="flex items-center gap-3">
               <div
                 className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
                 style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
@@ -624,21 +624,28 @@ function RecurringInvestments() {
                 <CalendarClock className="h-5 w-5 text-pill" />
               </div>
               <div className="min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <p className="text-base font-semibold text-foreground">
-                    LKR {Number(plan.amount).toLocaleString()}
-                  </p>
-                  <span className="rounded-full bg-pill/15 px-2 py-1 text-[11px] font-semibold text-pill">
-                    {plan.active ? "Active" : "Paused"}
-                  </span>
-                </div>
-                <p className="mt-1 truncate text-[13px] text-foreground">{plan.fund}</p>
-                <p className="mt-0.5 truncate text-[12px] text-muted-foreground">{plan.account}</p>
-                <p className="mt-3 text-[12px] text-muted-foreground">
-                  {plan.frequency} · Next investment {formattedDate}
+                <p className="text-[15px] font-semibold leading-tight text-foreground">
+                  LKR {Number(plan.amount).toLocaleString()}
+                </p>
+                <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+                  {plan.fund} · {plan.account}
                 </p>
               </div>
-              <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />
+              <span
+                className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                  plan.active ? "bg-pill/15 text-pill" : "bg-muted/20 text-muted-foreground"
+                }`}
+              >
+                {plan.active ? "Active" : "Paused"}
+              </span>
+              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+            </div>
+            <div className="mt-2.5 flex items-center gap-1.5 border-t border-border/20 pt-2.5">
+              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--pill)" }} />
+              <p className="truncate text-[12px] text-muted-foreground">
+                {plan.frequency} · Next investment{" "}
+                <span className="font-medium text-foreground">{formattedDate}</span>
+              </p>
             </div>
           </button>
         </div>
