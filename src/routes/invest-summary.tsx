@@ -11,6 +11,7 @@ type SummarySearch = {
   fund?: string;
   account?: string;
   bank?: string;
+  fromBank?: string;
   repeats?: string;
 };
 
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/invest-summary")({
     fund: (search.fund as string) ?? "",
     account: (search.account as string) ?? "",
     bank: (search.bank as string) ?? "",
+    fromBank: (search.fromBank as string) ?? "",
     repeats: (search.repeats as string) ?? "1",
   }),
   component: InvestSummary,
@@ -28,7 +30,7 @@ export const Route = createFileRoute("/invest-summary")({
 
 function InvestSummary() {
   const navigate = useNavigate();
-  const { method, amount, fund, account, bank, repeats } = Route.useSearch();
+  const { method, amount, fund, account, bank, fromBank, repeats } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
@@ -47,6 +49,10 @@ function InvestSummary() {
   const reflectedDate = fmtDate(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
+
+  // Quick check (bank transfer): derive the paying-from bank from the search param
+  const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
+  const fromBankLast4 = fromBankAcctNo?.split(" ").pop() ?? "";
 
   return (
     <MobileLayout>
@@ -136,6 +142,51 @@ function InvestSummary() {
           <Row label={isInstant ? "Pay from" : "Pay to"} value={bank || "—"} />
         </div>
       </div>
+
+      {/* Quick check before you submit — bank transfer */}
+      {method === "bank" && (
+        <div
+          className="mx-4 mt-4 rounded-2xl px-4 py-4"
+          style={{
+            background: "color-mix(in oklch, var(--card) 78%, transparent)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          <div className="flex items-center gap-2.5">
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background: "color-mix(in oklch, var(--pill) 18%, transparent)",
+              }}
+            >
+              <Info className="w-4 h-4 text-pill" />
+            </div>
+            <p className="text-sm font-semibold text-foreground">
+              Quick check before you submit
+            </p>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {[
+              "Funds have been transferred to Deutsche Bank",
+              `Funds were transferred from ${fromBankName} account ending ${fromBankLast4}`,
+              "You have not used a wallet account",
+            ].map((label) => (
+              <li key={label} className="flex items-start gap-2.5">
+                <span
+                  className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ background: "var(--pill)" }}
+                />
+                <span className="text-[13px] leading-snug text-foreground">
+                  {label}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-[12px] font-medium text-pill">
+            All done? You're ready to submit.
+          </p>
+        </div>
+      )}
 
       {/* Confirm */}
       <div className="mx-4 mt-4 mb-6">
