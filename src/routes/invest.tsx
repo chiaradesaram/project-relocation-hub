@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   Plus,
   Split,
+  Info,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
