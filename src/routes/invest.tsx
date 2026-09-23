@@ -1070,12 +1070,7 @@ function MethodForm({
                     {isBankPicker ? (
                       <RadioDot selected={isSelected} />
                     ) : (
-                      isSelected && (
-                        <Check
-                          className="w-4 h-4 shrink-0"
-                          style={{ color: "var(--pill)" }}
-                        />
-                      )
+                      <RadioDot selected={isSelected} />
                     )}
                   </button>
                 );
@@ -1471,12 +1466,7 @@ function RecurringOptions() {
                 }`}
               >
                 <span className="text-sm text-foreground">{opt}</span>
-                {frequency === opt && (
-                  <Check
-                    className="w-4 h-4 shrink-0"
-                    style={{ color: "var(--pill)" }}
-                  />
-                )}
+                <RadioDot selected={frequency === opt} />
               </button>
             ))}
             <p className="pt-1 text-[12px] text-muted-foreground leading-snug">
@@ -2007,13 +1997,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                       )}
                       <span className="text-sm text-foreground">{opt}</span>
                     </span>
-                    {picker === "bank" ? (
-                      <RadioDot selected={isSelected} />
-                    ) : (
-                      isSelected && (
-                        <Check className="w-4 h-4" style={{ color: "var(--pill)" }} />
-                      )
-                    )}
+                    <RadioDot selected={isSelected} />
                   </button>
                 );
               })
