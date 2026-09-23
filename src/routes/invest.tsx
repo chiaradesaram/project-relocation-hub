@@ -67,6 +67,16 @@ export const Route = createFileRoute("/invest")({
         : undefined,
     mode: search.mode === "setup" ? "setup" : undefined,
   }),
+  head: () => ({
+    meta: [
+      { title: "Invest — CAL" },
+      { name: "description", content: "Invest, transfer funds, and manage recurring investments with CAL." },
+      { property: "og:title", content: "Invest — CAL" },
+      { property: "og:description", content: "Invest, transfer funds, and manage recurring investments with CAL." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Invest,
 });
 
@@ -530,9 +540,17 @@ function RecurringInvestments() {
   const [plan, setPlan] = useState<RecurringInvestmentPlan | null>(null);
   const [manageOpen, setManageOpen] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
     setPlan(readRecurringInvestment());
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("recurringInvestmentSaved") !== "true") return;
+    localStorage.removeItem("recurringInvestmentSaved");
+    setSavedOpen(true);
   }, []);
 
   const updateActive = (active: boolean) => {
@@ -566,7 +584,7 @@ function RecurringInvestments() {
   return (
     <MobileLayout>
       <PageHeader title="Recurring Investments" showBack helpTopic="invest" />
-      {!plan ? (
+      {!loaded ? null : !plan ? (
         <div className="px-6 pt-20 text-center">
           <div
             className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
@@ -675,7 +693,13 @@ function RecurringInvestments() {
 
       <Sheet open={savedOpen} onOpenChange={setSavedOpen}>
         <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-2">
-          <SavedConfirmation summary={`Recurring investment ${plan?.active ? "resumed" : "paused"}`} />
+          <SavedConfirmation
+            summary={
+              plan?.active
+                ? "Your recurring investment is active"
+                : "Your recurring investment is paused"
+            }
+          />
         </SheetContent>
       </Sheet>
     </MobileLayout>
@@ -1685,6 +1709,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [payTo, setPayTo] = useState("CAL Securities Account");
   const [proofName, setProofName] = useState<string | null>(null);
   const [recurring, setRecurring] = useState(false);
+  const [recurringStartDate, setRecurringStartDate] = useState(new Date());
   const [sourceFund, setSourceFund] = useState(equityFundSources[0]!.name);
   const [sourceSub, setSourceSub] = useState(
     equityFundSubAccounts[equityFundSources[0]!.name]![0]!.name,
@@ -1931,7 +1956,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           <div className="mx-4 mt-4">
             <RecurringToggle value={recurring} onChange={setRecurring} />
           </div>
-          {recurring && <RecurringOptions />}
+          {recurring && (
+            <RecurringOptions
+              startDate={recurringStartDate}
+              onStartDateChange={setRecurringStartDate}
+              frequency="Monthly"
+            />
+          )}
         </>
       )}
 
