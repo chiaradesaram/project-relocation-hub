@@ -558,7 +558,8 @@ function RecurringInvestments() {
     const next = { ...plan, active };
     localStorage.setItem(RECURRING_INVESTMENT_KEY, JSON.stringify(next));
     setPlan(next);
-    setSavedOpen(true);
+    setManageOpen(false);
+    window.setTimeout(() => setSavedOpen(true), 180);
   };
 
   const removePlan = () => {
