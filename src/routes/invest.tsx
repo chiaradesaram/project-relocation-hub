@@ -53,7 +53,7 @@ type InvestMethod =
 export const Route = createFileRoute("/invest")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { product?: string; method?: InvestMethod; mode?: "setup" } => ({
+  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
@@ -66,6 +66,7 @@ export const Route = createFileRoute("/invest")({
         ? (search.method as InvestMethod)
         : undefined,
     mode: search.mode === "setup" ? "setup" : undefined,
+    edit: typeof search.edit === "string" ? search.edit : undefined,
   }),
   head: () => ({
     meta: [
@@ -85,9 +86,9 @@ import { ViewRatesLink } from "@/components/ViewRates";
 import { RadioDot } from "@/components/RadioDot";
 import { Button } from "@/components/ui/button";
 import {
-  RECURRING_INVESTMENT_KEY,
   type RecurringInvestmentPlan,
-  readRecurringInvestment,
+  readRecurringInvestments,
+  writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
@@ -537,13 +538,16 @@ function Invest() {
 
 function RecurringInvestments() {
   const navigate = useNavigate();
-  const [plan, setPlan] = useState<RecurringInvestmentPlan | null>(null);
-  const [manageOpen, setManageOpen] = useState(false);
+  const [plans, setPlans] = useState<RecurringInvestmentPlan[]>([]);
+  const [manageId, setManageId] = useState<string | null>(null);
   const [savedOpen, setSavedOpen] = useState(false);
+  const [savedSummary, setSavedSummary] = useState("Your recurring investment is active");
   const [loaded, setLoaded] = useState(false);
 
+  const managed = plans.find((p) => p.id === manageId) ?? null;
+
   useEffect(() => {
-    setPlan(readRecurringInvestment());
+    setPlans(readRecurringInvestments());
     setLoaded(true);
   }, []);
 
@@ -553,19 +557,31 @@ function RecurringInvestments() {
     setSavedOpen(true);
   }, []);
 
+  const fmtPlanDate = (p: RecurringInvestmentPlan) =>
+    new Date(`${p.startDate}T00:00:00`).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+
   const updateActive = (active: boolean) => {
-    if (!plan) return;
-    const next = { ...plan, active };
-    localStorage.setItem(RECURRING_INVESTMENT_KEY, JSON.stringify(next));
-    setPlan(next);
-    setManageOpen(false);
+    if (!managed) return;
+    const next = plans.map((p) => (p.id === managed.id ? { ...p, active } : p));
+    writeRecurringInvestments(next);
+    setPlans(next);
+    setManageId(null);
+    setSavedSummary(
+      active ? "Your recurring investment is active" : "Your recurring investment is paused",
+    );
     window.setTimeout(() => setSavedOpen(true), 180);
   };
 
   const removePlan = () => {
-    localStorage.removeItem(RECURRING_INVESTMENT_KEY);
-    setPlan(null);
-    setManageOpen(false);
+    if (!managed) return;
+    const next = plans.filter((p) => p.id !== managed.id);
+    writeRecurringInvestments(next);
+    setPlans(next);
+    setManageId(null);
   };
 
   const startSetup = () =>
@@ -574,18 +590,20 @@ function RecurringInvestments() {
       search: { product: "unit-trust", method: "recurring", mode: "setup" },
     });
 
-  const formattedDate = plan
-    ? new Date(`${plan.startDate}T00:00:00`).toLocaleDateString("en-GB", {
-        day: "2-digit",
-        month: "short",
-        year: "numeric",
-      })
-    : "";
+  const startEdit = () => {
+    if (!managed) return;
+    const editId = managed.id;
+    setManageId(null);
+    navigate({
+      to: "/invest",
+      search: { product: "unit-trust", method: "recurring", mode: "setup", edit: editId },
+    });
+  };
 
   return (
     <MobileLayout>
       <PageHeader title="Recurring Investments" showBack helpTopic="invest" />
-      {!loaded ? null : !plan ? (
+      {!loaded ? null : plans.length === 0 ? (
         <div className="px-6 pt-20 text-center">
           <div
             className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
@@ -609,78 +627,99 @@ function RecurringInvestments() {
       ) : (
         <div className="px-4 pt-4">
           <p className="px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
-            Your plan
+            {plans.length > 1 ? "Your plans" : "Your plan"}
           </p>
+          {plans.map((plan) => {
+            const formattedDate = fmtPlanDate(plan);
+            return (
+              <button
+                key={plan.id}
+                type="button"
+                onClick={() => setManageId(plan.id)}
+                className="mt-2 w-full rounded-2xl bg-card/60 px-4 py-3.5 text-left backdrop-blur-md transition hover:bg-muted/10"
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                    style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+                  >
+                    <CalendarClock className="h-5 w-5 text-pill" />
+                  </div>
+                  <div className="min-w-0 flex-1">
+                    <p className="text-[15px] font-semibold leading-tight text-foreground">
+                      LKR {Number(plan.amount).toLocaleString()}
+                    </p>
+                    <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
+                      {plan.fund} · {plan.account}
+                    </p>
+                  </div>
+                  <span
+                    className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
+                      plan.active ? "bg-pill/15 text-pill" : "bg-muted/20 text-muted-foreground"
+                    }`}
+                  >
+                    {plan.active ? "Active" : "Paused"}
+                  </span>
+                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+                </div>
+                <div className="mt-2.5 flex items-center gap-1.5 border-t border-border/20 pt-2.5">
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--pill)" }} />
+                  <p className="truncate text-[12px] text-muted-foreground">
+                    {plan.frequency} · Next investment{" "}
+                    <span className="font-medium text-foreground">{formattedDate}</span>
+                  </p>
+                </div>
+              </button>
+            );
+          })}
           <button
             type="button"
-            onClick={() => setManageOpen(true)}
-            className="mt-2 w-full rounded-2xl bg-card/60 px-4 py-3.5 text-left backdrop-blur-md transition hover:bg-muted/10"
+            onClick={startSetup}
+            className="mt-2 flex w-full items-center gap-3 rounded-2xl bg-card/60 px-4 py-3.5 text-left backdrop-blur-md transition hover:bg-muted/10"
           >
-            <div className="flex items-center gap-3">
-              <div
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
-                style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
-              >
-                <CalendarClock className="h-5 w-5 text-pill" />
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="text-[15px] font-semibold leading-tight text-foreground">
-                  LKR {Number(plan.amount).toLocaleString()}
-                </p>
-                <p className="mt-0.5 truncate text-[12px] text-muted-foreground">
-                  {plan.fund} · {plan.account}
-                </p>
-              </div>
-              <span
-                className={`shrink-0 rounded-full px-2.5 py-1 text-[11px] font-semibold ${
-                  plan.active ? "bg-pill/15 text-pill" : "bg-muted/20 text-muted-foreground"
-                }`}
-              >
-                {plan.active ? "Active" : "Paused"}
-              </span>
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+            <div
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+              style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+            >
+              <Plus className="h-5 w-5 text-pill" />
             </div>
-            <div className="mt-2.5 flex items-center gap-1.5 border-t border-border/20 pt-2.5">
-              <span className="h-1.5 w-1.5 shrink-0 rounded-full" style={{ background: "var(--pill)" }} />
-              <p className="truncate text-[12px] text-muted-foreground">
-                {plan.frequency} · Next investment{" "}
-                <span className="font-medium text-foreground">{formattedDate}</span>
-              </p>
-            </div>
+            <span className="text-[15px] font-semibold text-pill">Add another plan</span>
           </button>
         </div>
       )}
 
-      <Sheet open={manageOpen} onOpenChange={setManageOpen}>
+      <Sheet
+        open={manageId !== null}
+        onOpenChange={(open) => {
+          if (!open) setManageId(null);
+        }}
+      >
         <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-8">
           <SheetHeader className="pb-0">
             <SheetTitle className="text-base text-foreground">Manage recurring investment</SheetTitle>
           </SheetHeader>
-          {plan && (
+          {managed && (
             <div className="mt-5">
               <div className="rounded-2xl bg-background/40 px-4 py-1">
-                <ManageRow label="Amount" value={`LKR ${Number(plan.amount).toLocaleString()}`} />
-                <ManageRow label="Fund" value={plan.fund} />
-                <ManageRow label="Sub-account" value={plan.account} />
-                <ManageRow label="From" value={plan.bank} />
-                <ManageRow label="Frequency" value={plan.frequency} />
-                <ManageRow label="Next investment" value={formattedDate} last />
+                <ManageRow label="Amount" value={`LKR ${Number(managed.amount).toLocaleString()}`} />
+                <ManageRow label="Fund" value={managed.fund} />
+                <ManageRow label="Sub-account" value={managed.account} />
+                <ManageRow label="From" value={managed.bank} />
+                <ManageRow label="Frequency" value={managed.frequency} />
+                <ManageRow label="Next investment" value={fmtPlanDate(managed)} last />
               </div>
               <Button
                 type="button"
-                onClick={() => updateActive(!plan.active)}
+                onClick={() => updateActive(!managed.active)}
                 className="mt-4 h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90"
               >
-                {plan.active ? <PauseCircle /> : <PlayCircle />}
-                {plan.active ? "Pause investment" : "Resume investment"}
+                {managed.active ? <PauseCircle /> : <PlayCircle />}
+                {managed.active ? "Pause investment" : "Resume investment"}
               </Button>
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => {
-                  setManageOpen(false);
-                  startSetup();
-                }}
+                onClick={startEdit}
                 className="mt-2 h-12 w-full rounded-full"
               >
                 Edit details
@@ -701,13 +740,7 @@ function RecurringInvestments() {
 
       <Sheet open={savedOpen} onOpenChange={setSavedOpen}>
         <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-2">
-          <SavedConfirmation
-            summary={
-              plan?.active
-                ? "Your recurring investment is active"
-                : "Your recurring investment is paused"
-            }
-          />
+          <SavedConfirmation summary={savedSummary} />
         </SheetContent>
       </Sheet>
     </MobileLayout>
@@ -760,9 +793,12 @@ function MethodForm({
   const [recurringStartDate, setRecurringStartDate] = useState(new Date());
   const recurringFrequency = "Monthly";
 
+  const { edit: editPlanId } = Route.useSearch();
+
   useEffect(() => {
     if (!isRecurringMethod) return;
-    const saved = readRecurringInvestment();
+    const all = readRecurringInvestments();
+    const saved = (editPlanId ? all.find((p) => p.id === editPlanId) : null) ?? all[0] ?? null;
     if (!saved) return;
     setAmount(saved.amount);
     setSelectedFund(saved.fund);
@@ -770,6 +806,7 @@ function MethodForm({
     setSelectedBank(saved.bank);
     const parsedDate = new Date(`${saved.startDate}T00:00:00`);
     if (!Number.isNaN(parsedDate.getTime())) setRecurringStartDate(parsedDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRecurringMethod]);
 
   const title =
@@ -863,6 +900,7 @@ function MethodForm({
           ? recurringStartDate.toISOString().slice(0, 10)
           : undefined,
         frequency: isRecurringMethod ? recurringFrequency : undefined,
+        edit: isRecurringMethod ? editPlanId : undefined,
       },
     });
   };
