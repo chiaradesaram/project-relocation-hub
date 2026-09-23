@@ -53,7 +53,7 @@ type InvestMethod =
 export const Route = createFileRoute("/invest")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { product?: string; method?: InvestMethod; mode?: "setup" } => ({
+  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
@@ -66,6 +66,7 @@ export const Route = createFileRoute("/invest")({
         ? (search.method as InvestMethod)
         : undefined,
     mode: search.mode === "setup" ? "setup" : undefined,
+    edit: typeof search.edit === "string" ? search.edit : undefined,
   }),
   head: () => ({
     meta: [
@@ -85,9 +86,9 @@ import { ViewRatesLink } from "@/components/ViewRates";
 import { RadioDot } from "@/components/RadioDot";
 import { Button } from "@/components/ui/button";
 import {
-  RECURRING_INVESTMENT_KEY,
   type RecurringInvestmentPlan,
-  readRecurringInvestment,
+  readRecurringInvestments,
+  writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
