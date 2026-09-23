@@ -23,6 +23,10 @@ import {
   CheckCircle2,
   Plus,
   Split,
+  CalendarClock,
+  PauseCircle,
+  PlayCircle,
+  Trash2,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
@@ -49,7 +53,7 @@ type InvestMethod =
 export const Route = createFileRoute("/invest")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { product?: string; method?: InvestMethod } => ({
+  ): { product?: string; method?: InvestMethod; mode?: "setup" } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
@@ -61,6 +65,17 @@ export const Route = createFileRoute("/invest")({
       search.method === "recurring"
         ? (search.method as InvestMethod)
         : undefined,
+    mode: search.mode === "setup" ? "setup" : undefined,
+  }),
+  head: () => ({
+    meta: [
+      { title: "Invest — CAL" },
+      { name: "description", content: "Invest, transfer funds, and manage recurring investments with CAL." },
+      { property: "og:title", content: "Invest — CAL" },
+      { property: "og:description", content: "Invest, transfer funds, and manage recurring investments with CAL." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
   }),
   component: Invest,
 });
@@ -68,6 +83,12 @@ export const Route = createFileRoute("/invest")({
 import { isPopularFund } from "@/lib/fundMeta";
 import { ViewRatesLink } from "@/components/ViewRates";
 import { RadioDot } from "@/components/RadioDot";
+import { Button } from "@/components/ui/button";
+import {
+  RECURRING_INVESTMENT_KEY,
+  type RecurringInvestmentPlan,
+  readRecurringInvestment,
+} from "@/lib/recurringInvestment";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
 import deutscheLogo from "@/assets/banks/deutsche.png";
@@ -505,10 +526,194 @@ function Invest() {
   }
 
   if (search.method === "default") return <DefaultFundForm />;
+  if (search.method === "recurring" && search.mode !== "setup") {
+    return <RecurringInvestments />;
+  }
   if (isEquities) return <EquitiesForm method={search.method} />;
   if (search.method === "payin" || search.method === "utflip")
     return <EquitiesForm method={search.method} />;
   return <MethodForm method={search.method} />;
+}
+
+function RecurringInvestments() {
+  const navigate = useNavigate();
+  const [plan, setPlan] = useState<RecurringInvestmentPlan | null>(null);
+  const [manageOpen, setManageOpen] = useState(false);
+  const [savedOpen, setSavedOpen] = useState(false);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    setPlan(readRecurringInvestment());
+    setLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (localStorage.getItem("recurringInvestmentSaved") !== "true") return;
+    localStorage.removeItem("recurringInvestmentSaved");
+    setSavedOpen(true);
+  }, []);
+
+  const updateActive = (active: boolean) => {
+    if (!plan) return;
+    const next = { ...plan, active };
+    localStorage.setItem(RECURRING_INVESTMENT_KEY, JSON.stringify(next));
+    setPlan(next);
+    setManageOpen(false);
+    window.setTimeout(() => setSavedOpen(true), 180);
+  };
+
+  const removePlan = () => {
+    localStorage.removeItem(RECURRING_INVESTMENT_KEY);
+    setPlan(null);
+    setManageOpen(false);
+  };
+
+  const startSetup = () =>
+    navigate({
+      to: "/invest",
+      search: { product: "unit-trust", method: "recurring", mode: "setup" },
+    });
+
+  const formattedDate = plan
+    ? new Date(`${plan.startDate}T00:00:00`).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+
+  return (
+    <MobileLayout>
+      <PageHeader title="Recurring Investments" showBack helpTopic="invest" />
+      {!loaded ? null : !plan ? (
+        <div className="px-6 pt-20 text-center">
+          <div
+            className="mx-auto flex h-16 w-16 items-center justify-center rounded-full"
+            style={{ background: "color-mix(in oklch, var(--pill) 18%, transparent)" }}
+          >
+            <CalendarClock className="h-7 w-7 text-pill" />
+          </div>
+          <h2 className="mt-5 text-lg font-semibold text-foreground">No recurring investments yet</h2>
+          <p className="mx-auto mt-2 max-w-[290px] text-[13px] leading-relaxed text-muted-foreground">
+            Set an amount and date, and we’ll invest it automatically each month.
+          </p>
+          <Button
+            type="button"
+            onClick={startSetup}
+            className="mt-7 h-12 rounded-full bg-pill px-6 text-[14px] font-semibold text-pill-foreground hover:bg-pill/90"
+          >
+            <Plus className="h-4 w-4" />
+            Add recurring investment
+          </Button>
+        </div>
+      ) : (
+        <div className="px-4 pt-4">
+          <p className="px-1 text-[12px] font-semibold uppercase tracking-wider text-muted-foreground">
+            Your plan
+          </p>
+          <button
+            type="button"
+            onClick={() => setManageOpen(true)}
+            className="mt-2 w-full rounded-2xl bg-card/60 p-4 text-left backdrop-blur-md transition hover:bg-muted/10"
+          >
+            <div className="flex items-start gap-3">
+              <div
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full"
+                style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+              >
+                <CalendarClock className="h-5 w-5 text-pill" />
+              </div>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center justify-between gap-2">
+                  <p className="text-base font-semibold text-foreground">
+                    LKR {Number(plan.amount).toLocaleString()}
+                  </p>
+                  <span className="rounded-full bg-pill/15 px-2 py-1 text-[11px] font-semibold text-pill">
+                    {plan.active ? "Active" : "Paused"}
+                  </span>
+                </div>
+                <p className="mt-1 truncate text-[13px] text-foreground">{plan.fund}</p>
+                <p className="mt-0.5 truncate text-[12px] text-muted-foreground">{plan.account}</p>
+                <p className="mt-3 text-[12px] text-muted-foreground">
+                  {plan.frequency} · Next investment {formattedDate}
+                </p>
+              </div>
+              <ChevronRight className="mt-1 h-4 w-4 shrink-0 text-muted-foreground" />
+            </div>
+          </button>
+        </div>
+      )}
+
+      <Sheet open={manageOpen} onOpenChange={setManageOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-8">
+          <SheetHeader className="pb-0">
+            <SheetTitle className="text-base text-foreground">Manage recurring investment</SheetTitle>
+          </SheetHeader>
+          {plan && (
+            <div className="mt-5">
+              <div className="rounded-2xl bg-background/40 px-4 py-1">
+                <ManageRow label="Amount" value={`LKR ${Number(plan.amount).toLocaleString()}`} />
+                <ManageRow label="Fund" value={plan.fund} />
+                <ManageRow label="Sub-account" value={plan.account} />
+                <ManageRow label="From" value={plan.bank} />
+                <ManageRow label="Frequency" value={plan.frequency} />
+                <ManageRow label="Next investment" value={formattedDate} last />
+              </div>
+              <Button
+                type="button"
+                onClick={() => updateActive(!plan.active)}
+                className="mt-4 h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90"
+              >
+                {plan.active ? <PauseCircle /> : <PlayCircle />}
+                {plan.active ? "Pause investment" : "Resume investment"}
+              </Button>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => {
+                  setManageOpen(false);
+                  startSetup();
+                }}
+                className="mt-2 h-12 w-full rounded-full"
+              >
+                Edit details
+              </Button>
+              <Button
+                type="button"
+                variant="ghost"
+                onClick={removePlan}
+                className="mt-2 h-11 w-full text-destructive hover:bg-destructive/10 hover:text-destructive"
+              >
+                <Trash2 />
+                Remove recurring investment
+              </Button>
+            </div>
+          )}
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={savedOpen} onOpenChange={setSavedOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-2">
+          <SavedConfirmation
+            summary={
+              plan?.active
+                ? "Your recurring investment is active"
+                : "Your recurring investment is paused"
+            }
+          />
+        </SheetContent>
+      </Sheet>
+    </MobileLayout>
+  );
+}
+
+function ManageRow({ label, value, last }: { label: string; value: string; last?: boolean }) {
+  return (
+    <div className={`flex items-start justify-between gap-4 py-3 ${last ? "" : "border-b border-border/20"}`}>
+      <span className="text-[12px] text-muted-foreground">{label}</span>
+      <span className="max-w-[62%] text-right text-[12px] font-medium text-foreground">{value}</span>
+    </div>
+  );
 }
 
 type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
@@ -545,6 +750,20 @@ function MethodForm({
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
   const isRecurringMethod = method === "recurring";
   const [recurring, setRecurring] = useState(isRecurringMethod);
+  const [recurringStartDate, setRecurringStartDate] = useState(new Date());
+  const recurringFrequency = "Monthly";
+
+  useEffect(() => {
+    if (!isRecurringMethod) return;
+    const saved = readRecurringInvestment();
+    if (!saved) return;
+    setAmount(saved.amount);
+    setSelectedFund(saved.fund);
+    setSelectedAccount(saved.account);
+    setSelectedBank(saved.bank);
+    const parsedDate = new Date(`${saved.startDate}T00:00:00`);
+    if (!Number.isNaN(parsedDate.getTime())) setRecurringStartDate(parsedDate);
+  }, [isRecurringMethod]);
 
   const title =
     method === "instant"
@@ -633,6 +852,10 @@ function MethodForm({
             : selectedPayTo,
         fromBank: isBank ? selectedBank : undefined,
         repeats: String(Math.max(1, splits.length)),
+        startDate: isRecurringMethod
+          ? recurringStartDate.toISOString().slice(0, 10)
+          : undefined,
+        frequency: isRecurringMethod ? recurringFrequency : undefined,
       },
     });
   };
@@ -847,7 +1070,13 @@ function MethodForm({
           <div className="mx-4 mt-4">
             <RecurringToggle value={recurring} onChange={setRecurring} />
           </div>
-          {recurring && <RecurringOptions />}
+          {recurring && (
+            <RecurringOptions
+              startDate={recurringStartDate}
+              onStartDateChange={setRecurringStartDate}
+              frequency={recurringFrequency}
+            />
+          )}
         </>
       )}
 
@@ -1340,10 +1569,16 @@ function DateRow({
  * Lets the user pick a start date (calendar sheet) and a frequency
  * (bottom-sheet picker, Monthly default).
  */
-function RecurringOptions() {
-  const [startDate, setStartDate] = useState(new Date());
+function RecurringOptions({
+  startDate,
+  onStartDateChange,
+  frequency,
+}: {
+  startDate: Date;
+  onStartDateChange: (date: Date) => void;
+  frequency: string;
+}) {
   const [dateOpen, setDateOpen] = useState(false);
-  const [frequency, setFrequency] = useState("Monthly");
   const [freqOpen, setFreqOpen] = useState(false);
 
   return (
@@ -1386,7 +1621,7 @@ function RecurringOptions() {
               mode="single"
               selected={startDate}
               onSelect={(d) => {
-                if (d) setStartDate(d);
+                if (d) onStartDateChange(d);
                 setDateOpen(false);
               }}
               className="p-3 pointer-events-auto"
@@ -1419,7 +1654,6 @@ function RecurringOptions() {
               <button
                 key={opt}
                 onClick={() => {
-                  setFrequency(opt);
                   setFreqOpen(false);
                 }}
                 className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
@@ -1476,6 +1710,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const [payTo, setPayTo] = useState("CAL Securities Account");
   const [proofName, setProofName] = useState<string | null>(null);
   const [recurring, setRecurring] = useState(false);
+  const [recurringStartDate, setRecurringStartDate] = useState(new Date());
   const [sourceFund, setSourceFund] = useState(equityFundSources[0]!.name);
   const [sourceSub, setSourceSub] = useState(
     equityFundSubAccounts[equityFundSources[0]!.name]![0]!.name,
@@ -1722,7 +1957,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           <div className="mx-4 mt-4">
             <RecurringToggle value={recurring} onChange={setRecurring} />
           </div>
-          {recurring && <RecurringOptions />}
+          {recurring && (
+            <RecurringOptions
+              startDate={recurringStartDate}
+              onStartDateChange={setRecurringStartDate}
+              frequency="Monthly"
+            />
+          )}
         </>
       )}
 

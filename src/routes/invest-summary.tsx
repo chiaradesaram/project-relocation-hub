@@ -4,6 +4,11 @@ import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Info, CheckCircle2, Lightbulb } from "lucide-react";
 import { directInvestSplits } from "./invest";
+import {
+  RECURRING_INVESTMENT_KEY,
+  RECURRING_INVESTMENT_SAVED_KEY,
+} from "@/lib/recurringInvestment";
+import { Button } from "@/components/ui/button";
 
 type SummarySearch = {
   method?: "instant" | "bank" | "flip" | "recurring";
@@ -13,6 +18,8 @@ type SummarySearch = {
   bank?: string;
   fromBank?: string;
   repeats?: string;
+  startDate?: string;
+  frequency?: string;
 };
 
 export const Route = createFileRoute("/invest-summary")({
@@ -24,13 +31,25 @@ export const Route = createFileRoute("/invest-summary")({
     bank: (search.bank as string) ?? "",
     fromBank: (search.fromBank as string) ?? "",
     repeats: (search.repeats as string) ?? "1",
+    startDate: (search.startDate as string) ?? "",
+    frequency: (search.frequency as string) ?? "Monthly",
+  }),
+  head: () => ({
+    meta: [
+      { title: "Review Investment — CAL" },
+      { name: "description", content: "Review and confirm your CAL investment." },
+      { property: "og:title", content: "Review Investment — CAL" },
+      { property: "og:description", content: "Review and confirm your CAL investment." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
   }),
   component: InvestSummary,
 });
 
 function InvestSummary() {
   const navigate = useNavigate();
-  const { method, amount, fund, account, bank, fromBank, repeats } = Route.useSearch();
+  const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
@@ -49,6 +68,37 @@ function InvestSummary() {
   const reflectedDate = fmtDate(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
+  const recurringDate = startDate
+    ? new Date(`${startDate}T00:00:00`).toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric",
+      })
+    : "";
+
+  const confirmInvestment = () => {
+    if (isRecurring) {
+      localStorage.setItem(
+        RECURRING_INVESTMENT_KEY,
+        JSON.stringify({
+          amount,
+          fund,
+          account,
+          bank,
+          startDate,
+          frequency,
+          active: true,
+        }),
+      );
+      localStorage.setItem(RECURRING_INVESTMENT_SAVED_KEY, "true");
+      navigate({
+        to: "/invest",
+        search: { product: "unit-trust", method: "recurring" },
+      });
+      return;
+    }
+    navigate({ to: "/" });
+  };
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
@@ -111,6 +161,12 @@ function InvestSummary() {
             </div>
           )}
           <Row label="Transaction date" value={txDate} />
+          {isRecurring && (
+            <>
+              <Row label="Start date" value={recurringDate} />
+              <Row label="Frequency" value={frequency || "Monthly"} />
+            </>
+          )}
           {!isInstant && (
             <>
               <RowWithInfo
@@ -180,8 +236,8 @@ function InvestSummary() {
 
       {/* Confirm */}
       <div className="mx-4 mt-4 mb-6">
-        <button
-          onClick={() => navigate({ to: "/" })}
+        <Button
+          onClick={confirmInvestment}
           className="w-full py-4 rounded-full text-[15px] font-semibold flex items-center justify-center gap-2 transition"
           style={{
             background: "var(--pill)",
@@ -189,8 +245,8 @@ function InvestSummary() {
           }}
         >
           <CheckCircle2 className="w-4 h-4" />
-          Confirm & Invest
-        </button>
+          {isRecurring ? "Confirm recurring investment" : "Confirm & Invest"}
+        </Button>
       </div>
     </MobileLayout>
   );
