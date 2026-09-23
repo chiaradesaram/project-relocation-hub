@@ -139,6 +139,51 @@ function InvestSummary() {
         </div>
       </div>
 
+      {/* Quick check before you submit — bank transfer */}
+      {method === "bank" && (
+        <div
+          className="mx-4 mt-4 rounded-2xl px-4 py-4"
+          style={{
+            background: "color-mix(in oklch, var(--card) 78%, transparent)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          <div className="flex items-center gap-2.5">
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background: "color-mix(in oklch, var(--pill) 18%, transparent)",
+              }}
+            >
+              <Info className="w-4 h-4 text-pill" />
+            </div>
+            <p className="text-sm font-semibold text-foreground">
+              Quick check before you submit
+            </p>
+          </div>
+          <ul className="mt-3 space-y-2">
+            {[
+              "Funds have been transferred to Deutsche Bank",
+              `Funds were transferred from ${fromBankName} account ending ${fromBankLast4}`,
+              "You have not used a wallet account",
+            ].map((label) => (
+              <li key={label} className="flex items-start gap-2.5">
+                <span
+                  className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ background: "var(--pill)" }}
+                />
+                <span className="text-[13px] leading-snug text-foreground">
+                  {label}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-[12px] font-medium text-pill">
+            All done? You're ready to submit.
+          </p>
+        </div>
+      )}
+
       {/* Confirm */}
       <div className="mx-4 mt-4 mb-6">
         <button
