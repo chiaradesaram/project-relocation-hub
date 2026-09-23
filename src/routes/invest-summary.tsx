@@ -30,7 +30,7 @@ export const Route = createFileRoute("/invest-summary")({
 
 function InvestSummary() {
   const navigate = useNavigate();
-  const { method, amount, fund, account, bank, repeats } = Route.useSearch();
+  const { method, amount, fund, account, bank, fromBank, repeats } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
