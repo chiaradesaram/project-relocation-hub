@@ -591,14 +591,6 @@ function MethodForm({
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
   const needsProof = isBank && !isDeutsche;
 
-  // ---- Quick check before you submit (bank transfer) ----
-  const [bankName, bankAcctNo] = selectedBank.split("·").map((p) => p.trim());
-  const bankChecks = [
-    "Funds have been transferred to Deutsche Bank",
-    `Funds were transferred from ${bankName || "your bank"} account ending ${bankAcctNo?.split(" ").pop() ?? ""}`,
-    "You have not used a wallet account",
-  ];
-
   // ---- Fund Flip balances ----
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
   const fmtLkr = (n: number) =>
@@ -640,6 +632,7 @@ function MethodForm({
           : isInstant
             ? selectedBank
             : selectedPayTo,
+        fromBank: isBank ? selectedBank : undefined,
         repeats: String(Math.max(1, splits.length)),
       },
     });
@@ -946,44 +939,6 @@ function MethodForm({
             </div>
             <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
           </button>
-        </div>
-      )}
-
-      {/* Quick check before you submit — bank transfer */}
-      {isBank && (
-        <div className="mx-4 mt-4 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-              style={{
-                background: "color-mix(in oklch, var(--pill) 18%, transparent)",
-              }}
-            >
-              <Info className="w-4 h-4 text-pill" />
-            </div>
-            <p className="text-sm font-semibold text-foreground">
-              Quick check before you submit
-            </p>
-          </div>
-          <ul className="mt-3 space-y-2">
-            {bankChecks.map((label) => (
-              <li
-                key={label}
-                className="flex items-start gap-2.5"
-              >
-                <span
-                  className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0"
-                  style={{ background: "var(--pill)" }}
-                />
-                <span className="text-[13px] leading-snug text-foreground">
-                  {label}
-                </span>
-              </li>
-            ))}
-          </ul>
-          <p className="mt-3 text-[12px] font-medium text-pill">
-            All done? You're ready to submit.
-          </p>
         </div>
       )}
 
