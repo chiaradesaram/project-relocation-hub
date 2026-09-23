@@ -82,12 +82,12 @@ function InvestSummary() {
     if (isRecurring) {
       const plans = readRecurringInvestments();
       const next: Omit<RecurringInvestmentPlan, "id"> = {
-        amount,
-        fund,
-        account,
-        bank,
-        startDate,
-        frequency,
+        amount: amount ?? "0",
+        fund: fund ?? "",
+        account: account ?? "",
+        bank: bank ?? "",
+        startDate: startDate ?? "",
+        frequency: frequency ?? "Monthly",
         active: true,
       };
       const idx = edit ? plans.findIndex((p) => p.id === edit) : -1;
