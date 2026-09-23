@@ -490,12 +490,7 @@ function Invest() {
                                 Popular
                               </span>
                             )}
-                          {selected && (
-                            <Check
-                              className="w-4 h-4 shrink-0"
-                              style={{ color: "var(--pill)" }}
-                            />
-                          )}
+                          <RadioDot selected={selected} />
                         </button>
                       );
                     },
@@ -2193,9 +2188,7 @@ function DefaultFundForm() {
                       </span>
                     )}
                   </span>
-                  {isSelected && (
-                    <Check className="h-4 w-4" style={{ color: "var(--pill)" }} />
-                  )}
+                  <RadioDot selected={isSelected} />
                 </button>
               );
             })}
