@@ -5,8 +5,11 @@ import PageHeader from "@/components/PageHeader";
 import { Info, CheckCircle2, Lightbulb } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
-  RECURRING_INVESTMENT_KEY,
   RECURRING_INVESTMENT_SAVED_KEY,
+  type RecurringInvestmentPlan,
+  newRecurringInvestmentId,
+  readRecurringInvestments,
+  writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
 import { Button } from "@/components/ui/button";
 
@@ -19,7 +22,8 @@ type SummarySearch = {
   fromBank?: string;
   repeats?: string;
   startDate?: string;
-  frequency?: string;
+   frequency?: string;
+   edit?: string;
 };
 
 export const Route = createFileRoute("/invest-summary")({
@@ -33,6 +37,7 @@ export const Route = createFileRoute("/invest-summary")({
     repeats: (search.repeats as string) ?? "1",
     startDate: (search.startDate as string) ?? "",
     frequency: (search.frequency as string) ?? "Monthly",
+    edit: (search.edit as string) ?? "",
   }),
   head: () => ({
     meta: [
@@ -49,7 +54,7 @@ export const Route = createFileRoute("/invest-summary")({
 
 function InvestSummary() {
   const navigate = useNavigate();
-  const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency } = Route.useSearch();
+  const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
 
   const isInstant = method === "instant";
@@ -75,18 +80,20 @@ function InvestSummary() {
 
   const confirmInvestment = () => {
     if (isRecurring) {
-      localStorage.setItem(
-        RECURRING_INVESTMENT_KEY,
-        JSON.stringify({
-          amount,
-          fund,
-          account,
-          bank,
-          startDate,
-          frequency,
-          active: true,
-        }),
-      );
+      const plans = readRecurringInvestments();
+      const next: Omit<RecurringInvestmentPlan, "id"> = {
+        amount,
+        fund,
+        account,
+        bank,
+        startDate,
+        frequency,
+        active: true,
+      };
+      const idx = edit ? plans.findIndex((p) => p.id === edit) : -1;
+      if (idx >= 0) plans[idx] = { ...plans[idx]!, ...next };
+      else plans.push({ ...next, id: newRecurringInvestmentId() });
+      writeRecurringInvestments(plans);
       localStorage.setItem(RECURRING_INVESTMENT_SAVED_KEY, "true");
       navigate({
         to: "/invest",

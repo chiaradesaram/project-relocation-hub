@@ -793,9 +793,12 @@ function MethodForm({
   const [recurringStartDate, setRecurringStartDate] = useState(new Date());
   const recurringFrequency = "Monthly";
 
+  const { edit: editPlanId } = Route.useSearch();
+
   useEffect(() => {
     if (!isRecurringMethod) return;
-    const saved = readRecurringInvestment();
+    const all = readRecurringInvestments();
+    const saved = (editPlanId ? all.find((p) => p.id === editPlanId) : null) ?? all[0] ?? null;
     if (!saved) return;
     setAmount(saved.amount);
     setSelectedFund(saved.fund);
@@ -803,6 +806,7 @@ function MethodForm({
     setSelectedBank(saved.bank);
     const parsedDate = new Date(`${saved.startDate}T00:00:00`);
     if (!Number.isNaN(parsedDate.getTime())) setRecurringStartDate(parsedDate);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRecurringMethod]);
 
   const title =
@@ -896,6 +900,7 @@ function MethodForm({
           ? recurringStartDate.toISOString().slice(0, 10)
           : undefined,
         frequency: isRecurringMethod ? recurringFrequency : undefined,
+        edit: isRecurringMethod ? editPlanId : undefined,
       },
     });
   };
