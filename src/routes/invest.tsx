@@ -23,6 +23,7 @@ import {
   CheckCircle2,
   Plus,
   Split,
+  Info,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
@@ -597,10 +598,6 @@ function MethodForm({
     `Funds were transferred from ${bankName || "your bank"} account ending ${bankAcctNo?.split(" ").pop() ?? ""}`,
     "You have not used a wallet account",
   ];
-  const [bankChecksState, setBankChecksState] = useState<
-    Record<string, boolean>
-  >({});
-  const allBankChecked = bankChecks.every((l) => bankChecksState[l]);
 
   // ---- Fund Flip balances ----
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
@@ -626,7 +623,7 @@ function MethodForm({
     if (isFlip) return !isOverBalance && !isSameAccount;
     if (!selectedFund || !selectedAccount) return false;
     if (isInstant) return !!selectedBank;
-    if (isBank) return !!selectedBank && !!selectedPayTo && allBankChecked && (!needsProof || !!proofName);
+    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
     return false;
   })();
 
@@ -952,51 +949,40 @@ function MethodForm({
         </div>
       )}
 
-      {/* Quick check before you submit — bank transfer checklist */}
+      {/* Quick check before you submit — bank transfer */}
       {isBank && (
         <div className="mx-4 mt-4 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
-          <p className="text-sm font-semibold text-foreground">
-            Quick check before you submit
-          </p>
-          <div className="mt-3 space-y-1">
-            {bankChecks.map((label) => {
-              const checked = bankChecksState[label];
-              return (
-                <button
-                  key={label}
-                  type="button"
-                  onClick={() =>
-                    setBankChecksState((s) => ({ ...s, [label]: !s[label] }))
-                  }
-                  className="flex w-full items-center gap-3 rounded-xl px-1 py-2 text-left transition hover:bg-muted/20"
-                >
-                  <span
-                    className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition"
-                    style={{
-                      background: checked
-                        ? "var(--pill)"
-                        : "transparent",
-                      border: checked ? "none" : "1.5px solid var(--border)",
-                    }}
-                  >
-                    {checked && (
-                      <Check className="w-3.5 h-3.5 text-background" strokeWidth={3} />
-                    )}
-                  </span>
-                  <span
-                    className={`text-[13px] leading-snug transition ${checked ? "text-foreground" : "text-foreground/80"}`}
-                  >
-                    {label}
-                  </span>
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-2.5">
+            <div
+              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+              style={{
+                background: "color-mix(in oklch, var(--pill) 18%, transparent)",
+              }}
+            >
+              <Info className="w-4 h-4 text-pill" />
+            </div>
+            <p className="text-sm font-semibold text-foreground">
+              Quick check before you submit
+            </p>
           </div>
-          <p
-            className="mt-2.5 text-[12px] font-medium"
-            style={{ color: allBankChecked ? "var(--success)" : "var(--foreground)" }}
-          >
-            All checked? You're ready to submit.
+          <ul className="mt-3 space-y-2">
+            {bankChecks.map((label) => (
+              <li
+                key={label}
+                className="flex items-start gap-2.5"
+              >
+                <span
+                  className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0"
+                  style={{ background: "var(--pill)" }}
+                />
+                <span className="text-[13px] leading-snug text-foreground">
+                  {label}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-[12px] font-medium text-pill">
+            All done? You're ready to submit.
           </p>
         </div>
       )}
