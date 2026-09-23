@@ -597,10 +597,6 @@ function MethodForm({
     `Funds were transferred from ${bankName || "your bank"} account ending ${bankAcctNo?.split(" ").pop() ?? ""}`,
     "You have not used a wallet account",
   ];
-  const [bankChecksState, setBankChecksState] = useState<
-    Record<string, boolean>
-  >({});
-  const allBankChecked = bankChecks.every((l) => bankChecksState[l]);
 
   // ---- Fund Flip balances ----
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
@@ -626,7 +622,7 @@ function MethodForm({
     if (isFlip) return !isOverBalance && !isSameAccount;
     if (!selectedFund || !selectedAccount) return false;
     if (isInstant) return !!selectedBank;
-    if (isBank) return !!selectedBank && !!selectedPayTo && allBankChecked && (!needsProof || !!proofName);
+    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
     return false;
   })();
 
