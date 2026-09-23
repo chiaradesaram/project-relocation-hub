@@ -16,6 +16,7 @@ import {
   PauseCircle,
   PenLine,
 } from "lucide-react";
+import { RadioDot } from "@/components/RadioDot";
 import { isPopularFund } from "@/lib/fundMeta";
 import {
   SETTLEMENT_FUND_KEY,
