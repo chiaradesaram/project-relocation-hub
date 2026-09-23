@@ -167,25 +167,6 @@ function InvestSummary() {
               <Row label="Frequency" value={frequency || "Monthly"} />
             </>
           )}
-          {!isInstant && (
-            <>
-              <RowWithInfo
-                label="Creation date"
-                value={creationDate}
-                open={openInfo === "creation"}
-                onToggle={() => setOpenInfo(openInfo === "creation" ? null : "creation")}
-                infoText="The date your investment becomes active."
-              />
-              <RowWithInfo
-                label="Reflected on Portal by"
-                value={reflectedDate}
-                open={openInfo === "reflected"}
-                onToggle={() => setOpenInfo(openInfo === "reflected" ? null : "reflected")}
-                infoText="Your investment will appear in your CAL Online portfolio and mobile app by this date, once all processing is complete."
-                accent
-              />
-            </>
-          )}
         </div>
       </div>
 
