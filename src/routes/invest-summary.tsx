@@ -237,3 +237,5 @@ function Row({ label, value }: { label: string; value: string }) {
       <span className="text-[12px] font-medium text-foreground text-right">{value}</span>
     </div>
   );
+}
+
