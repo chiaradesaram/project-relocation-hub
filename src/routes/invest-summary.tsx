@@ -148,7 +148,7 @@ function InvestSummary() {
         <div
           className="mx-4 mt-4 rounded-2xl px-4 py-4"
           style={{
-            background: "color-mix(in oklch, var(--card) 78%, transparent)",
+            background: "color-mix(in oklch, var(--card) 94%, transparent)",
             backdropFilter: "blur(12px)",
           }}
         >
@@ -243,10 +243,7 @@ function RowWithInfo({
             <Info className="w-3 h-3" style={accent ? { color: accentColor } : undefined} />
           </button>
         </span>
-        <span
-          className="text-[12px] font-medium text-right"
-          style={accent ? { color: accentColor } : undefined}
-        >
+        <span className="text-[12px] font-medium text-foreground text-right">
           {value}
         </span>
       </div>
