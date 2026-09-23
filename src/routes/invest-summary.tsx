@@ -50,6 +50,10 @@ function InvestSummary() {
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
 
+  // Quick check (bank transfer): derive the paying-from bank from the search param
+  const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
+  const fromBankLast4 = fromBankAcctNo?.split(" ").pop() ?? "";
+
   return (
     <MobileLayout>
       <PageHeader title="Review & Confirm" showBack />
