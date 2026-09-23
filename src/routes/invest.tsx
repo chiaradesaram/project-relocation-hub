@@ -940,36 +940,56 @@ function MethodForm({
         </div>
       )}
 
-      {/* Bank transfer warning */}
+      {/* Quick check before you submit — bank transfer checklist */}
       {isBank && (
-        <div className="mx-4 mt-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden flex">
-          <div
-            className="w-1 shrink-0"
-            style={{ background: "oklch(0.77 0.17 70)" }}
-          />
-          <div className="flex items-start gap-3 px-3 py-3.5 flex-1">
-            <div
-              className="w-9 h-9 rounded-full flex items-center justify-center shrink-0"
-              style={{
-                background:
-                  "color-mix(in oklch, oklch(0.77 0.17 70) 25%, transparent)",
-              }}
-            >
-              <AlertTriangle
-                className="w-4 h-4"
-                style={{ color: "oklch(0.85 0.15 70)" }}
-              />
-            </div>
-            <div className="pt-0.5">
-              <p className="text-[13px] font-semibold text-foreground">
-                Transfer funds before submitting
-              </p>
-              <p className="text-[12px] text-muted-foreground mt-0.5 leading-snug">
-                Please make sure your funds have been sent to the CAL account
-                before raising this request.
-              </p>
-            </div>
+        <div className="mx-4 mt-4 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
+          <p className="text-sm font-semibold text-foreground">
+            Quick check before you submit
+          </p>
+          <div className="mt-3 space-y-1">
+            {bankChecks.map((label) => {
+              const checked = bankChecksState[label];
+              return (
+                <button
+                  key={label}
+                  type="button"
+                  onClick={() =>
+                    setBankChecksState((s) => ({ ...s, [label]: !s[label] }))
+                  }
+                  className="flex w-full items-center gap-3 rounded-xl px-1 py-2 text-left transition hover:bg-muted/20"
+                >
+                  <span
+                    className="w-5 h-5 rounded-md flex items-center justify-center shrink-0 transition"
+                    style={{
+                      background: checked
+                        ? "var(--pill)"
+                        : "transparent",
+                      border: checked ? "none" : "1.5px solid var(--border)",
+                    }}
+                  >
+                    {checked && (
+                      <Check className="w-3.5 h-3.5 text-background" strokeWidth={3} />
+                    )}
+                  </span>
+                  <span
+                    className={`text-[13px] leading-snug transition ${checked ? "text-foreground" : "text-foreground/80"}`}
+                  >
+                    {label}
+                  </span>
+                </button>
+              );
+            })}
           </div>
+          <p
+            className="mt-2.5 text-[12px] font-medium"
+            style={{
+              color: allBankChecked ? "var(--success)" : "var(--foreground)",
+            }}
+          >
+            {allBankChecked
+              ? "All checked? You're ready to submit."
+              : "All checked? You're ready to submit."}
+          </p>
         </div>
       )}
 
