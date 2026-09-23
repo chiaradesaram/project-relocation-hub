@@ -994,13 +994,9 @@ function MethodForm({
           </div>
           <p
             className="mt-2.5 text-[12px] font-medium"
-            style={{
-              color: allBankChecked ? "var(--success)" : "var(--foreground)",
-            }}
+            style={{ color: allBankChecked ? "var(--success)" : "var(--foreground)" }}
           >
-            {allBankChecked
-              ? "All checked? You're ready to submit."
-              : "All checked? You're ready to submit."}
+            All checked? You're ready to submit.
           </p>
         </div>
       )}
