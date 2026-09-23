@@ -67,6 +67,7 @@ export const Route = createFileRoute("/invest")({
 
 import { isPopularFund } from "@/lib/fundMeta";
 import { ViewRatesLink } from "@/components/ViewRates";
+import { RadioDot } from "@/components/RadioDot";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
 import deutscheLogo from "@/assets/banks/deutsche.png";
