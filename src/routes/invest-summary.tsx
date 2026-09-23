@@ -51,7 +51,6 @@ function InvestSummary() {
   const navigate = useNavigate();
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
-  const [openInfo, setOpenInfo] = useState<"creation" | "reflected" | null>(null);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
@@ -64,8 +63,6 @@ function InvestSummary() {
     d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
   const today = new Date();
   const txDate = fmtDate(today);
-  const creationDate = fmtDate(new Date(today.getTime() + 2 * 24 * 60 * 60 * 1000));
-  const reflectedDate = fmtDate(new Date(today.getTime() + 4 * 24 * 60 * 60 * 1000));
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
   const recurringDate = startDate
@@ -240,40 +237,3 @@ function Row({ label, value }: { label: string; value: string }) {
       <span className="text-[12px] font-medium text-foreground text-right">{value}</span>
     </div>
   );
-}
-
-function RowWithInfo({
-  label,
-  value,
-  open,
-  onToggle,
-  infoText,
-  accent,
-}: {
-  label: string;
-  value: string;
-  open: boolean;
-  onToggle: () => void;
-  infoText: string;
-  accent?: boolean;
-}) {
-  const accentColor = accent ? "var(--portfolio-blue)" : undefined;
-  return (
-    <div>
-      <div className="flex items-center justify-between gap-2">
-        <span className="text-[12px] flex items-center gap-1">
-          <span className="text-foreground">{label}</span>
-          <button type="button" onClick={onToggle} aria-label={`About ${label}`}>
-            <Info className="w-3 h-3" style={accent ? { color: accentColor } : undefined} />
-          </button>
-        </span>
-        <span className="text-[12px] font-medium text-foreground text-right">
-          {value}
-        </span>
-      </div>
-      {open && (
-        <p className="mt-1 text-[12px] text-muted-foreground/80 leading-relaxed">{infoText}</p>
-      )}
-    </div>
-  );
-}
