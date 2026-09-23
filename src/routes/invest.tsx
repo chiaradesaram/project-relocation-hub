@@ -626,7 +626,7 @@ function MethodForm({
     if (isFlip) return !isOverBalance && !isSameAccount;
     if (!selectedFund || !selectedAccount) return false;
     if (isInstant) return !!selectedBank;
-    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
+    if (isBank) return !!selectedBank && !!selectedPayTo && allBankChecked && (!needsProof || !!proofName);
     return false;
   })();
 
