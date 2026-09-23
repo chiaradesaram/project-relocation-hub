@@ -11,12 +11,12 @@ import {
 } from "@/components/ui/sheet";
 import {
   ArrowLeftRight,
-  Check,
   CheckCircle2,
   ChevronRight,
   PauseCircle,
   PenLine,
 } from "lucide-react";
+import { RadioDot } from "@/components/RadioDot";
 import { isPopularFund } from "@/lib/fundMeta";
 import {
   SETTLEMENT_FUND_KEY,
@@ -234,12 +234,7 @@ function EquitySettlementRequest() {
                       Popular
                     </span>
                   )}
-                  {selected && (
-                    <Check
-                      className="w-4 h-4 shrink-0"
-                      style={{ color: "var(--pill)" }}
-                    />
-                  )}
+                  <RadioDot selected={selected} />
                 </button>
               );
             })}

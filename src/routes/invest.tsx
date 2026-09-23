@@ -67,6 +67,7 @@ export const Route = createFileRoute("/invest")({
 
 import { isPopularFund } from "@/lib/fundMeta";
 import { ViewRatesLink } from "@/components/ViewRates";
+import { RadioDot } from "@/components/RadioDot";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
 import commercialLogo from "@/assets/banks/commercial.png";
 import deutscheLogo from "@/assets/banks/deutsche.png";
@@ -85,26 +86,6 @@ const bankLogos: Record<string, string> = {
 const bankLogoFor = (opt: string) =>
   Object.entries(bankLogos).find(([name]) => opt.startsWith(name))?.[1];
 
-function RadioDot({ selected }: { selected: boolean }) {
-  return (
-    <span
-      className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition"
-      style={{
-        borderColor: selected ? "var(--pill)" : "var(--border)",
-        backgroundColor: selected
-          ? "color-mix(in oklch, var(--pill) 15%, transparent)"
-          : "transparent",
-      }}
-    >
-      {selected && (
-        <span
-          className="h-2.5 w-2.5 rounded-full"
-          style={{ backgroundColor: "var(--pill)" }}
-        />
-      )}
-    </span>
-  );
-}
 
 
 const funds = [
@@ -509,12 +490,7 @@ function Invest() {
                                 Popular
                               </span>
                             )}
-                          {selected && (
-                            <Check
-                              className="w-4 h-4 shrink-0"
-                              style={{ color: "var(--pill)" }}
-                            />
-                          )}
+                          <RadioDot selected={selected} />
                         </button>
                       );
                     },
@@ -1089,12 +1065,7 @@ function MethodForm({
                     {isBankPicker ? (
                       <RadioDot selected={isSelected} />
                     ) : (
-                      isSelected && (
-                        <Check
-                          className="w-4 h-4 shrink-0"
-                          style={{ color: "var(--pill)" }}
-                        />
-                      )
+                      <RadioDot selected={isSelected} />
                     )}
                   </button>
                 );
@@ -1490,12 +1461,7 @@ function RecurringOptions() {
                 }`}
               >
                 <span className="text-sm text-foreground">{opt}</span>
-                {frequency === opt && (
-                  <Check
-                    className="w-4 h-4 shrink-0"
-                    style={{ color: "var(--pill)" }}
-                  />
-                )}
+                <RadioDot selected={frequency === opt} />
               </button>
             ))}
             <p className="pt-1 text-[12px] text-muted-foreground leading-snug">
@@ -2026,13 +1992,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                       )}
                       <span className="text-sm text-foreground">{opt}</span>
                     </span>
-                    {picker === "bank" ? (
-                      <RadioDot selected={isSelected} />
-                    ) : (
-                      isSelected && (
-                        <Check className="w-4 h-4" style={{ color: "var(--pill)" }} />
-                      )
-                    )}
+                    <RadioDot selected={isSelected} />
                   </button>
                 );
               })
@@ -2228,9 +2188,7 @@ function DefaultFundForm() {
                       </span>
                     )}
                   </span>
-                  {isSelected && (
-                    <Check className="h-4 w-4" style={{ color: "var(--pill)" }} />
-                  )}
+                  <RadioDot selected={isSelected} />
                 </button>
               );
             })}
