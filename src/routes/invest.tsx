@@ -590,6 +590,18 @@ function MethodForm({
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
   const needsProof = isBank && !isDeutsche;
 
+  // ---- Quick check before you submit (bank transfer) ----
+  const [bankName, bankAcctNo] = selectedBank.split("·").map((p) => p.trim());
+  const bankChecks = [
+    "Funds have been transferred to Deutsche Bank",
+    `Funds were transferred from ${bankName || "your bank"} account ending ${bankAcctNo?.split(" ").pop() ?? ""}`,
+    "You have not used a wallet account",
+  ];
+  const [bankChecksState, setBankChecksState] = useState<
+    Record<string, boolean>
+  >({});
+  const allBankChecked = bankChecks.every((l) => bankChecksState[l]);
+
   // ---- Fund Flip balances ----
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
   const fmtLkr = (n: number) =>
