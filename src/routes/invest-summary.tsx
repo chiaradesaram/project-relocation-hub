@@ -224,11 +224,8 @@ function RowWithInfo({
   return (
     <div>
       <div className="flex items-center justify-between gap-2">
-        <span
-          className="text-[12px] flex items-center gap-1"
-          style={accent ? { color: accentColor } : undefined}
-        >
-          <span className={accent ? "" : "text-muted-foreground"}>{label}</span>
+        <span className="text-[12px] flex items-center gap-1">
+          <span className="text-foreground">{label}</span>
           <button type="button" onClick={onToggle} aria-label={`About ${label}`}>
             <Info className="w-3 h-3" style={accent ? { color: accentColor } : undefined} />
           </button>
