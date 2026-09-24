@@ -636,13 +636,7 @@ function Transactions() {
                     )}
                   </div>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
-                    {tx.product === "Equities" || tx.product === "Treasuries"
-                      ? product === "All"
-                        ? tx.product
-                        : null
-                      : product === "All"
-                        ? `${tx.product} · ${tx.subAccount}`
-                        : tx.subAccount}
+                    {product === "All" ? tx.product : null}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
                     {tx.kind === "Fund Flip" && <span>Fund flip ·</span>}
@@ -694,9 +688,6 @@ function Transactions() {
             <DrawerDescription>
               {openTx?.product === "Treasuries" ? `${openTx?.name} · ` : ""}
               {openTx?.product}
-              {openTx && openTx.product !== "Equities" && openTx.product !== "Treasuries"
-                ? ` · ${openTx.subAccount}`
-                : ""}
               {" · "}
               <span>{openTx?.positive ? "+" : "−"} {openTx?.value}</span>
             </DrawerDescription>
