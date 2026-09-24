@@ -22,6 +22,7 @@ import {
   BarChart3,
   CheckCircle2,
   Plus,
+  Copy,
   Split,
   CalendarClock,
   PauseCircle,
@@ -822,6 +823,7 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
+  const [accountCopied, setAccountCopied] = useState(false);
 
 
   const amountNum = parseFloat(amount || "0") || 0;
@@ -943,10 +945,19 @@ function MethodForm({
           <button
             type="button"
             onClick={() => setBankInfoOpen(true)}
-            className="text-[13px] font-medium"
+            className="inline-flex items-center gap-1.5 text-[13px] font-medium"
             style={{ color: "var(--pill)" }}
           >
-            Learn how bank transfers work
+            <span
+              className="w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0"
+              style={{
+                background:
+                  "color-mix(in oklch, var(--pill) 20%, transparent)",
+              }}
+            >
+              ?
+            </span>
+            Learn how it works
           </button>
           <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
             <SheetContent side="bottom" className="rounded-t-3xl p-0 pb-0">
@@ -959,10 +970,7 @@ function MethodForm({
                 className="w-full h-36 object-cover"
               />
               <div className="px-5 pt-4 pb-8">
-                <SheetHeader className="px-0 pt-0 pb-0">
-                  <SheetTitle>How bank transfers work</SheetTitle>
-                </SheetHeader>
-                <div className="mt-4">
+                <div>
                   <div className="flex items-start gap-3">
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
@@ -974,11 +982,44 @@ function MethodForm({
                     >
                       1
                     </div>
-                    <p className="text-[13px] text-foreground leading-snug pt-0.5">
-                      Transfer to CAL's Deutsche Bank account
-                    </p>
+                    <div className="min-w-0">
+                      <p className="text-[13px] font-semibold text-foreground leading-snug pt-0.5">
+                        Transfer to CAL's Deutsche Bank account
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard
+                            ?.writeText("0078 4521 0036")
+                            .catch(() => {});
+                          setAccountCopied(true);
+                          window.setTimeout(
+                            () => setAccountCopied(false),
+                            1500
+                          );
+                        }}
+                        className="mt-2 flex items-center gap-2 rounded-xl bg-card/60 px-3 py-2 text-left"
+                      >
+                        <span className="text-[12px] text-foreground/90 leading-snug">
+                          Account name: CAL Online (Pvt) Ltd
+                          <br />
+                          Account number: 0078 4521 0036
+                        </span>
+                        {accountCopied ? (
+                          <Check
+                            className="w-4 h-4 shrink-0"
+                            style={{ color: "var(--success)" }}
+                          />
+                        ) : (
+                          <Copy
+                            className="w-4 h-4 shrink-0"
+                            style={{ color: "var(--pill)" }}
+                          />
+                        )}
+                      </button>
+                    </div>
                   </div>
-                  <div className="flex items-start gap-3 mt-3">
+                  <div className="flex items-start gap-3 mt-4">
                     <div
                       className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
                       style={{
@@ -990,10 +1031,11 @@ function MethodForm({
                       2
                     </div>
                     <p className="text-[13px] text-foreground leading-snug pt-0.5">
-                      Raise a request here
+                      Come here to raise a request to tell us which fund you
+                      want it in.
                     </p>
                   </div>
-                  <p className="mt-3 pt-3 border-t border-white/5 text-[12px] text-foreground/90 leading-snug">
+                  <p className="mt-4 pt-3 border-t border-white/5 text-[12px] text-foreground/90 leading-snug">
                     Requests before 9 will be confirmed on the same working
                     day. After 9, they'll be confirmed the next working day.
                   </p>
