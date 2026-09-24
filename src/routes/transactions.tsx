@@ -959,21 +959,20 @@ function Transactions() {
 
 type LogItem = {
   label: string;
-  detail: string;
   amount: number;
   date: string;
   kind: "in" | "out" | "flip" | "recurring" | "dividend";
 };
 
 const logItems: LogItem[] = [
-  { label: "Investment", detail: "CAL Growth Fund · Personal", amount: 125000, date: "13 Apr 2026", kind: "in" },
-  { label: "Recurring Investment", detail: "CAL Income Fund · Personal", amount: 25000, date: "12 Apr 2026", kind: "recurring" },
-  { label: "Fund Flip", detail: "CAL Equity Fund → CAL Income Fund", amount: 40000, date: "12 Apr 2026", kind: "flip" },
-  { label: "Investment", detail: "Treasury Bill 91D", amount: 105000, date: "12 Apr 2026", kind: "in" },
-  { label: "Redemption", detail: "CAL Equity Fund · Personal", amount: -75000, date: "8 Apr 2026", kind: "out" },
-  { label: "Dividend", detail: "JKH.N0000", amount: 3200, date: "5 Apr 2026", kind: "dividend" },
-  { label: "Redemption", detail: "CAL Money Market Fund · Joint", amount: -30000, date: "2 Apr 2026", kind: "out" },
-  { label: "Recurring Investment", detail: "CAL Income Fund · Personal", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
+  { label: "Investment", amount: 125000, date: "13 Apr 2026", kind: "in" },
+  { label: "Recurring Investment", amount: 25000, date: "12 Apr 2026", kind: "recurring" },
+  { label: "Fund Flip", amount: 40000, date: "12 Apr 2026", kind: "flip" },
+  { label: "Investment", amount: 105000, date: "12 Apr 2026", kind: "in" },
+  { label: "Redemption", amount: -75000, date: "8 Apr 2026", kind: "out" },
+  { label: "Dividend", amount: 3200, date: "5 Apr 2026", kind: "dividend" },
+  { label: "Redemption", amount: -30000, date: "2 Apr 2026", kind: "out" },
+  { label: "Recurring Investment", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
 ];
 
 const logIcon = { in: TrendingUp, out: ArrowUpRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
@@ -994,18 +993,15 @@ function TransactionLog() {
               const positive = t.amount > 0 && t.kind !== "flip";
               const abs = Math.abs(t.amount).toLocaleString("en-US");
               return (
-                <div key={i} className={cn("flex items-center gap-3 py-3.5", i > 0 && "border-t border-border/40")}>
+                <div key={i} className={cn("flex items-center gap-3 py-2.5", i > 0 && "border-t border-border/40")}>
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
                   >
-                    <Icon className="w-5 h-5 text-pill" />
+                    <Icon className="w-4 h-4 text-pill" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[15px] font-medium text-foreground truncate">{t.label}</p>
-                    <p className="text-xs text-foreground/60 truncate">{t.detail}</p>
-                  </div>
-                  <p className={cn("text-[15px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
+                  <p className="flex-1 min-w-0 text-[14px] font-medium text-foreground truncate">{t.label}</p>
+                  <p className={cn("text-[14px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
                     {t.kind === "flip" ? "" : positive ? "+" : "−"}
                     {abs}
                     <span className="text-[11px] font-medium ml-1 opacity-70">LKR</span>
