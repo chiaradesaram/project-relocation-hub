@@ -269,7 +269,9 @@ function Transactions() {
               onClick={() => setTab(k)}
               className={cn(
                 "flex-1 py-2 rounded-full text-sm font-semibold transition",
-                tab === k ? "bg-pill text-black" : "text-foreground",
+                tab === k
+                  ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                  : "text-muted-foreground",
               )}
             >
               {label}
