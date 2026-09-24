@@ -959,21 +959,20 @@ function Transactions() {
 
 type LogItem = {
   label: string;
-  detail: string;
   amount: number;
   date: string;
   kind: "in" | "out" | "flip" | "recurring" | "dividend";
 };
 
 const logItems: LogItem[] = [
-  { label: "Investment", detail: "CAL Growth Fund · Personal", amount: 125000, date: "13 Apr 2026", kind: "in" },
-  { label: "Recurring Investment", detail: "CAL Income Fund · Personal", amount: 25000, date: "12 Apr 2026", kind: "recurring" },
-  { label: "Fund Flip", detail: "CAL Equity Fund → CAL Income Fund", amount: 40000, date: "12 Apr 2026", kind: "flip" },
-  { label: "Investment", detail: "Treasury Bill 91D", amount: 105000, date: "12 Apr 2026", kind: "in" },
-  { label: "Redemption", detail: "CAL Equity Fund · Personal", amount: -75000, date: "8 Apr 2026", kind: "out" },
-  { label: "Dividend", detail: "JKH.N0000", amount: 3200, date: "5 Apr 2026", kind: "dividend" },
-  { label: "Redemption", detail: "CAL Money Market Fund · Joint", amount: -30000, date: "2 Apr 2026", kind: "out" },
-  { label: "Recurring Investment", detail: "CAL Income Fund · Personal", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
+  { label: "Investment", amount: 125000, date: "13 Apr 2026", kind: "in" },
+  { label: "Recurring Investment", amount: 25000, date: "12 Apr 2026", kind: "recurring" },
+  { label: "Fund Flip", amount: 40000, date: "12 Apr 2026", kind: "flip" },
+  { label: "Investment", amount: 105000, date: "12 Apr 2026", kind: "in" },
+  { label: "Redemption", amount: -75000, date: "8 Apr 2026", kind: "out" },
+  { label: "Dividend", amount: 3200, date: "5 Apr 2026", kind: "dividend" },
+  { label: "Redemption", amount: -30000, date: "2 Apr 2026", kind: "out" },
+  { label: "Recurring Investment", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
 ];
 
 const logIcon = { in: TrendingUp, out: ArrowUpRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
