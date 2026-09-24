@@ -639,7 +639,6 @@ function Transactions() {
                     {product === "All" ? tx.product : null}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
-                    {tx.kind === "Fund Flip" && <span>Fund flip ·</span>}
                     {tx.product === "Treasuries" && <span>{tx.kind} ·</span>}
                     <span>{tx.date}</span>
                   </p>
