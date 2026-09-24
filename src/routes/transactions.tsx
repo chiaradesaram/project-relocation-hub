@@ -985,9 +985,6 @@ function TransactionLog() {
   }, {});
   return (
     <div className="px-4 pb-6 space-y-4">
-      <p className="text-xs text-foreground/70">
-        Every transaction on your account, including ones you didn't request.
-      </p>
       {Object.entries(groups).map(([date, items]) => (
         <div key={date}>
           <p className="text-xs font-semibold text-foreground/70 mb-2 px-1">{date}</p>
