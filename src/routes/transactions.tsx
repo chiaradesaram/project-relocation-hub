@@ -993,18 +993,15 @@ function TransactionLog() {
               const positive = t.amount > 0 && t.kind !== "flip";
               const abs = Math.abs(t.amount).toLocaleString("en-US");
               return (
-                <div key={i} className={cn("flex items-center gap-3 py-3.5", i > 0 && "border-t border-border/40")}>
+                <div key={i} className={cn("flex items-center gap-3 py-2.5", i > 0 && "border-t border-border/40")}>
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
                     style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
                   >
-                    <Icon className="w-5 h-5 text-pill" />
+                    <Icon className="w-4 h-4 text-pill" />
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <p className="text-[15px] font-medium text-foreground truncate">{t.label}</p>
-                    <p className="text-xs text-foreground/60 truncate">{t.detail}</p>
-                  </div>
-                  <p className={cn("text-[15px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
+                  <p className="flex-1 min-w-0 text-[14px] font-medium text-foreground truncate">{t.label}</p>
+                  <p className={cn("text-[14px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
                     {t.kind === "flip" ? "" : positive ? "+" : "−"}
                     {abs}
                     <span className="text-[11px] font-medium ml-1 opacity-70">LKR</span>
