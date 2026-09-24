@@ -22,6 +22,7 @@ import {
   BarChart3,
   CheckCircle2,
   Plus,
+  Copy,
   Split,
   CalendarClock,
   PauseCircle,
@@ -822,6 +823,7 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
+  const [accountCopied, setAccountCopied] = useState(false);
 
 
   const amountNum = parseFloat(amount || "0") || 0;
