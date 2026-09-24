@@ -986,6 +986,12 @@ function TransactionLog() {
         const abs = Math.abs(t.amount).toLocaleString("en-US");
         return (
           <div key={i} className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-2.5 flex items-center gap-3">
+            <div
+              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+              style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+            >
+              <Icon className="w-4 h-4 text-pill" />
+            </div>
             <div className="flex-1 min-w-0">
               <p className="text-[11px] font-medium text-foreground/70">{t.date}</p>
               <p className="text-[14px] font-medium text-foreground truncate">{t.label}</p>
