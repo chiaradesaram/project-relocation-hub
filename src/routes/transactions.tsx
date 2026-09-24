@@ -969,31 +969,33 @@ const logIcon = { in: TrendingUp, out: ArrowUpRight, flip: ArrowLeftRight, recur
 
 function TransactionLog() {
   return (
-    <div className="px-4 pb-6 space-y-2">
-      {logItems.map((t, i) => {
-        const Icon = logIcon[t.kind];
-        const positive = t.amount > 0 && t.kind !== "flip";
-        const abs = Math.abs(t.amount).toLocaleString("en-US");
-        return (
-          <div key={i} className="rounded-2xl bg-card/60 backdrop-blur-md px-4 py-2.5 flex items-center gap-3">
-            <div
-              className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
-              style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
-            >
-              <Icon className="w-4 h-4 text-pill" />
+    <div className="px-4 pb-6">
+      <div className="divide-y divide-white/[0.06]">
+        {logItems.map((t, i) => {
+          const Icon = logIcon[t.kind];
+          const positive = t.amount > 0 && t.kind !== "flip";
+          const abs = Math.abs(t.amount).toLocaleString("en-US");
+          return (
+            <div key={i} className="py-3 flex items-center gap-3">
+              <div
+                className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+              >
+                <Icon className="w-4 h-4 text-pill" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[11px] font-medium text-foreground/70">{t.date}</p>
+                <p className="text-[14px] font-medium text-foreground truncate">{t.label}</p>
+              </div>
+              <p className={cn("text-[14px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
+                {t.kind === "flip" ? "" : positive ? "+" : "−"}
+                {abs}
+                <span className="text-[11px] font-medium ml-1 opacity-70">LKR</span>
+              </p>
             </div>
-            <div className="flex-1 min-w-0">
-              <p className="text-[11px] font-medium text-foreground/70">{t.date}</p>
-              <p className="text-[14px] font-medium text-foreground truncate">{t.label}</p>
-            </div>
-            <p className={cn("text-[14px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
-              {t.kind === "flip" ? "" : positive ? "+" : "−"}
-              {abs}
-              <span className="text-[11px] font-medium ml-1 opacity-70">LKR</span>
-            </p>
-          </div>
-        );
-      })}
+          );
+        })}
+      </div>
     </div>
   );
 }
