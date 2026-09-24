@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Check, Clock, X, CalendarDays, LifeBuoy, ChevronRight, Repeat } from "lucide-react";
+import { Check, Clock, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowUpRight, ArrowLeftRight, Coins } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -252,9 +252,37 @@ function Transactions() {
       return 0;
     });
 
+  const [tab, setTab] = useState<"requests" | "log">("requests");
+
   return (
     <MobileLayout>
       <PageHeader title="Transactions" showBack helpTopic="transactions" />
+
+      <div className="px-4 mt-1 mb-2">
+        <div className="flex p-1 rounded-full bg-card/60 backdrop-blur-md">
+          {([
+            ["requests", "Requests"],
+            ["log", "Transaction log"],
+          ] as const).map(([k, label]) => (
+            <button
+              key={k}
+              onClick={() => setTab(k)}
+              className={cn(
+                "flex-1 py-2 rounded-full text-sm font-semibold transition",
+                tab === k ? "bg-pill text-black" : "text-foreground",
+              )}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {tab === "log" ? (
+        <TransactionLog />
+      ) : (
+      <>
+
 
       {/* Product Filters */}
       <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-2">
@@ -921,6 +949,74 @@ function Transactions() {
           </Link>
         </DrawerContent>
       </Drawer>
+      </>
+      )}
     </MobileLayout>
+  );
+}
+
+type LogItem = {
+  label: string;
+  detail: string;
+  amount: number;
+  date: string;
+  kind: "in" | "out" | "flip" | "recurring" | "dividend";
+};
+
+const logItems: LogItem[] = [
+  { label: "Investment", detail: "CAL Growth Fund · Personal", amount: 125000, date: "13 Apr 2026", kind: "in" },
+  { label: "Recurring Investment", detail: "CAL Income Fund · Personal", amount: 25000, date: "12 Apr 2026", kind: "recurring" },
+  { label: "Fund Flip", detail: "CAL Equity Fund → CAL Income Fund", amount: 40000, date: "12 Apr 2026", kind: "flip" },
+  { label: "Investment", detail: "Treasury Bill 91D", amount: 105000, date: "12 Apr 2026", kind: "in" },
+  { label: "Redemption", detail: "CAL Equity Fund · Personal", amount: -75000, date: "8 Apr 2026", kind: "out" },
+  { label: "Dividend", detail: "JKH.N0000", amount: 3200, date: "5 Apr 2026", kind: "dividend" },
+  { label: "Redemption", detail: "CAL Money Market Fund · Joint", amount: -30000, date: "2 Apr 2026", kind: "out" },
+  { label: "Recurring Investment", detail: "CAL Income Fund · Personal", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
+];
+
+const logIcon = { in: TrendingUp, out: ArrowUpRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
+
+function TransactionLog() {
+  const groups = logItems.reduce<Record<string, LogItem[]>>((acc, t) => {
+    (acc[t.date] ??= []).push(t);
+    return acc;
+  }, {});
+  return (
+    <div className="px-4 pb-6 space-y-4">
+      <p className="text-xs text-foreground/70">
+        Every transaction on your account, including ones you didn't request.
+      </p>
+      {Object.entries(groups).map(([date, items]) => (
+        <div key={date}>
+          <p className="text-xs font-semibold text-foreground/70 mb-2 px-1">{date}</p>
+          <div className="rounded-2xl bg-card/60 backdrop-blur-md px-4">
+            {items.map((t, i) => {
+              const Icon = logIcon[t.kind];
+              const positive = t.amount > 0 && t.kind !== "flip";
+              const abs = Math.abs(t.amount).toLocaleString("en-US");
+              return (
+                <div key={i} className={cn("flex items-center gap-3 py-3.5", i > 0 && "border-t border-border/40")}>
+                  <div
+                    className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0"
+                    style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+                  >
+                    <Icon className="w-5 h-5 text-pill" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[15px] font-medium text-foreground truncate">{t.label}</p>
+                    <p className="text-xs text-foreground/60 truncate">{t.detail}</p>
+                  </div>
+                  <p className={cn("text-[15px] font-semibold shrink-0", positive ? "text-success" : "text-foreground")}>
+                    {t.kind === "flip" ? "" : positive ? "+" : "−"}
+                    {abs}
+                    <span className="text-[11px] font-medium ml-1 opacity-70">LKR</span>
+                  </p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      ))}
+    </div>
   );
 }
