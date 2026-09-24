@@ -16,6 +16,7 @@ import { Route as RequestsRouteImport } from './routes/requests'
 import { Route as RedeemRouteImport } from './routes/redeem'
 import { Route as RatesRouteImport } from './routes/rates'
 import { Route as PrototypeBRouteImport } from './routes/prototype-b'
+import { Route as PrototypeActivityRouteImport } from './routes/prototype-activity'
 import { Route as ProfileRouteImport } from './routes/profile'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as LearnRouteImport } from './routes/learn'
@@ -72,6 +73,11 @@ const RatesRoute = RatesRouteImport.update({
 const PrototypeBRoute = PrototypeBRouteImport.update({
   id: '/prototype-b',
   path: '/prototype-b',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrototypeActivityRoute = PrototypeActivityRouteImport.update({
+  id: '/prototype-activity',
+  path: '/prototype-activity',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ProfileRoute = ProfileRouteImport.update({
@@ -197,6 +203,7 @@ export interface FileRoutesByFullPath {
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
+  '/prototype-activity': typeof PrototypeActivityRoute
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -227,6 +234,7 @@ export interface FileRoutesByTo {
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
+  '/prototype-activity': typeof PrototypeActivityRoute
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -257,6 +265,7 @@ export interface FileRoutesById {
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
+  '/prototype-activity': typeof PrototypeActivityRoute
   '/prototype-b': typeof PrototypeBRoute
   '/rates': typeof RatesRoute
   '/redeem': typeof RedeemRoute
@@ -290,6 +299,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/more'
     | '/profile'
+    | '/prototype-activity'
     | '/prototype-b'
     | '/rates'
     | '/redeem'
@@ -320,6 +330,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/more'
     | '/profile'
+    | '/prototype-activity'
     | '/prototype-b'
     | '/rates'
     | '/redeem'
@@ -349,6 +360,7 @@ export interface FileRouteTypes {
     | '/learn'
     | '/more'
     | '/profile'
+    | '/prototype-activity'
     | '/prototype-b'
     | '/rates'
     | '/redeem'
@@ -381,6 +393,7 @@ export interface RootRouteChildren {
   LearnRoute: typeof LearnRoute
   MoreRoute: typeof MoreRoute
   ProfileRoute: typeof ProfileRoute
+  PrototypeActivityRoute: typeof PrototypeActivityRoute
   PrototypeBRoute: typeof PrototypeBRoute
   RatesRoute: typeof RatesRoute
   RedeemRoute: typeof RedeemRoute
@@ -444,6 +457,13 @@ declare module '@tanstack/react-router' {
       path: '/prototype-b'
       fullPath: '/prototype-b'
       preLoaderRoute: typeof PrototypeBRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prototype-activity': {
+      id: '/prototype-activity'
+      path: '/prototype-activity'
+      fullPath: '/prototype-activity'
+      preLoaderRoute: typeof PrototypeActivityRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/profile': {
@@ -656,6 +676,7 @@ const rootRouteChildren: RootRouteChildren = {
   LearnRoute: LearnRoute,
   MoreRoute: MoreRoute,
   ProfileRoute: ProfileRoute,
+  PrototypeActivityRoute: PrototypeActivityRoute,
   PrototypeBRoute: PrototypeBRoute,
   RatesRoute: RatesRoute,
   RedeemRoute: RedeemRoute,
