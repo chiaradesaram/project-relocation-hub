@@ -311,13 +311,13 @@ function Transactions() {
       <>
 
 
-      {/* Date Range Filter */}
-      <div className="flex items-center gap-2 px-4 mt-1">
+      {/* Date Range + type filters — one row */}
+      <div className="flex items-center gap-2 px-4 mt-1 overflow-x-auto pb-1">
         <button
           type="button"
           onClick={openDatePicker}
           className={cn(
-            "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold transition",
+            "inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap shrink-0 transition",
             range?.from
               ? "bg-pill text-white"
               : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
@@ -331,66 +331,30 @@ function Transactions() {
             type="button"
             onClick={() => { setRange(undefined); setActivePreset("All time"); }}
             aria-label="Clear date range"
-            className="w-6 h-6 rounded-full bg-white/[0.06] flex items-center justify-center text-muted-foreground hover:text-foreground"
+            className="w-6 h-6 rounded-full bg-white/[0.06] shrink-0 flex items-center justify-center text-muted-foreground hover:text-foreground"
           >
             <X className="w-4 h-4" />
           </button>
         )}
+        {subFiltersByProduct[product].map((f) => {
+          const active = sub === f;
+          return (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setSub(active ? null : f)}
+              className={cn(
+                "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap shrink-0 transition",
+                active
+                  ? "bg-pill text-white"
+                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
+              )}
+            >
+              {f}
+            </button>
+          );
+        })}
       </div>
-
-      {/* Sub filters (per product) */}
-      {subFiltersByProduct[product].length > 0 && (
-        <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-1">
-          {product === "Unit Trusts" && (
-            <button
-              type="button"
-              onClick={() => setSubAccountOpen(true)}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition",
-                subAccount
-                  ? "bg-pill text-white"
-                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
-              )}
-            >
-              {subAccount ?? "Sub Account"}
-              <ChevronRight className="w-4 h-4 rotate-90" />
-            </button>
-          )}
-          {product === "Unit Trusts" && (
-            <button
-              type="button"
-              onClick={() => setFundOpen(true)}
-              className={cn(
-                "inline-flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold whitespace-nowrap transition",
-                fund
-                  ? "bg-pill text-white"
-                  : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
-              )}
-            >
-              {fund ?? "Fund"}
-              <ChevronRight className="w-4 h-4 rotate-90" />
-            </button>
-          )}
-          {subFiltersByProduct[product].map((f) => {
-            const active = sub === f;
-            return (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setSub(active ? null : f)}
-                className={cn(
-                  "px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition",
-                  active
-                    ? "bg-pill text-white"
-                    : "bg-white/[0.06] text-foreground hover:bg-white/[0.1]",
-                )}
-              >
-                {f}
-              </button>
-            );
-          })}
-        </div>
-      )}
 
       {/* Sub Account picker drawer */}
       <Drawer open={subAccountOpen} onOpenChange={setSubAccountOpen}>
