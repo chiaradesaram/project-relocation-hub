@@ -18,8 +18,8 @@ const productFilters = ["Unit Trusts", "Equities", "Treasuries"] as const;
 type Product = (typeof productFilters)[number];
 
 const subFiltersByProduct: Record<Product, string[]> = {
-  "Unit Trusts": ["Pending", "Confirmed", "Completed"],
-  Equities: ["Pay In", "Pay Out", "Stocks", "Pending", "Confirmed"],
+  "Unit Trusts": [],
+  Equities: ["Pay In", "Pay Out", "Stocks"],
   Treasuries: [],
 };
 
