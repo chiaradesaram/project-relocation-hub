@@ -249,10 +249,7 @@ function PrototypeActivity() {
                           <Icon className="w-5 h-5 text-pill" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-[15px] font-medium text-foreground truncate">{item.label}</p>
-                            <ProductPill product={item.product} />
-                          </div>
+                          <p className="text-[15px] font-medium text-foreground truncate">{item.label}</p>
                           <p className="text-xs text-foreground/60 truncate">{item.detail}</p>
                           {item.value && (
                             <p className="text-xs font-semibold text-foreground/80 mt-0.5">{item.value}</p>
@@ -283,10 +280,7 @@ function PrototypeActivity() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="text-[14px] font-medium text-foreground truncate">{item.label}</p>
-                          <ProductPill product={item.product} />
-                        </div>
+                        <p className="text-[14px] font-medium text-foreground truncate">{item.label}</p>
                         {item.detail && <p className="text-xs text-foreground/60 truncate">{item.detail}</p>}
                       </div>
                       <p
