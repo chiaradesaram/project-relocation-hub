@@ -855,6 +855,22 @@ function MethodForm({
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
   const needsProof = isBank && !isDeutsche;
 
+  // Next 2nd Monday of October — when new units will be created for bank transfers
+  const unitCreationDate = (() => {
+    const secondMonday = (y: number) => {
+      const firstDay = new Date(y, 9, 1).getDay();
+      return 1 + ((8 - firstDay) % 7) + 7;
+    };
+    const now = new Date();
+    let y = now.getFullYear();
+    if (now > new Date(y, 9, secondMonday(y), 23, 59)) y += 1;
+    return new Date(y, 9, secondMonday(y)).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  })();
+
   // ---- Fund Flip balances ----
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
   const fmtLkr = (n: number) =>
@@ -1141,12 +1157,22 @@ function MethodForm({
             onClick={() => setPicker("payFrom")}
           />
           {isBank && (
-            <PickerRow
-              label={sendToLabel}
-              value={sendToValue}
-              placeholder={sendToPlaceholder}
-              onClick={() => setPicker("payTo")}
-            />
+            <>
+              <PickerRow
+                label={sendToLabel}
+                value={sendToValue}
+                placeholder={sendToPlaceholder}
+                onClick={() => setPicker("payTo")}
+              />
+              <div className="w-full flex items-center gap-3 px-4 py-3.5 text-left">
+                <span className="text-sm text-muted-foreground shrink-0">
+                  Unit creation date
+                </span>
+                <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
+                  2nd Monday of October · {unitCreationDate}
+                </span>
+              </div>
+            </>
           )}
         </div>
       )}
