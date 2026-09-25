@@ -1175,7 +1175,7 @@ function MethodForm({
                   Unit creation date
                 </span>
                 <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
-                  2nd Monday of October · {unitCreationDate}
+                  {unitCreationDate}
                 </span>
               </div>
             </>
