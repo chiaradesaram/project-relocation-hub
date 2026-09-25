@@ -68,6 +68,27 @@ function InvestSummary() {
     d.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" });
   const today = new Date();
   const txDate = fmtDate(today);
+  // Next 2nd Monday of October — when new units will be created for bank transfers
+  const unitCreationDate = (() => {
+    const secondMonday = (y: number) => {
+      const firstDay = new Date(y, 9, 1).getDay();
+      return 1 + ((8 - firstDay) % 7) + 7;
+    };
+    const now = new Date();
+    let y = now.getFullYear();
+    if (now > new Date(y, 9, secondMonday(y), 23, 59)) y += 1;
+    const d = new Date(y, 9, secondMonday(y));
+    const day = d.getDate();
+    const ord =
+      day % 10 === 1 && day !== 11
+        ? "st"
+        : day % 10 === 2 && day !== 12
+          ? "nd"
+          : day % 10 === 3 && day !== 13
+            ? "rd"
+            : "th";
+    return `${day}${ord} October, ${d.toLocaleDateString("en-GB", { weekday: "short" })}`;
+  })();
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
   const recurringDate = startDate
