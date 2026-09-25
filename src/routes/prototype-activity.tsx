@@ -24,12 +24,6 @@ export const Route = createFileRoute("/prototype-activity")({
 
 type Product = "ut" | "equity" | "treasuries";
 
-const productLabel: Record<Product, string> = {
-  ut: "UT",
-  equity: "Equity",
-  treasuries: "Treasuries",
-};
-
 type Item =
   | {
       kind: "request";
