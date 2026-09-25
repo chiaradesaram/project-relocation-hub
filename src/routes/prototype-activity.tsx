@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
@@ -22,12 +23,6 @@ export const Route = createFileRoute("/prototype-activity")({
 });
 
 type Product = "ut" | "equity" | "treasuries";
-
-const productLabel: Record<Product, string> = {
-  ut: "UT",
-  equity: "Equity",
-  treasuries: "Treasuries",
-};
 
 type Item =
   | {
@@ -178,10 +173,11 @@ const sample: Item[] = [
   },
 ];
 
-const groups = sample.reduce<Record<string, Item[]>>((acc, item) => {
-  (acc[item.date] ??= []).push(item);
-  return acc;
-}, {});
+const products: { key: Product; label: string }[] = [
+  { key: "ut", label: "Unit Trust" },
+  { key: "equity", label: "Equities" },
+  { key: "treasuries", label: "Treasuries" },
+];
 
 const requestIcon = {
   request: FileText,
@@ -195,20 +191,41 @@ const movementIcon = {
   flip: ArrowLeftRight,
 };
 
-function ProductPill({ product }: { product: Product }) {
-  return (
-    <span className="inline-flex items-center rounded-full bg-pill/15 text-pill text-[10px] font-semibold px-2 py-0.5 shrink-0">
-      {productLabel[product]}
-    </span>
-  );
-}
-
 function PrototypeActivity() {
+  const [product, setProduct] = useState<Product>("ut");
+
+  const groups = sample
+    .filter((item) => item.product === product)
+    .reduce<Record<string, Item[]>>((acc, item) => {
+      (acc[item.date] ??= []).push(item);
+      return acc;
+    }, {});
+
   return (
     <MobileLayout>
       <PageHeader title="Activity log — B" showBack />
 
-      <div className="px-4 pb-6 space-y-4">
+      <div className="px-4 pt-1">
+        <div className="flex gap-2 rounded-full bg-card/60 backdrop-blur-md p-1">
+          {products.map((p) => (
+            <button
+              key={p.key}
+              type="button"
+              onClick={() => setProduct(p.key)}
+              className={cn(
+                "flex-1 rounded-full py-2 text-[13px] font-semibold transition-colors",
+                product === p.key
+                  ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                  : "text-muted-foreground"
+              )}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-4 pt-4 pb-6 space-y-4">
         {Object.entries(groups).map(([date, items]) => (
           <div key={date}>
             <p className="text-xs font-semibold text-foreground/70 mb-2 px-1">{date}</p>
@@ -226,10 +243,7 @@ function PrototypeActivity() {
                           <Icon className="w-5 h-5 text-pill" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="text-[15px] font-medium text-foreground truncate">{item.label}</p>
-                            <ProductPill product={item.product} />
-                          </div>
+                          <p className="text-[15px] font-medium text-foreground truncate">{item.label}</p>
                           <p className="text-xs text-foreground/60 truncate">{item.detail}</p>
                           {item.value && (
                             <p className="text-xs font-semibold text-foreground/80 mt-0.5">{item.value}</p>
@@ -260,10 +274,7 @@ function PrototypeActivity() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="text-[14px] font-medium text-foreground truncate">{item.label}</p>
-                          <ProductPill product={item.product} />
-                        </div>
+                        <p className="text-[14px] font-medium text-foreground truncate">{item.label}</p>
                         {item.detail && <p className="text-xs text-foreground/60 truncate">{item.detail}</p>}
                       </div>
                       <p
