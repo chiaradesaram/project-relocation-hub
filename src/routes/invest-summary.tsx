@@ -166,7 +166,7 @@ function InvestSummary() {
           )}
           <Row label="Transaction date" value={txDate} />
           {method === "bank" && (
-            <Row label="Unit creation date" value="2nd Monday of October" />
+            <Row label="Unit creation date" value={unitCreationDate} />
           )}
           {isRecurring && (
             <>
