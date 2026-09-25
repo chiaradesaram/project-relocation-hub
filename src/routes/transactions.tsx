@@ -14,11 +14,10 @@ export const Route = createFileRoute("/transactions")({
   component: Transactions,
 });
 
-const productFilters = ["All", "Unit Trusts", "Equities", "Treasuries"] as const;
+const productFilters = ["Unit Trusts", "Equities", "Treasuries"] as const;
 type Product = (typeof productFilters)[number];
 
 const subFiltersByProduct: Record<Product, string[]> = {
-  All: [],
   "Unit Trusts": ["Pending", "Confirmed", "Completed"],
   Equities: ["Pay In", "Pay Out", "Stocks", "Pending", "Confirmed"],
   Treasuries: [],
@@ -166,7 +165,7 @@ function StatusPill({ status }: { status: Status }) {
 }
 
 function Transactions() {
-  const [product, setProduct] = useState<Product>("All");
+  const [product, setProduct] = useState<Product>("Unit Trusts");
   const [sub, setSub] = useState<string | null>(null);
   const [subAccount, setSubAccount] = useState<string | null>(null);
   const [subAccountOpen, setSubAccountOpen] = useState(false);
@@ -236,7 +235,7 @@ function Transactions() {
 
   const filtered = transactions
     .filter((tx) => {
-      if (product !== "All" && tx.product !== product) return false;
+      if (tx.product !== product) return false;
       if (range?.from) {
         const txDate = new Date(tx.date);
         const from = new Date(range.from);
@@ -277,7 +276,7 @@ function Transactions() {
               className={cn(
                 "flex-1 rounded-full py-2 text-[13px] font-semibold transition-colors",
                 product === f
-                  ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                  ? "text-white bg-pill"
                   : "text-muted-foreground bg-card/60",
               )}
             >
@@ -343,7 +342,7 @@ function Transactions() {
       </div>
 
       {/* Sub filters (per product) */}
-      {product !== "All" && subFiltersByProduct[product].length > 0 && (
+      {subFiltersByProduct[product].length > 0 && (
         <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-1">
           {product === "Unit Trusts" && (
             <button
@@ -648,9 +647,6 @@ function Transactions() {
                   </div>
                   <p className="text-xs font-semibold text-foreground/80 mt-0.5">
                     {tx.positive ? "+" : "−"} {tx.value}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate mt-0.5">
-                    {product === "All" ? tx.product : null}
                   </p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5 flex items-center gap-1">
                     {tx.product === "Treasuries" && <span>{tx.kind} ·</span>}
