@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { createFileRoute } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
@@ -178,10 +179,11 @@ const sample: Item[] = [
   },
 ];
 
-const groups = sample.reduce<Record<string, Item[]>>((acc, item) => {
-  (acc[item.date] ??= []).push(item);
-  return acc;
-}, {});
+const products: { key: Product; label: string }[] = [
+  { key: "ut", label: "Unit Trust" },
+  { key: "equity", label: "Equities" },
+  { key: "treasuries", label: "Treasuries" },
+];
 
 const requestIcon = {
   request: FileText,
@@ -195,20 +197,41 @@ const movementIcon = {
   flip: ArrowLeftRight,
 };
 
-function ProductPill({ product }: { product: Product }) {
-  return (
-    <span className="inline-flex items-center rounded-full bg-pill/15 text-pill text-[10px] font-semibold px-2 py-0.5 shrink-0">
-      {productLabel[product]}
-    </span>
-  );
-}
-
 function PrototypeActivity() {
+  const [product, setProduct] = useState<Product>("ut");
+
+  const groups = sample
+    .filter((item) => item.product === product)
+    .reduce<Record<string, Item[]>>((acc, item) => {
+      (acc[item.date] ??= []).push(item);
+      return acc;
+    }, {});
+
   return (
     <MobileLayout>
       <PageHeader title="Activity log — B" showBack />
 
-      <div className="px-4 pb-6 space-y-4">
+      <div className="px-4 pt-1">
+        <div className="flex gap-2 rounded-full bg-card/60 backdrop-blur-md p-1">
+          {products.map((p) => (
+            <button
+              key={p.key}
+              type="button"
+              onClick={() => setProduct(p.key)}
+              className={cn(
+                "flex-1 rounded-full py-2 text-[13px] font-semibold transition-colors",
+                product === p.key
+                  ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                  : "text-muted-foreground"
+              )}
+            >
+              {p.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-4 pt-4 pb-6 space-y-4">
         {Object.entries(groups).map(([date, items]) => (
           <div key={date}>
             <p className="text-xs font-semibold text-foreground/70 mb-2 px-1">{date}</p>
