@@ -18,8 +18,8 @@ const productFilters = ["Unit Trusts", "Equities", "Treasuries"] as const;
 type Product = (typeof productFilters)[number];
 
 const subFiltersByProduct: Record<Product, string[]> = {
-  "Unit Trusts": ["Pending", "Confirmed", "Completed"],
-  Equities: ["Pay In", "Pay Out", "Stocks", "Pending", "Confirmed"],
+  "Unit Trusts": [],
+  Equities: ["Pay In", "Pay Out", "Stocks"],
   Treasuries: [],
 };
 
@@ -247,9 +247,6 @@ function Transactions() {
       if (product === "Unit Trusts" && subAccount && tx.subAccount !== subAccount) return false;
       if (product === "Unit Trusts" && fund && tx.fund !== fund) return false;
       if (!sub) return true;
-      if (sub === "Pending") return tx.status === "Pending";
-      if (sub === "Confirmed") return tx.status === "Confirmed";
-      if (sub === "Completed") return tx.status === "Completed";
       const allowedKinds = subToKinds[sub] ?? [];
       return allowedKinds.includes(tx.kind);
     })
