@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Check, Clock, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowUpRight, ArrowLeftRight, Coins } from "lucide-react";
+import { Check, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowUpRight, ArrowLeftRight, Coins, Banknote, Landmark, FileText } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -121,24 +121,32 @@ const subToKinds: Record<string, string[]> = {
   Maturities: ["Maturity"],
 };
 
-function StateIcon({ status }: { status: Status }) {
-  if (status === "Pending") {
-    return (
-      <div className="w-8 h-8 rounded-full bg-warning/20 flex items-center justify-center shrink-0">
-        <Clock className="w-4 h-4 text-warning" strokeWidth={2.5} />
-      </div>
-    );
-  }
-  if (status === "Confirmed") {
-    return (
-      <div className="w-8 h-8 rounded-full bg-success/10 border-2 border-success flex items-center justify-center shrink-0">
-        <Check className="w-4 h-4 text-success" strokeWidth={2.5} />
-      </div>
-    );
-  }
+const kindIcon: Record<string, typeof TrendingUp> = {
+  Investment: TrendingUp,
+  Redemption: ArrowUpRight,
+  "Fund Flip": ArrowLeftRight,
+  "Pay In": Banknote,
+  "Pay Out": ArrowUpRight,
+  Dividend: Coins,
+  "Bond Purchase": Landmark,
+  "Bill Purchase": Landmark,
+  Maturity: Landmark,
+  "Coupon Received": Coins,
+  "Coupon Paid Out": Coins,
+  "Cash In": Banknote,
+  "Cash Out": ArrowUpRight,
+  "Stock Buy": TrendingUp,
+  "Stock Sell": ArrowUpRight,
+};
+
+function KindIcon({ kind }: { kind: string }) {
+  const Icon = kindIcon[kind] ?? FileText;
   return (
-    <div className="w-8 h-8 rounded-full bg-success/20 flex items-center justify-center shrink-0">
-      <Check className="w-4 h-4 text-success" strokeWidth={2.5} />
+    <div
+      className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
+      style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+    >
+      <Icon className="w-[18px] h-[18px] text-pill" />
     </div>
   );
 }
@@ -254,11 +262,32 @@ function Transactions() {
 
   const [tab, setTab] = useState<"requests" | "log">("requests");
 
+  // Product selection sits above the Requests / Transaction log tabs
   return (
     <MobileLayout>
       <PageHeader title="Transactions" showBack helpTopic="transactions" />
 
-      <div className="px-4 mt-1 mb-2">
+      {/* Product Filters — topmost selection */}
+      <div className="px-4 mt-1">
+        <div className="flex gap-2">
+          {productFilters.map((f) => (
+            <button
+              key={f}
+              onClick={() => changeProduct(f)}
+              className={cn(
+                "flex-1 rounded-full py-2 text-[13px] font-semibold transition-colors",
+                product === f
+                  ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                  : "text-muted-foreground bg-card/60",
+              )}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="px-4 mt-2 mb-2">
         <div className="flex p-1 rounded-full bg-card/60 backdrop-blur-md">
           {([
             ["requests", "Requests"],
@@ -285,23 +314,6 @@ function Transactions() {
       ) : (
       <>
 
-
-      {/* Product Filters */}
-      <div className="flex gap-2 px-4 mt-2 overflow-x-auto pb-2">
-        {productFilters.map((f) => (
-          <button
-            key={f}
-            onClick={() => changeProduct(f)}
-            className={`px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition ${
-              product === f
-                ? "bg-pill text-white"
-                : "bg-pill/20 text-pill"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
-      </div>
 
       {/* Date Range Filter */}
       <div className="flex items-center gap-2 px-4 mt-1">
@@ -616,13 +628,12 @@ function Transactions() {
             onClick={() => setOpenTx(tx)}
             className="glass-card p-4 flex items-start gap-3 w-full text-left hover:bg-white/[0.03] transition"
           >
-            <StateIcon status={tx.status} />
+            <KindIcon kind={tx.kind} />
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
                 <>
-                  <div className="flex items-center gap-1.5">
-                    <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
-                  </div>
+                  <p className="text-sm font-medium text-foreground truncate">{tx.kind}</p>
+                  <p className="text-xs font-semibold text-foreground/80 mt-0.5">{tx.value}</p>
                   <p className="text-[12px] text-muted-foreground/70 mt-0.5">{tx.date}</p>
                 </>
               ) : (
@@ -635,6 +646,9 @@ function Transactions() {
                       </span>
                     )}
                   </div>
+                  <p className="text-xs font-semibold text-foreground/80 mt-0.5">
+                    {tx.positive ? "+" : "−"} {tx.value}
+                  </p>
                   <p className="text-xs text-muted-foreground truncate mt-0.5">
                     {product === "All" ? tx.product : null}
                   </p>
@@ -644,13 +658,6 @@ function Transactions() {
                   </p>
                 </>
               )}
-            </div>
-            <div className="text-right shrink-0">
-              <p className={`text-sm font-semibold ${
-                tx.positive ? "text-success" : "text-foreground"
-              }`}>
-                {tx.positive ? "+" : "−"} {tx.value}
-              </p>
             </div>
           </button>
         ))}
@@ -674,7 +681,7 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              {openTx && <StateIcon status={openTx.status} />}
+              {openTx && <KindIcon kind={openTx.kind} />}
               <DrawerTitle className="text-xl font-semibold">
                 {openTx?.product === "Treasuries"
                   ? openTx?.kind
