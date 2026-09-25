@@ -59,7 +59,7 @@ const sample: Item[] = [
   },
   {
     kind: "movement",
-    label: "Cash in",
+    label: "Investment",
     detail: "Paid into CAL Income Fund",
     date: "13 Apr 2026",
     value: "LKR 60,000",
@@ -78,13 +78,13 @@ const sample: Item[] = [
   },
   {
     kind: "movement",
-    label: "Paid out",
+    label: "Withdrawal",
     detail: "To Commercial Bank ····21",
     date: "12 Apr 2026",
     value: "LKR 75,000",
     positive: false,
     product: "ut",
-    icon: "out",
+    icon: "in",
   },
   {
     kind: "request",
@@ -96,7 +96,7 @@ const sample: Item[] = [
   },
   {
     kind: "movement",
-    label: "Cash in",
+    label: "Investment",
     detail: "Recurring investment",
     date: "12 Apr 2026",
     value: "LKR 25,000",
@@ -115,7 +115,7 @@ const sample: Item[] = [
   },
   {
     kind: "movement",
-    label: "Cash in",
+    label: "Investment",
     detail: "Funded from Unit Trust",
     date: "10 Apr 2026",
     value: "LKR 100,000",
@@ -134,13 +134,13 @@ const sample: Item[] = [
   },
   {
     kind: "movement",
-    label: "Paid out",
+    label: "Withdrawal",
     detail: "Settled from cash balance",
     date: "8 Apr 2026",
     value: "LKR 250,000",
     positive: false,
     product: "treasuries",
-    icon: "out",
+    icon: "in",
   },
   {
     kind: "request",
@@ -163,7 +163,7 @@ const sample: Item[] = [
   },
   {
     kind: "movement",
-    label: "Cash in",
+    label: "Investment",
     detail: "Sampath Bank",
     date: "6 Apr 2026",
     value: "LKR 300,000",
@@ -268,7 +268,12 @@ function PrototypeActivity() {
                         }}
                       >
                         {item.icon === "in" ? (
-                          <Banknote className="w-[18px] h-[18px] text-success" />
+                          <Banknote
+                            className={cn(
+                              "w-[18px] h-[18px]",
+                              item.positive ? "text-success" : "text-foreground/80"
+                            )}
+                          />
                         ) : (
                           <Icon className="w-[18px] h-[18px] text-foreground/80" />
                         )}
