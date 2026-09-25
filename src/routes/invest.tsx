@@ -1157,12 +1157,22 @@ function MethodForm({
             onClick={() => setPicker("payFrom")}
           />
           {isBank && (
-            <PickerRow
-              label={sendToLabel}
-              value={sendToValue}
-              placeholder={sendToPlaceholder}
-              onClick={() => setPicker("payTo")}
-            />
+            <>
+              <PickerRow
+                label={sendToLabel}
+                value={sendToValue}
+                placeholder={sendToPlaceholder}
+                onClick={() => setPicker("payTo")}
+              />
+              <div className="w-full flex items-center gap-3 px-4 py-3.5 text-left">
+                <span className="text-sm text-muted-foreground shrink-0">
+                  Unit creation date
+                </span>
+                <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
+                  2nd Monday of October · {unitCreationDate}
+                </span>
+              </div>
+            </>
           )}
         </div>
       )}
