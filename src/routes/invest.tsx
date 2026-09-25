@@ -842,11 +842,11 @@ function MethodForm({
 
   const splits = isInstant ? directInvestSplits(amountNum) : [];
 
-  const payFromLabel = isFlip ? "Transfer from" : "Paying from";
+  const payFromLabel = isFlip ? "Transfer from" : isBank ? "Paid from" : "Paying from";
   const payFromValue = isFlip ? selectedFund : selectedBank;
   const payFromPlaceholder = isFlip ? "Select a fund" : "Select bank account";
 
-  const sendToLabel = isFlip ? "Transfer to" : "Send to";
+  const sendToLabel = isFlip ? "Transfer to" : isBank ? "Sent to" : "Send to";
   const sendToValue = isFlip ? selectedFlipTo : selectedPayTo;
   const sendToPlaceholder = isFlip
     ? "Select destination fund"
@@ -918,8 +918,8 @@ function MethodForm({
   const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
     fund: "Select fund",
     account: "Select sub-account",
-    payFrom: isFlip ? "Transfer from" : "Paying from",
-    payTo: "Send to",
+    payFrom: isFlip ? "Transfer from" : isBank ? "Paid from" : "Paying from",
+    payTo: isBank ? "Sent to" : "Send to",
     flipTo: "Transfer to",
   };
 
