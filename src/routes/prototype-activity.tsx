@@ -4,7 +4,6 @@ import PageHeader from "@/components/PageHeader";
 import {
   TrendingUp,
   ArrowUpRight,
-  Coins,
   Repeat,
   ArrowLeftRight,
   FileText,
@@ -22,6 +21,14 @@ export const Route = createFileRoute("/prototype-activity")({
   component: PrototypeActivity,
 });
 
+type Product = "ut" | "equity" | "treasuries";
+
+const productLabel: Record<Product, string> = {
+  ut: "UT",
+  equity: "Equity",
+  treasuries: "Treasuries",
+};
+
 type Item =
   | {
       kind: "request";
@@ -29,6 +36,7 @@ type Item =
       detail: string;
       date: string;
       value?: string;
+      product: Product;
       icon: "request" | "recurring" | "flip";
     }
   | {
@@ -38,18 +46,20 @@ type Item =
       date: string;
       value: string;
       positive: boolean;
-      icon: "in" | "out" | "dividend" | "flip";
+      product: Product;
+      icon: "in" | "out" | "flip";
     };
 
 // Requests and cash movements are separate items — some movements have no
-// request behind them (dividends, ad-hoc cash in, payouts without requests).
+// request behind them (ad-hoc cash in, payouts without requests).
 const sample: Item[] = [
   {
     kind: "request",
-    label: "CAL Income Fund Request",
-    detail: "Investment · Joint · Spouse",
+    label: "Bank Transfer Request CAL Income Fund",
+    detail: "Investment",
     date: "13 Apr 2026",
     value: "LKR 60,000",
+    product: "ut",
     icon: "request",
   },
   {
@@ -59,14 +69,16 @@ const sample: Item[] = [
     date: "13 Apr 2026",
     value: "LKR 60,000",
     positive: true,
+    product: "ut",
     icon: "in",
   },
   {
     kind: "request",
-    label: "Payout Request",
-    detail: "Redemption · CAL Equity Fund · Personal",
+    label: "Redemption CAL Equity Fund",
+    detail: "Redemption",
     date: "12 Apr 2026",
     value: "LKR 75,000",
+    product: "ut",
     icon: "request",
   },
   {
@@ -76,13 +88,15 @@ const sample: Item[] = [
     date: "12 Apr 2026",
     value: "LKR 75,000",
     positive: false,
+    product: "ut",
     icon: "out",
   },
   {
     kind: "request",
     label: "Recurring Investment",
-    detail: "CAL Income Fund · Personal · Monthly",
+    detail: "CAL Income Fund · Monthly",
     date: "12 Apr 2026",
+    product: "ut",
     icon: "recurring",
   },
   {
@@ -92,16 +106,46 @@ const sample: Item[] = [
     date: "12 Apr 2026",
     value: "LKR 25,000",
     positive: true,
+    product: "ut",
     icon: "in",
   },
   {
-    kind: "movement",
-    label: "Dividend",
-    detail: "JKH.N0000 · Personal · CDS",
+    kind: "request",
+    label: "Equity Funding Request",
+    detail: "Fund equity cash balance",
     date: "10 Apr 2026",
-    value: "LKR 3,200",
+    value: "LKR 100,000",
+    product: "equity",
+    icon: "request",
+  },
+  {
+    kind: "movement",
+    label: "Cash in",
+    detail: "Funded from Unit Trust",
+    date: "10 Apr 2026",
+    value: "LKR 100,000",
     positive: true,
-    icon: "dividend",
+    product: "equity",
+    icon: "in",
+  },
+  {
+    kind: "request",
+    label: "T-Bill Purchase Request",
+    detail: "Treasury bill · 91 days",
+    date: "8 Apr 2026",
+    value: "LKR 250,000",
+    product: "treasuries",
+    icon: "request",
+  },
+  {
+    kind: "movement",
+    label: "Paid out",
+    detail: "Settled from cash balance",
+    date: "8 Apr 2026",
+    value: "LKR 250,000",
+    positive: false,
+    product: "treasuries",
+    icon: "out",
   },
   {
     kind: "request",
@@ -109,6 +153,7 @@ const sample: Item[] = [
     detail: "CAL Equity Fund → CAL Income Fund",
     date: "8 Apr 2026",
     value: "LKR 40,000",
+    product: "ut",
     icon: "flip",
   },
   {
@@ -118,15 +163,17 @@ const sample: Item[] = [
     date: "8 Apr 2026",
     value: "LKR 40,000",
     positive: true,
+    product: "ut",
     icon: "flip",
   },
   {
     kind: "movement",
     label: "Cash in",
-    detail: "Sampath Bank · Personal · Main",
+    detail: "Sampath Bank",
     date: "6 Apr 2026",
     value: "LKR 300,000",
     positive: true,
+    product: "ut",
     icon: "in",
   },
 ];
@@ -145,18 +192,21 @@ const requestIcon = {
 const movementIcon = {
   in: TrendingUp,
   out: ArrowUpRight,
-  dividend: Coins,
   flip: ArrowLeftRight,
 };
+
+function ProductPill({ product }: { product: Product }) {
+  return (
+    <span className="inline-flex items-center rounded-full bg-pill/15 text-pill text-[10px] font-semibold px-2 py-0.5 shrink-0">
+      {productLabel[product]}
+    </span>
+  );
+}
 
 function PrototypeActivity() {
   return (
     <MobileLayout>
       <PageHeader title="Activity log — B" showBack />
-
-      <p className="px-4 text-xs text-foreground/70 mt-1 mb-3">
-        Requests and cash movements are separate items — like Splitwise, some payments have no request behind them.
-      </p>
 
       <div className="px-4 pb-6 space-y-4">
         {Object.entries(groups).map(([date, items]) => (
@@ -176,15 +226,15 @@ function PrototypeActivity() {
                           <Icon className="w-5 h-5 text-pill" />
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-[15px] font-medium text-foreground truncate">{item.label}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="text-[15px] font-medium text-foreground truncate">{item.label}</p>
+                            <ProductPill product={item.product} />
+                          </div>
                           <p className="text-xs text-foreground/60 truncate">{item.detail}</p>
+                          {item.value && (
+                            <p className="text-xs font-semibold text-foreground/80 mt-0.5">{item.value}</p>
+                          )}
                         </div>
-                        {item.value && (
-                          <p className="text-[15px] font-semibold text-foreground shrink-0">
-                            {item.value}
-                            <span className="text-[11px] font-medium ml-1 opacity-70">LKR</span>
-                          </p>
-                        )}
                       </div>
                     </div>
                   );
@@ -210,7 +260,10 @@ function PrototypeActivity() {
                         )}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-medium text-foreground truncate">{item.label}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="text-[14px] font-medium text-foreground truncate">{item.label}</p>
+                          <ProductPill product={item.product} />
+                        </div>
                         {item.detail && <p className="text-xs text-foreground/60 truncate">{item.detail}</p>}
                       </div>
                       <p
