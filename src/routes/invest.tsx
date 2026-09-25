@@ -864,11 +864,17 @@ function MethodForm({
     const now = new Date();
     let y = now.getFullYear();
     if (now > new Date(y, 9, secondMonday(y), 23, 59)) y += 1;
-    return new Date(y, 9, secondMonday(y)).toLocaleDateString("en-GB", {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
+    const d = new Date(y, 9, secondMonday(y));
+    const day = d.getDate();
+    const ord =
+      day % 10 === 1 && day !== 11
+        ? "st"
+        : day % 10 === 2 && day !== 12
+          ? "nd"
+          : day % 10 === 3 && day !== 13
+            ? "rd"
+            : "th";
+    return `${day}${ord} October, ${d.toLocaleDateString("en-GB", { weekday: "short" })}`;
   })();
 
   // ---- Fund Flip balances ----
@@ -1169,7 +1175,7 @@ function MethodForm({
                   Unit creation date
                 </span>
                 <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
-                  2nd Monday of October · {unitCreationDate}
+                  {unitCreationDate}
                 </span>
               </div>
             </>
