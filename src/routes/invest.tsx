@@ -855,6 +855,22 @@ function MethodForm({
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
   const needsProof = isBank && !isDeutsche;
 
+  // Next 2nd Monday of October — when new units will be created for bank transfers
+  const unitCreationDate = (() => {
+    const secondMonday = (y: number) => {
+      const firstDay = new Date(y, 9, 1).getDay();
+      return 1 + ((8 - firstDay) % 7) + 7;
+    };
+    const now = new Date();
+    let y = now.getFullYear();
+    if (now > new Date(y, 9, secondMonday(y), 23, 59)) y += 1;
+    return new Date(y, 9, secondMonday(y)).toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  })();
+
   // ---- Fund Flip balances ----
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
   const fmtLkr = (n: number) =>
