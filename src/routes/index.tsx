@@ -279,22 +279,23 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="grid grid-cols-[112px_1fr] items-center gap-4 pt-4">
-              <div className="portfolio-donut relative mx-auto h-28 w-28 rounded-full">
-                <div className="absolute inset-[17px] flex flex-col items-center justify-center rounded-full bg-card">
+            <div className="grid grid-cols-[88px_1fr] items-center gap-3 pt-4">
+              <div className="portfolio-donut relative mx-auto h-[88px] w-[88px] rounded-full">
+                <div className="absolute inset-[13px] flex flex-col items-center justify-center rounded-full bg-card">
                   <strong className="type-title-lg text-foreground">100%</strong>
                   <span className="type-caption text-muted-foreground">Portfolio</span>
                 </div>
               </div>
               <div className="min-w-0 divide-y divide-foreground/10">
                 {[
-                  { name: "Unit Trusts", value: "LKR 3.68M", share: "50%", path: "/unit-trusts", color: "bg-allocation-unit-trusts", text: "text-allocation-unit-trusts" },
-                  { name: "Equities", value: "LKR 2.21M", share: "30%", path: "/invest?product=equities", color: "bg-allocation-equities", text: "text-allocation-equities" },
-                  { name: "Treasuries", value: "LKR 1.48M", share: "20%", path: "/invest?product=treasuries", color: "bg-allocation-treasuries", text: "text-allocation-treasuries" },
+                  { name: "Unit Trusts", value: "LKR 3.68M", share: "50%", path: "/unit-trusts", color: "bg-allocation-unit-trusts/20", text: "text-allocation-unit-trusts" },
+                  { name: "Equities", value: "LKR 2.21M", share: "30%", path: "/invest?product=equities", color: "bg-allocation-equities/20", text: "text-allocation-equities" },
+                  { name: "Treasuries", value: "LKR 1.48M", share: "20%", path: "/invest?product=treasuries", color: "bg-allocation-treasuries/20", text: "text-allocation-treasuries" },
                 ].map((item) => (
-                  <Link
+                  <button
                     key={item.name}
-                    to={item.path}
+                    type="button"
+                    onClick={() => navigate({ to: item.path })}
                     className="grid min-h-16 grid-cols-[42px_1fr_auto_16px] items-center gap-2 py-2 transition-opacity hover:opacity-80"
                   >
                     <span className={`flex h-10 w-10 items-center justify-center rounded-full ${item.color}/20 type-label ${item.text}`}>
@@ -303,13 +304,13 @@ function Dashboard() {
                     <span className="min-w-0 truncate type-label text-foreground">{item.name}</span>
                     <span className="type-label text-muted-foreground">{item.value}</span>
                     <ChevronRight className="h-4 w-4 text-muted-foreground" />
-                  </Link>
+                  </button>
                 ))}
               </div>
             </div>
           </article>
 
-          <article className="ml-3 min-h-[310px] w-[calc(100%-2rem)] shrink-0 snap-center rounded-2xl bg-card px-5 py-5 shadow-sm">
+          <article className="ml-3 min-h-[310px] w-full shrink-0 snap-center rounded-2xl bg-card px-5 py-5 shadow-sm">
             <h2 className="type-title-lg text-foreground">Returns by class</h2>
             <div className="mt-5 grid grid-cols-[1fr_repeat(3,minmax(58px,0.7fr))] items-center gap-2 px-3 type-body-sm text-muted-foreground">
               <span />
