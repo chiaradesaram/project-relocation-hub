@@ -267,8 +267,8 @@ function Dashboard() {
           }}
           className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-pl-4 px-4 pb-1"
         >
-          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border/55 pb-3">
+          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3 shadow-sm">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border/55 pb-2">
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">Total portfolio value</p>
                 <h1 className="mt-1 truncate text-[1.3rem] font-semibold leading-none text-foreground">LKR 7.37M</h1>
@@ -279,8 +279,8 @@ function Dashboard() {
               </div>
             </div>
 
-            <div className="mt-3 grid grid-cols-[72px_minmax(0,1fr)] items-center gap-3">
-              <div className="portfolio-donut relative h-[64px] w-[64px] shrink-0 rounded-full" />
+            <div className="mt-2 grid grid-cols-[56px_minmax(0,1fr)] items-center gap-3">
+              <div className="portfolio-donut relative h-[56px] w-[56px] shrink-0 rounded-full" />
               <div className="min-w-0 divide-y divide-border/55">
                 {[
                   { name: "Unit Trusts", value: "LKR 3.68M", path: "/unit-trusts", dot: "bg-allocation-unit-trusts" },
@@ -291,7 +291,7 @@ function Dashboard() {
                     key={item.name}
                     type="button"
                     onClick={() => navigate({ to: item.path })}
-                    className="grid min-h-[42px] w-full grid-cols-[16px_minmax(0,1fr)_auto_14px] items-center gap-2 text-left transition-opacity hover:opacity-80 active:opacity-70"
+                    className="grid min-h-[36px] w-full grid-cols-[16px_minmax(0,1fr)_auto_14px] items-center gap-2 text-left transition-opacity hover:opacity-80 active:opacity-70"
                   >
                     <span className={`h-2 w-2 rounded-full ${item.dot}`} />
                     <span className="min-w-0 truncate text-xs font-semibold text-foreground">{item.name}</span>
@@ -303,20 +303,20 @@ function Dashboard() {
             </div>
           </article>
 
-          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
+          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3 shadow-sm">
             <div className="grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-3 text-xs text-muted-foreground">
               <span />
               <span className="text-right">7D</span>
               <span className="text-right">30D</span>
               <span className="text-right">All time</span>
             </div>
-            <div className="mt-2 space-y-2">
+            <div className="mt-1.5 space-y-1.5">
               {[
                 { label: "UT", values: ["+66k", "+169k", "+677k"] },
                 { label: "EQ", values: ["+75k", "+135k", "+546k"] },
                 { label: "TB", values: ["+4k", "+13k", "+121k"] },
               ].map((row) => (
-                <div key={row.label} className="grid min-h-[46px] grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 rounded-xl bg-secondary/40 px-3">
+                <div key={row.label} className="grid min-h-[38px] grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 rounded-xl bg-secondary/40 px-3">
                   <strong className="text-sm font-semibold text-foreground">{row.label}</strong>
                   {row.values.map((value) => (
                     <span key={value} className="text-right text-xs font-semibold text-success">{value}</span>
