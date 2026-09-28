@@ -267,7 +267,7 @@ function Dashboard() {
           }}
           className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1"
         >
-          <article data-portfolio-card className="min-h-0 w-[calc(100%-3rem)] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
+          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border/55 pb-3">
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">Total portfolio value</p>
@@ -280,11 +280,7 @@ function Dashboard() {
             </div>
 
             <div className="mt-3 grid grid-cols-[72px_minmax(0,1fr)] items-center gap-3">
-              <div className="portfolio-donut relative h-[64px] w-[64px] shrink-0 rounded-full">
-                <div className="absolute inset-[11px] flex items-center justify-center rounded-full bg-card">
-                  <span className="text-[10px] leading-none text-muted-foreground">Portfolio</span>
-                </div>
-              </div>
+              <div className="portfolio-donut relative h-[64px] w-[64px] shrink-0 rounded-full" />
               <div className="min-w-0 divide-y divide-border/55">
                 {[
                   { name: "Unit Trusts", value: "LKR 3.68M", path: "/unit-trusts", dot: "bg-allocation-unit-trusts" },
@@ -307,9 +303,8 @@ function Dashboard() {
             </div>
           </article>
 
-          <article data-portfolio-card className="min-h-0 w-[calc(100%-3rem)] shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
-            <h2 className="text-base font-semibold text-foreground">Returns by class</h2>
-            <div className="mt-5 grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-3 text-xs text-muted-foreground">
+          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
+            <div className="grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-3 text-xs text-muted-foreground">
               <span />
               <span className="text-right">7D</span>
               <span className="text-right">30D</span>
@@ -341,7 +336,7 @@ function Dashboard() {
               aria-current={heroPage === page ? "true" : undefined}
               onClick={() => {
                 const scroller = heroScrollerRef.current;
-                if (scroller) scroller.scrollTo({ left: page === 0 ? 0 : scroller.scrollWidth - scroller.clientWidth, behavior: "smooth" });
+                if (scroller) scroller.scrollTo({ left: page === 0 ? 0 : scroller.scrollWidth, behavior: "smooth" });
               }}
               className={`h-1.5 rounded-full transition-all ${heroPage === page ? "w-4 bg-pill" : "w-1.5 bg-muted-foreground/35"}`}
             />
