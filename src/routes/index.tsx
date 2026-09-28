@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import { Link } from "@tanstack/react-router";
@@ -12,6 +12,16 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Portfolio Dashboard — CAL" },
+      { name: "description", content: "View your CAL portfolio value, allocation, returns, rates, and recent activity." },
+      { property: "og:title", content: "Portfolio Dashboard — CAL" },
+      { property: "og:description", content: "View your CAL portfolio value, allocation, returns, rates, and recent activity." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: Dashboard,
 });
 
@@ -85,6 +95,8 @@ const STORAGE_KEY = "dashboard.hiddenWidgets.v1";
 
 function Dashboard() {
   const navigate = useNavigate();
+  const heroScrollerRef = useRef<HTMLDivElement>(null);
+  const [heroPage, setHeroPage] = useState(0);
   const [showActionPicker, setShowActionPicker] = useState<"invest" | "redeem" | null>(null);
   // Demo flag — would come from user/account state in production
   const [isFirstTimeInvestor, setIsFirstTimeInvestor] = useState(true);
@@ -246,21 +258,95 @@ function Dashboard() {
         </div>
       </div>
 
-      <div
-        className="relative mx-4 mt-1.5 overflow-hidden rounded-2xl px-5 pt-5 pb-4 shadow-sm"
-        style={{
-          background: "oklch(0.34 0.10 275)",
-        }}
-      >
-        <p className="text-[12px] font-medium text-white/60 tracking-wide text-center">Total Portfolio Value</p>
-        <h2 className="mt-2 text-center text-[32px] font-bold tracking-tight text-white leading-none">
-          LKR 7,370,000
-        </h2>
-        <p className="mt-1.5 text-center text-[12px] text-[oklch(0.88_0.18_155)] font-medium">
-          +LKR 662,000 · 7.8%
-          <span className="text-white/45 font-normal"> for month</span>
-        </p>
-      </div>
+      <section className="mt-1.5" aria-label="Portfolio summary">
+        <div
+          ref={heroScrollerRef}
+          onScroll={(event) => {
+            const width = event.currentTarget.clientWidth;
+            if (width > 0) setHeroPage(Math.round(event.currentTarget.scrollLeft / width));
+          }}
+          className="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain px-4"
+        >
+          <article className="min-h-[310px] w-full shrink-0 snap-center overflow-hidden rounded-2xl bg-card px-5 py-5 shadow-sm">
+            <div className="flex items-end justify-between gap-4 border-b border-foreground/10 pb-4">
+              <div>
+                <p className="type-body-sm text-muted-foreground">Total portfolio value</p>
+                <h2 className="mt-1 type-display text-foreground">LKR 7.37M</h2>
+              </div>
+              <div className="pb-0.5 text-right">
+                <p className="type-body-sm text-muted-foreground">This month</p>
+                <p className="type-title text-success">+7.8%</p>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-[112px_1fr] items-center gap-4 pt-4">
+              <div className="portfolio-donut relative mx-auto h-28 w-28 rounded-full">
+                <div className="absolute inset-[17px] flex flex-col items-center justify-center rounded-full bg-card">
+                  <strong className="type-title-lg text-foreground">100%</strong>
+                  <span className="type-caption text-muted-foreground">Portfolio</span>
+                </div>
+              </div>
+              <div className="min-w-0 divide-y divide-foreground/10">
+                {[
+                  { name: "Unit Trusts", value: "LKR 3.68M", share: "50%", path: "/unit-trusts", color: "bg-allocation-unit-trusts", text: "text-allocation-unit-trusts" },
+                  { name: "Equities", value: "LKR 2.21M", share: "30%", path: "/invest?product=equities", color: "bg-allocation-equities", text: "text-allocation-equities" },
+                  { name: "Treasuries", value: "LKR 1.48M", share: "20%", path: "/invest?product=treasuries", color: "bg-allocation-treasuries", text: "text-allocation-treasuries" },
+                ].map((item) => (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    className="grid min-h-16 grid-cols-[42px_1fr_auto_16px] items-center gap-2 py-2 transition-opacity hover:opacity-80"
+                  >
+                    <span className={`flex h-10 w-10 items-center justify-center rounded-full ${item.color}/20 type-label ${item.text}`}>
+                      {item.share}
+                    </span>
+                    <span className="min-w-0 truncate type-label text-foreground">{item.name}</span>
+                    <span className="type-label text-muted-foreground">{item.value}</span>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </article>
+
+          <article className="ml-3 min-h-[310px] w-[calc(100%-2rem)] shrink-0 snap-center rounded-2xl bg-card px-5 py-5 shadow-sm">
+            <h2 className="type-title-lg text-foreground">Returns by class</h2>
+            <div className="mt-5 grid grid-cols-[1fr_repeat(3,minmax(58px,0.7fr))] items-center gap-2 px-3 type-body-sm text-muted-foreground">
+              <span />
+              <span className="text-right">7D</span>
+              <span className="text-right">30D</span>
+              <span className="text-right">All time</span>
+            </div>
+            <div className="mt-2 space-y-2.5">
+              {[
+                { label: "UT", values: ["+66k", "+169k", "+677k"] },
+                { label: "EQ", values: ["+75k", "+135k", "+546k"] },
+                { label: "TB", values: ["+4k", "+13k", "+121k"] },
+              ].map((row) => (
+                <div key={row.label} className="grid min-h-16 grid-cols-[1fr_repeat(3,minmax(58px,0.7fr))] items-center gap-2 rounded-xl bg-secondary/50 px-3">
+                  <strong className="type-title text-foreground">{row.label}</strong>
+                  {row.values.map((value) => (
+                    <span key={value} className="text-right type-label text-success">{value}</span>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </article>
+          <div className="w-4 shrink-0" aria-hidden="true" />
+        </div>
+        <div className="mt-2 flex justify-center gap-1.5" aria-label={`Portfolio card ${heroPage + 1} of 2`}>
+          {[0, 1].map((page) => (
+            <button
+              key={page}
+              type="button"
+              aria-label={`Show portfolio card ${page + 1}`}
+              aria-current={heroPage === page ? "true" : undefined}
+              onClick={() => heroScrollerRef.current?.scrollTo({ left: page * heroScrollerRef.current.clientWidth, behavior: "smooth" })}
+              className={`h-1.5 rounded-full transition-all ${heroPage === page ? "w-5 bg-pill" : "w-1.5 bg-muted-foreground/35"}`}
+            />
+          ))}
+        </div>
+      </section>
 
       {isFirstTimeInvestor && (
         <div className="mx-4 mt-2">

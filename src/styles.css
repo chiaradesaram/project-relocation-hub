@@ -55,6 +55,9 @@
   --color-accent-cyan: var(--accent-cyan);
   --color-accent-magenta: var(--accent-magenta);
   --color-accent-purple: var(--accent-purple);
+  --color-allocation-unit-trusts: var(--allocation-unit-trusts);
+  --color-allocation-equities: var(--allocation-equities);
+  --color-allocation-treasuries: var(--allocation-treasuries);
   --color-form-card: var(--form-card);
   --color-pill: var(--pill);
   --color-pill-foreground: var(--pill-foreground);
@@ -138,6 +141,9 @@
   --accent-cyan: oklch(0.69 0.14 231);
   --accent-magenta: oklch(0.60 0.24 359);
   --accent-purple: #7B5EA7;
+  --allocation-unit-trusts: oklch(0.76 0.14 195);
+  --allocation-equities: oklch(0.67 0.20 300);
+  --allocation-treasuries: oklch(0.70 0.20 350);
 
 
   --chart-1: oklch(0.646 0.222 41.116);
@@ -316,6 +322,14 @@
     background: oklch(0.26 0.10 265 / 0.75);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
+  }
+
+  .portfolio-donut {
+    background: conic-gradient(
+      var(--allocation-unit-trusts) 0 50%,
+      var(--allocation-equities) 50% 80%,
+      var(--allocation-treasuries) 80% 100%
+    );
   }
 }
 
