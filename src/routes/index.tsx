@@ -259,15 +259,6 @@ function Dashboard() {
       </div>
 
       <section className="mt-2" aria-label="Portfolio summary">
-        <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 px-4">
-          <div className="min-w-0">
-            <p className="type-caption font-semibold text-muted-foreground">Portfolio</p>
-            <h1 className="mt-0.5 truncate text-[1.75rem] font-semibold leading-none text-foreground">LKR 7.37M</h1>
-          </div>
-          <div className="shrink-0 rounded-full bg-success/15 px-2.5 py-1 text-right">
-            <span className="type-caption font-semibold text-success">+7.8% this month</span>
-          </div>
-        </div>
         <div
           ref={heroScrollerRef}
           onScroll={(event) => {
@@ -276,20 +267,26 @@ function Dashboard() {
           }}
           className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1"
         >
-          <article data-portfolio-card className="min-h-[236px] w-[calc(100%-3rem)] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/45 bg-card px-4 py-4 shadow-sm">
-            <div className="grid grid-cols-[64px_minmax(0,1fr)] items-center gap-4">
-              <div className="portfolio-donut relative h-16 w-16 shrink-0 rounded-full">
-                <div className="absolute inset-[9px] flex items-center justify-center rounded-full bg-card">
-                  <strong className="text-sm font-semibold text-foreground">100%</strong>
-                </div>
-              </div>
+          <article data-portfolio-card className="min-h-[260px] w-[calc(100%-3rem)] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/45 bg-card px-4 py-4 shadow-sm">
+            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border/55 pb-3">
               <div className="min-w-0">
-                <h2 className="text-base font-semibold text-foreground">Your allocation</h2>
-                <p className="mt-0.5 text-xs text-muted-foreground">Across three asset classes</p>
+                <p className="text-xs text-muted-foreground">Total portfolio value</p>
+                <h1 className="mt-1 truncate text-[1.65rem] font-semibold leading-none text-foreground">LKR 7.37M</h1>
+              </div>
+              <div className="shrink-0 pb-0.5 text-right">
+                <p className="text-xs text-muted-foreground">This month</p>
+                <p className="mt-0.5 text-sm font-semibold text-success">+7.8%</p>
               </div>
             </div>
 
-            <div className="mt-3 divide-y divide-border/55">
+            <div className="mt-3 grid grid-cols-[72px_minmax(0,1fr)] items-center gap-3">
+              <div className="portfolio-donut relative h-[72px] w-[72px] shrink-0 rounded-full">
+                <div className="absolute inset-[10px] flex flex-col items-center justify-center rounded-full bg-card">
+                  <strong className="text-base font-semibold leading-none text-foreground">100%</strong>
+                  <span className="mt-1 text-[10px] leading-none text-muted-foreground">Portfolio</span>
+                </div>
+              </div>
+              <div className="min-w-0 divide-y divide-border/55">
                 {[
                   { name: "Unit Trusts", value: "LKR 3.68M", share: "50%", path: "/unit-trusts", color: "bg-allocation-unit-trusts/20", text: "text-allocation-unit-trusts" },
                   { name: "Equities", value: "LKR 2.21M", share: "30%", path: "/invest?product=equities", color: "bg-allocation-equities/20", text: "text-allocation-equities" },
@@ -299,35 +296,35 @@ function Dashboard() {
                     key={item.name}
                     type="button"
                     onClick={() => navigate({ to: item.path })}
-                    className="grid min-h-12 w-full grid-cols-[34px_minmax(0,1fr)_auto_16px] items-center gap-2 text-left transition-opacity hover:opacity-80 active:opacity-70"
+                    className="grid min-h-[52px] w-full grid-cols-[32px_minmax(0,1fr)_auto_14px] items-center gap-2 text-left transition-opacity hover:opacity-80 active:opacity-70"
                   >
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-full ${item.color} text-xs font-semibold ${item.text}`}>
+                    <span className={`flex h-7 w-7 items-center justify-center rounded-full ${item.color} text-[11px] font-semibold ${item.text}`}>
                       {item.share}
                     </span>
-                    <span className="min-w-0 truncate text-sm font-semibold text-foreground">{item.name}</span>
-                    <span className="text-xs font-medium text-muted-foreground">{item.value}</span>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground/70" />
+                    <span className="min-w-0 truncate text-xs font-semibold text-foreground">{item.name}</span>
+                    <span className="text-[11px] font-medium text-muted-foreground">{item.value}</span>
+                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/70" />
                   </button>
                 ))}
+              </div>
             </div>
           </article>
 
-          <article data-portfolio-card className="min-h-[236px] w-[calc(100%-3rem)] shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-4 shadow-sm">
+          <article data-portfolio-card className="min-h-[260px] w-[calc(100%-3rem)] shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-4 shadow-sm">
             <h2 className="text-base font-semibold text-foreground">Returns by class</h2>
-            <p className="mt-0.5 text-xs text-muted-foreground">Portfolio gains in LKR</p>
-            <div className="mt-4 grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-2 text-xs text-muted-foreground">
+            <div className="mt-5 grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-3 text-xs text-muted-foreground">
               <span />
               <span className="text-right">7D</span>
               <span className="text-right">30D</span>
               <span className="text-right">All time</span>
             </div>
-            <div className="mt-1 divide-y divide-border/55">
+            <div className="mt-2 space-y-2">
               {[
                 { label: "UT", values: ["+66k", "+169k", "+677k"] },
                 { label: "EQ", values: ["+75k", "+135k", "+546k"] },
                 { label: "TB", values: ["+4k", "+13k", "+121k"] },
               ].map((row) => (
-                <div key={row.label} className="grid min-h-12 grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-2">
+                <div key={row.label} className="grid min-h-[46px] grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 rounded-xl bg-secondary/40 px-3">
                   <strong className="text-sm font-semibold text-foreground">{row.label}</strong>
                   {row.values.map((value) => (
                     <span key={value} className="text-right text-xs font-semibold text-success">{value}</span>
