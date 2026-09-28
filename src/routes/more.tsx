@@ -15,7 +15,7 @@ export const Route = createFileRoute("/more")({
 
 const sections = [
   {
-    title: "PRODUCTS & SERVICES",
+    title: "PORTFOLIO",
     items: [
       { icon: PieChart, label: "Unit Trusts", path: "/unit-trusts" },
       { icon: BarChart2, label: "Equities", path: "/invest?product=equities" },
