@@ -258,35 +258,38 @@ function Dashboard() {
         </div>
       </div>
 
-      <section className="mt-1.5" aria-label="Portfolio summary">
+      <section className="mt-2" aria-label="Portfolio summary">
+        <div className="mb-3 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 px-4">
+          <div className="min-w-0">
+            <p className="type-caption font-semibold text-muted-foreground">Portfolio</p>
+            <h1 className="mt-0.5 truncate text-[1.75rem] font-semibold leading-none text-foreground">LKR 7.37M</h1>
+          </div>
+          <div className="shrink-0 rounded-full bg-success/15 px-2.5 py-1 text-right">
+            <span className="type-caption font-semibold text-success">+7.8% this month</span>
+          </div>
+        </div>
         <div
           ref={heroScrollerRef}
           onScroll={(event) => {
-            const width = event.currentTarget.clientWidth;
-            if (width > 0) setHeroPage(Math.round(event.currentTarget.scrollLeft / width));
+            const maxScroll = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
+            if (maxScroll > 0) setHeroPage(event.currentTarget.scrollLeft >= maxScroll / 2 ? 1 : 0);
           }}
-          className="scrollbar-hide flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain px-4"
+          className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1"
         >
-          <article className="min-h-[310px] w-full shrink-0 snap-center overflow-hidden rounded-2xl bg-card px-5 py-5 shadow-sm">
-            <div className="flex items-end justify-between gap-4 border-b border-foreground/10 pb-4">
-              <div>
-                <p className="type-body-sm text-muted-foreground">Total portfolio value</p>
-                <h2 className="mt-1 type-display text-foreground">LKR 7.37M</h2>
+          <article data-portfolio-card className="min-h-[236px] w-[calc(100%-3rem)] shrink-0 snap-start overflow-hidden rounded-2xl border border-border/45 bg-card px-4 py-4 shadow-sm">
+            <div className="grid grid-cols-[64px_minmax(0,1fr)] items-center gap-4">
+              <div className="portfolio-donut relative h-16 w-16 shrink-0 rounded-full">
+                <div className="absolute inset-[9px] flex items-center justify-center rounded-full bg-card">
+                  <strong className="text-sm font-semibold text-foreground">100%</strong>
+                </div>
               </div>
-              <div className="pb-0.5 text-right">
-                <p className="type-body-sm text-muted-foreground">This month</p>
-                <p className="type-title text-success">+7.8%</p>
+              <div className="min-w-0">
+                <h2 className="text-base font-semibold text-foreground">Your allocation</h2>
+                <p className="mt-0.5 text-xs text-muted-foreground">Across three asset classes</p>
               </div>
             </div>
 
-            <div className="grid grid-cols-[88px_1fr] items-center gap-3 pt-4">
-              <div className="portfolio-donut relative mx-auto h-[88px] w-[88px] rounded-full">
-                <div className="absolute inset-[13px] flex flex-col items-center justify-center rounded-full bg-card">
-                  <strong className="type-title-lg text-foreground">100%</strong>
-                  <span className="type-caption text-muted-foreground">Portfolio</span>
-                </div>
-              </div>
-              <div className="min-w-0 divide-y divide-foreground/10">
+            <div className="mt-3 divide-y divide-border/55">
                 {[
                   { name: "Unit Trusts", value: "LKR 3.68M", share: "50%", path: "/unit-trusts", color: "bg-allocation-unit-trusts/20", text: "text-allocation-unit-trusts" },
                   { name: "Equities", value: "LKR 2.21M", share: "30%", path: "/invest?product=equities", color: "bg-allocation-equities/20", text: "text-allocation-equities" },
@@ -296,44 +299,44 @@ function Dashboard() {
                     key={item.name}
                     type="button"
                     onClick={() => navigate({ to: item.path })}
-                    className="grid min-h-16 grid-cols-[42px_1fr_auto_16px] items-center gap-2 py-2 transition-opacity hover:opacity-80"
+                    className="grid min-h-12 w-full grid-cols-[34px_minmax(0,1fr)_auto_16px] items-center gap-2 text-left transition-opacity hover:opacity-80 active:opacity-70"
                   >
-                    <span className={`flex h-10 w-10 items-center justify-center rounded-full ${item.color}/20 type-label ${item.text}`}>
+                    <span className={`flex h-8 w-8 items-center justify-center rounded-full ${item.color} text-xs font-semibold ${item.text}`}>
                       {item.share}
                     </span>
-                    <span className="min-w-0 truncate type-label text-foreground">{item.name}</span>
-                    <span className="type-label text-muted-foreground">{item.value}</span>
-                    <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                    <span className="min-w-0 truncate text-sm font-semibold text-foreground">{item.name}</span>
+                    <span className="text-xs font-medium text-muted-foreground">{item.value}</span>
+                    <ChevronRight className="h-4 w-4 text-muted-foreground/70" />
                   </button>
                 ))}
-              </div>
             </div>
           </article>
 
-          <article className="ml-3 min-h-[310px] w-full shrink-0 snap-center rounded-2xl bg-card px-5 py-5 shadow-sm">
-            <h2 className="type-title-lg text-foreground">Returns by class</h2>
-            <div className="mt-5 grid grid-cols-[1fr_repeat(3,minmax(58px,0.7fr))] items-center gap-2 px-3 type-body-sm text-muted-foreground">
+          <article data-portfolio-card className="min-h-[236px] w-[calc(100%-3rem)] shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-4 shadow-sm">
+            <h2 className="text-base font-semibold text-foreground">Returns by class</h2>
+            <p className="mt-0.5 text-xs text-muted-foreground">Portfolio gains in LKR</p>
+            <div className="mt-4 grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-2 text-xs text-muted-foreground">
               <span />
               <span className="text-right">7D</span>
               <span className="text-right">30D</span>
               <span className="text-right">All time</span>
             </div>
-            <div className="mt-2 space-y-2.5">
+            <div className="mt-1 divide-y divide-border/55">
               {[
                 { label: "UT", values: ["+66k", "+169k", "+677k"] },
                 { label: "EQ", values: ["+75k", "+135k", "+546k"] },
                 { label: "TB", values: ["+4k", "+13k", "+121k"] },
               ].map((row) => (
-                <div key={row.label} className="grid min-h-16 grid-cols-[1fr_repeat(3,minmax(58px,0.7fr))] items-center gap-2 rounded-xl bg-secondary/50 px-3">
-                  <strong className="type-title text-foreground">{row.label}</strong>
+                <div key={row.label} className="grid min-h-12 grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-2">
+                  <strong className="text-sm font-semibold text-foreground">{row.label}</strong>
                   {row.values.map((value) => (
-                    <span key={value} className="text-right type-label text-success">{value}</span>
+                    <span key={value} className="text-right text-xs font-semibold text-success">{value}</span>
                   ))}
                 </div>
               ))}
             </div>
           </article>
-          <div className="w-4 shrink-0" aria-hidden="true" />
+          <div className="w-12 shrink-0" aria-hidden="true" />
         </div>
         <div className="mt-2 flex justify-center gap-1.5" aria-label={`Portfolio card ${heroPage + 1} of 2`}>
           {[0, 1].map((page) => (
@@ -342,16 +345,19 @@ function Dashboard() {
               type="button"
               aria-label={`Show portfolio card ${page + 1}`}
               aria-current={heroPage === page ? "true" : undefined}
-              onClick={() => heroScrollerRef.current?.scrollTo({ left: page * heroScrollerRef.current.clientWidth, behavior: "smooth" })}
-              className={`h-1.5 rounded-full transition-all ${heroPage === page ? "w-5 bg-pill" : "w-1.5 bg-muted-foreground/35"}`}
+              onClick={() => {
+                const scroller = heroScrollerRef.current;
+                if (scroller) scroller.scrollTo({ left: page === 0 ? 0 : scroller.scrollWidth - scroller.clientWidth, behavior: "smooth" });
+              }}
+              className={`h-1.5 rounded-full transition-all ${heroPage === page ? "w-4 bg-pill" : "w-1.5 bg-muted-foreground/35"}`}
             />
           ))}
         </div>
       </section>
 
       {isFirstTimeInvestor && (
-        <div className="mx-4 mt-2">
-          <div className="relative overflow-hidden rounded-2xl bg-primary/15 backdrop-blur-md p-3.5">
+        <div className="mx-4 mt-4">
+          <div className="relative overflow-hidden rounded-xl bg-secondary/55 p-3">
             <button
               onClick={() => setIsFirstTimeInvestor(false)}
               className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-background/30 text-muted-foreground hover:text-foreground transition"
@@ -363,12 +369,12 @@ function Dashboard() {
               onClick={() => navigate({ to: "/get-started" })}
               className="flex w-full items-center gap-3 text-left"
             >
-              <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-pill ring-1 ring-pill/60">
-                <Sparkles className="h-4 w-4 text-pill-foreground" />
+              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-pill/15">
+                <Sparkles className="h-4 w-4 text-pill" />
               </span>
               <div className="min-w-0 flex-1 pr-5">
-                <p className="text-[12px] font-semibold text-foreground leading-tight">New here? Let's get you started</p>
-                <p className="text-[10.5px] text-muted-foreground mt-0.5 leading-snug">
+                <p className="text-xs font-semibold leading-tight text-foreground">New here? Let's get you started</p>
+                <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
                   Not sure what to invest in? Take a 30-second quiz to find a fund that fits you.
                 </p>
               </div>
@@ -378,21 +384,25 @@ function Dashboard() {
         </div>
       )}
 
-      {/* Invest / Redeem buttons under hero */}
-      <div className="mx-4 mt-2.5 flex gap-2">
+      {/* Compact portfolio actions */}
+      <div className="mx-4 mt-4 flex justify-center gap-12">
         <button
           onClick={() => setShowActionPicker("invest")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 transition hover:bg-primary/90"
+          className="flex min-w-16 flex-col items-center gap-1.5 text-foreground transition-opacity hover:opacity-85 active:opacity-70"
         >
-          <Plus className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
-          <span className="text-[12px] font-semibold text-primary-foreground">Invest</span>
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-pill">
+            <Plus className="h-5 w-5 text-pill-foreground" strokeWidth={2.5} />
+          </span>
+          <span className="text-xs font-semibold">Invest</span>
         </button>
         <button
           onClick={() => setShowActionPicker("redeem")}
-          className="flex flex-1 items-center justify-center gap-1.5 rounded-xl bg-primary py-2.5 transition hover:bg-primary/90"
+          className="flex min-w-16 flex-col items-center gap-1.5 text-foreground transition-opacity hover:opacity-85 active:opacity-70"
         >
-          <Minus className="h-3.5 w-3.5 text-primary-foreground" strokeWidth={3} />
-          <span className="text-[12px] font-semibold text-primary-foreground">Redeem</span>
+          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary">
+            <Minus className="h-5 w-5 text-foreground" strokeWidth={2.5} />
+          </span>
+          <span className="text-xs font-semibold">Redeem</span>
         </button>
       </div>
 
