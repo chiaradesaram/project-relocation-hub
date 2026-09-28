@@ -271,13 +271,8 @@ function Dashboard() {
         <div
           ref={heroScrollerRef}
           onScroll={(event) => {
-            const cards = Array.from(event.currentTarget.querySelectorAll<HTMLElement>("[data-portfolio-card]"));
-            if (cards.length === 0) return;
-            const nearest = cards.reduce((best, card, index) => {
-              const distance = Math.abs(card.offsetLeft - event.currentTarget.scrollLeft - 16);
-              return distance < best.distance ? { index, distance } : best;
-            }, { index: 0, distance: Number.POSITIVE_INFINITY });
-            setHeroPage(nearest.index);
+            const maxScroll = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
+            if (maxScroll > 0) setHeroPage(event.currentTarget.scrollLeft >= maxScroll / 2 ? 1 : 0);
           }}
           className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1"
         >
@@ -341,7 +336,7 @@ function Dashboard() {
               ))}
             </div>
           </article>
-          <div className="w-1 shrink-0" aria-hidden="true" />
+          <div className="w-12 shrink-0" aria-hidden="true" />
         </div>
         <div className="mt-2 flex justify-center gap-1.5" aria-label={`Portfolio card ${heroPage + 1} of 2`}>
           {[0, 1].map((page) => (
@@ -351,8 +346,8 @@ function Dashboard() {
               aria-label={`Show portfolio card ${page + 1}`}
               aria-current={heroPage === page ? "true" : undefined}
               onClick={() => {
-                const card = heroScrollerRef.current?.querySelectorAll<HTMLElement>("[data-portfolio-card]")[page];
-                if (card && heroScrollerRef.current) heroScrollerRef.current.scrollTo({ left: card.offsetLeft - 16, behavior: "smooth" });
+                const scroller = heroScrollerRef.current;
+                if (scroller) scroller.scrollTo({ left: page === 0 ? 0 : scroller.scrollWidth - scroller.clientWidth, behavior: "smooth" });
               }}
               className={`h-1.5 rounded-full transition-all ${heroPage === page ? "w-4 bg-pill" : "w-1.5 bg-muted-foreground/35"}`}
             />
