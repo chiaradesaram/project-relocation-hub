@@ -265,7 +265,7 @@ function Dashboard() {
             const maxScroll = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
             if (maxScroll > 0) setHeroPage(event.currentTarget.scrollLeft >= maxScroll / 2 ? 1 : 0);
           }}
-          className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain px-4 pb-1"
+          className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-pl-4 px-4 pb-1"
         >
           <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3.5 shadow-sm">
             <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border/55 pb-3">
