@@ -192,6 +192,39 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
     <MobileLayout>
       <PageHeader title={title} showBack />
 
+      {/* Amount hero */}
+      <div className="px-4 pt-6 pb-6 text-center">
+        <div className="inline-flex items-baseline gap-2">
+          <span className="text-[18px] font-medium text-muted-foreground">LKR</span>
+          <input
+            type="text"
+            inputMode="decimal"
+            value={formatAmountDisplay(amount)}
+            onChange={(e) => setAmount(sanitizeAmountInput(e.target.value))}
+            placeholder="0"
+            className="bg-transparent text-[44px] font-bold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none text-center"
+            style={{ width: `${Math.max(2, (formatAmountDisplay(amount) || "0").length)}ch` }}
+          />
+          {hasSource && !isPlan && maxAmount > 0 && (
+            <button
+              type="button"
+              onClick={() => setAmount(String(Math.floor(maxAmount)))}
+              className="text-[12px] font-semibold px-3 py-1 rounded-full bg-pill/15 text-pill"
+            >
+              Max
+            </button>
+          )}
+        </div>
+        {amountHint && <p className="mt-3 text-[12px] text-muted-foreground">{amountHint}</p>}
+        {overMax && (
+          <p className="mt-1 text-[12px] text-destructive">
+            {isInstant
+              ? "That's over your instant limit. Try Normal Redemption for larger amounts."
+              : "That's more than your available balance."}
+          </p>
+        )}
+      </div>
+
       {/* From */}
       <SectionTitle>{isPayout ? "Withdraw from" : "Redeem from"}</SectionTitle>
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
@@ -241,39 +274,6 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       <SectionTitle>Pay to</SectionTitle>
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
         <PickerRow label="Bank account" value={bank} placeholder="Select bank" onClick={() => setPicker("bank")} />
-      </div>
-
-      {/* Amount */}
-      <SectionTitle>{isPlan ? "Amount per payout" : "Amount"}</SectionTitle>
-      <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4">
-        <div className="flex items-baseline gap-2">
-          <span className="text-[22px] font-medium text-muted-foreground">LKR</span>
-          <input
-            type="text"
-            inputMode="decimal"
-            value={formatAmountDisplay(amount)}
-            onChange={(e) => setAmount(sanitizeAmountInput(e.target.value))}
-            placeholder="0.00"
-            className="flex-1 min-w-0 bg-transparent text-[26px] font-semibold text-foreground placeholder:text-muted-foreground/60 outline-none"
-          />
-          {hasSource && !isPlan && maxAmount > 0 && (
-            <button
-              type="button"
-              onClick={() => setAmount(String(Math.floor(maxAmount)))}
-              className="text-[12px] font-semibold px-3 py-1 rounded-full bg-pill/15 text-pill"
-            >
-              Max
-            </button>
-          )}
-        </div>
-        {amountHint && <p className="mt-2 text-[12px] text-muted-foreground">{amountHint}</p>}
-        {overMax && (
-          <p className="mt-1 text-[12px] text-destructive">
-            {isInstant
-              ? "That's over your instant limit. Try Normal Redemption for larger amounts."
-              : "That's more than your available balance."}
-          </p>
-        )}
       </div>
 
       {isInstant && (
