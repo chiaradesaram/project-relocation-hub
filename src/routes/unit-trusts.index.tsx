@@ -91,9 +91,16 @@ function UnitTrustPortfolio() {
                     {fund.description}
                   </p>
                 </div>
-                <p className="shrink-0 type-label text-foreground">
-                  {fund.value}
-                </p>
+                <div className="shrink-0 text-right">
+                  <p className="type-label text-foreground">
+                    {fund.value}
+                  </p>
+                  {!isOpen && (
+                    <p className="text-[11px] font-semibold text-success mt-0.5">
+                      All {fund.earningsAll}
+                    </p>
+                  )}
+                </div>
                 {isOpen ? (
                   <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
                 ) : (
