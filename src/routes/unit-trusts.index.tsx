@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { funds, type UnitTrustFund } from "@/data/unitTrusts";
+import { funds, type Fund } from "@/data/unitTrusts";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { ChevronRight, ArrowUpRight, ArrowDownLeft, Plus, X } from "lucide-react";
 
