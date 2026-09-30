@@ -91,34 +91,30 @@ function UnitTrustPortfolio() {
                     {fund.description}
                   </p>
                 </div>
-                <div className="shrink-0 text-right">
-                  <p className="type-label text-foreground">
-                    {fund.value}
-                  </p>
-                  {isOpen ? (
-                    <div className="mt-1.5 flex items-center justify-end gap-1.5 flex-wrap">
-                      <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                        7d {fund.earnings7d}
-                      </span>
-                      <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                        30d {fund.earnings30d}
-                      </span>
-                      <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                        All {fund.earningsAll}
-                      </span>
-                    </div>
-                  ) : (
-                    <span className="mt-1 inline-block rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                      All {fund.earningsAll}
-                    </span>
-                  )}
-                </div>
+                <p className="shrink-0 type-label text-foreground">
+                  {fund.value}
+                </p>
                 {isOpen ? (
                   <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
                 ) : (
                   <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
                 )}
               </button>
+
+              {/* Earnings row */}
+              {isOpen && (
+                <div className="flex items-center gap-1.5 px-4 pb-3 -mt-1 flex-wrap">
+                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                    7d {fund.earnings7d}
+                  </span>
+                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                    30d {fund.earnings30d}
+                  </span>
+                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                    All {fund.earningsAll}
+                  </span>
+                </div>
+              )}
 
               {/* Sub-accounts */}
               {isOpen && (
