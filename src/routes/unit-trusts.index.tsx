@@ -2,8 +2,9 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { funds } from "@/data/unitTrusts";
-import { ChevronRight, ChevronDown, ArrowUpRight, ArrowDownLeft, Plus } from "lucide-react";
+import { funds, type UnitTrustFund } from "@/data/unitTrusts";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { ChevronRight, ArrowUpRight, ArrowDownLeft, Plus, X } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/")({
   component: UnitTrustPortfolio,
@@ -11,10 +12,7 @@ export const Route = createFileRoute("/unit-trusts/")({
 
 function UnitTrustPortfolio() {
   const navigate = useNavigate();
-  const [expanded, setExpanded] = useState<string | null>(null);
-
-  const toggle = (name: string) =>
-    setExpanded(expanded === name ? null : name);
+  const [openFund, setOpenFund] = useState<UnitTrustFund | null>(null);
 
   return (
     <MobileLayout>
@@ -22,24 +20,19 @@ function UnitTrustPortfolio() {
 
       {/* Summary */}
       <div className="px-4 mt-3 text-center">
-        <p className="type-label-sm text-muted-foreground">
-          Total Balance
-        </p>
-        <p className="type-title-lg tracking-tight text-foreground mt-1">
+        <p className="text-[12px] text-muted-foreground">Total Balance</p>
+        <p className="mt-1 text-[26px] font-bold tracking-tight text-foreground">
           LKR 2,450,000
         </p>
-        <div className="mt-2 flex items-center justify-center gap-5 type-caption">
+        <div className="mt-2 flex items-center justify-center gap-5 text-[12px]">
           <span className="text-muted-foreground">
-            7d{" "}
-            <span className="font-semibold text-success">+16,436</span>
+            7d <span className="font-semibold text-success">+16,436</span>
           </span>
           <span className="text-muted-foreground">
-            30d{" "}
-            <span className="font-semibold text-success">+110,250</span>
+            30d <span className="font-semibold text-success">+110,250</span>
           </span>
           <span className="text-muted-foreground">
-            All{" "}
-            <span className="font-semibold text-success">+219,949</span>
+            All <span className="font-semibold text-success">+219,949</span>
           </span>
         </div>
       </div>
@@ -53,140 +46,133 @@ function UnitTrustPortfolio() {
           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card py-3 transition hover:bg-form-card/60 active:bg-form-card/70"
         >
           <ArrowUpRight className="h-4 w-4 text-success" />
-          <span className="type-label text-foreground">Invest</span>
+          <span className="text-[14px] font-semibold text-foreground">Invest</span>
         </button>
         <button
           onClick={() =>
-            navigate({
-              to: "/redeem",
-              search: { product: "unit-trust" },
-            })
+            navigate({ to: "/redeem", search: { product: "unit-trust" } })
           }
           className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card py-3 transition hover:bg-form-card/60 active:bg-form-card/70"
         >
           <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
-          <span className="type-label text-foreground">Redeem</span>
+          <span className="text-[14px] font-semibold text-foreground">Redeem</span>
         </button>
       </div>
 
       {/* Fund Cards */}
       <div className="mx-4 mt-5 space-y-2.5">
-        {funds.map((fund) => {
-          const isOpen = expanded === fund.name;
-          return (
-            <div
-              key={fund.name}
-              className="rounded-2xl bg-card overflow-hidden"
-            >
-              {/* Fund row */}
-              <button
-                onClick={() => toggle(fund.name)}
-                className="flex w-full items-center gap-3 p-4 transition active:bg-form-card/40"
-              >
-                <div className="min-w-0 flex-1 text-left">
-                  <p className="type-label text-foreground leading-tight">
-                    {fund.name}
-                  </p>
-                  <p className="type-caption text-muted-foreground mt-0.5">
-                    {fund.description}
-                  </p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="type-label text-foreground">
-                    {fund.value}
-                  </p>
-                  {!isOpen && (
-                    <p className="text-[11px] font-semibold text-success mt-0.5">
-                      All {fund.earningsAll}
-                    </p>
-                  )}
-                </div>
-                {isOpen ? (
-                  <ChevronDown className="h-4 w-4 shrink-0 text-muted-foreground" />
-                ) : (
-                  <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-                )}
-              </button>
-
-              {/* Earnings row */}
-              {isOpen && (
-                <div className="flex items-center gap-1.5 px-4 pb-3 -mt-1 flex-wrap">
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                    7d {fund.earnings7d}
-                  </span>
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                    30d {fund.earnings30d}
-                  </span>
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                    All {fund.earningsAll}
-                  </span>
-                </div>
-              )}
-
-              {/* Sub-accounts */}
-              {isOpen && (
-                <div className="px-3 pb-3 space-y-1">
-                  {fund.subAccounts.map((sub) => {
-                    const hasGoal = !!sub.goalTarget;
-                    const progress = hasGoal
-                      ? Math.min((sub.valueNum / sub.goalTarget!) * 100, 100)
-                      : 0;
-
-                    return (
-                      <Link
-                        key={sub.id}
-                        to="/unit-trusts/$subAccountId"
-                        params={{ subAccountId: sub.id }}
-                        className="block rounded-xl bg-background/40 px-3.5 py-3 transition active:bg-form-card/40"
-                      >
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-2 min-w-0">
-                            <div
-                              className="h-1.5 w-1.5 shrink-0 rounded-full"
-                              style={{ backgroundColor: sub.dotColor }}
-                            />
-                            <span className="type-label-sm text-foreground truncate">
-                              {sub.name}
-                            </span>
-                          </div>
-                          <div className="flex items-center gap-1.5 shrink-0">
-                            <span className="text-[13px] font-semibold text-foreground">
-                              {sub.value}
-                            </span>
-                            <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
-                          </div>
-                        </div>
-
-                        {/* Earnings + goal progress */}
-                        <div className="mt-2 flex items-center justify-end gap-1.5">
-                          {hasGoal && (
-                            <span className="rounded-full bg-accent-magenta/20 px-2 py-0.5 text-[11px] font-semibold text-accent-magenta">
-                              {Math.round(progress)}% of goal
-                            </span>
-                          )}
-                          <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
-                            All {sub.earningsAll}
-                          </span>
-                        </div>
-                      </Link>
-                    );
-                  })}
-                </div>
-              )}
+        {funds.map((fund) => (
+          <button
+            key={fund.name}
+            onClick={() => setOpenFund(fund)}
+            className="flex w-full items-center gap-3 rounded-2xl bg-card p-4 text-left transition active:bg-form-card/40"
+          >
+            <div className="min-w-0 flex-1">
+              <p className="text-[14px] font-semibold leading-tight text-foreground">
+                {fund.name}
+              </p>
+              <p className="mt-0.5 text-[12px] text-muted-foreground">
+                {fund.description}
+              </p>
             </div>
-          );
-        })}
+            <div className="shrink-0 text-right">
+              <p className="text-[14px] font-semibold text-foreground">
+                {fund.value}
+              </p>
+              <p className="mt-0.5 text-[11px] font-semibold text-success">
+                All {fund.earningsAll}
+              </p>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+          </button>
+        ))}
       </div>
 
       {/* Add new fund */}
       <div className="mx-4 mt-4 mb-6">
         <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-card/60 py-3.5 transition active:bg-form-card/40">
           <Plus className="h-4 w-4 text-muted-foreground" />
-          <span className="type-label-sm text-muted-foreground">
+          <span className="text-[13px] font-semibold text-muted-foreground">
             Add new fund
           </span>
         </button>
       </div>
+
+      {/* Fund detail sheet */}
+      <Sheet open={!!openFund} onOpenChange={(o) => !o && setOpenFund(null)}>
+        <SheetContent side="bottom" className="rounded-t-3xl bg-card px-4 pb-8">
+          {openFund && (
+            <>
+              <div className="flex items-center justify-between pt-1">
+                <div className="min-w-0">
+                  <p className="text-[15px] font-semibold leading-tight text-foreground">
+                    {openFund.name}
+                  </p>
+                  <p className="mt-0.5 text-[12px] text-muted-foreground">
+                    {openFund.description}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setOpenFund(null)}
+                  className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted/50 text-muted-foreground transition hover:bg-muted"
+                  aria-label="Close"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              <div className="mt-3 flex items-end justify-between">
+                <p className="text-[22px] font-bold tracking-tight text-foreground">
+                  {openFund.value}
+                </p>
+                <div className="flex items-center gap-1.5">
+                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                    7d {openFund.earnings7d}
+                  </span>
+                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                    30d {openFund.earnings30d}
+                  </span>
+                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                    All {openFund.earningsAll}
+                  </span>
+                </div>
+              </div>
+
+              <div className="mt-4 space-y-1.5">
+                {openFund.subAccounts.map((sub) => (
+                  <Link
+                    key={sub.id}
+                    to="/unit-trusts/$subAccountId"
+                    params={{ subAccountId: sub.id }}
+                    className="flex items-center justify-between gap-2 rounded-xl bg-background/40 px-3.5 py-3 transition active:bg-form-card/40"
+                  >
+                    <div className="flex min-w-0 items-center gap-2">
+                      <div
+                        className="h-1.5 w-1.5 shrink-0 rounded-full"
+                        style={{ backgroundColor: sub.dotColor }}
+                      />
+                      <span className="truncate text-[13px] font-medium text-foreground">
+                        {sub.name}
+                      </span>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      <div className="text-right">
+                        <p className="text-[13px] font-semibold text-foreground">
+                          {sub.value}
+                        </p>
+                        <p className="text-[11px] font-semibold text-success">
+                          All {sub.earningsAll}
+                        </p>
+                      </div>
+                      <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
   );
 }
