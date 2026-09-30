@@ -12,7 +12,7 @@ export const Route = createFileRoute("/unit-trusts/")({
 
 function UnitTrustPortfolio() {
   const navigate = useNavigate();
-  const [openFund, setOpenFund] = useState<UnitTrustFund | null>(null);
+  const [openFund, setOpenFund] = useState<Fund | null>(null);
 
   return (
     <MobileLayout>
