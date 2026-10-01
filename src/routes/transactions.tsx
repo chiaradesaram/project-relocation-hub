@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Check, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Coins, Banknote, Landmark, FileText } from "lucide-react";
+import { Check, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowDownRight } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,7 @@ type Product = (typeof productFilters)[number];
 
 const subFiltersByProduct: Record<Product, string[]> = {
   "Unit Trusts": [],
-  Equities: ["Pay In", "Pay Out", "Stocks"],
+  Equities: [],
   Treasuries: [],
 };
 
@@ -120,26 +120,9 @@ const subToKinds: Record<string, string[]> = {
   Maturities: ["Maturity"],
 };
 
-const kindIcon: Record<string, typeof TrendingUp> = {
-  Investment: TrendingUp,
-  Redemption: ArrowDownRight,
-  "Fund Flip": ArrowLeftRight,
-  "Pay In": Banknote,
-  "Pay Out": ArrowDownRight,
-  Dividend: Coins,
-  "Bond Purchase": Landmark,
-  "Bill Purchase": Landmark,
-  Maturity: Landmark,
-  "Coupon Received": Coins,
-  "Coupon Paid Out": Coins,
-  "Cash In": Banknote,
-  "Cash Out": ArrowDownRight,
-  "Stock Buy": TrendingUp,
-  "Stock Sell": ArrowDownRight,
-};
-
-function KindIcon({ kind }: { kind: string }) {
-  const Icon = kindIcon[kind] ?? FileText;
+// Just two icons: money in (positive) and money out (negative).
+function KindIcon({ positive }: { positive: boolean }) {
+  const Icon = positive ? TrendingUp : ArrowDownRight;
   return (
     <div
       className="w-9 h-9 rounded-xl flex items-center justify-center shrink-0"
@@ -588,7 +571,7 @@ function Transactions() {
             onClick={() => setOpenTx(tx)}
             className="glass-card p-4 flex items-start gap-3 w-full text-left hover:bg-white/[0.03] transition"
           >
-            <KindIcon kind={tx.kind} />
+            <KindIcon positive={tx.positive} />
             <div className="flex-1 min-w-0">
               {tx.kind === "Pay In" || tx.kind === "Pay Out" ? (
                 <>
@@ -638,7 +621,7 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              {openTx && <KindIcon kind={openTx.kind} />}
+              {openTx && <KindIcon positive={openTx.positive} />}
               <DrawerTitle className="text-xl font-semibold">
                 {openTx?.product === "Treasuries"
                   ? openTx?.kind
@@ -929,14 +912,13 @@ const logItems: LogItem[] = [
   { label: "Recurring Investment", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
 ];
 
-const logIcon = { in: TrendingUp, out: ArrowDownRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
 
 function TransactionLog() {
   return (
     <div className="px-4 pb-6">
       <div className="divide-y divide-white/[0.06]">
         {logItems.map((t, i) => {
-          const Icon = logIcon[t.kind];
+          const Icon = t.amount > 0 ? TrendingUp : ArrowDownRight;
           const positive = t.amount > 0 && t.kind !== "flip";
           const abs = Math.abs(t.amount).toLocaleString("en-US");
           return (
