@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Check, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowUpRight, ArrowLeftRight, Coins, Banknote, Landmark, FileText } from "lucide-react";
+import { Check, X, CalendarDays, LifeBuoy, ChevronRight, Repeat, TrendingUp, ArrowUpRight, ArrowDownRight, ArrowLeftRight, Coins, Banknote, Landmark, FileText } from "lucide-react";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription } from "@/components/ui/drawer";
 import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
@@ -122,10 +122,10 @@ const subToKinds: Record<string, string[]> = {
 
 const kindIcon: Record<string, typeof TrendingUp> = {
   Investment: TrendingUp,
-  Redemption: ArrowUpRight,
+  Redemption: ArrowDownRight,
   "Fund Flip": ArrowLeftRight,
   "Pay In": Banknote,
-  "Pay Out": ArrowUpRight,
+  "Pay Out": ArrowDownRight,
   Dividend: Coins,
   "Bond Purchase": Landmark,
   "Bill Purchase": Landmark,
@@ -133,9 +133,9 @@ const kindIcon: Record<string, typeof TrendingUp> = {
   "Coupon Received": Coins,
   "Coupon Paid Out": Coins,
   "Cash In": Banknote,
-  "Cash Out": ArrowUpRight,
+  "Cash Out": ArrowDownRight,
   "Stock Buy": TrendingUp,
-  "Stock Sell": ArrowUpRight,
+  "Stock Sell": ArrowDownRight,
 };
 
 function KindIcon({ kind }: { kind: string }) {
@@ -929,7 +929,7 @@ const logItems: LogItem[] = [
   { label: "Recurring Investment", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
 ];
 
-const logIcon = { in: TrendingUp, out: ArrowUpRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
+const logIcon = { in: TrendingUp, out: ArrowDownRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
 
 function TransactionLog() {
   return (
