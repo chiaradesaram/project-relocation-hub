@@ -919,6 +919,7 @@ function TransactionLog() {
       <div className="divide-y divide-white/[0.06]">
         {logItems.map((t, i) => {
           const Icon = t.amount > 0 ? TrendingUp : ArrowDownRight;
+          const positive = t.amount > 0 && t.kind !== "flip";
           const abs = Math.abs(t.amount).toLocaleString("en-US");
           return (
             <div key={i} className="py-3 flex items-center gap-3">
