@@ -270,7 +270,7 @@ function Transactions() {
         <div className="flex p-1 rounded-full bg-card/60 backdrop-blur-md">
           {([
             ["requests", "Requests"],
-            ["log", "Transaction log"],
+            ["log", "Transactions"],
           ] as const).map(([k, label]) => (
             <button
               key={k}
