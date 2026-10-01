@@ -621,7 +621,7 @@ function Transactions() {
 
           <DrawerHeader className="text-left p-0 pb-5">
             <div className="flex items-center gap-2 flex-wrap">
-              {openTx && <KindIcon kind={openTx.kind} />}
+              {openTx && <KindIcon positive={openTx.positive} />}
               <DrawerTitle className="text-xl font-semibold">
                 {openTx?.product === "Treasuries"
                   ? openTx?.kind
@@ -912,15 +912,13 @@ const logItems: LogItem[] = [
   { label: "Recurring Investment", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
 ];
 
-const logIcon = { in: TrendingUp, out: ArrowDownRight, flip: ArrowLeftRight, recurring: Repeat, dividend: Coins };
 
 function TransactionLog() {
   return (
     <div className="px-4 pb-6">
       <div className="divide-y divide-white/[0.06]">
         {logItems.map((t, i) => {
-          const Icon = logIcon[t.kind];
-          const positive = t.amount > 0 && t.kind !== "flip";
+          const Icon = t.amount > 0 ? TrendingUp : ArrowDownRight;
           const abs = Math.abs(t.amount).toLocaleString("en-US");
           return (
             <div key={i} className="py-3 flex items-center gap-3">
