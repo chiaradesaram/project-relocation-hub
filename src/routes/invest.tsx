@@ -822,7 +822,7 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
-  const [bankConcept, setBankConcept] = useState<"classic" | "floating">("classic"); // field concept toggle for bank transfer
+  const [bankConcept, setBankConcept] = useState<"classic" | "floating">("floating"); // field concept toggle for bank transfer
   const [accountCopied, setAccountCopied] = useState(false);
 
 
