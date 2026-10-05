@@ -823,6 +823,7 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
+  const [bankConcept, setBankConcept] = useState<"classic" | "floating">("classic"); // field concept toggle for bank transfer
   const [accountCopied, setAccountCopied] = useState(false);
 
 
@@ -1141,59 +1142,101 @@ function MethodForm({
         )}
       </div>
 
-      {/* Details — stacked floating fields (bank) or grouped card (others) */}
-      {!isFlip && (isBank ? (
-        <div className="mx-4 space-y-2.5">
-          <FloatingField
-            label="Fund"
-            value={selectedFund}
-            onClick={() => setPicker("fund")}
-          />
-          <FloatingField
-            label="Sub-account"
-            value={selectedAccount}
-            onClick={() => setPicker("account")}
-          />
-          <FloatingField
-            label={payFromLabel}
-            value={payFromValue}
-            onClick={() => setPicker("payFrom")}
-          />
-          <FloatingField
-            label={sendToLabel}
-            value={sendToValue}
-            onClick={() => setPicker("payTo")}
-          />
-          <FloatingField label="Unit creation date" value={unitCreationDate} readOnly />
-        </div>
-      ) : (
-        <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
-          <PickerRow
-            label="Fund"
-            value={selectedFund}
-            placeholder="Select a fund"
-            onClick={() => setPicker("fund")}
-          />
-          <PickerRow
-            label="Sub-account"
-            value={selectedAccount}
-            placeholder="Select sub-account"
-            onClick={() => setPicker("account")}
-          />
-          <PickerRow
-            label={payFromLabel}
-            value={payFromValue}
-            placeholder={payFromPlaceholder}
-            onClick={() => setPicker("payFrom")}
-          />
-          <PickerRow
-            label={sendToLabel}
-            value={sendToValue}
-            placeholder={sendToPlaceholder}
-            onClick={() => setPicker("payTo")}
-          />
-        </div>
-      ))}
+      {/* Details — bank transfer can toggle between the two field concepts */}
+      {!isFlip && (
+        <>
+          {isBank && (
+            <div className="mx-4 mb-3 flex w-fit items-center rounded-full bg-card/60 p-1">
+              <button
+                type="button"
+                onClick={() => setBankConcept("classic")}
+                className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
+                  bankConcept === "classic"
+                    ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Classic
+              </button>
+              <button
+                type="button"
+                onClick={() => setBankConcept("floating")}
+                className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
+                  bankConcept === "floating"
+                    ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
+                    : "text-muted-foreground"
+                }`}
+              >
+                Floating fields
+              </button>
+            </div>
+          )}
+          {isBank && bankConcept === "floating" ? (
+            <div className="mx-4 space-y-2.5">
+              <FloatingField
+                label="Fund"
+                value={selectedFund}
+                onClick={() => setPicker("fund")}
+              />
+              <FloatingField
+                label="Sub-account"
+                value={selectedAccount}
+                onClick={() => setPicker("account")}
+              />
+              <FloatingField
+                label={payFromLabel}
+                value={payFromValue}
+                onClick={() => setPicker("payFrom")}
+              />
+              <FloatingField
+                label={sendToLabel}
+                value={sendToValue}
+                onClick={() => setPicker("payTo")}
+              />
+              <FloatingField label="Unit creation date" value={unitCreationDate} readOnly />
+            </div>
+          ) : (
+            <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+              <PickerRow
+                label="Fund"
+                value={selectedFund}
+                placeholder="Select a fund"
+                onClick={() => setPicker("fund")}
+              />
+              <PickerRow
+                label="Sub-account"
+                value={selectedAccount}
+                placeholder="Select sub-account"
+                onClick={() => setPicker("account")}
+              />
+              <PickerRow
+                label={payFromLabel}
+                value={payFromValue}
+                placeholder={payFromPlaceholder}
+                onClick={() => setPicker("payFrom")}
+              />
+              {isBank && (
+                <>
+                  <PickerRow
+                    label={sendToLabel}
+                    value={sendToValue}
+                    placeholder={sendToPlaceholder}
+                    onClick={() => setPicker("payTo")}
+                  />
+                  <div className="w-full flex items-center gap-3 px-4 py-3.5 text-left">
+                    <span className="text-sm text-muted-foreground shrink-0">
+                      Unit creation date
+                    </span>
+                    <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
+                      {unitCreationDate}
+                    </span>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </>
+      )}
 
       {/* Recurring — Direct Invest only */}
       {isInstant && (
