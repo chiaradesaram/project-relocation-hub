@@ -1141,8 +1141,32 @@ function MethodForm({
         )}
       </div>
 
-      {/* Details card */}
-      {!isFlip && (
+      {/* Details — stacked floating fields (bank) or grouped card (others) */}
+      {!isFlip && (isBank ? (
+        <div className="mx-4 space-y-2.5">
+          <FloatingField
+            label="Fund"
+            value={selectedFund}
+            onClick={() => setPicker("fund")}
+          />
+          <FloatingField
+            label="Sub-account"
+            value={selectedAccount}
+            onClick={() => setPicker("account")}
+          />
+          <FloatingField
+            label={payFromLabel}
+            value={payFromValue}
+            onClick={() => setPicker("payFrom")}
+          />
+          <FloatingField
+            label={sendToLabel}
+            value={sendToValue}
+            onClick={() => setPicker("payTo")}
+          />
+          <FloatingField label="Unit creation date" value={unitCreationDate} readOnly />
+        </div>
+      ) : (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <PickerRow
             label="Fund"
@@ -1162,26 +1186,14 @@ function MethodForm({
             placeholder={payFromPlaceholder}
             onClick={() => setPicker("payFrom")}
           />
-          {isBank && (
-            <>
-              <PickerRow
-                label={sendToLabel}
-                value={sendToValue}
-                placeholder={sendToPlaceholder}
-                onClick={() => setPicker("payTo")}
-              />
-              <div className="w-full flex items-center gap-3 px-4 py-3.5 text-left">
-                <span className="text-sm text-muted-foreground shrink-0">
-                  Unit creation date
-                </span>
-                <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
-                  {unitCreationDate}
-                </span>
-              </div>
-            </>
-          )}
+          <PickerRow
+            label={sendToLabel}
+            value={sendToValue}
+            placeholder={sendToPlaceholder}
+            onClick={() => setPicker("payTo")}
+          />
         </div>
-      )}
+      ))}
 
       {/* Recurring — Direct Invest only */}
       {isInstant && (
@@ -1601,6 +1613,69 @@ function PickerRow({
         {hasValue ? value : placeholder}
       </span>
       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+    </button>
+  );
+}
+
+/**
+ * FloatingField — modern boxed input-style field (bank transfer concept).
+ * Unselected: the field name shows inside the box as the placeholder.
+ * Selected: the field name floats small on top and the value sits below.
+ * Tapping opens the same bottom-sheet picker as PickerRow.
+ */
+function FloatingField({
+  label,
+  value,
+  onClick,
+  readOnly = false,
+}: {
+  label: string;
+  value: string;
+  onClick?: () => void;
+  readOnly?: boolean;
+}) {
+  const hasValue = !!value;
+  const inner = (
+    <>
+      <div className="flex flex-col min-w-0 flex-1">
+        {hasValue ? (
+          <>
+            <span
+              className={`text-[10px] font-semibold uppercase tracking-[0.08em] mb-0.5 leading-none ${
+                readOnly ? "text-muted-foreground/50" : "text-pill"
+              }`}
+            >
+              {label}
+            </span>
+            <span
+              className={`mt-1 text-[15px] font-medium leading-tight truncate ${
+                readOnly ? "text-muted-foreground/80" : "text-foreground"
+              }`}
+            >
+              {value}
+            </span>
+          </>
+        ) : (
+          <span className="text-[15px] text-muted-foreground/70 leading-tight">
+            {label}
+          </span>
+        )}
+      </div>
+      {!readOnly && (
+        <ChevronRight className="w-4 h-4 text-muted-foreground/70 shrink-0 transition-colors group-hover:text-pill" />
+      )}
+    </>
+  );
+  const box = `group w-full rounded-2xl px-4 py-3.5 text-left flex items-center gap-3 transition-all ${
+    readOnly
+      ? "bg-card/50 cursor-default"
+      : "bg-card border border-white/[0.06] hover:border-pill/40 active:border-pill/60"
+  }`;
+  return readOnly ? (
+    <div className={box}>{inner}</div>
+  ) : (
+    <button type="button" onClick={onClick} className={box}>
+      {inner}
     </button>
   );
 }
