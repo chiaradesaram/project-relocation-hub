@@ -2234,44 +2234,66 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                   <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
                     Fund
                   </p>
-                  <ModernSelect
-                    value={draftFund}
-                    onChange={(e) => {
-                      const f = e.target.value;
-                      setDraftFund(f);
-                      setDraftSub(equityFundSubAccounts[f]?.[0]?.name ?? "");
-                    }}
-                    placeholder="Select fund"
-                  >
+                  <div className="space-y-2">
                     {equityFundSources.map((f) => (
-                      <option key={f.name} value={f.name}>
-                        {f.name}
-                        {isPopularFund(f.name) ? " · Popular" : ""}
-                      </option>
+                      <button
+                        key={f.name}
+                        type="button"
+                        onClick={() => {
+                          setDraftFund(f.name);
+                          setDraftSub(
+                            equityFundSubAccounts[f.name]?.[0]?.name ?? "",
+                          );
+                        }}
+                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+                          draftFund === f.name
+                            ? "bg-muted/20"
+                            : "bg-background/40 hover:bg-muted/10"
+                        }`}
+                      >
+                        <span className="flex items-center gap-2 min-w-0">
+                          <span className="text-sm text-foreground">
+                            {f.name}
+                          </span>
+                          {isPopularFund(f.name) && (
+                            <span className="px-1.5 py-0.5 rounded text-[11px] font-semibold bg-pill/15 text-pill">
+                              Popular
+                            </span>
+                          )}
+                        </span>
+                        <RadioDot selected={draftFund === f.name} />
+                      </button>
                     ))}
-                  </ModernSelect>
+                  </div>
                 </div>
                 <div>
                   <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
                     Sub account
                   </p>
-                  <ModernSelect
-                    value={draftSub}
-                    onChange={(e) => setDraftSub(e.target.value)}
-                    placeholder="Select sub account"
-                  >
+                  <div className="space-y-2">
                     {draftSubOptions.map((s) => (
-                      <option key={s.name} value={s.name}>
-                        {s.name}
-                      </option>
+                      <button
+                        key={s.name}
+                        type="button"
+                        onClick={() => setDraftSub(s.name)}
+                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
+                          draftSub === s.name
+                            ? "bg-muted/20"
+                            : "bg-background/40 hover:bg-muted/10"
+                        }`}
+                      >
+                        <span className="min-w-0">
+                          <span className="block text-sm text-foreground">
+                            {s.name}
+                          </span>
+                          <span className="block text-[12px] text-muted-foreground">
+                            Available {s.value}
+                          </span>
+                        </span>
+                        <RadioDot selected={draftSub === s.name} />
+                      </button>
                     ))}
-                  </ModernSelect>
-                  {draftSub && (
-                    <p className="mt-2 px-1 text-[12px] text-muted-foreground">
-                      Available{" "}
-                      {draftSubOptions.find((s) => s.name === draftSub)?.value}
-                    </p>
-                  )}
+                  </div>
                 </div>
                 <button
                   type="button"
