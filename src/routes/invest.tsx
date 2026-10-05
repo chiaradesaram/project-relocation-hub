@@ -2280,30 +2280,18 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                   <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
                     Sub account
                   </p>
-                  <div className="space-y-2">
+                  <ModernSelect
+                    value={draftSub}
+                    onChange={(e) => setDraftSub(e.target.value)}
+                    contentClassName="z-[120]"
+                  >
+                    <option value="">Select sub account</option>
                     {draftSubOptions.map((s) => (
-                      <button
-                        key={s.name}
-                        type="button"
-                        onClick={() => setDraftSub(s.name)}
-                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
-                          draftSub === s.name
-                            ? "bg-muted/20"
-                            : "bg-background/40 hover:bg-muted/10"
-                        }`}
-                      >
-                        <span className="min-w-0">
-                          <span className="block text-sm text-foreground">
-                            {s.name}
-                          </span>
-                          <span className="block text-[12px] text-muted-foreground">
-                            Available {s.value}
-                          </span>
-                        </span>
-                        <RadioDot selected={draftSub === s.name} />
-                      </button>
+                      <option key={s.name} value={s.name} data-pill={s.value}>
+                        {s.name}
+                      </option>
                     ))}
-                  </div>
+                  </ModernSelect>
                 </div>
                 <button
                   type="button"
