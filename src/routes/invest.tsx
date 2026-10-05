@@ -1712,7 +1712,7 @@ function FloatingField({
   const box = `group w-full rounded-2xl px-4 py-3.5 text-left flex items-center gap-3 transition-all ${
     readOnly
       ? "bg-card/50 cursor-default"
-      : "bg-card border border-white/[0.06] hover:border-pill/40 active:border-pill/60"
+      : "bg-card hover:bg-card/80 active:bg-card/90"
   }`;
   return readOnly ? (
     <div className={box}>{inner}</div>
