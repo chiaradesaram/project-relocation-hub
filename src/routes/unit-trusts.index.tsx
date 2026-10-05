@@ -121,18 +121,18 @@ function UnitTrustPortfolio() {
                 </button>
               </div>
 
-              <div className="mt-3 flex items-end justify-between">
+              <div className="mt-3">
                 <p className="text-[22px] font-bold tracking-tight text-foreground">
                   {openFund.value}
                 </p>
-                <div className="flex items-center gap-1.5">
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                <div className="mt-2 grid grid-cols-3 gap-1.5">
+                  <span className="whitespace-nowrap rounded-full bg-success/15 px-2 py-1 text-center text-[11px] font-semibold text-success">
                     7d {openFund.earnings7d}
                   </span>
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                  <span className="whitespace-nowrap rounded-full bg-success/15 px-2 py-1 text-center text-[11px] font-semibold text-success">
                     30d {openFund.earnings30d}
                   </span>
-                  <span className="rounded-full bg-success/15 px-2 py-0.5 text-[11px] font-semibold text-success">
+                  <span className="whitespace-nowrap rounded-full bg-success/15 px-2 py-1 text-center text-[11px] font-semibold text-success">
                     All {openFund.earningsAll}
                   </span>
                 </div>
