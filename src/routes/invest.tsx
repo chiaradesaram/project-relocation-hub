@@ -2,6 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
+import ModernSelect from "@/components/ModernSelect";
 import {
   Zap,
   Building2,
@@ -2252,66 +2253,45 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                   <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
                     Fund
                   </p>
-                  <div className="space-y-2">
+                  <ModernSelect
+                    value={draftFund}
+                    onChange={(e) => {
+                      const name = e.target.value;
+                      setDraftFund(name);
+                      setDraftSub(
+                        equityFundSubAccounts[name]?.[0]?.name ?? "",
+                      );
+                    }}
+                    contentClassName="z-[120]"
+                  >
+                    <option value="">Select fund</option>
                     {equityFundSources.map((f) => (
-                      <button
+                      <option
                         key={f.name}
-                        type="button"
-                        onClick={() => {
-                          setDraftFund(f.name);
-                          setDraftSub(
-                            equityFundSubAccounts[f.name]?.[0]?.name ?? "",
-                          );
-                        }}
-                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
-                          draftFund === f.name
-                            ? "bg-muted/20"
-                            : "bg-background/40 hover:bg-muted/10"
-                        }`}
+                        value={f.name}
+                        data-pill={isPopularFund(f.name) ? "Popular" : undefined}
                       >
-                        <span className="flex items-center gap-2 min-w-0">
-                          <span className="text-sm text-foreground">
-                            {f.name}
-                          </span>
-                          {isPopularFund(f.name) && (
-                            <span className="px-1.5 py-0.5 rounded text-[11px] font-semibold bg-pill/15 text-pill">
-                              Popular
-                            </span>
-                          )}
-                        </span>
-                        <RadioDot selected={draftFund === f.name} />
-                      </button>
+                        {f.name}
+                      </option>
                     ))}
-                  </div>
+                  </ModernSelect>
                 </div>
                 <div>
                   <p className="mb-1.5 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
                     Sub account
                   </p>
-                  <div className="space-y-2">
+                  <ModernSelect
+                    value={draftSub}
+                    onChange={(e) => setDraftSub(e.target.value)}
+                    contentClassName="z-[120]"
+                  >
+                    <option value="">Select sub account</option>
                     {draftSubOptions.map((s) => (
-                      <button
-                        key={s.name}
-                        type="button"
-                        onClick={() => setDraftSub(s.name)}
-                        className={`w-full flex items-center justify-between rounded-xl px-4 py-3 text-left transition ${
-                          draftSub === s.name
-                            ? "bg-muted/20"
-                            : "bg-background/40 hover:bg-muted/10"
-                        }`}
-                      >
-                        <span className="min-w-0">
-                          <span className="block text-sm text-foreground">
-                            {s.name}
-                          </span>
-                          <span className="block text-[12px] text-muted-foreground">
-                            Available {s.value}
-                          </span>
-                        </span>
-                        <RadioDot selected={draftSub === s.name} />
-                      </button>
+                      <option key={s.name} value={s.name} data-pill={s.value}>
+                        {s.name}
+                      </option>
                     ))}
-                  </div>
+                  </ModernSelect>
                 </div>
                 <button
                   type="button"
