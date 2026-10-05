@@ -768,13 +768,12 @@ function MethodForm({
 
   const [amount, setAmount] = useState("");
   const [selectedFund, setSelectedFund] = useState("");
-  const [selectedAccount, setSelectedAccount] = useState("Personal Account");
-  const [selectedBank, setSelectedBank] = useState(
-    method === "bank" ? "Commercial Bank · 8001 2345 21" : "",
+  // Bank transfer starts with all fields unselected — users pick each one
+  const [selectedAccount, setSelectedAccount] = useState(
+    method === "bank" ? "" : "Personal Account",
   );
-  const [selectedPayTo, setSelectedPayTo] = useState(
-    method === "bank" ? "CAL Securities Account" : "",
-  );
+  const [selectedBank, setSelectedBank] = useState("");
+  const [selectedPayTo, setSelectedPayTo] = useState("");
   const [selectedFlipTo, setSelectedFlipTo] = useState("");
   // Fund Flip: source and destination fund + sub account
   const [flipFromFund, setFlipFromFund] = useState(funds[0]!);
@@ -854,7 +853,7 @@ function MethodForm({
     : "Select CAL account";
 
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
-  const needsProof = isBank && !isDeutsche;
+  const needsProof = isBank && !!selectedPayTo && !isDeutsche;
 
   // Next 2nd Monday of October — when new units will be created for bank transfers
   const unitCreationDate = (() => {
