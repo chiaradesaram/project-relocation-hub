@@ -58,7 +58,7 @@ export default function GoalCreator({
     setStep("details");
   };
 
-  const targetNum = Number(target.replace(/[^0-9]/g, ""));
+  const targetNum = target;
   const canSave = !!topic && name.trim() && fund && (!hasTarget || targetNum > 0);
 
   const save = () => {
