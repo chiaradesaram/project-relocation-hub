@@ -314,30 +314,34 @@ function UnitTrustPortfolio() {
               )}
 
               <div className="mt-5">
-                <div className="flex items-center justify-between rounded-2xl bg-card/80 backdrop-blur-sm">
-                  <div className="flex items-center gap-3 px-4 py-3.5">
+                <div className="rounded-2xl bg-card/80 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 px-4 pb-2.5 pt-3.5">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-success/15">
-                      <Sprout className="h-4.5 w-4.5 text-success" />
+                      <Sprout className="h-4 w-4 text-success" />
                     </div>
-                    <div>
+                    <div className="min-w-0 flex-1">
                       <p className="text-[13px] font-semibold text-foreground">Interest earned</p>
                       <p className="text-[11px] text-foreground/90">Last 3 months</p>
                     </div>
+                    <p className="text-[13px] font-semibold text-success">
+                      +LKR{" "}
+                      {(
+                        Math.round(selectedSubAccount.valueNum * 0.008 * 2.8 / 50) * 50
+                      ).toLocaleString("en-LK")}
+                    </p>
                   </div>
-                  <div className="flex flex-1 flex-col items-end gap-0.5 py-3.5 pr-4">
+                  <div className="divide-y divide-foreground/[0.06]">
                     {[
                       { label: "October", mult: 1 },
                       { label: "September", mult: 0.93 },
                       { label: "August", mult: 0.87 },
                     ].map((m) => (
-                      <div key={m.label} className="flex w-full items-baseline justify-between">
-                        <span className="text-[11px] text-foreground/90">{m.label}</span>
-                        <span className="text-[11px] font-semibold text-success">
+                      <div key={m.label} className="flex items-center justify-between px-4 py-2.5">
+                        <span className="text-[12px] text-foreground/90">{m.label}</span>
+                        <span className="text-[12px] font-semibold text-success">
                           +LKR{" "}
                           {(
-                            Math.round(
-                              (selectedSubAccount.valueNum * 0.008 * m.mult) / 50,
-                            ) * 50
+                            Math.round((selectedSubAccount.valueNum * 0.008 * m.mult) / 50) * 50
                           ).toLocaleString("en-LK")}
                         </span>
                       </div>
