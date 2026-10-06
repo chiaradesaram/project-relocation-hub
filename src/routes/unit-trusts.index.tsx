@@ -18,7 +18,6 @@ import {
   Plus,
   X,
   TrendingUp,
-  Pencil,
 } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/")({
@@ -46,12 +45,6 @@ function UnitTrustPortfolio() {
   const [expandedFund, setExpandedFund] = useState<string | null>(null);
   const [selectedSubAccount, setSelectedSubAccount] = useState<SubAccount | null>(null);
 
-  const totalInvested = selectedSubAccount?.activity
-    .filter((entry) => entry.type === "invest")
-    .reduce((total, entry) => total + entry.amount, 0) ?? 0;
-  const totalRedeemed = selectedSubAccount?.activity
-    .filter((entry) => entry.type === "redeem")
-    .reduce((total, entry) => total + entry.amount, 0) ?? 0;
 
   return (
     <MobileLayout>
