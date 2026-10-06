@@ -91,7 +91,7 @@ function UnitTrustPortfolio() {
 
       <section className="mx-4 mt-8">
         <h2 className="px-1 text-[13px] font-semibold text-foreground">Your funds</h2>
-        <div className="mt-2 space-y-2">
+        <div className="mt-2 space-y-2.5">
           {funds.map((fund) => {
             const isOpen = expandedFund === fund.name;
             return (
@@ -99,7 +99,7 @@ function UnitTrustPortfolio() {
                 <Button
                   variant="ghost"
                   onClick={() => setExpandedFund(isOpen ? null : fund.name)}
-                  className="h-auto min-h-[66px] w-full justify-start rounded-2xl bg-form-card/55 px-4 py-3 text-left hover:bg-form-card/70"
+                  className="flex h-auto min-h-[64px] w-full items-center justify-between gap-3 rounded-2xl bg-transparent px-4 py-3 text-left hover:bg-foreground/[0.04]"
                 >
                   <div className="min-w-0 flex-1">
                     <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
@@ -120,17 +120,17 @@ function UnitTrustPortfolio() {
                 </Button>
 
                 {isOpen && (
-                  <div className="space-y-1 px-2.5 pb-2.5 pt-2">
+                  <div className="space-y-1.5 px-2 pb-2.5 pt-1.5">
                     {fund.subAccounts.map((sub) => (
                       <Button
                         key={sub.id}
                         variant="ghost"
                         onClick={() => setSelectedSubAccount(sub)}
-                        className="flex h-auto min-h-[58px] w-full items-center justify-between gap-2 rounded-xl bg-background/30 px-3.5 py-2.5 text-left hover:bg-background/45"
+                        className="flex h-auto min-h-[56px] w-full items-center justify-between gap-2 rounded-xl bg-foreground/[0.06] px-3.5 py-2.5 text-left transition-colors hover:bg-foreground/[0.09] active:bg-foreground/[0.12]"
                       >
-                        <div className="flex min-w-0 items-center gap-2">
+                        <div className="flex min-w-0 items-center gap-2.5">
                           <div
-                            className="h-1.5 w-1.5 shrink-0 rounded-full"
+                            className="h-2 w-2 shrink-0 rounded-full"
                             style={{ backgroundColor: sub.dotColor }}
                           />
                           <span className="truncate text-[13px] font-medium text-foreground">
@@ -176,91 +176,124 @@ function UnitTrustPortfolio() {
       >
         <SheetContent
           side="bottom"
-          className="max-h-[88vh] overflow-y-auto rounded-t-3xl border-0 bg-card px-4 pb-7 pt-3 shadow-none"
+          className="max-h-[90vh] overflow-y-auto rounded-t-3xl border-0 bg-background px-4 pb-8 pt-3 shadow-none"
         >
-          <div className="mx-auto mb-3 h-1 w-9 rounded-full bg-foreground/20" />
-          <div className="flex items-start justify-between gap-3">
-            <div className="min-w-0">
-              <SheetTitle className="text-[20px] font-semibold leading-tight">
-                {selectedSubAccount?.name}
-              </SheetTitle>
-              <SheetDescription className="mt-1 text-[13px] text-muted-foreground">
-                {selectedSubAccount?.fundName}
-              </SheetDescription>
-            </div>
-            <SheetClose asChild>
-              <Button
-                variant="secondary"
-                size="icon"
-                aria-label="Close fund details"
-                className="h-9 w-9 shrink-0 rounded-full bg-form-card/70 shadow-none"
-              >
-                <X className="h-4 w-4" />
-              </Button>
-            </SheetClose>
-          </div>
+          <div className="mx-auto mb-5 h-1 w-9 rounded-full bg-foreground/20" />
 
           {selectedSubAccount && (
             <>
-              <div className="mt-5 rounded-2xl bg-form-card/55 px-4 py-5 text-center">
-                <div className="mx-auto mb-3 flex h-9 w-9 items-center justify-center rounded-full bg-success/15">
-                  <TrendingUp className="h-4 w-4 text-success" />
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-card">
+                  <TrendingUp className="h-7 w-7 text-success" />
                 </div>
-                <p className="text-[12px] font-medium text-muted-foreground">Current value</p>
-                <p className="mt-1 font-display text-[26px] font-semibold text-foreground">
-                  {selectedSubAccount.value}
-                </p>
-                <p className="mt-1.5 text-[13px] font-semibold text-success">
-                  {selectedSubAccount.earningsAll} all time
+                <SheetClose asChild>
+                  <Button
+                    variant="secondary"
+                    size="icon"
+                    aria-label="Close fund details"
+                    className="h-9 w-9 shrink-0 rounded-full bg-card shadow-none"
+                  >
+                    <X className="h-4 w-4" />
+                  </Button>
+                </SheetClose>
+              </div>
+
+              <div className="mt-4 flex items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <SheetTitle className="font-display text-[24px] font-bold leading-tight text-foreground">
+                    {selectedSubAccount.name}
+                  </SheetTitle>
+                  <SheetDescription className="mt-1 text-[14px] text-muted-foreground">
+                    {selectedSubAccount.fundName}
+                  </SheetDescription>
+                </div>
+                <p className="shrink-0 font-display text-[24px] font-bold leading-tight text-success">
+                  {selectedSubAccount.earningsAll}
                 </p>
               </div>
 
-              <div className="mt-3 grid grid-cols-3 divide-x divide-foreground/[0.07] rounded-2xl bg-background/30 py-3">
-                {[
-                  ["7 days", selectedSubAccount.earnings7d],
-                  ["30 days", selectedSubAccount.earnings30d],
-                  ["All time", selectedSubAccount.earningsAll],
-                ].map(([label, value]) => (
-                  <div key={label} className="text-center">
-                    <p className="text-[11px] font-medium text-muted-foreground">{label}</p>
-                    <p className="mt-1 text-[13px] font-semibold text-success">{value}</p>
-                  </div>
-                ))}
-              </div>
+              <button
+                type="button"
+                onClick={() => navigate({ to: "/unit-trusts" })}
+                className="mt-6 flex w-full items-center gap-3 rounded-full bg-card py-2 pl-2 pr-3 text-left transition-colors hover:bg-foreground/[0.06] active:bg-foreground/[0.09]"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-success/15">
+                  <TrendingUp className="h-4.5 w-4.5 text-success" />
+                </span>
+                <span className="min-w-0 flex-1">
+                  <span className="block truncate text-[15px] font-semibold text-foreground">
+                    {selectedSubAccount.fundName}
+                  </span>
+                  <span className="block text-[13px] text-muted-foreground">
+                    View fund details
+                  </span>
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </button>
 
-              <div className="mt-5 flex items-center gap-2 px-1">
-                <Wallet className="h-4 w-4 text-pill" />
-                <h3 className="text-[14px] font-semibold text-foreground">Your holding</h3>
-              </div>
-              <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-background/30 px-4">
+              <button
+                type="button"
+                className="mt-2 flex w-full items-center gap-3 rounded-full bg-card py-2 pl-2 pr-3 text-left transition-colors hover:bg-foreground/[0.06] active:bg-foreground/[0.09]"
+              >
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-pill/15">
+                  <Pencil className="h-4.5 w-4.5 text-pill" />
+                </span>
+                <span className="min-w-0 flex-1 text-[15px] font-semibold text-foreground">
+                  Add notes and #tags
+                </span>
+                <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
+              </button>
+
+              <p className="mt-7 px-1 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground">
+                History
+              </p>
+              <div className="mt-2 divide-y divide-foreground/[0.07] rounded-2xl bg-card px-4">
+                <div className="flex items-center justify-between py-3.5">
+                  <span className="text-[15px] text-foreground">Current value</span>
+                  <span className="text-[15px] font-bold text-foreground">
+                    {selectedSubAccount.value}
+                  </span>
+                </div>
                 {selectedSubAccount.units !== undefined && (
-                  <div className="flex items-center justify-between py-3">
-                    <span className="text-[13px] text-muted-foreground">Units held</span>
-                    <span className="text-[13px] font-semibold text-foreground">
+                  <div className="flex items-center justify-between py-3.5">
+                    <span className="text-[15px] text-foreground">Units held</span>
+                    <span className="text-[15px] font-bold text-foreground">
                       {selectedSubAccount.units.toLocaleString("en-LK", { maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 )}
                 {selectedSubAccount.navPerUnit !== undefined && (
-                  <div className="flex items-center justify-between py-3">
-                    <span className="text-[13px] text-muted-foreground">NAV per unit</span>
-                    <span className="text-[13px] font-semibold text-foreground">
+                  <div className="flex items-start justify-between py-3.5">
+                    <span>
+                      <span className="block text-[15px] text-foreground">NAV per unit</span>
+                      <span className="block text-[12px] text-muted-foreground">
+                        {selectedSubAccount.units !== undefined
+                          ? `For ${selectedSubAccount.units.toLocaleString("en-LK", { maximumFractionDigits: 0 })} units`
+                          : ""}
+                      </span>
+                    </span>
+                    <span className="text-[15px] font-bold text-foreground">
                       LKR {selectedSubAccount.navPerUnit.toFixed(2)}
                     </span>
                   </div>
                 )}
-                <div className="flex items-center justify-between py-3">
-                  <span className="text-[13px] text-muted-foreground">Net contributed</span>
-                  <span className="text-[13px] font-semibold text-foreground">
+                <div className="flex items-start justify-between py-3.5">
+                  <span>
+                    <span className="block text-[15px] text-foreground">Net contributed</span>
+                    <span className="block text-[12px] text-muted-foreground">
+                      {selectedSubAccount.activity.length} transactions
+                    </span>
+                  </span>
+                  <span className="text-[15px] font-bold text-foreground">
                     LKR {(totalInvested - totalRedeemed).toLocaleString("en-LK")}
                   </span>
                 </div>
               </div>
 
-              <div className="mt-5 grid grid-cols-2 gap-2">
+              <div className="mt-6 grid grid-cols-2 gap-2">
                 <Button
                   onClick={() => navigate({ to: "/invest", search: { product: "unit-trust" } })}
-                  className="h-11 rounded-xl bg-primary text-[13px] font-semibold text-primary-foreground shadow-none hover:bg-primary/90"
+                  className="h-11 rounded-full bg-primary text-[13px] font-semibold text-primary-foreground shadow-none hover:bg-primary/90"
                 >
                   <ArrowUpRight className="h-4 w-4" />
                   Invest
@@ -268,7 +301,7 @@ function UnitTrustPortfolio() {
                 <Button
                   variant="secondary"
                   onClick={() => navigate({ to: "/redeem", search: { product: "unit-trust" } })}
-                  className="h-11 rounded-xl bg-form-card/70 text-[13px] font-semibold text-foreground shadow-none hover:bg-form-card"
+                  className="h-11 rounded-full bg-card text-[13px] font-semibold text-foreground shadow-none hover:bg-foreground/[0.06]"
                 >
                   <ArrowDownLeft className="h-4 w-4" />
                   Redeem
