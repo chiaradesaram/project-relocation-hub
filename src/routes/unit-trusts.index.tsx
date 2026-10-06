@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ArrowUpRight,
   ArrowDownLeft,
+  ArrowDownRight,
   Plus,
   X,
   TrendingUp,
@@ -227,7 +228,7 @@ function UnitTrustPortfolio() {
 
               <div className="mt-5">
                 <p className="px-1 text-[12px] font-medium text-foreground">Portfolio</p>
-                <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-card/80 backdrop-blur-sm">
+                <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-[color-mix(in_oklch,var(--pill)_12%,var(--card))] backdrop-blur-sm">
                   {[
                     selectedSubAccount.units !== undefined && {
                       label: "Units held",
@@ -277,11 +278,14 @@ function UnitTrustPortfolio() {
                   <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-card/80 backdrop-blur-sm">
                     {selectedSubAccount.activity.slice(0, 3).map((a, i) => (
                       <div key={i} className="flex items-center gap-3 px-4 py-3">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06]">
+                        <div
+                          className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl"
+                          style={{ background: "color-mix(in oklch, var(--pill) 20%, transparent)" }}
+                        >
                           {a.type === "invest" ? (
-                            <ArrowUpRight className="h-3.5 w-3.5 text-success" />
+                            <TrendingUp className="w-4 h-4 text-pill" />
                           ) : (
-                            <ArrowDownLeft className="h-3.5 w-3.5 text-foreground/90" />
+                            <ArrowDownRight className="w-4 h-4 text-pill" />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
@@ -320,12 +324,6 @@ function UnitTrustPortfolio() {
                       <p className="text-[13px] font-semibold text-foreground">Interest earned</p>
                       <p className="text-[11px] text-foreground/90">Last 3 months</p>
                     </div>
-                    <p className="text-[13px] font-semibold text-success">
-                      +LKR{" "}
-                      {(
-                        Math.round(selectedSubAccount.valueNum * 0.008 * 2.8 / 50) * 50
-                      ).toLocaleString("en-LK")}
-                    </p>
                   </div>
                   <div className="divide-y divide-foreground/[0.06]">
                     {[
