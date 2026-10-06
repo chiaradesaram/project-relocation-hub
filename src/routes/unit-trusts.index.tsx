@@ -218,8 +218,8 @@ function UnitTrustPortfolio() {
                       key={e.label}
                       className="rounded-2xl bg-card/80 px-3 py-3 text-center backdrop-blur-sm"
                     >
-                      <p className="text-[11px] font-medium text-foreground/90">{e.label}</p>
-                      <p className="mt-1 text-[13px] font-semibold text-success">{e.value}</p>
+                      <p className="text-[15px] font-semibold text-success">{e.value}</p>
+                      <p className="mt-1 text-[11px] font-medium text-foreground/90">{e.label}</p>
                     </div>
                   ))}
                 </div>
