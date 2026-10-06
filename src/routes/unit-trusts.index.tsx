@@ -307,6 +307,41 @@ function UnitTrustPortfolio() {
                 {selectedSubAccount.value}
               </p>
 
+              {selectedSubAccount.goalTarget !== undefined &&
+                selectedSubAccount.goalTarget > 0 && (
+                  <div className="mt-5 rounded-2xl bg-card/80 px-4 py-3.5 backdrop-blur-sm">
+                    <div className="flex items-center justify-between gap-3">
+                      <p className="text-[13px] font-semibold text-foreground">
+                        {selectedSubAccount.goalLabel ?? "Target"}
+                      </p>
+                      <p className="text-[12px] font-semibold text-success">
+                        {Math.min(
+                          100,
+                          Math.round(
+                            (selectedSubAccount.valueNum / selectedSubAccount.goalTarget) * 100,
+                          ),
+                        )}
+                        %
+                      </p>
+                    </div>
+                    <div className="mt-2.5 h-2 overflow-hidden rounded-full bg-foreground/[0.08]">
+                      <div
+                        className="h-full rounded-full bg-success transition-all"
+                        style={{
+                          width: `${Math.min(100, (selectedSubAccount.valueNum / selectedSubAccount.goalTarget) * 100)}%`,
+                        }}
+                      />
+                    </div>
+                    <p className="mt-2 text-[11px] font-medium text-foreground/90">
+                      {selectedSubAccount.value} of LKR{" "}
+                      {selectedSubAccount.goalTarget.toLocaleString("en-LK")}
+                      {selectedSubAccount.goalDeadline
+                        ? ` · by ${new Date(selectedSubAccount.goalDeadline).toLocaleDateString("en-GB", { month: "short", year: "numeric" })}`
+                        : ""}
+                    </p>
+                  </div>
+                )}
+
               <div className="mt-6">
                 <p className="px-1 text-[12px] font-medium text-foreground">Earnings</p>
                 <div className="mt-2 grid grid-cols-3 gap-2">
@@ -471,17 +506,17 @@ function UnitTrustPortfolio() {
   );
 }
 
-function SubIcon({ sub, goals }: { sub: SubAccount; goals: Goal[] }) {
+function SubIcon({ sub, goals, large }: { sub: SubAccount; goals: Goal[]; large?: boolean }) {
   const goal = goals.find((g) => g.id === sub.id);
   const { icon: Icon, hue } = goal
     ? { icon: ICONS[goal.icon]!, hue: topicFor(goal.topic).hue }
     : iconForSubAccount(sub.name);
   return (
     <span
-      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+      className={`flex shrink-0 items-center justify-center rounded-full ${large ? "h-11 w-11" : "h-9 w-9"}`}
       style={tileStyle(hue)}
     >
-      <Icon className="h-4 w-4" strokeWidth={2.2} />
+      <Icon className={large ? "h-5 w-5" : "h-4 w-4"} strokeWidth={2.2} />
     </span>
   );
 }
