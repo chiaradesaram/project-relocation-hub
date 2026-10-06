@@ -46,8 +46,8 @@ export default function GoalCreator({
       setName("");
       setFund(defaultFund);
       setHasTarget(false);
-      setTarget("");
-      setDate("");
+      setTarget(0);
+      setDate(undefined);
     }
   }, [open, defaultFund]);
 
