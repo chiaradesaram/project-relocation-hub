@@ -176,9 +176,19 @@ function UnitTrustPortfolio() {
 
           {selectedSubAccount && (
             <>
-              <div className="flex items-start justify-between gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card/80 backdrop-blur-sm">
-                  <TrendingUp className="h-5 w-5 text-success" />
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex min-w-0 items-center gap-3">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-card/80 backdrop-blur-sm">
+                    <TrendingUp className="h-4 w-4 text-success" />
+                  </div>
+                  <div className="min-w-0">
+                    <SheetTitle className="truncate text-[15px] font-semibold leading-tight text-foreground">
+                      {selectedSubAccount.name}
+                    </SheetTitle>
+                    <SheetDescription className="mt-0.5 truncate text-[12px] text-foreground/90">
+                      {selectedSubAccount.fundName}
+                    </SheetDescription>
+                  </div>
                 </div>
                 <SheetClose asChild>
                   <Button
@@ -192,22 +202,9 @@ function UnitTrustPortfolio() {
                 </SheetClose>
               </div>
 
-              <div className="mt-4">
-                <SheetTitle className="font-display text-[20px] font-semibold leading-tight text-foreground">
-                  {selectedSubAccount.name}
-                </SheetTitle>
-                <SheetDescription className="mt-0.5 text-[13px] text-foreground/90">
-                  {selectedSubAccount.fundName}
-                </SheetDescription>
-                <div className="mt-4 flex items-end justify-between gap-3">
-                  <p className="font-display text-[32px] font-semibold leading-none tracking-tight text-foreground">
-                    {selectedSubAccount.value}
-                  </p>
-                  <span className="rounded-full bg-success/15 px-3 py-1 text-[12px] font-semibold text-success">
-                    {selectedSubAccount.returnPct}
-                  </span>
-                </div>
-              </div>
+              <p className="mt-4 font-display text-[22px] font-semibold leading-none tracking-tight text-foreground">
+                {selectedSubAccount.value}
+              </p>
 
               <div className="mt-6">
                 <p className="px-1 text-[12px] font-medium text-foreground">Earnings</p>
