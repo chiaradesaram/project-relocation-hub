@@ -68,30 +68,70 @@ function UnitTrustPortfolio() {
 
       <section className="mx-4 mt-8">
         <h2 className="px-1 text-[13px] font-semibold text-foreground">Your funds</h2>
-        <div className="mt-2 overflow-hidden rounded-2xl bg-card">
-          {funds.map((fund, index) => (
-            <Button
-              key={fund.name}
-              variant="ghost"
-              onClick={() => setOpenFund(fund)}
-              className={`h-auto min-h-[66px] w-full justify-start rounded-none px-4 py-3 text-left hover:bg-form-card/35 ${
-                index > 0 ? "border-t border-foreground/[0.06]" : ""
-              }`}
-            >
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
-                  {fund.name}
-                </p>
-                <p className="mt-1 text-[12px] font-semibold text-success">
-                  +LKR {fund.earningsAll.replace(/^\+/, "")} all time
-                </p>
+        <div className="mt-2 space-y-2">
+          {funds.map((fund) => {
+            const isOpen = expandedFund === fund.name;
+            return (
+              <div key={fund.name} className="overflow-hidden rounded-2xl bg-card">
+                <Button
+                  variant="ghost"
+                  onClick={() => setExpandedFund(isOpen ? null : fund.name)}
+                  className="h-auto min-h-[66px] w-full justify-start rounded-none px-4 py-3 text-left hover:bg-form-card/35"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
+                      {fund.name}
+                    </p>
+                    <p className="mt-1 text-[12px] font-semibold text-success">
+                      +LKR {fund.earningsAll.replace(/^\+/, "")} all time
+                    </p>
+                  </div>
+                  <p className="shrink-0 text-right text-[14px] font-semibold text-foreground">
+                    {fund.value}
+                  </p>
+                  <ChevronRight
+                    className={`h-4 w-4 shrink-0 text-muted-foreground/70 transition-transform duration-200 ${
+                      isOpen ? "rotate-90" : ""
+                    }`}
+                  />
+                </Button>
+
+                {isOpen && (
+                  <div className="space-y-1.5 px-3 pb-3">
+                    {fund.subAccounts.map((sub) => (
+                      <Link
+                        key={sub.id}
+                        to="/unit-trusts/$subAccountId"
+                        params={{ subAccountId: sub.id }}
+                        className="flex items-center justify-between gap-2 rounded-xl bg-background/40 px-3.5 py-3 transition active:bg-form-card/40"
+                      >
+                        <div className="flex min-w-0 items-center gap-2">
+                          <div
+                            className="h-1.5 w-1.5 shrink-0 rounded-full"
+                            style={{ backgroundColor: sub.dotColor }}
+                          />
+                          <span className="truncate text-[13px] font-medium text-foreground">
+                            {sub.name}
+                          </span>
+                        </div>
+                        <div className="flex shrink-0 items-center gap-2">
+                          <div className="text-right">
+                            <p className="text-[13px] font-semibold text-foreground">
+                              {sub.value}
+                            </p>
+                            <p className="text-[11px] font-semibold text-success">
+                              All {sub.earningsAll}
+                            </p>
+                          </div>
+                          <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
               </div>
-              <p className="shrink-0 text-right text-[14px] font-semibold text-foreground">
-                {fund.value}
-              </p>
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/70" />
-            </Button>
-          ))}
+            );
+          })}
         </div>
       </section>
 
