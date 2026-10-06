@@ -211,8 +211,7 @@ function UnitTrustPortfolio() {
                               {sub.value}
                             </p>
                             <p className="text-[11px] font-semibold text-success">
-                              {activeEarnings.key === "all" ? "All" : activeEarnings.label} +LKR{" "}
-                              {subEarningsForRange(sub).toLocaleString("en-LK")}
+                              +LKR {subEarningsForRange(sub).toLocaleString("en-LK")}
                             </p>
                           </div>
                           <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
