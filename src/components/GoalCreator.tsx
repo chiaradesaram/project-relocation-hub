@@ -70,7 +70,7 @@ export default function GoalCreator({
       topic: topic.key,
       icon: emoji,
       target: hasTarget ? targetNum : undefined,
-      targetDate: hasTarget && date ? date : undefined,
+      targetDate: hasTarget && date ? date.toISOString() : undefined,
       saved: 0,
       createdAt: new Date().toISOString(),
     });
