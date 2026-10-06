@@ -36,8 +36,8 @@ export default function GoalCreator({
   const [name, setName] = useState("");
   const [fund, setFund] = useState<string | undefined>(defaultFund);
   const [hasTarget, setHasTarget] = useState(false);
-  const [target, setTarget] = useState("");
-  const [date, setDate] = useState("");
+  const [target, setTarget] = useState(0);
+  const [date, setDate] = useState<Date | undefined>(undefined);
 
   useEffect(() => {
     if (open) {
