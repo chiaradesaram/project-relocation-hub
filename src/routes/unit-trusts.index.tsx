@@ -169,7 +169,7 @@ function UnitTrustPortfolio() {
       >
         <SheetContent
           side="bottom"
-          className="max-h-[88vh] overflow-y-auto rounded-t-[28px] border-0 bg-background/80 px-5 pb-9 pt-3 shadow-none backdrop-blur-2xl"
+          className="max-h-[88vh] overflow-y-auto rounded-t-[28px] border-0 bg-[radial-gradient(120%_60%_at_50%_0%,color-mix(in_oklch,var(--success)_14%,transparent),transparent_70%),color-mix(in_oklch,var(--card)_72%,transparent)] px-5 pb-9 pt-3 shadow-[0_-20px_60px_-20px_color-mix(in_oklch,var(--background)_80%,transparent)] backdrop-blur-2xl"
         >
           <div className="mx-auto mb-6 h-1 w-9 rounded-full bg-foreground/20" />
 
