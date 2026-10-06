@@ -256,15 +256,15 @@ function UnitTrustPortfolio() {
                       }),
                     },
                   ]
-                    .filter(Boolean)
+                    .filter((row): row is { label: string; value: string } => Boolean(row))
                     .map((row) => (
                       <div
-                        key={row!.label}
+                        key={row.label}
                         className="flex items-center justify-between px-4 py-3"
                       >
-                        <span className="text-[13px] text-muted-foreground">{row!.label}</span>
+                        <span className="text-[13px] text-muted-foreground">{row.label}</span>
                         <span className="text-[13px] font-semibold text-foreground">
-                          {row!.value}
+                          {row.value}
                         </span>
                       </div>
                     ))}
