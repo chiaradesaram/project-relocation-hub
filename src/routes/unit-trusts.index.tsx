@@ -83,9 +83,12 @@ function UnitTrustPortfolio() {
           LKR 2,450,000
         </p>
         <div className="mt-4 flex flex-col items-center">
-          <p className="font-display text-[24px] font-semibold leading-none text-success">
-            +LKR {activeEarnings.value.toLocaleString("en-LK")}
-          </p>
+          <div className="flex items-center gap-1.5">
+            <Sprout className="h-4 w-4 shrink-0 text-success" />
+            <p className="font-display text-[17px] font-semibold leading-none text-success">
+              +LKR {activeEarnings.value.toLocaleString("en-LK")}
+            </p>
+          </div>
           <p className="mt-1.5 text-[12px] font-medium text-muted-foreground">
             Earned in {activeEarnings.caption}
           </p>
