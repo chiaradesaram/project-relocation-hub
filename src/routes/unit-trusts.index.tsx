@@ -46,6 +46,31 @@ function UnitTrustPortfolio() {
   const navigate = useNavigate();
   const [expandedFund, setExpandedFund] = useState<string | null>(null);
   const [selectedSubAccount, setSelectedSubAccount] = useState<SubAccount | null>(null);
+  const [earningsRange, setEarningsRange] = useState<"7d" | "30d" | "all">("7d");
+
+  const allSubAccounts = funds.flatMap((f) => f.subAccounts);
+  const earningsRanges = [
+    {
+      key: "7d" as const,
+      label: "7d",
+      caption: "the last 7 days",
+      value: allSubAccounts.reduce((sum, s) => sum + s.earnings7dNum, 0),
+    },
+    {
+      key: "30d" as const,
+      label: "30d",
+      caption: "the last 30 days",
+      value: allSubAccounts.reduce((sum, s) => sum + s.earnings30dNum, 0),
+    },
+    {
+      key: "all" as const,
+      label: "All time",
+      caption: "all time",
+      value: allSubAccounts.reduce((sum, s) => sum + s.earningsAllNum, 0),
+    },
+  ];
+  const activeEarnings =
+    earningsRanges.find((r) => r.key === earningsRange) ?? earningsRanges[0];
 
 
   return (
@@ -57,34 +82,29 @@ function UnitTrustPortfolio() {
         <p className="mt-1.5 font-display text-[28px] font-semibold leading-tight text-foreground">
           LKR 2,450,000
         </p>
-        <div className="mt-3 flex items-start justify-center divide-x divide-foreground/[0.08]">
-          {[
-            {
-              label: "7d",
-              value: funds
-                .flatMap((f) => f.subAccounts)
-                .reduce((sum, s) => sum + s.earnings7dNum, 0),
-            },
-            {
-              label: "30d",
-              value: funds
-                .flatMap((f) => f.subAccounts)
-                .reduce((sum, s) => sum + s.earnings30dNum, 0),
-            },
-            {
-              label: "All time",
-              value: funds
-                .flatMap((f) => f.subAccounts)
-                .reduce((sum, s) => sum + s.earningsAllNum, 0),
-            },
-          ].map((e) => (
-            <div key={e.label} className="px-3 text-center first:pl-0 last:pr-0">
-              <p className="text-[14px] font-semibold text-success">
-                +LKR {e.value.toLocaleString("en-LK")}
-              </p>
-              <p className="mt-0.5 text-[11px] font-medium text-muted-foreground">{e.label}</p>
-            </div>
-          ))}
+        <div className="mt-4 flex flex-col items-center">
+          <p className="font-display text-[24px] font-semibold leading-none text-success">
+            +LKR {activeEarnings.value.toLocaleString("en-LK")}
+          </p>
+          <p className="mt-1.5 text-[12px] font-medium text-muted-foreground">
+            Earned in {activeEarnings.caption}
+          </p>
+          <div className="mt-3 flex items-center gap-1 rounded-full bg-card p-1">
+            {earningsRanges.map((r) => (
+              <button
+                key={r.key}
+                type="button"
+                onClick={() => setEarningsRange(r.key)}
+                className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
+                  earningsRange === r.key
+                    ? "bg-pill/20 text-pill"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {r.label}
+              </button>
+            ))}
+          </div>
         </div>
       </div>
 
