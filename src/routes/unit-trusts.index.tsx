@@ -176,8 +176,8 @@ function UnitTrustPortfolio() {
           {selectedSubAccount && (
             <>
               <div className="flex items-start justify-between gap-3">
-                <div className="flex h-14 w-14 items-center justify-center rounded-full bg-card/80 backdrop-blur-sm">
-                  <TrendingUp className="h-6 w-6 text-success" />
+                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-card/80 backdrop-blur-sm">
+                  <TrendingUp className="h-5 w-5 text-success" />
                 </div>
                 <SheetClose asChild>
                   <Button
@@ -191,34 +191,128 @@ function UnitTrustPortfolio() {
                 </SheetClose>
               </div>
 
-              <div className="mt-5 text-center">
-                <SheetTitle className="font-display text-[17px] font-semibold leading-tight text-foreground">
+              <div className="mt-4">
+                <SheetTitle className="font-display text-[20px] font-semibold leading-tight text-foreground">
                   {selectedSubAccount.name}
                 </SheetTitle>
-                <SheetDescription className="mt-1 text-[13px] text-muted-foreground">
+                <SheetDescription className="mt-0.5 text-[13px] text-muted-foreground">
                   {selectedSubAccount.fundName}
                 </SheetDescription>
-                <p className="mt-4 font-display text-[34px] font-semibold leading-none tracking-tight text-foreground">
-                  {selectedSubAccount.value}
-                </p>
-                <p className="mt-2 text-[14px] font-semibold text-success">
-                  {selectedSubAccount.earningsAll} all time
-                </p>
+                <div className="mt-4 flex items-end justify-between gap-3">
+                  <p className="font-display text-[32px] font-semibold leading-none tracking-tight text-foreground">
+                    {selectedSubAccount.value}
+                  </p>
+                  <span className="rounded-full bg-success/15 px-3 py-1 text-[12px] font-semibold text-success">
+                    {selectedSubAccount.returnPct}
+                  </span>
+                </div>
               </div>
 
-              <div className="mt-7 flex justify-center gap-2">
-                <span className="rounded-full bg-card/80 px-3.5 py-1.5 text-[12px] font-medium text-muted-foreground backdrop-blur-sm">
-                  7d {selectedSubAccount.earnings7d}
-                </span>
-                <span className="rounded-full bg-card/80 px-3.5 py-1.5 text-[12px] font-medium text-muted-foreground backdrop-blur-sm">
-                  30d {selectedSubAccount.earnings30d}
-                </span>
-                <span className="rounded-full bg-success/15 px-3.5 py-1.5 text-[12px] font-semibold text-success backdrop-blur-sm">
-                  All {selectedSubAccount.earningsAll}
-                </span>
+              <div className="mt-6">
+                <p className="px-1 text-[12px] font-medium text-muted-foreground">Earnings</p>
+                <div className="mt-2 grid grid-cols-3 gap-2">
+                  {[
+                    { label: "7 days", value: selectedSubAccount.earnings7d },
+                    { label: "30 days", value: selectedSubAccount.earnings30d },
+                    { label: "All time", value: selectedSubAccount.earningsAll },
+                  ].map((e) => (
+                    <div
+                      key={e.label}
+                      className="rounded-2xl bg-card/80 px-3 py-3 text-center backdrop-blur-sm"
+                    >
+                      <p className="text-[11px] font-medium text-muted-foreground">{e.label}</p>
+                      <p className="mt-1 text-[13px] font-semibold text-success">{e.value}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
 
-              <div className="mt-8 grid grid-cols-2 gap-2.5">
+              <div className="mt-5">
+                <p className="px-1 text-[12px] font-medium text-muted-foreground">Portfolio</p>
+                <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-card/80 backdrop-blur-sm">
+                  {[
+                    selectedSubAccount.units !== undefined && {
+                      label: "Units held",
+                      value: selectedSubAccount.units.toLocaleString("en-LK", {
+                        maximumFractionDigits: 2,
+                      }),
+                    },
+                    selectedSubAccount.navPerUnit !== undefined && {
+                      label: "NAV per unit",
+                      value: `LKR ${selectedSubAccount.navPerUnit.toFixed(2)}`,
+                    },
+                    {
+                      label: "Net contributed",
+                      value: `LKR ${(
+                        selectedSubAccount.valueNum - selectedSubAccount.earningsAllNum
+                      ).toLocaleString("en-LK")}`,
+                    },
+                    {
+                      label: "Opened",
+                      value: new Date(selectedSubAccount.createdAt).toLocaleDateString("en-GB", {
+                        day: "numeric",
+                        month: "short",
+                        year: "numeric",
+                      }),
+                    },
+                  ]
+                    .filter(Boolean)
+                    .map((row) => (
+                      <div
+                        key={row!.label}
+                        className="flex items-center justify-between px-4 py-3"
+                      >
+                        <span className="text-[13px] text-muted-foreground">{row!.label}</span>
+                        <span className="text-[13px] font-semibold text-foreground">
+                          {row!.value}
+                        </span>
+                      </div>
+                    ))}
+                </div>
+              </div>
+
+              {selectedSubAccount.activity.length > 0 && (
+                <div className="mt-5">
+                  <p className="px-1 text-[12px] font-medium text-muted-foreground">
+                    Recent activity
+                  </p>
+                  <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-card/80 backdrop-blur-sm">
+                    {selectedSubAccount.activity.slice(0, 3).map((a, i) => (
+                      <div key={i} className="flex items-center gap-3 px-4 py-3">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-foreground/[0.06]">
+                          {a.type === "invest" ? (
+                            <ArrowUpRight className="h-3.5 w-3.5 text-success" />
+                          ) : (
+                            <ArrowDownLeft className="h-3.5 w-3.5 text-muted-foreground" />
+                          )}
+                        </div>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-[13px] font-medium text-foreground">
+                            {a.type === "invest" ? "Investment" : "Withdrawal"}
+                          </p>
+                          <p className="text-[11px] text-muted-foreground">
+                            {new Date(a.date).toLocaleDateString("en-GB", {
+                              day: "numeric",
+                              month: "short",
+                              year: "numeric",
+                            })}
+                            {a.method ? ` · ${a.method}` : ""}
+                          </p>
+                        </div>
+                        <p
+                          className={`text-[13px] font-semibold ${
+                            a.type === "invest" ? "text-success" : "text-foreground"
+                          }`}
+                        >
+                          {a.type === "invest" ? "+" : "−"}LKR {a.amount.toLocaleString("en-LK")}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-7 grid grid-cols-2 gap-2.5">
                 <Button
                   onClick={() => navigate({ to: "/invest", search: { product: "unit-trust" } })}
                   className="h-12 rounded-full bg-primary text-[14px] font-semibold text-primary-foreground shadow-none hover:bg-primary/90"
