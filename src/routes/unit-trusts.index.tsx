@@ -1,5 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import GoalCreator, { tileStyle } from "@/components/GoalCreator";
+import { readGoals, writeGoals, topicFor, goalProgress, type Goal } from "@/lib/goals";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -47,6 +49,10 @@ function UnitTrustPortfolio() {
   const [expandedFund, setExpandedFund] = useState<string | null>(null);
   const [selectedSubAccount, setSelectedSubAccount] = useState<SubAccount | null>(null);
   const [earningsRange, setEarningsRange] = useState<"7d" | "30d" | "all">("7d");
+  const [goals, setGoals] = useState<Goal[]>([]);
+  const [goalOpen, setGoalOpen] = useState(false);
+  const [goalFund, setGoalFund] = useState<string | undefined>();
+  useEffect(() => setGoals(readGoals()), []);
 
   const allSubAccounts = funds.flatMap((f) => f.subAccounts);
   const earningsRanges = [
@@ -213,6 +219,63 @@ function UnitTrustPortfolio() {
                         </div>
                       </Button>
                     ))}
+                    {goals
+                      .filter((g) => g.fundName === fund.name)
+                      .map((g) => {
+                        const pct = goalProgress(g);
+                        return (
+                          <div
+                            key={g.id}
+                            className="flex min-h-[56px] items-center gap-3 rounded-xl bg-foreground/[0.06] px-3 py-2.5"
+                          >
+                            <span
+                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[18px]"
+                              style={tileStyle(topicFor(g.topic).hue)}
+                            >
+                              {g.emoji}
+                            </span>
+                            <div className="min-w-0 flex-1">
+                              <div className="flex items-center justify-between gap-2">
+                                <span className="truncate text-[13px] font-medium text-foreground">
+                                  {g.name}
+                                </span>
+                                <span className="shrink-0 text-[13px] font-semibold text-foreground">
+                                  LKR {g.saved.toLocaleString("en-LK")}
+                                </span>
+                              </div>
+                              {pct !== null ? (
+                                <div className="mt-1.5 flex items-center gap-2">
+                                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-foreground/10">
+                                    <div
+                                      className="h-full rounded-full bg-success"
+                                      style={{ width: `${Math.max(pct, 2)}%` }}
+                                    />
+                                  </div>
+                                  <span className="text-[11px] font-medium text-foreground/80">
+                                    of {g.target!.toLocaleString("en-LK")}
+                                  </span>
+                                </div>
+                              ) : (
+                                <p className="mt-0.5 text-[11px] text-foreground/70">
+                                  New goal · no target
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    <button
+                      onClick={() => {
+                        setGoalFund(fund.name);
+                        setGoalOpen(true);
+                      }}
+                      className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-pill hover:bg-foreground/[0.04]"
+                    >
+                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-pill/15">
+                        <Plus className="h-4 w-4" />
+                      </span>
+                      Add a goal
+                    </button>
                   </div>
                 )}
               </div>
@@ -224,12 +287,29 @@ function UnitTrustPortfolio() {
       <div className="mx-4 mb-6 mt-3">
         <Button
           variant="ghost"
+          onClick={() => {
+            setGoalFund(undefined);
+            setGoalOpen(true);
+          }}
           className="h-11 w-full rounded-xl text-[13px] font-semibold text-pill hover:bg-card/70 hover:text-pill"
         >
           <Plus className="h-4 w-4" />
-          Add new fund
+          New goal
         </Button>
       </div>
+
+      <GoalCreator
+        open={goalOpen}
+        onOpenChange={setGoalOpen}
+        fundNames={funds.map((f) => f.name)}
+        defaultFund={goalFund}
+        onCreate={(g) => {
+          const next = [...goals, g];
+          setGoals(next);
+          writeGoals(next);
+          setExpandedFund(g.fundName);
+        }}
+      />
 
       <Sheet
         open={selectedSubAccount !== null}

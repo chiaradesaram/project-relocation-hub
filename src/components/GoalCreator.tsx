@@ -4,7 +4,7 @@ import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
 import SavedConfirmation from "@/components/SavedConfirmation";
-import RadioDot from "@/components/RadioDot";
+import { RadioDot } from "@/components/RadioDot";
 import { GOAL_TOPICS, type Goal, type GoalTopic } from "@/lib/goals";
 
 const sheetClass =
