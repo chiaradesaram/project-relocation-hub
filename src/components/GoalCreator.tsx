@@ -3,16 +3,14 @@ import { ChevronLeft, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { Switch } from "@/components/ui/switch";
 import { Button } from "@/components/ui/button";
-import SavedConfirmation from "@/components/SavedConfirmation";
 import { RadioDot } from "@/components/RadioDot";
-import { GOAL_TOPICS, type Goal, type GoalTopic } from "@/lib/goals";
+import { GOAL_TOPICS, ICONS, tileStyle, type Goal, type GoalTopic } from "@/lib/goals";
+import { useNavigate } from "@tanstack/react-router";
+import { Check } from "lucide-react";
 
 const sheetClass =
   "max-h-[90vh] overflow-y-auto rounded-t-[28px] border-0 bg-[color-mix(in_oklch,var(--card)_80%,transparent)] px-5 pb-9 pt-3 backdrop-blur-2xl";
 
-export function tileStyle(hue: number) {
-  return { background: `oklch(0.42 0.09 ${hue} / 0.45)` };
-}
 
 export default function GoalCreator({
   open,
@@ -30,6 +28,7 @@ export default function GoalCreator({
   const [step, setStep] = useState<"topic" | "details" | "done">("topic");
   const [topic, setTopic] = useState<GoalTopic | null>(null);
   const [emoji, setEmoji] = useState("");
+  const navigate = useNavigate();
   const [name, setName] = useState("");
   const [fund, setFund] = useState<string | undefined>(defaultFund);
   const [hasTarget, setHasTarget] = useState(false);
@@ -50,7 +49,7 @@ export default function GoalCreator({
 
   const pickTopic = (t: GoalTopic) => {
     setTopic(t);
-    setEmoji(t.emoji);
+    setEmoji(t.icons[0]!);
     setName(t.key === "other" ? "" : t.label);
     setStep("details");
   };
@@ -65,30 +64,13 @@ export default function GoalCreator({
       fundName: fund,
       name: name.trim(),
       topic: topic.key,
-      emoji,
+      icon: emoji,
       target: hasTarget ? targetNum : undefined,
       targetDate: hasTarget && date ? date : undefined,
       saved: 0,
       createdAt: new Date().toISOString(),
     });
     setStep("done");
-    setTimeout(() => onOpenChange(false), 1300);
-  };
-
-  // Emoji alternatives per topic for a bit of fun
-  const emojiOptions: Record<string, string[]> = {
-    travel: ["✈️", "🏝️", "🗺️", "🎒", "🗼"],
-    home: ["🏡", "🛋️", "🔑", "🪴", "🏢"],
-    car: ["🚗", "🏍️", "🚙", "🛵", "⛽"],
-    wedding: ["💍", "💒", "🥂", "💐", "👰"],
-    education: ["🎓", "📚", "🧑‍🎓", "✏️", "🔬"],
-    emergency: ["☔", "🛟", "🧰", "🛡️", "🌧️"],
-    retirement: ["🌴", "🏖️", "🎣", "☕", "🌅"],
-    baby: ["🍼", "🧸", "👶", "🎈", "🍭"],
-    tech: ["💻", "📱", "🎧", "🎮", "📷"],
-    gift: ["🎁", "🎂", "🎉", "💝", "🎄"],
-    health: ["🧘", "🏋️", "🍎", "🚴", "💪"],
-    other: ["✨", "⭐", "🚀", "🎯", "🌈"],
   };
 
   return (
@@ -96,7 +78,32 @@ export default function GoalCreator({
       <SheetContent side="bottom" className={sheetClass}>
         <div className="mx-auto mb-4 h-1 w-9 rounded-full bg-foreground/20" />
         {step === "done" ? (
-          <SavedConfirmation summary={`${emoji} ${name} is ready. Start investing towards it anytime.`} />
+          <div className="flex flex-col items-center px-1 pb-4 pt-4 text-center">
+            <div className="relative">
+              <span className="flex h-20 w-20 items-center justify-center rounded-[26px] animate-in zoom-in-50 duration-300" style={tileStyle(topic!.hue)}>
+                {(() => { const I = ICONS[emoji]!; return <I className="h-9 w-9" strokeWidth={2.2} />; })()}
+              </span>
+              <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-success">
+                <Check className="h-4 w-4 text-success-foreground" strokeWidth={3} />
+              </span>
+            </div>
+            <SheetTitle className="mt-4 font-display text-[20px] font-semibold text-foreground">{name} is ready</SheetTitle>
+            <SheetDescription className="mt-1 text-[13px] text-foreground/85">
+              Nothing's in it yet — make your first investment to get it growing.
+            </SheetDescription>
+            <Button
+              onClick={() => {
+                onOpenChange(false);
+                navigate({ to: "/invest", search: { product: "unit-trust", method: "instant", fund: fund, sub: name.trim() } });
+              }}
+              className="mt-6 h-12 w-full rounded-full bg-primary text-[15px] font-semibold text-primary-foreground"
+            >
+              Invest now
+            </Button>
+            <button onClick={() => onOpenChange(false)} className="mt-3 text-[13px] font-semibold text-pill">
+              Maybe later
+            </button>
+          </div>
         ) : (
           <>
             <div className="flex items-center justify-between">
@@ -136,10 +143,10 @@ export default function GoalCreator({
                       className="flex flex-col items-center gap-2 rounded-2xl bg-foreground/[0.06] px-2 py-4 transition-transform hover:bg-foreground/[0.09] active:scale-95"
                     >
                       <span
-                        className="flex h-12 w-12 items-center justify-center rounded-2xl text-[26px]"
+                        className="flex h-12 w-12 items-center justify-center rounded-full"
                         style={tileStyle(t.hue)}
                       >
-                        {t.emoji}
+                        {(() => { const I = ICONS[t.icons[0]!]!; return <I className="h-5 w-5" strokeWidth={2.2} />; })()}
                       </span>
                       <span className="text-[12px] font-semibold text-foreground">{t.label}</span>
                     </button>
@@ -152,23 +159,26 @@ export default function GoalCreator({
               <>
                 <div className="mt-1 flex flex-col items-center">
                   <span
-                    className="flex h-20 w-20 items-center justify-center rounded-[26px] text-[42px] animate-in zoom-in-50 duration-300"
+                    className="flex h-20 w-20 items-center justify-center rounded-full animate-in zoom-in-50 duration-300"
                     style={tileStyle(topic.hue)}
                   >
-                    {emoji}
+                    {(() => { const I = ICONS[emoji]!; return <I className="h-9 w-9" strokeWidth={2.2} />; })()}
                   </span>
                   <div className="mt-3 flex gap-1.5">
-                    {emojiOptions[topic.key].map((e) => (
-                      <button
-                        key={e}
-                        onClick={() => setEmoji(e)}
-                        className={`flex h-9 w-9 items-center justify-center rounded-full text-[18px] transition-all ${
-                          emoji === e ? "bg-pill/25 scale-110" : "bg-foreground/[0.06]"
-                        }`}
-                      >
-                        {e}
-                      </button>
-                    ))}
+                    {topic.icons.map((e) => {
+                      const I = ICONS[e]!;
+                      return (
+                        <button
+                          key={e}
+                          onClick={() => setEmoji(e)}
+                          className={`flex h-9 w-9 items-center justify-center rounded-full transition-all ${
+                            emoji === e ? "bg-pill/25 text-pill scale-110" : "bg-foreground/[0.06] text-foreground"
+                          }`}
+                        >
+                          <I className="h-4 w-4" />
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
                 <SheetTitle className="sr-only">Goal details</SheetTitle>
