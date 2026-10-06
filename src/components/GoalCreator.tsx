@@ -80,7 +80,7 @@ export default function GoalCreator({
         {step === "done" ? (
           <div className="flex flex-col items-center px-1 pb-4 pt-4 text-center">
             <div className="relative">
-              <span className="flex h-20 w-20 items-center justify-center rounded-[26px] animate-in zoom-in-50 duration-300" style={tileStyle(topic!.hue)}>
+              <span className="flex h-20 w-20 items-center justify-center rounded-full animate-in zoom-in-50 duration-300" style={tileStyle(topic!.hue)}>
                 {(() => { const I = ICONS[emoji]!; return <I className="h-9 w-9" strokeWidth={2.2} />; })()}
               </span>
               <span className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-success">
