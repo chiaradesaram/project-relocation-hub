@@ -177,9 +177,7 @@ function UnitTrustPortfolio() {
                       {fund.name}
                     </p>
                     <p className="mt-1 text-[12px] font-semibold text-success">
-                      +LKR{" "}
-                      {fundEarningsForRange(fund).toLocaleString("en-LK")}{" "}
-                      {activeEarnings.key === "all" ? "all time" : `· ${activeEarnings.label}`}
+                      +LKR {fundEarningsForRange(fund).toLocaleString("en-LK")}
                     </p>
                   </div>
                   <p className="shrink-0 text-right text-[14px] font-semibold text-foreground">
