@@ -17,8 +17,8 @@ import {
   ArrowDownLeft,
   Plus,
   X,
-  Wallet,
   TrendingUp,
+  Pencil,
 } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/")({
