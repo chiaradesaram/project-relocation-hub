@@ -10,7 +10,7 @@ import {
   SheetDescription,
   SheetTitle,
 } from "@/components/ui/sheet";
-import { funds, type SubAccount } from "@/data/unitTrusts";
+import { funds, type Fund, type SubAccount } from "@/data/unitTrusts";
 import {
   ChevronRight,
   ArrowUpRight,
@@ -71,6 +71,20 @@ function UnitTrustPortfolio() {
   ];
   const activeEarnings =
     earningsRanges.find((r) => r.key === earningsRange) ?? earningsRanges[0];
+
+  const fundEarningsForRange = (fund: Fund) => {
+    if (earningsRange === "7d")
+      return fund.subAccounts.reduce((s, a) => s + a.earnings7dNum, 0);
+    if (earningsRange === "30d")
+      return fund.subAccounts.reduce((s, a) => s + a.earnings30dNum, 0);
+    return fund.subAccounts.reduce((s, a) => s + a.earningsAllNum, 0);
+  };
+
+  const subEarningsForRange = (sub: SubAccount) => {
+    if (earningsRange === "7d") return sub.earnings7dNum;
+    if (earningsRange === "30d") return sub.earnings30dNum;
+    return sub.earningsAllNum;
+  };
 
 
   return (
@@ -134,7 +148,12 @@ function UnitTrustPortfolio() {
       </div>
 
       <section className="mx-4 mt-8">
-        <h2 className="px-1 text-[13px] font-semibold text-foreground">Your funds</h2>
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-[13px] font-semibold text-foreground">Your funds</h2>
+          <span className="text-[11px] font-semibold text-pill">
+            {activeEarnings.label} earnings
+          </span>
+        </div>
         <div className="mt-2 space-y-2.5">
           {funds.map((fund) => {
             const isOpen = expandedFund === fund.name;
@@ -150,7 +169,9 @@ function UnitTrustPortfolio() {
                       {fund.name}
                     </p>
                     <p className="mt-1 text-[12px] font-semibold text-success">
-                      +LKR {fund.earningsAll.replace(/^\+/, "")} all time
+                      +LKR{" "}
+                      {fundEarningsForRange(fund).toLocaleString("en-LK")}{" "}
+                      {activeEarnings.key === "all" ? "all time" : `· ${activeEarnings.label}`}
                     </p>
                   </div>
                   <p className="shrink-0 text-right text-[14px] font-semibold text-foreground">
@@ -187,7 +208,8 @@ function UnitTrustPortfolio() {
                               {sub.value}
                             </p>
                             <p className="text-[11px] font-semibold text-success">
-                              All {sub.earningsAll}
+                              {activeEarnings.key === "all" ? "All" : activeEarnings.label} +LKR{" "}
+                              {subEarningsForRange(sub).toLocaleString("en-LK")}
                             </p>
                           </div>
                           <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
