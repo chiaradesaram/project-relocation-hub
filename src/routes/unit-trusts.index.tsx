@@ -1,7 +1,7 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import GoalCreator, { tileStyle } from "@/components/GoalCreator";
-import { readGoals, writeGoals, topicFor, goalProgress, type Goal } from "@/lib/goals";
+import GoalCreator from "@/components/GoalCreator";
+import { readGoals, writeGoals, topicFor, tileStyle, ICONS, iconForSubAccount, goalToSubAccount, type Goal } from "@/lib/goals";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
@@ -189,7 +189,7 @@ function UnitTrustPortfolio() {
 
                 {isOpen && (
                   <div className="space-y-1.5 px-2 pb-2.5 pt-1.5">
-                    {fund.subAccounts.map((sub) => (
+                    {[...fund.subAccounts, ...goals.filter((g) => g.fundName === fund.name).map(goalToSubAccount)].map((sub) => (
                       <Button
                         key={sub.id}
                         variant="ghost"
@@ -197,10 +197,7 @@ function UnitTrustPortfolio() {
                         className="flex h-auto min-h-[56px] w-full items-center justify-between gap-2 rounded-xl bg-foreground/[0.06] px-3.5 py-2.5 text-left transition-colors hover:bg-foreground/[0.09] active:bg-foreground/[0.12]"
                       >
                         <div className="flex min-w-0 items-center gap-2.5">
-                          <div
-                            className="h-2 w-2 shrink-0 rounded-full"
-                            style={{ backgroundColor: sub.dotColor }}
-                          />
+                          <SubIcon sub={sub} goals={goals} />
                           <span className="truncate text-[13px] font-medium text-foreground">
                             {sub.name}
                           </span>
@@ -219,51 +216,6 @@ function UnitTrustPortfolio() {
                         </div>
                       </Button>
                     ))}
-                    {goals
-                      .filter((g) => g.fundName === fund.name)
-                      .map((g) => {
-                        const pct = goalProgress(g);
-                        return (
-                          <div
-                            key={g.id}
-                            className="flex min-h-[56px] items-center gap-3 rounded-xl bg-foreground/[0.06] px-3 py-2.5"
-                          >
-                            <span
-                              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl text-[18px]"
-                              style={tileStyle(topicFor(g.topic).hue)}
-                            >
-                              {g.emoji}
-                            </span>
-                            <div className="min-w-0 flex-1">
-                              <div className="flex items-center justify-between gap-2">
-                                <span className="truncate text-[13px] font-medium text-foreground">
-                                  {g.name}
-                                </span>
-                                <span className="shrink-0 text-[13px] font-semibold text-foreground">
-                                  LKR {g.saved.toLocaleString("en-LK")}
-                                </span>
-                              </div>
-                              {pct !== null ? (
-                                <div className="mt-1.5 flex items-center gap-2">
-                                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-foreground/10">
-                                    <div
-                                      className="h-full rounded-full bg-success"
-                                      style={{ width: `${Math.max(pct, 2)}%` }}
-                                    />
-                                  </div>
-                                  <span className="text-[11px] font-medium text-foreground/80">
-                                    of {g.target!.toLocaleString("en-LK")}
-                                  </span>
-                                </div>
-                              ) : (
-                                <p className="mt-0.5 text-[11px] text-foreground/70">
-                                  New goal · no target
-                                </p>
-                              )}
-                            </div>
-                          </div>
-                        );
-                      })}
                     <button
                       onClick={() => {
                         setGoalFund(fund.name);
@@ -271,7 +223,7 @@ function UnitTrustPortfolio() {
                       }}
                       className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-pill hover:bg-foreground/[0.04]"
                     >
-                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-pill/15">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-pill/15">
                         <Plus className="h-4 w-4" />
                       </span>
                       Add a goal
@@ -516,5 +468,20 @@ function UnitTrustPortfolio() {
       </Sheet>
 
     </MobileLayout>
+  );
+}
+
+function SubIcon({ sub, goals }: { sub: SubAccount; goals: Goal[] }) {
+  const goal = goals.find((g) => g.id === sub.id);
+  const { icon: Icon, hue } = goal
+    ? { icon: ICONS[goal.icon]!, hue: topicFor(goal.topic).hue }
+    : iconForSubAccount(sub.name);
+  return (
+    <span
+      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full"
+      style={tileStyle(hue)}
+    >
+      <Icon className="h-4 w-4" strokeWidth={2.2} />
+    </span>
   );
 }

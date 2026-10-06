@@ -1,3 +1,4 @@
+import { readGoals } from "@/lib/goals";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
@@ -54,7 +55,7 @@ type InvestMethod =
 export const Route = createFileRoute("/invest")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string } => ({
+  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string; fund?: string; sub?: string } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
@@ -68,6 +69,8 @@ export const Route = createFileRoute("/invest")({
         : undefined,
     mode: search.mode === "setup" ? "setup" : undefined,
     edit: typeof search.edit === "string" ? search.edit : undefined,
+    fund: typeof search.fund === "string" ? search.fund : undefined,
+    sub: typeof search.sub === "string" ? search.sub : undefined,
   }),
   head: () => ({
     meta: [
@@ -793,7 +796,15 @@ function MethodForm({
   const [recurringStartDate, setRecurringStartDate] = useState(new Date());
   const recurringFrequency = "Monthly";
 
-  const { edit: editPlanId } = Route.useSearch();
+  const { edit: editPlanId, fund: presetFund, sub: presetSub } = Route.useSearch();
+  // Goals are sub accounts — a goal opened from the Portfolio arrives pre-selected
+  const [goalNames, setGoalNames] = useState<string[]>([]);
+  useEffect(() => {
+    setGoalNames(readGoals().map((g) => g.name));
+    if (presetFund) setSelectedFund(presetFund);
+    if (presetSub) setSelectedAccount(presetSub);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     if (!isRecurringMethod) return;
@@ -931,8 +942,8 @@ function MethodForm({
 
   // ---- Picker options ----
   const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
-    fund: funds,
-    account: accounts,
+    fund: presetFund && !funds.includes(presetFund) ? [...funds, presetFund] : funds,
+    account: Array.from(new Set([...accounts, ...goalNames, ...(presetSub ? [presetSub] : [])])),
     payFrom: isFlip ? funds : banks,
     payTo: calBankAccounts.map((a) => a.label),
     flipTo: funds,
