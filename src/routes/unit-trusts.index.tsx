@@ -57,9 +57,35 @@ function UnitTrustPortfolio() {
         <p className="mt-1.5 font-display text-[28px] font-semibold leading-tight text-foreground">
           LKR 2,450,000
         </p>
-        <p className="mt-2 text-[14px] font-semibold text-success">
-          +LKR 219,949 all time
-        </p>
+        <div className="mt-3 flex items-start justify-center divide-x divide-foreground/[0.08]">
+          {[
+            {
+              label: "7d",
+              value: funds
+                .flatMap((f) => f.subAccounts)
+                .reduce((sum, s) => sum + s.earnings7dNum, 0),
+            },
+            {
+              label: "30d",
+              value: funds
+                .flatMap((f) => f.subAccounts)
+                .reduce((sum, s) => sum + s.earnings30dNum, 0),
+            },
+            {
+              label: "All time",
+              value: funds
+                .flatMap((f) => f.subAccounts)
+                .reduce((sum, s) => sum + s.earningsAllNum, 0),
+            },
+          ].map((e) => (
+            <div key={e.label} className="px-3 text-center first:pl-0 last:pr-0">
+              <p className="text-[14px] font-semibold text-success">
+                +LKR {e.value.toLocaleString("en-LK")}
+              </p>
+              <p className="mt-0.5 text-[11px] font-medium text-muted-foreground">{e.label}</p>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="mx-5 mt-6 flex justify-center gap-3">
