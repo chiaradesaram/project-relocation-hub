@@ -1,12 +1,16 @@
 import { useEffect, useState } from "react";
-import { ChevronLeft, X } from "lucide-react";
+import { ChevronLeft, X, Target } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import { ModernSelect } from "@/components/ModernSelect";
 import { Button } from "@/components/ui/button";
-import { Target } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Calendar } from "@/components/ui/calendar";
+import { Slider } from "@/components/ui/slider";
 import { GOAL_TOPICS, ICONS, tileStyle, type Goal, type GoalTopic } from "@/lib/goals";
 import { useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
+
+const TARGET_MAX = 5_000_000;
 
 const sheetClass =
   "max-h-[90vh] overflow-y-auto rounded-t-[28px] border-0 bg-[color-mix(in_oklch,var(--card)_80%,transparent)] px-5 pb-9 pt-3 backdrop-blur-2xl";
