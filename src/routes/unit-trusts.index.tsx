@@ -15,6 +15,7 @@ import {
   ChevronRight,
   ArrowUpRight,
   ArrowDownLeft,
+  ArrowDownRight,
   Plus,
   X,
   TrendingUp,
