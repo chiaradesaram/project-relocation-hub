@@ -18,6 +18,7 @@ import {
   Plus,
   X,
   TrendingUp,
+  Sprout,
 } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/")({
@@ -195,7 +196,7 @@ function UnitTrustPortfolio() {
                 <SheetTitle className="font-display text-[20px] font-semibold leading-tight text-foreground">
                   {selectedSubAccount.name}
                 </SheetTitle>
-                <SheetDescription className="mt-0.5 text-[13px] text-muted-foreground">
+                <SheetDescription className="mt-0.5 text-[13px] text-foreground/90">
                   {selectedSubAccount.fundName}
                 </SheetDescription>
                 <div className="mt-4 flex items-end justify-between gap-3">
@@ -209,7 +210,7 @@ function UnitTrustPortfolio() {
               </div>
 
               <div className="mt-6">
-                <p className="px-1 text-[12px] font-medium text-muted-foreground">Earnings</p>
+                <p className="px-1 text-[12px] font-medium text-foreground">Earnings</p>
                 <div className="mt-2 grid grid-cols-3 gap-2">
                   {[
                     { label: "7 days", value: selectedSubAccount.earnings7d },
@@ -220,7 +221,7 @@ function UnitTrustPortfolio() {
                       key={e.label}
                       className="rounded-2xl bg-card/80 px-3 py-3 text-center backdrop-blur-sm"
                     >
-                      <p className="text-[11px] font-medium text-muted-foreground">{e.label}</p>
+                      <p className="text-[11px] font-medium text-foreground/90">{e.label}</p>
                       <p className="mt-1 text-[13px] font-semibold text-success">{e.value}</p>
                     </div>
                   ))}
@@ -228,7 +229,7 @@ function UnitTrustPortfolio() {
               </div>
 
               <div className="mt-5">
-                <p className="px-1 text-[12px] font-medium text-muted-foreground">Portfolio</p>
+                <p className="px-1 text-[12px] font-medium text-foreground">Portfolio</p>
                 <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-card/80 backdrop-blur-sm">
                   {[
                     selectedSubAccount.units !== undefined && {
@@ -262,7 +263,7 @@ function UnitTrustPortfolio() {
                         key={row.label}
                         className="flex items-center justify-between px-4 py-3"
                       >
-                        <span className="text-[13px] text-muted-foreground">{row.label}</span>
+                        <span className="text-[13px] text-foreground/90">{row.label}</span>
                         <span className="text-[13px] font-semibold text-foreground">
                           {row.value}
                         </span>
@@ -273,7 +274,7 @@ function UnitTrustPortfolio() {
 
               {selectedSubAccount.activity.length > 0 && (
                 <div className="mt-5">
-                  <p className="px-1 text-[12px] font-medium text-muted-foreground">
+                  <p className="px-1 text-[12px] font-medium text-foreground">
                     Recent activity
                   </p>
                   <div className="mt-2 divide-y divide-foreground/[0.06] rounded-2xl bg-card/80 backdrop-blur-sm">
@@ -283,14 +284,14 @@ function UnitTrustPortfolio() {
                           {a.type === "invest" ? (
                             <ArrowUpRight className="h-3.5 w-3.5 text-success" />
                           ) : (
-                            <ArrowDownLeft className="h-3.5 w-3.5 text-muted-foreground" />
+                            <ArrowDownLeft className="h-3.5 w-3.5 text-foreground/90" />
                           )}
                         </div>
                         <div className="min-w-0 flex-1">
                           <p className="text-[13px] font-medium text-foreground">
                             {a.type === "invest" ? "Investment" : "Withdrawal"}
                           </p>
-                          <p className="text-[11px] text-muted-foreground">
+                          <p className="text-[11px] text-foreground/90">
                             {new Date(a.date).toLocaleDateString("en-GB", {
                               day: "numeric",
                               month: "short",
@@ -311,6 +312,39 @@ function UnitTrustPortfolio() {
                   </div>
                 </div>
               )}
+
+              <div className="mt-5">
+                <div className="flex items-center justify-between rounded-2xl bg-card/80 backdrop-blur-sm">
+                  <div className="flex items-center gap-3 px-4 py-3.5">
+                    <div className="flex h-9 w-9 items-center justify-center rounded-full bg-success/15">
+                      <Sprout className="h-4.5 w-4.5 text-success" />
+                    </div>
+                    <div>
+                      <p className="text-[13px] font-semibold text-foreground">Interest earned</p>
+                      <p className="text-[11px] text-foreground/90">Last 3 months</p>
+                    </div>
+                  </div>
+                  <div className="flex flex-1 flex-col items-end gap-0.5 py-3.5 pr-4">
+                    {[
+                      { label: "October", mult: 1 },
+                      { label: "September", mult: 0.93 },
+                      { label: "August", mult: 0.87 },
+                    ].map((m) => (
+                      <div key={m.label} className="flex w-full items-baseline justify-between">
+                        <span className="text-[11px] text-foreground/90">{m.label}</span>
+                        <span className="text-[11px] font-semibold text-success">
+                          +LKR{" "}
+                          {(
+                            Math.round(
+                              (selectedSubAccount.valueNum * 0.008 * m.mult) / 50,
+                            ) * 50
+                          ).toLocaleString("en-LK")}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
 
               <div className="mt-7 grid grid-cols-2 gap-2.5">
                 <Button
