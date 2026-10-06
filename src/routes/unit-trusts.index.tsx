@@ -156,7 +156,12 @@ function UnitTrustPortfolio() {
       )}
 
       <section className="mx-4 mt-8">
-        <h2 className="px-1 text-[13px] font-semibold text-foreground">Your funds</h2>
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-[13px] font-semibold text-foreground">Your funds</h2>
+          <p className="text-[11px] font-semibold text-pill">
+            {activeEarnings.key === "all" ? "All-time earnings" : `${activeEarnings.label} earnings`}
+          </p>
+        </div>
         <div className="mt-2 space-y-2.5">
           {funds.map((fund) => {
             const isOpen = expandedFund === fund.name;
@@ -172,9 +177,7 @@ function UnitTrustPortfolio() {
                       {fund.name}
                     </p>
                     <p className="mt-1 text-[12px] font-semibold text-success">
-                      +LKR{" "}
-                      {fundEarningsForRange(fund).toLocaleString("en-LK")}{" "}
-                      {activeEarnings.key === "all" ? "all time" : `· ${activeEarnings.label}`}
+                      +LKR {fundEarningsForRange(fund).toLocaleString("en-LK")}
                     </p>
                   </div>
                   <p className="shrink-0 text-right text-[14px] font-semibold text-foreground">
@@ -208,8 +211,7 @@ function UnitTrustPortfolio() {
                               {sub.value}
                             </p>
                             <p className="text-[11px] font-semibold text-success">
-                              {activeEarnings.key === "all" ? "All" : activeEarnings.label} +LKR{" "}
-                              {subEarningsForRange(sub).toLocaleString("en-LK")}
+                              +LKR {subEarningsForRange(sub).toLocaleString("en-LK")}
                             </p>
                           </div>
                           <ChevronRight className="h-3.5 w-3.5 text-muted-foreground" />
