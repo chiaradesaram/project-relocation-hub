@@ -223,7 +223,7 @@ function UnitTrustPortfolio() {
                       }}
                       className="flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-[13px] font-semibold text-pill hover:bg-foreground/[0.04]"
                     >
-                      <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-pill/15">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-pill/15">
                         <Plus className="h-4 w-4" />
                       </span>
                       Add a goal
