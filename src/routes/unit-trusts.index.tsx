@@ -3,9 +3,8 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import { Button } from "@/components/ui/button";
-import { funds, type Fund } from "@/data/unitTrusts";
-import { Sheet, SheetContent } from "@/components/ui/sheet";
-import { ChevronRight, ArrowUpRight, ArrowDownLeft, Plus, X } from "lucide-react";
+import { funds } from "@/data/unitTrusts";
+import { ChevronRight, ArrowUpRight, ArrowDownLeft, Plus } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/")({
   head: () => ({
@@ -29,7 +28,7 @@ export const Route = createFileRoute("/unit-trusts/")({
 
 function UnitTrustPortfolio() {
   const navigate = useNavigate();
-  const [openFund, setOpenFund] = useState<Fund | null>(null);
+  const [expandedFund, setExpandedFund] = useState<string | null>(null);
 
   return (
     <MobileLayout>
