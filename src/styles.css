@@ -131,8 +131,8 @@
   --input: #39345B;
   --ring: oklch(0.55 0.22 265);
 
-  --success: oklch(0.6 0.1 155);
-  --success-foreground: oklch(1 0 0);
+  --success: oklch(0.82 0.2 155);
+  --success-foreground: #121127;
   --warning: oklch(0.77 0.17 70);
   --warning-foreground: oklch(1 0 0);
 
