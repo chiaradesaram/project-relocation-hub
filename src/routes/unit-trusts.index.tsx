@@ -156,7 +156,12 @@ function UnitTrustPortfolio() {
       )}
 
       <section className="mx-4 mt-8">
-        <h2 className="px-1 text-[13px] font-semibold text-foreground">Your funds</h2>
+        <div className="flex items-center justify-between px-1">
+          <h2 className="text-[13px] font-semibold text-foreground">Your funds</h2>
+          <p className="text-[11px] font-semibold text-pill">
+            {activeEarnings.key === "all" ? "All-time earnings" : `${activeEarnings.label} earnings`}
+          </p>
+        </div>
         <div className="mt-2 space-y-2.5">
           {funds.map((fund) => {
             const isOpen = expandedFund === fund.name;
