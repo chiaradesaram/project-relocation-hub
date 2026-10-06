@@ -2,11 +2,28 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
+import { Button } from "@/components/ui/button";
 import { funds, type Fund } from "@/data/unitTrusts";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { ChevronRight, ArrowUpRight, ArrowDownLeft, Plus, X } from "lucide-react";
 
 export const Route = createFileRoute("/unit-trusts/")({
+  head: () => ({
+    meta: [
+      { title: "Unit Trust Portfolio | CAL Digital" },
+      {
+        name: "description",
+        content: "View your CAL unit trust balance, returns, and fund holdings.",
+      },
+      { property: "og:title", content: "Unit Trust Portfolio | CAL Digital" },
+      {
+        property: "og:description",
+        content: "View your CAL unit trust balance, returns, and fund holdings.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
+    ],
+  }),
   component: UnitTrustPortfolio,
 });
 
@@ -18,84 +35,75 @@ function UnitTrustPortfolio() {
     <MobileLayout>
       <PageHeader title="Unit Trusts" showBack />
 
-      {/* Summary */}
-      <div className="px-4 mt-3 text-center">
-        <p className="text-[12px] text-muted-foreground">Total Balance</p>
-        <p className="mt-1 text-[26px] font-bold tracking-tight text-foreground">
+      <div className="px-5 pt-5 text-center">
+        <p className="text-[13px] font-medium text-muted-foreground">Total balance</p>
+        <p className="mt-1.5 font-display text-[28px] font-semibold leading-tight text-foreground">
           LKR 2,450,000
         </p>
-        <div className="mt-2 flex items-center justify-center gap-5 text-[12px]">
-          <span className="text-muted-foreground">
-            7d <span className="font-semibold text-success">+16,436</span>
-          </span>
-          <span className="text-muted-foreground">
-            30d <span className="font-semibold text-success">+110,250</span>
-          </span>
-          <span className="text-muted-foreground">
-            All <span className="font-semibold text-success">+219,949</span>
-          </span>
-        </div>
+        <p className="mt-2 text-[14px] font-semibold text-success">
+          +LKR 219,949 all time
+        </p>
       </div>
 
-      {/* Invest / Redeem */}
-      <div className="mx-4 mt-5 flex gap-2.5">
-        <button
+      <div className="mx-5 mt-6 flex justify-center gap-3">
+        <Button
           onClick={() =>
             navigate({ to: "/invest", search: { product: "unit-trust" } })
           }
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card py-3 transition hover:bg-form-card/60 active:bg-form-card/70"
+          className="h-10 rounded-full bg-primary px-5 text-[13px] font-semibold text-primary-foreground shadow-none hover:bg-primary/90"
         >
-          <ArrowUpRight className="h-4 w-4 text-success" />
-          <span className="text-[14px] font-semibold text-foreground">Invest</span>
-        </button>
-        <button
+          <ArrowUpRight className="h-4 w-4" />
+          Invest
+        </Button>
+        <Button
+          variant="secondary"
           onClick={() =>
             navigate({ to: "/redeem", search: { product: "unit-trust" } })
           }
-          className="flex flex-1 items-center justify-center gap-2 rounded-xl bg-card py-3 transition hover:bg-form-card/60 active:bg-form-card/70"
+          className="h-10 rounded-full bg-card px-5 text-[13px] font-semibold text-foreground shadow-none hover:bg-form-card/70"
         >
           <ArrowDownLeft className="h-4 w-4 text-muted-foreground" />
-          <span className="text-[14px] font-semibold text-foreground">Redeem</span>
-        </button>
+          Redeem
+        </Button>
       </div>
 
-      {/* Fund Cards */}
-      <div className="mx-4 mt-5 space-y-2.5">
-        {funds.map((fund) => (
-          <button
-            key={fund.name}
-            onClick={() => setOpenFund(fund)}
-            className="flex w-full items-center gap-3 rounded-2xl bg-card p-4 text-left transition active:bg-form-card/40"
-          >
-            <div className="min-w-0 flex-1">
-              <p className="text-[14px] font-semibold leading-tight text-foreground">
-                {fund.name}
-              </p>
-              <p className="mt-0.5 text-[12px] text-muted-foreground">
-                {fund.description}
-              </p>
-            </div>
-            <div className="shrink-0 text-right">
-              <p className="text-[14px] font-semibold text-foreground">
+      <section className="mx-4 mt-8">
+        <h2 className="px-1 text-[13px] font-semibold text-foreground">Your funds</h2>
+        <div className="mt-2 overflow-hidden rounded-2xl bg-card">
+          {funds.map((fund, index) => (
+            <Button
+              key={fund.name}
+              variant="ghost"
+              onClick={() => setOpenFund(fund)}
+              className={`h-auto min-h-[66px] w-full justify-start rounded-none px-4 py-3 text-left hover:bg-form-card/35 ${
+                index > 0 ? "border-t border-foreground/[0.06]" : ""
+              }`}
+            >
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-[14px] font-semibold leading-tight text-foreground">
+                  {fund.name}
+                </p>
+                <p className="mt-1 text-[12px] font-semibold text-success">
+                  +LKR {fund.earningsAll.replace(/^\+/, "")} all time
+                </p>
+              </div>
+              <p className="shrink-0 text-right text-[14px] font-semibold text-foreground">
                 {fund.value}
               </p>
-              <p className="mt-0.5 text-[11px] font-semibold text-success">
-                All {fund.earningsAll}
-              </p>
-            </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" />
-          </button>
-        ))}
-      </div>
+              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/70" />
+            </Button>
+          ))}
+        </div>
+      </section>
 
-      {/* Add new fund */}
-      <div className="mx-4 mt-4 mb-6">
-        <button className="flex w-full items-center justify-center gap-2 rounded-2xl bg-card/60 py-3.5 transition active:bg-form-card/40">
-          <Plus className="h-4 w-4 text-muted-foreground" />
-          <span className="text-[13px] font-semibold text-muted-foreground">
-            Add new fund
-          </span>
-        </button>
+      <div className="mx-4 mb-6 mt-3">
+        <Button
+          variant="ghost"
+          className="h-11 w-full rounded-xl text-[13px] font-semibold text-pill hover:bg-card/70 hover:text-pill"
+        >
+          <Plus className="h-4 w-4" />
+          Add new fund
+        </Button>
       </div>
 
       {/* Fund detail sheet */}
@@ -112,28 +120,30 @@ function UnitTrustPortfolio() {
                     {openFund.description}
                   </p>
                 </div>
-                <button
+                <Button
+                  variant="ghost"
+                  size="icon"
                   onClick={() => setOpenFund(null)}
-                  className="ml-3 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-muted/50 text-muted-foreground transition hover:bg-muted"
+                  className="ml-3 h-8 w-8 shrink-0 rounded-full bg-muted/50 text-muted-foreground hover:bg-muted"
                   aria-label="Close"
                 >
                   <X className="h-4 w-4" />
-                </button>
+                </Button>
               </div>
 
               <div className="mt-3">
                 <p className="text-[22px] font-bold tracking-tight text-foreground">
                   {openFund.value}
                 </p>
-                <div className="mt-2 grid grid-cols-3 gap-1.5">
-                  <span className="whitespace-nowrap rounded-full bg-success/15 px-2 py-1 text-center text-[11px] font-semibold text-success">
-                    7d {openFund.earnings7d}
+                <div className="mt-3 grid grid-cols-3 divide-x divide-foreground/[0.07] rounded-xl bg-background/35 py-2.5">
+                  <span className="text-center text-[11px] text-muted-foreground">
+                    7 days <strong className="mt-0.5 block text-[12px] font-semibold text-success">{openFund.earnings7d}</strong>
                   </span>
-                  <span className="whitespace-nowrap rounded-full bg-success/15 px-2 py-1 text-center text-[11px] font-semibold text-success">
-                    30d {openFund.earnings30d}
+                  <span className="text-center text-[11px] text-muted-foreground">
+                    30 days <strong className="mt-0.5 block text-[12px] font-semibold text-success">{openFund.earnings30d}</strong>
                   </span>
-                  <span className="whitespace-nowrap rounded-full bg-success/15 px-2 py-1 text-center text-[11px] font-semibold text-success">
-                    All {openFund.earningsAll}
+                  <span className="text-center text-[11px] text-muted-foreground">
+                    All time <strong className="mt-0.5 block text-[12px] font-semibold text-success">{openFund.earningsAll}</strong>
                   </span>
                 </div>
               </div>
