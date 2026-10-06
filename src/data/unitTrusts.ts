@@ -91,6 +91,8 @@ export const funds: Fund[] = [
         earningsAllNum: 22400,
         returnPct: "+2.9%",
         dotColor: "oklch(0.69 0.14 231)",
+        goalTarget: 500000,
+        goalDeadline: "2027-03-31",
         units: 17820.45,
         navPerUnit: 19.64,
         createdAt: "2023-03-04",
