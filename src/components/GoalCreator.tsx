@@ -196,30 +196,45 @@ export default function GoalCreator({
 
                   <div className="rounded-2xl bg-foreground/[0.06] px-4 py-2.5">
                     <span className="text-[11px] font-medium text-pill">Invest in</span>
-                    <div className="mt-1 space-y-0.5">
+                    <ModernSelect
+                      value={fund}
+                      onChange={(e) => setFund(e.target.value)}
+                      placeholder="Choose a fund"
+                      className="mt-1 rounded-xl border-0 bg-background/40 text-[14px] font-semibold"
+                    >
+                      <option value="">Choose a fund</option>
                       {fundNames.map((f) => (
-                        <button
-                          key={f}
-                          onClick={() => setFund(f)}
-                          className="flex w-full items-center justify-between py-2 text-left text-[14px] font-medium text-foreground"
-                        >
-                          {f}
-                          <RadioDot selected={fund === f} />
-                        </button>
+                        <option key={f} value={f}>{f}</option>
                       ))}
-                    </div>
+                    </ModernSelect>
                   </div>
 
-                  <div className="rounded-2xl bg-foreground/[0.06] px-4 py-3">
-                    <div className="flex items-center justify-between">
-                      <div>
+                  {!hasTarget ? (
+                    <button
+                      onClick={() => setHasTarget(true)}
+                      className="flex w-full items-center gap-3 rounded-2xl bg-foreground/[0.06] px-4 py-3 text-left transition-colors hover:bg-foreground/[0.09] active:bg-foreground/[0.12]"
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-pill/15">
+                        <Target className="h-5 w-5 text-pill" />
+                      </span>
+                      <span>
                         <p className="text-[14px] font-semibold text-foreground">Set a target</p>
                         <p className="text-[12px] text-foreground/75">Optional — track your progress</p>
-                      </div>
-                      <Switch checked={hasTarget} onCheckedChange={setHasTarget} />
-                    </div>
-                    {hasTarget && (
-                      <div className="mt-3 grid grid-cols-2 gap-2 animate-in fade-in slide-in-from-top-1">
+                      </span>
+                    </button>
+                  ) : (
+                    <div className="rounded-2xl bg-foreground/[0.06] px-4 py-3">
+                      <p className="flex items-center gap-2 text-[14px] font-semibold text-foreground">
+                        <Target className="h-4 w-4 text-pill" />
+                        Your target
+                        <button
+                          onClick={() => { setHasTarget(false); setTarget(""); setDate(""); }}
+                          className="ml-auto text-[12px] font-semibold text-pill"
+                        >
+                          Remove
+                        </button>
+                      </p>
+                      <div className="mt-2.5 grid grid-cols-2 gap-2">
                         <label className="rounded-xl bg-background/40 px-3 py-2">
                           <span className="text-[11px] font-medium text-pill">Target (LKR)</span>
                           <input
@@ -240,8 +255,8 @@ export default function GoalCreator({
                           />
                         </label>
                       </div>
-                    )}
-                  </div>
+                    </div>
+                  )}
                 </div>
 
                 <Button
