@@ -318,6 +318,11 @@ function UnitTrustPortfolio() {
                   <div className="flex items-center gap-3 px-4 pb-2.5 pt-3.5">
                     <div className="flex h-9 w-9 items-center justify-center rounded-full bg-success/15">
                       <Sprout className="h-4 w-4 text-success" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[13px] font-semibold text-foreground">Interest earned</p>
+                      <p className="text-[11px] text-foreground/90">Last 3 months</p>
+                    </div>
                   </div>
                   <div className="divide-y divide-foreground/[0.06]">
                     {[
