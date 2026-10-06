@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import { ChevronLeft, X } from "lucide-react";
 import { Sheet, SheetContent, SheetTitle, SheetDescription } from "@/components/ui/sheet";
-import { Switch } from "@/components/ui/switch";
+import { ModernSelect } from "@/components/ModernSelect";
 import { Button } from "@/components/ui/button";
-import { RadioDot } from "@/components/RadioDot";
+import { Target } from "lucide-react";
 import { GOAL_TOPICS, ICONS, tileStyle, type Goal, type GoalTopic } from "@/lib/goals";
 import { useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
