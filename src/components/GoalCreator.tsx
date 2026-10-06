@@ -232,33 +232,61 @@ export default function GoalCreator({
                         <Target className="h-4 w-4 text-pill" />
                         Your target
                         <button
-                          onClick={() => { setHasTarget(false); setTarget(""); setDate(""); }}
+                          onClick={() => { setHasTarget(false); setTarget(0); setDate(undefined); }}
                           className="ml-auto text-[12px] font-semibold text-pill"
                         >
                           Remove
                         </button>
                       </p>
-                      <div className="mt-2.5 grid grid-cols-2 gap-2">
-                        <label className="rounded-xl bg-background/40 px-3 py-2">
-                          <span className="text-[11px] font-medium text-pill">Target (LKR)</span>
-                          <input
-                            inputMode="numeric"
-                            value={target ? Number(target.replace(/[^0-9]/g, "")).toLocaleString("en-LK") : ""}
-                            onChange={(e) => setTarget(e.target.value)}
-                            placeholder="500,000"
-                            className="block w-full bg-transparent text-[14px] font-semibold text-foreground outline-none placeholder:text-foreground/40"
-                          />
-                        </label>
-                        <label className="rounded-xl bg-background/40 px-3 py-2">
-                          <span className="text-[11px] font-medium text-pill">By when</span>
-                          <input
-                            type="month"
-                            value={date}
-                            onChange={(e) => setDate(e.target.value)}
-                            className="block w-full bg-transparent text-[14px] font-semibold text-foreground outline-none [color-scheme:dark]"
-                          />
-                        </label>
+
+                      <div className="mt-2.5 flex items-center gap-2 rounded-xl bg-background/40 px-3 py-2.5">
+                        <span className="text-[12px] font-semibold text-foreground/60">LKR</span>
+                        <input
+                          inputMode="numeric"
+                          value={target ? target.toLocaleString("en-LK") : ""}
+                          onChange={(e) =>
+                            setTarget(
+                              Math.min(TARGET_MAX, Number(e.target.value.replace(/[^0-9]/g, "")) || 0),
+                            )
+                          }
+                          placeholder="0"
+                          className="block w-full bg-transparent text-[17px] font-semibold text-foreground outline-none placeholder:text-foreground/40"
+                        />
                       </div>
+
+                      <Slider
+                        value={[Math.min(target, TARGET_MAX)]}
+                        min={0}
+                        max={TARGET_MAX}
+                        step={10_000}
+                        onValueChange={(v) => setTarget(v[0] ?? 0)}
+                        className="mt-3.5 w-full"
+                      />
+
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <button className="mt-2.5 flex w-full items-center justify-between rounded-xl bg-background/40 px-3 py-2.5 text-left transition-colors hover:bg-background/60">
+                            <span className="text-[11px] font-medium text-pill">By when</span>
+                            <span className="text-[14px] font-semibold text-foreground">
+                              {date ? (
+                                date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" })
+                              ) : (
+                                <span className="text-foreground/40">Pick a date</span>
+                              )}
+                            </span>
+                          </button>
+                        </PopoverTrigger>
+                        <PopoverContent className="pointer-events-auto w-auto p-0" align="start">
+                          <div className="[&_[data-selected-single=true]]:!bg-pill [&_[data-selected-single=true]]:!text-white [&_[data-selected-single=true]_button]:!ring-0 [&_.rdp-today_button]:!bg-transparent [&_.rdp-today_button]:!ring-1 [&_.rdp-today_button]:!ring-pill [&_.rdp-today_button]:!rounded-full">
+                            <Calendar
+                              mode="single"
+                              selected={date}
+                              onSelect={setDate}
+                              disabled={{ before: new Date() }}
+                            />
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   )}
                 </div>
