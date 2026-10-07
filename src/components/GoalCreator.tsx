@@ -254,14 +254,6 @@ export default function GoalCreator({
                         />
                       </div>
 
-                      <Slider
-                        value={[Math.min(target, TARGET_MAX)]}
-                        min={0}
-                        max={TARGET_MAX}
-                        step={10_000}
-                        onValueChange={(v) => setTarget(v[0] ?? 0)}
-                        className="mt-3.5 w-full"
-                      />
 
                       <Popover>
                         <PopoverTrigger asChild>
