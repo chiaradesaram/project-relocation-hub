@@ -238,19 +238,6 @@ function UnitTrustPortfolio() {
         </div>
       </section>
 
-      <div className="mx-4 mb-6 mt-3">
-        <Button
-          variant="ghost"
-          onClick={() => {
-            setGoalFund(undefined);
-            setGoalOpen(true);
-          }}
-          className="h-11 w-full rounded-xl text-[13px] font-semibold text-pill hover:bg-card/70 hover:text-pill"
-        >
-          <Plus className="h-4 w-4" />
-          New goal
-        </Button>
-      </div>
 
       <GoalCreator
         open={goalOpen}
