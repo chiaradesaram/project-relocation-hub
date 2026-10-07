@@ -5,7 +5,6 @@ import { ModernSelect } from "@/components/ModernSelect";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Calendar } from "@/components/ui/calendar";
-import { Slider } from "@/components/ui/slider";
 import { GOAL_TOPICS, ICONS, tileStyle, type Goal, type GoalTopic } from "@/lib/goals";
 import { useNavigate } from "@tanstack/react-router";
 import { Check } from "lucide-react";
