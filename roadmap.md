@@ -12,3 +12,4 @@
 - [x] Rework bank-transfer help sheet with compact theme typography, simple step markers and balanced spacing
 - [x] Add a "Raise a request" action to the help sheet and widen its mobile side insets
 - [x] Merge the review screen's total and details into one card and drop the confirm button icon
+- [x] Replace the confirmation sheet's Done button with "Track my request" and "Make another investment"
