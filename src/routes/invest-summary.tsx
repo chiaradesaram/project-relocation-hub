@@ -351,17 +351,11 @@ function InvestSummary() {
           className="mx-4 mt-4 rounded-2xl px-4 py-4 backdrop-blur-sm"
           style={{ background: "color-mix(in oklch, var(--card) 94%, transparent)" }}
         >
-          <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
-            >
-              <CalendarClock className="size-[17px]" strokeWidth={2.25} />
-            </span>
-            <h2 className="type-label text-foreground">Investment timeline</h2>
-          </div>
+          <h2 className="text-[12px] font-semibold tracking-wide text-muted-foreground">
+            Investment timeline
+          </h2>
 
-          <ol className="mt-4">
+          <ol className="mt-3">
             {timeline.map((step, i) => (
               <li
                 key={step.label}
