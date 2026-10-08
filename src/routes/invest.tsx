@@ -998,7 +998,7 @@ function MethodForm({
             <SheetContent
               side="bottom"
               className="rounded-t-3xl p-0 pb-0 border-0"
-              style={{ background: "#292544" }}
+              style={{ background: "var(--sheet-surface)" }}
             >
               <div className="px-5 pt-5 pb-8">
                 <div className="flex items-center justify-between">
@@ -1013,7 +1013,7 @@ function MethodForm({
                     className="w-9 h-9 rounded-full flex items-center justify-center"
                     style={{
                       background:
-                        "color-mix(in oklch, var(--background) 45%, transparent)",
+                        "var(--sheet-card)",
                     }}
                   >
                     <X className="w-4 h-4 text-foreground" />
@@ -1043,7 +1043,7 @@ function MethodForm({
                     Sending money to CAL
                   </p>
                 </div>
-                <p className="mt-2 text-[13px] text-muted-foreground leading-snug">
+                <p className="mt-2 text-[14px] text-foreground leading-snug">
                   Two quick steps — send the money, then tell us where it
                   goes.
                 </p>
@@ -1053,22 +1053,21 @@ function MethodForm({
                     className="rounded-2xl p-4"
                     style={{
                       background:
-                        "color-mix(in oklch, var(--background) 35%, transparent)",
+                        "var(--sheet-card)",
                     }}
                   >
                     <div className="flex items-start gap-3">
                       <div
                         className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
                         style={{
-                          background:
-                            "color-mix(in oklch, var(--pill) 24%, transparent)",
-                          color: "var(--pill)",
+                          background: "var(--pill)",
+                          color: "var(--pill-foreground)",
                         }}
                       >
                         1
                       </div>
                       <div className="min-w-0 flex-1">
-                        <p className="text-[13px] font-semibold text-foreground leading-snug pt-0.5">
+                        <p className="text-[14px] font-semibold text-foreground leading-snug pt-0.5">
                           Transfer to CAL's Deutsche Bank account
                         </p>
                         <button
@@ -1086,10 +1085,10 @@ function MethodForm({
                           className="mt-2.5 flex items-center gap-2 rounded-xl px-3 py-2.5 text-left"
                           style={{
                             background:
-                              "color-mix(in oklch, var(--background) 55%, transparent)",
+                              "var(--sheet-field)",
                           }}
                         >
-                          <span className="text-[12px] text-foreground/90 leading-snug">
+                          <span className="text-[13px] text-foreground leading-snug">
                             Account name: CAL Online (Pvt) Ltd
                             <br />
                             Account number: 0078 4521 0036
@@ -1114,21 +1113,20 @@ function MethodForm({
                     className="rounded-2xl p-4"
                     style={{
                       background:
-                        "color-mix(in oklch, var(--background) 35%, transparent)",
+                        "var(--sheet-card)",
                     }}
                   >
                     <div className="flex items-start gap-3">
                       <div
                         className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
                         style={{
-                          background:
-                            "color-mix(in oklch, var(--pill) 24%, transparent)",
-                          color: "var(--pill)",
+                          background: "var(--pill)",
+                          color: "var(--pill-foreground)",
                         }}
                       >
                         2
                       </div>
-                      <p className="text-[13px] text-foreground leading-snug pt-0.5">
+                      <p className="text-[14px] font-semibold text-foreground leading-snug pt-0.5">
                         Come here to raise a request to tell us which fund you
                         want it in.
                       </p>
@@ -1141,7 +1139,7 @@ function MethodForm({
                     className="w-4 h-4 shrink-0 mt-0.5"
                     style={{ color: "var(--pill)" }}
                   />
-                  <p className="text-[12px] text-foreground/90 leading-snug">
+                  <p className="text-[13px] text-foreground leading-snug">
                     Requests before 9 will be confirmed on the same working
                     day. After 9, they'll be confirmed the next working day.
                   </p>
