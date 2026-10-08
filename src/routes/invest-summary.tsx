@@ -7,6 +7,7 @@ import {
   CalendarDays,
   Check,
   Copy,
+  FilePlus2,
   Info,
   Lightbulb,
   ListChecks,
