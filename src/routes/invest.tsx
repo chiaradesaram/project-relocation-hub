@@ -27,6 +27,8 @@ import {
   Copy,
   Split,
   CalendarClock,
+  Landmark,
+  FilePlus2,
   PauseCircle,
   PlayCircle,
   Trash2,
