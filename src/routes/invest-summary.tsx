@@ -327,12 +327,12 @@ function InvestSummary() {
                     type="button"
                     aria-label="Copy CAL bank account number"
                     onClick={copyCalAccount}
-                    className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
                   >
                     {accountCopied ? (
-                      <Check className="size-4 text-success" />
+                      <Check className="size-[15px] text-success" />
                     ) : (
-                      <Copy className="size-4 text-pill-bright" />
+                      <Copy className="size-[15px] text-pill-bright" />
                     )}
                   </button>
                 )}
