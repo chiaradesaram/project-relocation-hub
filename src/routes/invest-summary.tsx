@@ -3,14 +3,12 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
-  CalendarClock,
   CalendarDays,
   Check,
   Copy,
   FilePlus2,
   Info,
   Lightbulb,
-  ListChecks,
   TrendingUp,
   X,
 } from "lucide-react";
