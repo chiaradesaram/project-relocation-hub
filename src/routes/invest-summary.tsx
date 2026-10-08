@@ -129,9 +129,26 @@ function InvestSummary() {
     setSubmittedOpen(true);
   };
 
-  const closeSheet = () => {
+  const trackRequest = () => {
     setSubmittedOpen(false);
-    return () => window.setTimeout(
+    window.setTimeout(() => navigate({ to: "/transactions" }), 320);
+  };
+
+  const makeAnotherInvestment = () => {
+    setSubmittedOpen(false);
+    window.setTimeout(
+      () =>
+        navigate({
+          to: "/invest",
+          search: {
+            product: "unit-trust",
+            method: isRecurring ? "recurring" : isInstant ? "instant" : "bank",
+          },
+        }),
+      320,
+    );
+  };
+
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
@@ -293,14 +310,22 @@ function InvestSummary() {
               <span className="font-semibold text-rates-mint">confirmation email</span>.
             </p>
           </div>
-          <div className="px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+          <div className="space-y-2.5 px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
             <Button
-              onClick={finishConfirmation}
+              onClick={trackRequest}
               className="flex h-12 w-full items-center justify-center rounded-full bg-pill type-label text-pill-foreground hover:bg-pill/90"
             >
-              Done
+              Track my request
+            </Button>
+            <Button
+              variant="secondary"
+              onClick={makeAnotherInvestment}
+              className="flex h-12 w-full items-center justify-center rounded-full type-label hover:bg-secondary/80"
+            >
+              Make another investment
             </Button>
           </div>
+
         </SheetContent>
       </Sheet>
     </MobileLayout>
