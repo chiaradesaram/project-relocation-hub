@@ -61,6 +61,8 @@
   --color-form-card: var(--form-card);
   --color-pill: var(--pill);
   --color-pill-foreground: var(--pill-foreground);
+  --color-rates-surface: var(--rates-surface);
+  --color-rates-mint: var(--rates-mint);
   --font-sans: "Manrope", system-ui, sans-serif;
   --font-display: "Sora", "Manrope", system-ui, sans-serif;
   --animate-fade-in: fade-in 0.3s ease-out;
@@ -103,6 +105,8 @@
   --pill-foreground: #121127;
 
   --surface-1: #211E40;
+  --rates-surface: #292544;
+  --rates-mint: #A8EACB;
   --surface-2: #211E40;
   --form-card: #39345B;
 
