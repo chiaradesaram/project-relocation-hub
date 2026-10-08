@@ -64,6 +64,7 @@ function InvestSummary() {
   const navigate = useNavigate();
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
+  const [submittedOpen, setSubmittedOpen] = useState(false);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
