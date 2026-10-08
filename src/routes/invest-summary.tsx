@@ -3,14 +3,12 @@ import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
-  CalendarClock,
   CalendarDays,
   Check,
   Copy,
   FilePlus2,
   Info,
   Lightbulb,
-  ListChecks,
   TrendingUp,
   X,
 } from "lucide-react";
@@ -307,43 +305,34 @@ function InvestSummary() {
             background: "color-mix(in oklch, var(--card) 94%, transparent)",
           }}
         >
-          <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
-            >
-              <ListChecks className="size-[17px]" strokeWidth={2.25} />
-            </span>
-            <h2 className="type-label text-foreground">
-              Quick check before you submit
-            </h2>
-          </div>
+          <h2 className="text-[12px] font-semibold tracking-wide text-muted-foreground">
+            Quick check before you submit
+          </h2>
 
-          <ul className="mt-2 divide-y divide-border/40">
+          <ul className="mt-1 divide-y divide-border/40">
             {quickChecks.map((item, i) => (
               <li
                 key={item.title}
-                className="flex animate-fade-in items-center gap-3 py-2.5"
+                className="flex animate-fade-in items-center gap-2.5 py-2"
                 style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
               >
-                <span
+                <Check
                   aria-hidden="true"
-                  className="flex size-6 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
-                >
-                  <Check className="size-[13px]" strokeWidth={3} />
-                </span>
-                <p className="type-label min-w-0 flex-1 text-foreground">{item.title}</p>
+                  className="size-[13px] shrink-0 text-rates-mint"
+                  strokeWidth={2.75}
+                />
+                <p className="text-[12px] min-w-0 flex-1 text-foreground">{item.title}</p>
                 {item.copy && (
                   <button
                     type="button"
                     aria-label="Copy CAL bank account number"
                     onClick={copyCalAccount}
-                    className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
+                    className="flex size-8 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
                   >
                     {accountCopied ? (
-                      <Check className="size-4 text-success" />
+                      <Check className="size-[15px] text-success" />
                     ) : (
-                      <Copy className="size-4 text-pill-bright" />
+                      <Copy className="size-[15px] text-pill-bright" />
                     )}
                   </button>
                 )}
@@ -360,17 +349,11 @@ function InvestSummary() {
           className="mx-4 mt-4 rounded-2xl px-4 py-4 backdrop-blur-sm"
           style={{ background: "color-mix(in oklch, var(--card) 94%, transparent)" }}
         >
-          <div className="flex items-center gap-3">
-            <span
-              aria-hidden="true"
-              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
-            >
-              <CalendarClock className="size-[17px]" strokeWidth={2.25} />
-            </span>
-            <h2 className="type-label text-foreground">Investment timeline</h2>
-          </div>
+          <h2 className="text-[12px] font-semibold tracking-wide text-muted-foreground">
+            Investment timeline
+          </h2>
 
-          <ol className="mt-4">
+          <ol className="mt-3">
             {timeline.map((step, i) => (
               <li
                 key={step.label}
