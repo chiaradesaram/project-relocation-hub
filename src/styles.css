@@ -120,6 +120,11 @@
   --sheet-card: color-mix(in oklch, var(--form-card) 65%, transparent);
   --sheet-field: color-mix(in oklch, var(--form-card) 82%, transparent);
 
+  /* "Learn how it works" sheet — lighter, grayish layers */
+  --sheet-surface-light: color-mix(in oklch, var(--form-card) 72%, white);
+  --sheet-card-light: color-mix(in oklch, var(--form-card) 62%, white);
+  --sheet-field-light: color-mix(in oklch, var(--form-card) 50%, white);
+
   --card: var(--surface-2);
   --card-foreground: oklch(0.97 0 0);
 
