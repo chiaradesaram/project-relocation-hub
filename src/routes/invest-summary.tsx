@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Info, Lightbulb, X } from "lucide-react";
+import { Banknote, Check, Copy, Info, Lightbulb, X } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -65,6 +65,7 @@ function InvestSummary() {
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [submittedOpen, setSubmittedOpen] = useState(false);
+  const [accountCopied, setAccountCopied] = useState(false);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
@@ -152,7 +153,36 @@ function InvestSummary() {
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
-  const fromBankLast4 = fromBankAcctNo?.split(" ").pop() ?? "";
+
+  // CAL's receiving account — shown here so it can be matched against the transfer
+  const CAL_ACCOUNT_NAME = "CAL Online (Pvt) Ltd";
+  const CAL_ACCOUNT_NUMBER = "0078 4521 0036";
+
+  const copyCalAccount = () => {
+    navigator.clipboard?.writeText(CAL_ACCOUNT_NUMBER).catch(() => {});
+    setAccountCopied(true);
+    window.setTimeout(() => setAccountCopied(false), 1500);
+  };
+
+  const quickChecks = [
+    {
+      title: `You're investing in ${fund || "your fund"}`,
+      detail: account || "",
+    },
+    {
+      title: "Money sent to CAL's Deutsche Bank account",
+      detail: `${CAL_ACCOUNT_NAME} · ${CAL_ACCOUNT_NUMBER}`,
+      copy: true,
+    },
+    {
+      title: `Paid from ${fromBankName || "your bank"}`,
+      detail: fromBankAcctNo || "",
+    },
+    {
+      title: "It's a bank account, not a wallet",
+      detail: "",
+    },
+  ];
 
   return (
     <MobileLayout>
@@ -169,7 +199,9 @@ function InvestSummary() {
         </div>
         <div className="mt-4 mb-3 h-px w-full bg-border/60" />
         <div className="space-y-2.5">
-          <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
+          {method !== "bank" && (
+            <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
+          )}
           {splits.length > 1 && (
             <>
               <Row label="Split into" value={`${splits.length} transfers`} />
