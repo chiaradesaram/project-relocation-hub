@@ -30,6 +30,8 @@ import {
   PauseCircle,
   PlayCircle,
   Trash2,
+  Landmark,
+  Info,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
@@ -39,6 +41,7 @@ import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
   Sheet,
   SheetContent,
+  SheetClose,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
@@ -992,82 +995,153 @@ function MethodForm({
             Learn how it works
           </button>
           <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
-            <SheetContent side="bottom" className="rounded-t-3xl p-0 pb-0">
-              <img
-                src={bankTransferInfo}
-                alt=""
-                loading="lazy"
-                width={1024}
-                height={768}
-                className="w-full h-36 object-cover"
-              />
-              <div className="px-5 pt-4 pb-8">
-                <div>
-                  <div className="flex items-start gap-3">
-                    <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
-                      style={{
-                        background:
-                          "color-mix(in oklch, var(--pill) 24%, transparent)",
-                        color: "var(--pill)",
-                      }}
-                    >
-                      1
-                    </div>
-                    <div className="min-w-0">
-                      <p className="text-[13px] font-semibold text-foreground leading-snug pt-0.5">
-                        Transfer to CAL's Deutsche Bank account
-                      </p>
-                      <button
-                        type="button"
-                        onClick={() => {
-                          navigator.clipboard
-                            ?.writeText("0078 4521 0036")
-                            .catch(() => {});
-                          setAccountCopied(true);
-                          window.setTimeout(
-                            () => setAccountCopied(false),
-                            1500
-                          );
+            <SheetContent
+              side="bottom"
+              className="rounded-t-3xl p-0 pb-0 border-0"
+              style={{ background: "#292544" }}
+            >
+              <div className="px-5 pt-5 pb-8">
+                <div className="flex items-center justify-between">
+                  <span
+                    className="text-[11px] font-bold uppercase tracking-[0.16em]"
+                    style={{ color: "var(--pill)" }}
+                  >
+                    How it works
+                  </span>
+                  <SheetClose
+                    aria-label="Close"
+                    className="w-9 h-9 rounded-full flex items-center justify-center"
+                    style={{
+                      background:
+                        "color-mix(in oklch, var(--background) 45%, transparent)",
+                    }}
+                  >
+                    <X className="w-4 h-4 text-foreground" />
+                  </SheetClose>
+                </div>
+
+                <img
+                  src={bankTransferInfo}
+                  alt=""
+                  loading="lazy"
+                  width={1024}
+                  height={768}
+                  className="w-full h-32 object-cover rounded-2xl mt-4"
+                />
+
+                <div className="mt-5 flex items-center gap-3">
+                  <div
+                    className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
+                    style={{ background: "var(--pill)" }}
+                  >
+                    <Landmark
+                      className="w-6 h-6"
+                      style={{ color: "var(--pill-foreground)" }}
+                    />
+                  </div>
+                  <p className="font-display text-[20px] font-bold text-foreground leading-tight">
+                    Sending money to CAL
+                  </p>
+                </div>
+                <p className="mt-2 text-[13px] text-muted-foreground leading-snug">
+                  Two quick steps — send the money, then tell us where it
+                  goes.
+                </p>
+
+                <div className="mt-5 space-y-3">
+                  <div
+                    className="rounded-2xl p-4"
+                    style={{
+                      background:
+                        "color-mix(in oklch, var(--background) 35%, transparent)",
+                    }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
+                        style={{
+                          background:
+                            "color-mix(in oklch, var(--pill) 24%, transparent)",
+                          color: "var(--pill)",
                         }}
-                        className="mt-2 flex items-center gap-2 rounded-xl bg-card/60 px-3 py-2 text-left"
                       >
-                        <span className="text-[12px] text-foreground/90 leading-snug">
-                          Account name: CAL Online (Pvt) Ltd
-                          <br />
-                          Account number: 0078 4521 0036
-                        </span>
-                        {accountCopied ? (
-                          <Check
-                            className="w-4 h-4 shrink-0"
-                            style={{ color: "var(--success)" }}
-                          />
-                        ) : (
-                          <Copy
-                            className="w-4 h-4 shrink-0"
-                            style={{ color: "var(--pill)" }}
-                          />
-                        )}
-                      </button>
+                        1
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[13px] font-semibold text-foreground leading-snug pt-0.5">
+                          Transfer to CAL's Deutsche Bank account
+                        </p>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            navigator.clipboard
+                              ?.writeText("0078 4521 0036")
+                              .catch(() => {});
+                            setAccountCopied(true);
+                            window.setTimeout(
+                              () => setAccountCopied(false),
+                              1500
+                            );
+                          }}
+                          className="mt-2.5 flex items-center gap-2 rounded-xl px-3 py-2.5 text-left"
+                          style={{
+                            background:
+                              "color-mix(in oklch, var(--background) 55%, transparent)",
+                          }}
+                        >
+                          <span className="text-[12px] text-foreground/90 leading-snug">
+                            Account name: CAL Online (Pvt) Ltd
+                            <br />
+                            Account number: 0078 4521 0036
+                          </span>
+                          {accountCopied ? (
+                            <Check
+                              className="w-4 h-4 shrink-0"
+                              style={{ color: "var(--success)" }}
+                            />
+                          ) : (
+                            <Copy
+                              className="w-4 h-4 shrink-0"
+                              style={{ color: "var(--pill)" }}
+                            />
+                          )}
+                        </button>
+                      </div>
                     </div>
                   </div>
-                  <div className="flex items-start gap-3 mt-4">
-                    <div
-                      className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
-                      style={{
-                        background:
-                          "color-mix(in oklch, var(--pill) 24%, transparent)",
-                        color: "var(--pill)",
-                      }}
-                    >
-                      2
+
+                  <div
+                    className="rounded-2xl p-4"
+                    style={{
+                      background:
+                        "color-mix(in oklch, var(--background) 35%, transparent)",
+                    }}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div
+                        className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
+                        style={{
+                          background:
+                            "color-mix(in oklch, var(--pill) 24%, transparent)",
+                          color: "var(--pill)",
+                        }}
+                      >
+                        2
+                      </div>
+                      <p className="text-[13px] text-foreground leading-snug pt-0.5">
+                        Come here to raise a request to tell us which fund you
+                        want it in.
+                      </p>
                     </div>
-                    <p className="text-[13px] text-foreground leading-snug pt-0.5">
-                      Come here to raise a request to tell us which fund you
-                      want it in.
-                    </p>
                   </div>
-                  <p className="mt-4 pt-3 border-t border-white/5 text-[12px] text-foreground/90 leading-snug">
+                </div>
+
+                <div className="mt-4 flex items-start gap-2.5">
+                  <Info
+                    className="w-4 h-4 shrink-0 mt-0.5"
+                    style={{ color: "var(--pill)" }}
+                  />
+                  <p className="text-[12px] text-foreground/90 leading-snug">
                     Requests before 9 will be confirmed on the same working
                     day. After 9, they'll be confirmed the next working day.
                   </p>
