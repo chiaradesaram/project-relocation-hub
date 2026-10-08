@@ -30,7 +30,6 @@ import {
   PauseCircle,
   PlayCircle,
   Trash2,
-  X,
   Landmark,
   Info,
 } from "lucide-react";
