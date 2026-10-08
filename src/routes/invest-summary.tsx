@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Info, Lightbulb, X } from "lucide-react";
+import { Banknote, Check, Copy, Info, Lightbulb, ListChecks, X } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -65,6 +65,7 @@ function InvestSummary() {
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [submittedOpen, setSubmittedOpen] = useState(false);
+  const [accountCopied, setAccountCopied] = useState(false);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
@@ -152,7 +153,36 @@ function InvestSummary() {
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
-  const fromBankLast4 = fromBankAcctNo?.split(" ").pop() ?? "";
+
+  // CAL's receiving account — shown here so it can be matched against the transfer
+  const CAL_ACCOUNT_NAME = "CAL Online (Pvt) Ltd";
+  const CAL_ACCOUNT_NUMBER = "0078 4521 0036";
+
+  const copyCalAccount = () => {
+    navigator.clipboard?.writeText(CAL_ACCOUNT_NUMBER).catch(() => {});
+    setAccountCopied(true);
+    window.setTimeout(() => setAccountCopied(false), 1500);
+  };
+
+  const quickChecks = [
+    {
+      title: `You're investing in ${fund || "your fund"}`,
+      detail: account || "",
+    },
+    {
+      title: "Money sent to CAL's Deutsche Bank account",
+      detail: `${CAL_ACCOUNT_NAME} · ${CAL_ACCOUNT_NUMBER}`,
+      copy: true,
+    },
+    {
+      title: `Paid from ${fromBankName || "your bank"}`,
+      detail: fromBankAcctNo || "",
+    },
+    {
+      title: "It's a bank account, not a wallet",
+      detail: "",
+    },
+  ];
 
   return (
     <MobileLayout>
@@ -166,10 +196,17 @@ function InvestSummary() {
             LKR {total.toLocaleString()}
           </p>
           <p className="mt-2 text-[12px] font-medium text-muted-foreground">{methodLabel}</p>
+          {method === "bank" && (
+            <p className="mt-1 text-[12px] font-medium text-muted-foreground">
+              No service charge on bank transfers
+            </p>
+          )}
         </div>
         <div className="mt-4 mb-3 h-px w-full bg-border/60" />
         <div className="space-y-2.5">
-          <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
+          {method !== "bank" && (
+            <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
+          )}
           {splits.length > 1 && (
             <>
               <Row label="Split into" value={`${splits.length} transfers`} />
@@ -223,47 +260,87 @@ function InvestSummary() {
 
       {/* Quick check before you submit — bank transfer */}
       {method === "bank" && (
-        <div
+        <section
           className="mx-4 mt-4 rounded-2xl px-4 py-4"
           style={{
             background: "color-mix(in oklch, var(--card) 94%, transparent)",
             backdropFilter: "blur(12px)",
           }}
         >
-          <div className="flex items-center gap-2.5">
-            <div
-              className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-              style={{
-                background: "color-mix(in oklch, var(--pill) 18%, transparent)",
-              }}
+          <div className="flex items-start gap-3">
+            <span
+              aria-hidden="true"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
             >
-              <Info className="w-4 h-4 text-pill" />
+              <ListChecks className="size-[17px]" strokeWidth={2.25} />
+            </span>
+            <div className="min-w-0">
+              <h2 className="type-label text-foreground">
+                Quick check before you submit
+              </h2>
+              <p className="mt-0.5 type-caption text-foreground">
+                Make sure these all look right.
+              </p>
             </div>
-            <p className="text-sm font-semibold text-foreground">
-              Quick check before you submit
-            </p>
           </div>
-          <ul className="mt-3 space-y-2">
-            {[
-              "Funds have been transferred to Deutsche Bank",
-              `Funds were transferred from ${fromBankName} account ending ${fromBankLast4}`,
-              "You have not used a wallet account",
-            ].map((label) => (
-              <li key={label} className="flex items-start gap-2.5">
+
+          <ul className="mt-2 divide-y divide-border/40">
+            {quickChecks.map((item, i) => (
+              <li
+                key={item.title}
+                className="flex animate-fade-in items-start gap-3 py-2.5"
+                style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
+              >
                 <span
-                  className="mt-[7px] w-1.5 h-1.5 rounded-full shrink-0"
-                  style={{ background: "var(--pill)" }}
-                />
-                <span className="text-[13px] leading-snug text-foreground">
-                  {label}
+                  aria-hidden="true"
+                  className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
+                >
+                  <Check className="size-[13px]" strokeWidth={3} />
                 </span>
+                <div className="min-w-0 flex-1">
+                  <p className="type-label text-foreground">{item.title}</p>
+                  {item.detail && (
+                    <p className="mt-0.5 type-caption tabular-nums text-foreground">
+                      {item.detail}
+                    </p>
+                  )}
+                </div>
+                {item.copy && (
+                  <button
+                    type="button"
+                    aria-label="Copy CAL bank account number"
+                    onClick={copyCalAccount}
+                    className="ml-1 flex size-9 shrink-0 self-center items-center justify-center rounded-full hover:bg-sheet-field"
+                  >
+                    {accountCopied ? (
+                      <Check className="size-4 text-success" />
+                    ) : (
+                      <Copy className="size-4 text-pill-bright" />
+                    )}
+                  </button>
+                )}
               </li>
             ))}
           </ul>
-          <p className="mt-3 text-[12px] font-medium text-pill">
-            All done? You're ready to submit.
-          </p>
-        </div>
+
+          <div
+            className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3"
+            style={{ background: "var(--sheet-field-light)" }}
+          >
+            <span
+              aria-hidden="true"
+              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
+            >
+              <Banknote className="size-[18px]" strokeWidth={2} />
+            </span>
+            <div className="min-w-0 flex-1">
+              <p className="type-caption text-foreground">Investment amount</p>
+              <p className="mt-1 text-[18px] leading-none font-bold tracking-tight tabular-nums text-foreground">
+                LKR {amountNum.toLocaleString()}
+              </p>
+            </div>
+          </div>
+        </section>
       )}
 
       {/* Confirm */}
