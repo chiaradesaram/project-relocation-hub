@@ -129,19 +129,9 @@ function InvestSummary() {
     setSubmittedOpen(true);
   };
 
-  const finishConfirmation = () => {
+  const closeSheet = () => {
     setSubmittedOpen(false);
-    window.setTimeout(() => {
-      if (isRecurring) {
-        navigate({
-          to: "/invest",
-          search: { product: "unit-trust", method: "recurring" },
-        });
-      } else {
-        navigate({ to: "/" });
-      }
-    }, 320);
-  };
+    return () => window.setTimeout(
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
