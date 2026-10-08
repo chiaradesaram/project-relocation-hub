@@ -188,12 +188,10 @@ function InvestSummary() {
   const quickChecks = [
     {
       title: "Money sent to CAL's Deutsche Bank account",
-      detail: `${CAL_ACCOUNT_NAME} · ${CAL_ACCOUNT_NUMBER}`,
       copy: true,
     },
     {
       title: "It's a bank account, not a wallet",
-      detail: "",
     },
   ];
 
