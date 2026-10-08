@@ -1024,7 +1024,7 @@ function MethodForm({
                 </div>
 
                                 <div
-                  className="mt-4 flex snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+                  className="mt-4 flex select-none snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
                   onScroll={(e) =>
                     setInfoSlide(
                       Math.round(
