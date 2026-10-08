@@ -125,13 +125,22 @@ function InvestSummary() {
       else plans.push({ ...next, id: newRecurringInvestmentId() });
       writeRecurringInvestments(plans);
       localStorage.setItem(RECURRING_INVESTMENT_SAVED_KEY, "true");
-      navigate({
-        to: "/invest",
-        search: { product: "unit-trust", method: "recurring" },
-      });
-      return;
     }
-    navigate({ to: "/" });
+    setSubmittedOpen(true);
+  };
+
+  const finishConfirmation = () => {
+    setSubmittedOpen(false);
+    window.setTimeout(() => {
+      if (isRecurring) {
+        navigate({
+          to: "/invest",
+          search: { product: "unit-trust", method: "recurring" },
+        });
+      } else {
+        navigate({ to: "/" });
+      }
+    }, 320);
   };
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
