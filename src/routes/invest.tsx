@@ -41,6 +41,7 @@ import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
 import {
   Sheet,
   SheetContent,
+  SheetClose,
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
