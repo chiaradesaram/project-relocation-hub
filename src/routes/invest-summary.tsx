@@ -2,7 +2,18 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Banknote, Check, Copy, Info, Lightbulb, ListChecks, X } from "lucide-react";
+import {
+  CalendarClock,
+  CalendarDays,
+  Check,
+  Copy,
+  Info,
+  Lightbulb,
+  ListChecks,
+  TrendingUp,
+  X,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -79,7 +90,7 @@ function InvestSummary() {
   const today = new Date();
   const txDate = fmtDate(today);
   // Next 2nd Monday of October — when new units will be created for bank transfers
-  const unitCreationDate = (() => {
+  const unitCreation = (() => {
     const secondMonday = (y: number) => {
       const firstDay = new Date(y, 9, 1).getDay();
       return 1 + ((8 - firstDay) % 7) + 7;
@@ -87,18 +98,28 @@ function InvestSummary() {
     const now = new Date();
     let y = now.getFullYear();
     if (now > new Date(y, 9, secondMonday(y), 23, 59)) y += 1;
-    const d = new Date(y, 9, secondMonday(y));
-    const day = d.getDate();
-    const ord =
-      day % 10 === 1 && day !== 11
-        ? "st"
-        : day % 10 === 2 && day !== 12
-          ? "nd"
-          : day % 10 === 3 && day !== 13
-            ? "rd"
-            : "th";
-    return `${day}${ord} October, ${d.toLocaleDateString("en-GB", { weekday: "short" })}`;
+    return new Date(y, 9, secondMonday(y));
   })();
+  const ordinal = (day: number) =>
+    day % 10 === 1 && day !== 11
+      ? "st"
+      : day % 10 === 2 && day !== 12
+        ? "nd"
+        : day % 10 === 3 && day !== 13
+          ? "rd"
+          : "th";
+  const fmtTimeline = (d: Date) =>
+    `${d.getDate()}${ordinal(d.getDate())} ${d.toLocaleDateString("en-GB", { month: "long" })}, ${d.toLocaleDateString("en-GB", { weekday: "short" })}`;
+  // The portal shows the creation price one working day later (weekends skipped)
+  const nextWorkingDay = (d: Date) => {
+    const n = new Date(d);
+    do {
+      n.setDate(n.getDate() + 1);
+    } while (n.getDay() === 0 || n.getDay() === 6);
+    return n;
+  };
+  const unitCreationDate = fmtTimeline(unitCreation);
+  const portalDate = fmtTimeline(nextWorkingDay(unitCreation));
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
   const recurringDate = startDate
@@ -166,21 +187,38 @@ function InvestSummary() {
 
   const quickChecks = [
     {
-      title: `You're investing in ${fund || "your fund"}`,
-      detail: account || "",
-    },
-    {
       title: "Money sent to CAL's Deutsche Bank account",
       detail: `${CAL_ACCOUNT_NAME} · ${CAL_ACCOUNT_NUMBER}`,
       copy: true,
     },
     {
-      title: `Paid from ${fromBankName || "your bank"}`,
-      detail: fromBankAcctNo || "",
-    },
-    {
       title: "It's a bank account, not a wallet",
       detail: "",
+    },
+  ];
+
+  // Investment timeline — bank transfer
+  const timeline = [
+    {
+      label: "Request date",
+      value: fmtTimeline(today),
+      hint: "When you raised this Creation Request",
+      tone: "bg-rates-mint text-background",
+      icon: <Check className="size-[13px]" strokeWidth={3} />,
+    },
+    {
+      label: "Creation date",
+      value: unitCreationDate,
+      hint: "The date your investment will be valued",
+      tone: "bg-pill text-pill-foreground",
+      icon: <CalendarDays className="size-[13px]" strokeWidth={2.25} />,
+    },
+    {
+      label: "Reflected on the portal",
+      value: portalDate,
+      hint: "A working day after creation",
+      tone: "bg-secondary text-pill-bright",
+      icon: <TrendingUp className="size-[13px]" strokeWidth={2.25} />,
     },
   ];
 
@@ -189,7 +227,10 @@ function InvestSummary() {
       <PageHeader title="Review & Confirm" showBack />
 
       {/* Total + investment details — one card */}
-      <div className="mx-4 mt-2 glass-card px-4 pt-4 pb-3">
+      <div
+        className="mx-4 mt-2 rounded-2xl px-4 pt-4 pb-3"
+        style={{ background: "var(--sheet-field-light)" }}
+      >
         <div className="text-center">
           <p className="text-[13px] font-medium text-muted-foreground">Total to invest</p>
           <p className="mt-1.5 text-[28px] leading-none font-bold tracking-tight text-foreground tabular-nums">
@@ -204,6 +245,14 @@ function InvestSummary() {
         </div>
         <div className="mt-4 mb-3 h-px w-full bg-border/60" />
         <div className="space-y-2.5">
+          {fund && <Row label="Fund" value={fund} />}
+          {account && <Row label="Sub account" value={account} />}
+          {method === "bank" && (fromBankName || fromBankAcctNo) && (
+            <Row
+              label="Bank transferred from"
+              value={[fromBankName, fromBankAcctNo].filter(Boolean).join(" · ")}
+            />
+          )}
           {method !== "bank" && (
             <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
           )}
@@ -245,10 +294,7 @@ function InvestSummary() {
               </p>
             </div>
           )}
-          <Row label="Transaction date" value={txDate} />
-          {method === "bank" && (
-            <Row label="Unit creation date" value={unitCreationDate} />
-          )}
+          {method !== "bank" && <Row label="Transaction date" value={txDate} />}
           {isRecurring && (
             <>
               <Row label="Start date" value={recurringDate} />
@@ -263,8 +309,7 @@ function InvestSummary() {
         <section
           className="mx-4 mt-4 rounded-2xl px-4 py-4"
           style={{
-            background: "color-mix(in oklch, var(--card) 94%, transparent)",
-            backdropFilter: "blur(12px)",
+            background: "var(--sheet-field-light)",
           }}
         >
           <div className="flex items-start gap-3">
@@ -323,23 +368,60 @@ function InvestSummary() {
             ))}
           </ul>
 
-          <div
-            className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3"
-            style={{ background: "var(--sheet-field-light)" }}
-          >
+        </section>
+      )}
+
+      {/* Investment timeline */}
+      {method === "bank" && (
+        <section
+          className="mx-4 mt-4 rounded-2xl px-4 py-4"
+          style={{ background: "var(--sheet-field-light)" }}
+        >
+          <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
             >
-              <Banknote className="size-[18px]" strokeWidth={2} />
+              <CalendarClock className="size-[17px]" strokeWidth={2.25} />
             </span>
-            <div className="min-w-0 flex-1">
-              <p className="type-caption text-foreground">Investment amount</p>
-              <p className="mt-1 text-[18px] leading-none font-bold tracking-tight tabular-nums text-foreground">
-                LKR {amountNum.toLocaleString()}
+            <div className="min-w-0">
+              <h2 className="type-label text-foreground">Investment timeline</h2>
+              <p className="mt-0.5 type-caption text-foreground">
+                When each step happens.
               </p>
             </div>
           </div>
+
+          <ol className="mt-4">
+            {timeline.map((step, i) => (
+              <li
+                key={step.label}
+                className="relative flex animate-fade-in gap-3 pb-4 last:pb-0"
+                style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
+              >
+                {i < timeline.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-3 top-7 w-px bg-border/70"
+                  />
+                )}
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "relative z-10 mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full",
+                    step.tone,
+                  )}
+                >
+                  {step.icon}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="type-label text-foreground">{step.label}</p>
+                  <p className="mt-1 type-label tabular-nums text-foreground">{step.value}</p>
+                  <p className="mt-0.5 type-caption text-muted-foreground">{step.hint}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
       )}
 
