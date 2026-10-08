@@ -1043,7 +1043,7 @@ function MethodForm({
                     >
                       <picture>
                         <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
-                        <img src={bankTransferAnimation} alt="Money moving from your phone to CAL's bank" draggable={false} className="mb-4 h-36 w-full rounded-lg object-cover" />
+                        <img src={bankTransferAnimation} alt="Money moving from your phone to CAL's bank" draggable={false} className="mb-4 h-36 w-full rounded-lg object-contain" />
                       </picture>
                       <div className="flex items-center gap-2.5">
                         <div
@@ -1107,7 +1107,7 @@ function MethodForm({
                     >
                       <picture>
                         <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
-                        <img src={bankTransferAnimation} alt="Your transfer ready to invest with CAL" draggable={false} className="mb-4 h-36 w-full rounded-lg object-cover" />
+                        <img src={bankTransferAnimation} alt="Your transfer ready to invest with CAL" draggable={false} className="mb-4 h-36 w-full rounded-lg object-contain" />
                       </picture>
                       <div className="flex items-center gap-2.5">
                         <div
