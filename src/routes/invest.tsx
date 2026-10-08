@@ -833,7 +833,6 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
-  const [bankConcept, setBankConcept] = useState<"classic" | "floating">("floating"); // field concept toggle for bank transfer
   const [accountCopied, setAccountCopied] = useState(false);
 
 
@@ -1152,60 +1151,9 @@ function MethodForm({
         )}
       </div>
 
-      {/* Details — bank transfer can toggle between the two field concepts */}
+      {/* Details */}
       {!isFlip && (
         <>
-          {isBank && (
-            <div className="mx-4 mb-3 flex w-fit items-center rounded-full bg-card/60 p-1">
-              <button
-                type="button"
-                onClick={() => setBankConcept("classic")}
-                className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
-                  bankConcept === "classic"
-                    ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Classic
-              </button>
-              <button
-                type="button"
-                onClick={() => setBankConcept("floating")}
-                className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
-                  bankConcept === "floating"
-                    ? "text-white bg-[color-mix(in_oklch,var(--pill)_24%,var(--surface-2))]"
-                    : "text-muted-foreground"
-                }`}
-              >
-                Floating fields
-              </button>
-            </div>
-          )}
-          {isBank && bankConcept === "floating" ? (
-            <div className="mx-4 space-y-2.5">
-              <FloatingField
-                label="Fund"
-                value={selectedFund}
-                onClick={() => setPicker("fund")}
-              />
-              <FloatingField
-                label="Sub-account"
-                value={selectedAccount}
-                onClick={() => setPicker("account")}
-              />
-              <FloatingField
-                label={payFromLabel}
-                value={payFromValue}
-                onClick={() => setPicker("payFrom")}
-              />
-              <FloatingField
-                label={sendToLabel}
-                value={sendToValue}
-                onClick={() => setPicker("payTo")}
-              />
-              <FloatingField label="Unit creation date" value={unitCreationDate} readOnly />
-            </div>
-          ) : (
             <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
               <PickerRow
                 label="Fund"
@@ -1244,7 +1192,6 @@ function MethodForm({
                 </>
               )}
             </div>
-          )}
         </>
       )}
 
@@ -1670,70 +1617,6 @@ function PickerRow({
   );
 }
 
-/**
- * FloatingField — modern boxed input-style field (bank transfer concept).
- * Unselected: the field name shows inside the box as the placeholder.
- * Selected: the field name floats small on top and the value sits below.
- * Tapping opens the same bottom-sheet picker as PickerRow.
- */
-function FloatingField({
-  label,
-  value,
-  onClick,
-  readOnly = false,
-}: {
-  label: string;
-  value: string;
-  onClick?: () => void;
-  readOnly?: boolean;
-}) {
-  const hasValue = !!value;
-  const inner = (
-    <>
-      <div className="flex flex-col min-w-0 flex-1">
-        {hasValue ? (
-          <>
-            <span
-              className={`text-[10px] font-semibold uppercase tracking-[0.08em] mb-0.5 leading-none ${
-                readOnly ? "text-muted-foreground/50" : "text-pill"
-              }`}
-            >
-              {label}
-            </span>
-            <span
-              className={`mt-1 text-[15px] font-medium leading-tight truncate ${
-                readOnly ? "text-muted-foreground/80" : "text-foreground"
-              }`}
-            >
-              {value}
-            </span>
-          </>
-        ) : (
-          <span className="text-[15px] text-muted-foreground/70 leading-tight">
-            {label}
-          </span>
-        )}
-      </div>
-      {!readOnly && (
-        <ChevronRight className="w-4 h-4 text-muted-foreground/70 shrink-0 transition-colors group-hover:text-pill" />
-      )}
-    </>
-  );
-  const box = `group w-full rounded-2xl px-4 py-3.5 text-left flex items-center gap-3 transition-all ${
-    readOnly
-      ? "bg-card/50 cursor-default"
-      : "bg-card hover:bg-card/80 active:bg-card/90"
-  }`;
-  return readOnly ? (
-    <div className={box}>{inner}</div>
-  ) : (
-    <button type="button" onClick={onClick} className={box}>
-      {inner}
-    </button>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
