@@ -1153,46 +1153,44 @@ function MethodForm({
 
       {/* Details */}
       {!isFlip && (
-        <>
-            <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+        <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
+          <PickerRow
+            label="Fund"
+            value={selectedFund}
+            placeholder="Select a fund"
+            onClick={() => setPicker("fund")}
+          />
+          <PickerRow
+            label="Sub-account"
+            value={selectedAccount}
+            placeholder="Select sub-account"
+            onClick={() => setPicker("account")}
+          />
+          <PickerRow
+            label={payFromLabel}
+            value={payFromValue}
+            placeholder={payFromPlaceholder}
+            onClick={() => setPicker("payFrom")}
+          />
+          {isBank && (
+            <>
               <PickerRow
-                label="Fund"
-                value={selectedFund}
-                placeholder="Select a fund"
-                onClick={() => setPicker("fund")}
+                label={sendToLabel}
+                value={sendToValue}
+                placeholder={sendToPlaceholder}
+                onClick={() => setPicker("payTo")}
               />
-              <PickerRow
-                label="Sub-account"
-                value={selectedAccount}
-                placeholder="Select sub-account"
-                onClick={() => setPicker("account")}
-              />
-              <PickerRow
-                label={payFromLabel}
-                value={payFromValue}
-                placeholder={payFromPlaceholder}
-                onClick={() => setPicker("payFrom")}
-              />
-              {isBank && (
-                <>
-                  <PickerRow
-                    label={sendToLabel}
-                    value={sendToValue}
-                    placeholder={sendToPlaceholder}
-                    onClick={() => setPicker("payTo")}
-                  />
-                  <div className="w-full flex items-center gap-3 px-4 py-3.5 text-left">
-                    <span className="text-sm text-muted-foreground shrink-0">
-                      Unit creation date
-                    </span>
-                    <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
-                      {unitCreationDate}
-                    </span>
-                  </div>
-                </>
-              )}
-            </div>
-        </>
+              <div className="w-full flex items-center gap-3 px-4 py-3.5 text-left">
+                <span className="text-sm text-muted-foreground shrink-0">
+                  Unit creation date
+                </span>
+                <span className="flex-1 text-right text-sm font-medium text-foreground truncate">
+                  {unitCreationDate}
+                </span>
+              </div>
+            </>
+          )}
+        </div>
       )}
 
       {/* Recurring — Direct Invest only */}
