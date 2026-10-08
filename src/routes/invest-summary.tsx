@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Info, Lightbulb } from "lucide-react";
+import { Info, Lightbulb, X } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -12,6 +12,14 @@ import {
   writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import requestSubmittedAnimation from "@/assets/request-submitted.gif";
+import requestSubmittedInfo from "@/assets/request-submitted.png";
 
 type SummarySearch = {
   method?: "instant" | "bank" | "flip" | "recurring";
