@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Info, Lightbulb } from "lucide-react";
+import { Info, Lightbulb, X } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -12,6 +12,14 @@ import {
   writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
 import { Button } from "@/components/ui/button";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import requestSubmittedAnimation from "@/assets/request-submitted.gif";
+import requestSubmittedInfo from "@/assets/request-submitted.png";
 
 type SummarySearch = {
   method?: "instant" | "bank" | "flip" | "recurring";
@@ -56,6 +64,7 @@ function InvestSummary() {
   const navigate = useNavigate();
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
+  const [submittedOpen, setSubmittedOpen] = useState(false);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
@@ -116,13 +125,22 @@ function InvestSummary() {
       else plans.push({ ...next, id: newRecurringInvestmentId() });
       writeRecurringInvestments(plans);
       localStorage.setItem(RECURRING_INVESTMENT_SAVED_KEY, "true");
-      navigate({
-        to: "/invest",
-        search: { product: "unit-trust", method: "recurring" },
-      });
-      return;
     }
-    navigate({ to: "/" });
+    setSubmittedOpen(true);
+  };
+
+  const finishConfirmation = () => {
+    setSubmittedOpen(false);
+    window.setTimeout(() => {
+      if (isRecurring) {
+        navigate({
+          to: "/invest",
+          search: { product: "unit-trust", method: "recurring" },
+        });
+      } else {
+        navigate({ to: "/" });
+      }
+    }, 320);
   };
 
   // Quick check (bank transfer): derive the paying-from bank from the search param
@@ -254,6 +272,47 @@ function InvestSummary() {
           {isRecurring ? "Confirm recurring investment" : "Confirm & Invest"}
         </Button>
       </div>
+
+      {/* Request submitted — Monzo-style confirmation sheet */}
+      <Sheet open={submittedOpen} onOpenChange={setSubmittedOpen}>
+        <SheetContent
+          side="bottom"
+          className="bank-help-sheet mx-auto w-full max-w-[480px] overflow-hidden rounded-t-3xl p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
+        >
+          <div className="bank-help-header relative">
+            <picture className="block w-full">
+              <source media="(prefers-reduced-motion: reduce)" srcSet={requestSubmittedInfo} />
+              <img
+                src={requestSubmittedAnimation}
+                alt="A paper plane taking off with your investment request"
+                className="block aspect-[768/345] w-full object-cover"
+              />
+            </picture>
+            <SheetClose asChild>
+              <Button variant="ghost" size="icon" aria-label="Close" className="absolute right-5 top-5 size-9 rounded-full bg-secondary text-foreground">
+                <X className="size-4" />
+              </Button>
+            </SheetClose>
+          </div>
+          <div className="px-7 pt-5 pb-1 text-center">
+            <SheetTitle className="font-display text-xl leading-tight font-bold text-foreground">
+              Your request has been submitted
+            </SheetTitle>
+            <p className="mt-2.5 type-body-sm leading-snug text-foreground">
+              Once the money is matched, you will receive a{" "}
+              <span className="font-semibold text-rates-mint">confirmation email</span>.
+            </p>
+          </div>
+          <div className="px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+            <Button
+              onClick={finishConfirmation}
+              className="flex h-12 w-full items-center justify-center rounded-full bg-pill type-label text-pill-foreground hover:bg-pill/90"
+            >
+              Done
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
   );
 }
