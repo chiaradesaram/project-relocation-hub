@@ -1083,12 +1083,9 @@ function MethodForm({
                             );
                           }}
                           className="mt-2.5 flex items-center gap-2 rounded-xl px-3 py-2.5 text-left"
-                          style={{
-                            background:
-                              "var(--sheet-field)",
-                          }}
+                          style={{ background: "var(--sheet-field)" }}
                         >
-                          <span className="text-[13px] text-foreground leading-snug">
+                          <span className="text-[13px] font-medium text-foreground leading-snug">
                             Account name: CAL Online (Pvt) Ltd
                             <br />
                             Account number: 0078 4521 0036
