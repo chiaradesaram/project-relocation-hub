@@ -10,3 +10,4 @@
 - [x] Verify fund filtering, factsheet navigation and graph controls
 - [x] Remove the bank transfer floating-fields concept from Invest
 - [x] Rework bank-transfer help sheet with compact theme typography, simple step markers and balanced spacing
+- [x] Add a "Raise a request" action to the help sheet and widen its mobile side insets

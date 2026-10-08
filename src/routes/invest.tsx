@@ -839,6 +839,16 @@ function MethodForm({
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
   const [accountCopied, setAccountCopied] = useState(false);
+  const amountInputRef = useRef<HTMLInputElement>(null);
+
+  // “Raise a request” closes the guide and drops the user straight into the form
+  const raiseRequest = () => {
+    setBankInfoOpen(false);
+    window.setTimeout(() => {
+      amountInputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+      amountInputRef.current?.focus({ preventScroll: true });
+    }, 320);
+  };
 
 
   const amountNum = parseFloat(amount || "0") || 0;
@@ -1011,7 +1021,7 @@ function MethodForm({
                     <X className="size-4" />
                   </Button>
                 </SheetClose>
-                <div className="px-6 pt-4 pb-5">
+                <div className="px-7 pt-4 pb-5">
                   <span className="block type-label text-pill-bright">
                     How it works
                   </span>
@@ -1020,7 +1030,7 @@ function MethodForm({
                   </SheetTitle>
                 </div>
               </div>
-              <div className="space-y-6 px-6 pt-6 pb-8">
+              <div className="space-y-6 px-7 pt-6 pb-2">
                 <section className="flex items-start gap-3">
                   <span
                     aria-hidden="true"
@@ -1069,6 +1079,16 @@ function MethodForm({
                     </p>
                   </div>
                 </section>
+              </div>
+              <div className="px-7 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+                <Button
+                  type="button"
+                  onClick={raiseRequest}
+                  className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-pill type-label text-pill-foreground hover:bg-pill/90"
+                >
+                  <FilePlus2 className="size-[18px] strokeWidth={2}" />
+                  Raise a request
+                </Button>
               </div>
             </SheetContent>
           </Sheet>
@@ -1126,6 +1146,7 @@ function MethodForm({
             LKR
           </span>
           <input
+            ref={amountInputRef}
             type="text"
             inputMode="decimal"
             value={formatAmountDisplay(amount)}
