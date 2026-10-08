@@ -272,6 +272,47 @@ function InvestSummary() {
           {isRecurring ? "Confirm recurring investment" : "Confirm & Invest"}
         </Button>
       </div>
+
+      {/* Request submitted — Monzo-style confirmation sheet */}
+      <Sheet open={submittedOpen} onOpenChange={setSubmittedOpen}>
+        <SheetContent
+          side="bottom"
+          className="bank-help-sheet mx-auto w-full max-w-[480px] overflow-hidden rounded-t-3xl p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
+        >
+          <div className="bank-help-header relative">
+            <picture className="block w-full">
+              <source media="(prefers-reduced-motion: reduce)" srcSet={requestSubmittedInfo} />
+              <img
+                src={requestSubmittedAnimation}
+                alt="A paper plane taking off with your investment request"
+                className="block aspect-[768/345] w-full object-cover"
+              />
+            </picture>
+            <SheetClose asChild>
+              <Button variant="ghost" size="icon" aria-label="Close" className="absolute right-5 top-5 size-9 rounded-full bg-secondary text-foreground">
+                <X className="size-4" />
+              </Button>
+            </SheetClose>
+          </div>
+          <div className="px-7 pt-5 pb-1 text-center">
+            <SheetTitle className="font-display text-xl leading-tight font-bold text-foreground">
+              Your request has been submitted
+            </SheetTitle>
+            <p className="mt-2.5 type-body-sm leading-snug text-foreground">
+              Once the money is matched, you will receive a{" "}
+              <span className="font-semibold text-rates-mint">confirmation email</span>.
+            </p>
+          </div>
+          <div className="px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+            <Button
+              onClick={finishConfirmation}
+              className="flex h-12 w-full items-center justify-center rounded-full bg-pill type-label text-pill-foreground hover:bg-pill/90"
+            >
+              Done
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
     </MobileLayout>
   );
 }
