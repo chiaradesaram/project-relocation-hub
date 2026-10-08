@@ -63,6 +63,10 @@
   --color-pill-foreground: var(--pill-foreground);
   --color-rates-surface: var(--rates-surface);
   --color-rates-mint: var(--rates-mint);
+  --color-sheet-surface: var(--sheet-surface);
+  --color-sheet-card: var(--sheet-card);
+  --color-sheet-field: var(--sheet-field);
+  --color-pill-bright: var(--pill-bright);
   --font-sans: "Manrope", system-ui, sans-serif;
   --font-display: "Sora", "Manrope", system-ui, sans-serif;
   --animate-fade-in: fade-in 0.3s ease-out;
@@ -103,12 +107,18 @@
 
   --pill: #00A3E0;
   --pill-foreground: #121127;
+  --pill-bright: #5CC9F2;
 
   --surface-1: #211E40;
   --rates-surface: #292544;
   --rates-mint: #A8EACB;
   --surface-2: #211E40;
   --form-card: #39345B;
+
+  /* Bottom-sheet layering: each raised layer is lighter than the one below. */
+  --sheet-surface: #3A3563;
+  --sheet-card: #4B4583;
+  --sheet-field: #5B54A0;
 
   --card: var(--surface-2);
   --card-foreground: oklch(0.97 0 0);
