@@ -1041,9 +1041,6 @@ function MethodForm({
                   <div className="min-w-0 flex-1">
                     <span className="block type-label-sm text-pill-bright">Step 1</span>
                     <h3 className="mt-1 type-label">Transfer to CAL</h3>
-                    <p className="mt-1 type-body-sm text-foreground">
-                      Send to CAL’s Deutsche Bank account.
-                    </p>
                     <Button
                       type="button"
                       variant="ghost"
@@ -1053,7 +1050,7 @@ function MethodForm({
                         setAccountCopied(true);
                         window.setTimeout(() => setAccountCopied(false), 1500);
                       }}
-                      className="mt-2.5 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-foreground hover:bg-sheet-field"
+                      className="mt-3 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-foreground hover:bg-sheet-field"
                       style={{ background: "var(--sheet-field-light)" }}
                     >
                       <span className="min-w-0">
@@ -1075,7 +1072,7 @@ function MethodForm({
                     <span className="block type-label-sm text-rates-mint">Step 2</span>
                     <h3 className="mt-1 type-label">Raise a request</h3>
                     <p className="mt-1 type-body-sm text-foreground">
-                      Return here to make a Creation Request with your amount and transfer reference.
+                      Return here to make a Creation Request to tell us which fund to invest it in.
                     </p>
                   </div>
                 </section>
