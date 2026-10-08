@@ -303,55 +303,43 @@ function InvestSummary() {
       {/* Quick check before you submit — bank transfer */}
       {method === "bank" && (
         <section
-          className="mx-4 mt-4 rounded-2xl px-4 py-4"
+          className="mx-4 mt-4 rounded-2xl px-4 py-4 backdrop-blur-sm"
           style={{
-            background: "var(--sheet-field-light)",
+            background: "color-mix(in oklch, var(--card) 94%, transparent)",
           }}
         >
-          <div className="flex items-start gap-3">
+          <div className="flex items-center gap-3">
             <span
               aria-hidden="true"
               className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
             >
               <ListChecks className="size-[17px]" strokeWidth={2.25} />
             </span>
-            <div className="min-w-0">
-              <h2 className="type-label text-foreground">
-                Quick check before you submit
-              </h2>
-              <p className="mt-0.5 type-caption text-foreground">
-                Make sure these all look right.
-              </p>
-            </div>
+            <h2 className="type-label text-foreground">
+              Quick check before you submit
+            </h2>
           </div>
 
           <ul className="mt-2 divide-y divide-border/40">
             {quickChecks.map((item, i) => (
               <li
                 key={item.title}
-                className="flex animate-fade-in items-start gap-3 py-2.5"
+                className="flex animate-fade-in items-center gap-3 py-2.5"
                 style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
               >
                 <span
                   aria-hidden="true"
-                  className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
+                  className="flex size-6 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
                 >
                   <Check className="size-[13px]" strokeWidth={3} />
                 </span>
-                <div className="min-w-0 flex-1">
-                  <p className="type-label text-foreground">{item.title}</p>
-                  {item.detail && (
-                    <p className="mt-0.5 type-caption tabular-nums text-foreground">
-                      {item.detail}
-                    </p>
-                  )}
-                </div>
+                <p className="type-label min-w-0 flex-1 text-foreground">{item.title}</p>
                 {item.copy && (
                   <button
                     type="button"
                     aria-label="Copy CAL bank account number"
                     onClick={copyCalAccount}
-                    className="ml-1 flex size-9 shrink-0 self-center items-center justify-center rounded-full hover:bg-sheet-field"
+                    className="ml-1 flex size-9 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
                   >
                     {accountCopied ? (
                       <Check className="size-4 text-success" />
