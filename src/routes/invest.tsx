@@ -97,6 +97,7 @@ import {
   writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
 import bankTransferInfo from "@/assets/bank-transfer-info.png";
+import bankTransferAnimation from "@/assets/bank-transfer-info.gif";
 import commercialLogo from "@/assets/banks/commercial.png";
 import deutscheLogo from "@/assets/banks/deutsche.png";
 import sampathLogo from "@/assets/banks/sampath.png";
@@ -1003,13 +1004,14 @@ function MethodForm({
               >
             <SheetContent
               side="bottom"
-              className="rounded-t-[28px] p-0 pb-0 border-0 backdrop-blur-2xl"
+              className="rounded-t-[28px] p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
               style={{ background: "var(--sheet-surface-light)" }}
             >
+              <SheetTitle className="sr-only">Sending money to CAL</SheetTitle>
               <div className="px-5 pt-5 pb-8">
                 <div className="flex items-center justify-between">
                   <span
-                    className="text-[11px] font-bold uppercase tracking-[0.16em]"
+                    className="text-[12px] font-bold"
                     style={{ color: "var(--pill-bright)" }}
                   >
                     How it works
@@ -1039,6 +1041,10 @@ function MethodForm({
                       className="mr-1.5 h-full rounded-2xl p-4"
                       style={{ background: "var(--sheet-card-light)" }}
                     >
+                      <picture>
+                        <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
+                        <img src={bankTransferAnimation} alt="Money moving from your phone to CAL's bank" draggable={false} className="mb-4 h-36 w-full rounded-lg object-cover" />
+                      </picture>
                       <div className="flex items-center gap-2.5">
                         <div
                           className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold"
@@ -1049,12 +1055,15 @@ function MethodForm({
                         >
                           1
                         </div>
-                        <p className="font-display text-[16px] font-bold text-foreground">
-                          Send the money
+                        <p className="font-display text-[20px] font-semibold text-foreground">
+                          Send it to CAL
                         </p>
                       </div>
-                      <button
+                      <p className="mt-2 text-[14px] text-foreground">Transfer to this Deutsche Bank account.</p>
+                      <Button
                         type="button"
+                        variant="ghost"
+                        aria-label="Copy CAL bank account number"
                         onClick={() => {
                           navigator.clipboard
                             ?.writeText("0078 4521 0036")
@@ -1065,7 +1074,7 @@ function MethodForm({
                             1500
                           );
                         }}
-                        className="mt-3 flex w-full items-center justify-between gap-2 rounded-xl px-3.5 py-3 text-left"
+                        className="mt-3 flex h-auto w-full items-center justify-between gap-2 rounded-lg px-3.5 py-3 text-left hover:bg-sheet-field"
                         style={{ background: "var(--sheet-field-light)" }}
                       >
                         <span className="min-w-0">
@@ -1087,10 +1096,7 @@ function MethodForm({
                             style={{ color: "var(--pill)" }}
                           />
                         )}
-                      </button>
-                      <p className="mt-2.5 text-[12px] text-foreground">
-                        Deutsche Bank account
-                      </p>
+                      </Button>
                     </div>
                   </div>
 
@@ -1099,6 +1105,10 @@ function MethodForm({
                       className="ml-1.5 h-full rounded-2xl p-4"
                       style={{ background: "var(--sheet-card-light)" }}
                     >
+                      <picture>
+                        <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
+                        <img src={bankTransferAnimation} alt="Your transfer ready to invest with CAL" draggable={false} className="mb-4 h-36 w-full rounded-lg object-cover" />
+                      </picture>
                       <div className="flex items-center gap-2.5">
                         <div
                           className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold"
@@ -1109,13 +1119,12 @@ function MethodForm({
                         >
                           2
                         </div>
-                        <p className="font-display text-[16px] font-bold text-foreground">
-                          Tell us where it goes
+                        <p className="font-display text-[20px] font-semibold text-foreground">
+                          Let’s get it invested
                         </p>
                       </div>
                       <p className="mt-3 text-[14px] text-foreground leading-snug">
-                        Come back here and raise a request for the fund you
-                        want.
+                        Come back and make a Creation Request for your chosen fund.
                       </p>
                       <div className="mt-3 flex items-start gap-2">
                         <Info
