@@ -358,22 +358,17 @@ function InvestSummary() {
       {/* Investment timeline */}
       {method === "bank" && (
         <section
-          className="mx-4 mt-4 rounded-2xl px-4 py-4"
-          style={{ background: "var(--sheet-field-light)" }}
+          className="mx-4 mt-4 rounded-2xl px-4 py-4 backdrop-blur-sm"
+          style={{ background: "color-mix(in oklch, var(--card) 94%, transparent)" }}
         >
-          <div className="flex items-start gap-3">
+          <div className="flex items-center gap-3">
             <span
               aria-hidden="true"
               className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
             >
               <CalendarClock className="size-[17px]" strokeWidth={2.25} />
             </span>
-            <div className="min-w-0">
-              <h2 className="type-label text-foreground">Investment timeline</h2>
-              <p className="mt-0.5 type-caption text-foreground">
-                When each step happens.
-              </p>
-            </div>
+            <h2 className="type-label text-foreground">Investment timeline</h2>
           </div>
 
           <ol className="mt-4">
@@ -399,9 +394,13 @@ function InvestSummary() {
                   {step.icon}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="type-label text-foreground">{step.label}</p>
-                  <p className="mt-1 type-label tabular-nums text-foreground">{step.value}</p>
-                  <p className="mt-0.5 type-caption text-muted-foreground">{step.hint}</p>
+                  <div className="flex items-baseline justify-between gap-2">
+                    <span className="text-[13px] text-muted-foreground">{step.label}</span>
+                    <span className="text-[13px] font-semibold whitespace-nowrap text-foreground tabular-nums">
+                      {step.value}
+                    </span>
+                  </div>
+                  <p className="mt-0.5 text-[12px] text-muted-foreground">{step.hint}</p>
                 </div>
               </li>
             ))}
