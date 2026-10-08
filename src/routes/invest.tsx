@@ -997,7 +997,7 @@ function MethodForm({
           <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
             <SheetContent
               side="bottom"
-              className="rounded-t-3xl p-0 pb-0 border-0"
+              className="rounded-t-[28px] p-0 pb-0 border-0 backdrop-blur-2xl"
               style={{ background: "var(--sheet-surface)" }}
             >
               <div className="px-5 pt-5 pb-8">

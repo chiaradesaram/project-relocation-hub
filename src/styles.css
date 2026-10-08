@@ -116,9 +116,9 @@
   --form-card: #39345B;
 
   /* Bottom-sheet layering: each raised layer is lighter than the one below. */
-  --sheet-surface: #3A3563;
-  --sheet-card: #4B4583;
-  --sheet-field: #5B54A0;
+  --sheet-surface: color-mix(in oklch, var(--card) 72%, transparent);
+  --sheet-card: color-mix(in oklch, var(--form-card) 65%, transparent);
+  --sheet-field: color-mix(in oklch, var(--form-card) 82%, transparent);
 
   --card: var(--surface-2);
   --card-foreground: oklch(0.97 0 0);
