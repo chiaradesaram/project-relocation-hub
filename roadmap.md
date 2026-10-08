@@ -14,3 +14,4 @@
 - [x] Merge the review screen's total and details into one card and drop the confirm button icon
 - [x] Replace the confirmation sheet's Done button with "Track my request" and "Make another investment"
 - [x] Rebuild the review screen's quick-check card as a checklist with fund, account numbers and a nested amount
+- [x] Drop the duplicated amount, unify review card colours, add fund/sub-account/bank rows and an investment timeline card
