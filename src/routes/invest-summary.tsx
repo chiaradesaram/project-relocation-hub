@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Info, CheckCircle2, Lightbulb } from "lucide-react";
+import { Info, Lightbulb } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -133,19 +133,17 @@ function InvestSummary() {
     <MobileLayout>
       <PageHeader title="Review & Confirm" showBack />
 
-      {/* Total */}
-      <div className="mx-4 mt-2 glass-card p-4 text-center">
-        <p className="text-[12px] font-semibold text-muted-foreground tracking-wider">TOTAL</p>
-        <p className="mt-1 text-2xl font-bold text-foreground">LKR {total.toLocaleString()}</p>
-        <p className="text-[12px] text-muted-foreground mt-0.5">
-          {methodLabel}
-        </p>
-      </div>
-
-      {/* Investment Details */}
-      <div className="mx-4 mt-3 glass-card p-3">
-        <p className="text-[12px] font-semibold text-muted-foreground tracking-wider mb-2">INVESTMENT DETAILS</p>
-        <div className="space-y-2">
+      {/* Total + investment details — one card */}
+      <div className="mx-4 mt-2 glass-card px-4 pt-4 pb-3">
+        <div className="text-center">
+          <p className="text-[13px] font-medium text-muted-foreground">Total to invest</p>
+          <p className="mt-1.5 text-[28px] leading-none font-bold tracking-tight text-foreground tabular-nums">
+            LKR {total.toLocaleString()}
+          </p>
+          <p className="mt-2 text-[12px] font-medium text-muted-foreground">{methodLabel}</p>
+        </div>
+        <div className="mt-4 mb-3 h-px w-full bg-border/60" />
+        <div className="space-y-2.5">
           <Row label="Investment amount" value={`LKR ${amountNum.toLocaleString()}`} />
           {splits.length > 1 && (
             <>
@@ -161,13 +159,13 @@ function InvestSummary() {
           )}
           {isInstant && (
             <div className="flex items-start justify-between gap-2">
-              <span className="text-[12px] text-muted-foreground flex items-center gap-1">
+              <span className="text-[13px] text-muted-foreground flex items-center gap-1">
                 Justpay service charge{splits.length > 1 ? ` × ${splits.length}` : ""}
                 <button type="button" onClick={() => setShowJustpayInfo(!showJustpayInfo)} aria-label="About Justpay charge">
                   <Info className="w-3 h-3 text-muted-foreground" />
                 </button>
               </span>
-              <span className="text-[12px] font-medium text-foreground">LKR {serviceCharge.toLocaleString()}</span>
+              <span className="text-[13px] font-semibold text-foreground">LKR {serviceCharge.toLocaleString()}</span>
             </div>
           )}
           {isInstant && showJustpayInfo && (
@@ -247,13 +245,12 @@ function InvestSummary() {
       <div className="mx-4 mt-4 mb-6">
         <Button
           onClick={confirmInvestment}
-          className="w-full py-4 rounded-full text-[15px] font-semibold flex items-center justify-center gap-2 transition"
+          className="w-full py-4 rounded-full text-[15px] font-semibold transition"
           style={{
             background: "var(--pill)",
             color: "var(--pill-foreground)",
           }}
         >
-          <CheckCircle2 className="w-4 h-4" />
           {isRecurring ? "Confirm recurring investment" : "Confirm & Invest"}
         </Button>
       </div>
@@ -264,8 +261,8 @@ function InvestSummary() {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className="text-[12px] text-muted-foreground">{label}</span>
-      <span className="text-[12px] font-medium text-foreground text-right">{value}</span>
+      <span className="text-[13px] text-muted-foreground">{label}</span>
+      <span className="text-[13px] font-semibold text-foreground text-right">{value}</span>
     </div>
   );
 }
