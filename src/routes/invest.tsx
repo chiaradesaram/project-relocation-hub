@@ -1004,7 +1004,7 @@ function MethodForm({
                 <div className="flex items-center justify-between">
                   <span
                     className="text-[11px] font-bold uppercase tracking-[0.16em]"
-                    style={{ color: "var(--pill)" }}
+                    style={{ color: "var(--pill-bright)" }}
                   >
                     How it works
                   </span>
