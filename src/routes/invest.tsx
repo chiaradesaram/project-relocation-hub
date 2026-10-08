@@ -997,28 +997,28 @@ function MethodForm({
           <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
             <SheetContent
               side="bottom"
-              className="rounded-t-[28px] p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
+              className="mx-auto w-full max-w-[480px] overflow-hidden rounded-t-3xl p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
               style={{ background: "var(--sheet-surface-light)" }}
             >
-              <div className="flex items-center justify-between px-5 pt-5 pb-3">
-                <SheetTitle className="type-title">Sending money to CAL</SheetTitle>
+              <div className="flex items-center justify-between px-4 pt-4 pb-3">
+                <SheetTitle className="font-display text-base leading-snug font-semibold">Sending money to CAL</SheetTitle>
                 <SheetClose asChild>
-                  <Button variant="ghost" size="icon" aria-label="Close" className="rounded-full bg-secondary text-foreground">
+                  <Button variant="ghost" size="icon" aria-label="Close" className="size-9 rounded-full bg-secondary text-foreground">
                     <X className="size-4" />
                   </Button>
                 </SheetClose>
               </div>
               <picture className="block w-full">
                 <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
-                <img src={bankTransferAnimation} alt="A coin moving from your phone to CAL’s bank" className="h-40 w-full object-cover" />
+                <img src={bankTransferAnimation} alt="A coin moving from your phone to CAL’s bank" className="h-32 w-full object-contain" />
               </picture>
-              <div className="space-y-6 px-5 pt-5 pb-8">
+              <div className="space-y-5 px-4 pt-4 pb-6">
                 <section className="flex items-start gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright">
-                    <Building2 className="size-5" />
+                  <span aria-hidden="true" className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright type-caption font-semibold">
+                    1
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="type-title">1. Transfer to CAL</h3>
+                    <h3 className="type-label">Transfer to CAL</h3>
                     <p className="mt-1 type-body-sm text-foreground">Send to CAL’s Deutsche Bank account.</p>
                     <Button
                       type="button"
@@ -1029,24 +1029,24 @@ function MethodForm({
                         setAccountCopied(true);
                         window.setTimeout(() => setAccountCopied(false), 1500);
                       }}
-                      className="mt-3 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-3 text-left text-foreground hover:bg-sheet-field"
+                      className="mt-2.5 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-foreground hover:bg-sheet-field"
                       style={{ background: "var(--sheet-field-light)" }}
                     >
                       <span className="min-w-0">
                         <span className="block type-caption">CAL Online (Pvt) Ltd</span>
-                        <span className="block type-label mt-1">0078 4521 0036</span>
+                        <span className="block type-label mt-0.5">0078 4521 0036</span>
                       </span>
                       {accountCopied ? <Check className="size-4 shrink-0 text-success" /> : <Copy className="size-4 shrink-0 text-pill-bright" />}
                     </Button>
                   </div>
                 </section>
                 <section className="flex items-start gap-3">
-                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright">
-                    <Upload className="size-5" />
+                  <span aria-hidden="true" className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright type-caption font-semibold">
+                    2
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="type-title">2. Raise a request</h3>
-                    <p className="mt-1 type-body-sm text-foreground">Come back here with your amount and transfer reference to make a Creation Request.</p>
+                    <h3 className="type-label">Raise a request</h3>
+                    <p className="mt-1 type-body-sm text-foreground">Return here to make a Creation Request with your amount and transfer reference.</p>
                   </div>
                 </section>
               </div>
