@@ -369,23 +369,60 @@ function InvestSummary() {
             ))}
           </ul>
 
-          <div
-            className="mt-3 flex items-center gap-3 rounded-xl px-3 py-3"
-            style={{ background: "var(--sheet-field-light)" }}
-          >
+        </section>
+      )}
+
+      {/* Investment timeline */}
+      {method === "bank" && (
+        <section
+          className="mx-4 mt-4 rounded-2xl px-4 py-4"
+          style={{ background: "var(--sheet-field-light)" }}
+        >
+          <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
             >
-              <Banknote className="size-[18px]" strokeWidth={2} />
+              <CalendarClock className="size-[17px]" strokeWidth={2.25} />
             </span>
-            <div className="min-w-0 flex-1">
-              <p className="type-caption text-foreground">Investment amount</p>
-              <p className="mt-1 text-[18px] leading-none font-bold tracking-tight tabular-nums text-foreground">
-                LKR {amountNum.toLocaleString()}
+            <div className="min-w-0">
+              <h2 className="type-label text-foreground">Investment timeline</h2>
+              <p className="mt-0.5 type-caption text-foreground">
+                When each step happens.
               </p>
             </div>
           </div>
+
+          <ol className="mt-4">
+            {timeline.map((step, i) => (
+              <li
+                key={step.label}
+                className="relative flex animate-fade-in gap-3 pb-4 last:pb-0"
+                style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
+              >
+                {i < timeline.length - 1 && (
+                  <span
+                    aria-hidden="true"
+                    className="absolute bottom-0 left-3 top-7 w-px bg-border/70"
+                  />
+                )}
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    "relative z-10 mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full",
+                    step.tone,
+                  )}
+                >
+                  {step.icon}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <p className="type-label text-foreground">{step.label}</p>
+                  <p className="mt-1 type-label tabular-nums text-foreground">{step.value}</p>
+                  <p className="mt-0.5 type-caption text-muted-foreground">{step.hint}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </section>
       )}
 
