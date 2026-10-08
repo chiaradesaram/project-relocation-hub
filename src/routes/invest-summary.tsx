@@ -2,7 +2,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import { Banknote, Check, Copy, Info, Lightbulb, X } from "lucide-react";
+import { Banknote, Check, Copy, Info, Lightbulb, ListChecks, X } from "lucide-react";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -265,9 +265,9 @@ function InvestSummary() {
           <div className="flex items-start gap-3">
             <span
               aria-hidden="true"
-              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
+              className="flex size-8 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
             >
-              <Check className="size-[17px]" strokeWidth={2.75} />
+              <ListChecks className="size-[17px]" strokeWidth={2.25} />
             </span>
             <div className="min-w-0">
               <h2 className="type-label text-foreground">
@@ -279,11 +279,11 @@ function InvestSummary() {
             </div>
           </div>
 
-          <ul className="mt-3">
+          <ul className="mt-2 divide-y divide-border/40">
             {quickChecks.map((item, i) => (
               <li
                 key={item.title}
-                className="flex animate-fade-in items-start gap-3 py-2"
+                className="flex animate-fade-in items-start gap-3 py-2.5"
                 style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
               >
                 <span
@@ -305,7 +305,7 @@ function InvestSummary() {
                     type="button"
                     aria-label="Copy CAL bank account number"
                     onClick={copyCalAccount}
-                    className="-my-1 -mr-1 flex size-8 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
+                    className="ml-1 flex size-8 shrink-0 self-center items-center justify-center rounded-full hover:bg-sheet-field"
                   >
                     {accountCopied ? (
                       <Check className="size-4 text-success" />
