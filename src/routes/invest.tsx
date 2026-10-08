@@ -837,7 +837,6 @@ function MethodForm({
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
   const [accountCopied, setAccountCopied] = useState(false);
-  const [infoSlide, setInfoSlide] = useState(0);
 
 
   const amountNum = parseFloat(amount || "0") || 0;
@@ -995,165 +994,61 @@ function MethodForm({
             </span>
             Learn how it works
           </button>
-          <Sheet
-                open={bankInfoOpen}
-                onOpenChange={(open) => {
-                  setBankInfoOpen(open);
-                  if (!open) setInfoSlide(0);
-                }}
-              >
+          <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
             <SheetContent
               side="bottom"
               className="rounded-t-[28px] p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
               style={{ background: "var(--sheet-surface-light)" }}
             >
-              <SheetTitle className="sr-only">Sending money to CAL</SheetTitle>
-              <div className="px-5 pt-5 pb-8">
-                <div className="flex items-center justify-between">
-                  <span
-                    className="text-[12px] font-bold"
-                    style={{ color: "var(--pill-bright)" }}
-                  >
-                    How it works
+              <div className="flex items-center justify-between px-5 pt-5 pb-3">
+                <SheetTitle className="type-title">Sending money to CAL</SheetTitle>
+                <SheetClose asChild>
+                  <Button variant="ghost" size="icon" aria-label="Close" className="rounded-full bg-secondary text-foreground">
+                    <X className="size-4" />
+                  </Button>
+                </SheetClose>
+              </div>
+              <picture className="block w-full">
+                <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
+                <img src={bankTransferAnimation} alt="A coin moving from your phone to CAL’s bank" className="h-40 w-full object-cover" />
+              </picture>
+              <div className="space-y-6 px-5 pt-5 pb-8">
+                <section className="flex items-start gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright">
+                    <Building2 className="size-5" />
                   </span>
-                  <SheetClose
-                    aria-label="Close"
-                    className="w-9 h-9 rounded-full flex items-center justify-center"
-                    style={{ background: "var(--sheet-card-light)" }}
-                  >
-                    <X className="w-4 h-4 text-foreground" />
-                  </SheetClose>
-                </div>
-
-                                <div
-                  className="mt-4 flex select-none snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
-                  onScroll={(e) =>
-                    setInfoSlide(
-                      Math.round(
-                        e.currentTarget.scrollLeft /
-                          e.currentTarget.clientWidth
-                      )
-                    )
-                  }
-                >
-                  <div className="w-full shrink-0 snap-center">
-                    <div
-                      className="mr-1.5 h-full rounded-2xl p-4"
-                      style={{ background: "var(--sheet-card-light)" }}
-                    >
-                      <picture>
-                        <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
-                        <img src={bankTransferAnimation} alt="Money moving from your phone to CAL's bank" draggable={false} className="mb-4 h-36 w-full rounded-lg object-contain" />
-                      </picture>
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold"
-                          style={{
-                            background: "var(--pill)",
-                            color: "var(--pill-foreground)",
-                          }}
-                        >
-                          1
-                        </div>
-                        <p className="font-display text-[20px] font-semibold text-foreground">
-                          Send it to CAL
-                        </p>
-                      </div>
-                      <p className="mt-2 text-[14px] text-foreground">Transfer to this Deutsche Bank account.</p>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        aria-label="Copy CAL bank account number"
-                        onClick={() => {
-                          navigator.clipboard
-                            ?.writeText("0078 4521 0036")
-                            .catch(() => {});
-                          setAccountCopied(true);
-                          window.setTimeout(
-                            () => setAccountCopied(false),
-                            1500
-                          );
-                        }}
-                        className="mt-3 flex h-auto w-full items-center justify-between gap-2 rounded-lg px-3.5 py-3 text-left hover:bg-sheet-field"
-                        style={{ background: "var(--sheet-field-light)" }}
-                      >
-                        <span className="min-w-0">
-                          <span className="block text-[13px] font-medium text-foreground leading-snug">
-                            CAL Online (Pvt) Ltd
-                          </span>
-                          <span className="block text-[15px] font-bold tracking-wide text-foreground">
-                            0078 4521 0036
-                          </span>
-                        </span>
-                        {accountCopied ? (
-                          <Check
-                            className="w-4 h-4 shrink-0"
-                            style={{ color: "var(--success)" }}
-                          />
-                        ) : (
-                          <Copy
-                            className="w-4 h-4 shrink-0"
-                            style={{ color: "var(--pill)" }}
-                          />
-                        )}
-                      </Button>
-                    </div>
-                  </div>
-
-                  <div className="w-full shrink-0 snap-center">
-                    <div
-                      className="ml-1.5 h-full rounded-2xl p-4"
-                      style={{ background: "var(--sheet-card-light)" }}
-                    >
-                      <picture>
-                        <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
-                        <img src={bankTransferAnimation} alt="Your transfer ready to invest with CAL" draggable={false} className="mb-4 h-36 w-full rounded-lg object-contain" />
-                      </picture>
-                      <div className="flex items-center gap-2.5">
-                        <div
-                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold"
-                          style={{
-                            background: "var(--pill)",
-                            color: "var(--pill-foreground)",
-                          }}
-                        >
-                          2
-                        </div>
-                        <p className="font-display text-[20px] font-semibold text-foreground">
-                          Let’s get it invested
-                        </p>
-                      </div>
-                      <p className="mt-3 text-[14px] text-foreground leading-snug">
-                        Come back and make a Creation Request for your chosen fund.
-                      </p>
-                      <div className="mt-3 flex items-start gap-2">
-                        <Info
-                          className="w-4 h-4 shrink-0 mt-0.5"
-                          style={{ color: "var(--pill)" }}
-                        />
-                        <p className="text-[12px] text-foreground leading-snug">
-                          Before 9am — confirmed the same working day.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex items-center justify-center gap-1.5">
-                  {[0, 1].map((idx) => (
-                    <span
-                      key={idx}
-                      className="h-1.5 rounded-full transition-all duration-200"
-                      style={{
-                        width: infoSlide === idx ? 18 : 6,
-                        background:
-                          infoSlide === idx
-                            ? "var(--pill)"
-                            : "color-mix(in oklch, var(--foreground) 28%, transparent)",
+                  <div className="min-w-0 flex-1">
+                    <h3 className="type-title">1. Transfer to CAL</h3>
+                    <p className="mt-1 type-body-sm text-foreground">Send to CAL’s Deutsche Bank account.</p>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      aria-label="Copy CAL bank account number"
+                      onClick={() => {
+                        navigator.clipboard?.writeText("0078 4521 0036").catch(() => {});
+                        setAccountCopied(true);
+                        window.setTimeout(() => setAccountCopied(false), 1500);
                       }}
-                    />
-                  ))}
-                </div>
+                      className="mt-3 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-3 text-left text-foreground hover:bg-sheet-field"
+                      style={{ background: "var(--sheet-field-light)" }}
+                    >
+                      <span className="min-w-0">
+                        <span className="block type-caption">CAL Online (Pvt) Ltd</span>
+                        <span className="block type-label mt-1">0078 4521 0036</span>
+                      </span>
+                      {accountCopied ? <Check className="size-4 shrink-0 text-success" /> : <Copy className="size-4 shrink-0 text-pill-bright" />}
+                    </Button>
+                  </div>
+                </section>
+                <section className="flex items-start gap-3">
+                  <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright">
+                    <Upload className="size-5" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <h3 className="type-title">2. Raise a request</h3>
+                    <p className="mt-1 type-body-sm text-foreground">Come back here with your amount and transfer reference to make a Creation Request.</p>
+                  </div>
+                </section>
               </div>
             </SheetContent>
           </Sheet>
