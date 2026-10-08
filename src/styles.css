@@ -340,4 +340,11 @@
 @layer utilities {
   .scrollbar-hide::-webkit-scrollbar { display: none; }
   .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .fund-art img { width: 300%; height: 200%; }
+  .fund-art-0 img { left: 0; top: 0; }
+  .fund-art-1 img { left: -100%; top: 0; }
+  .fund-art-2 img { left: -200%; top: 0; }
+  .fund-art-3 img { left: 0; top: -100%; }
+  .fund-art-4 img { left: -100%; top: -100%; }
+  .fund-art-5 img { left: -200%; top: -100%; }
 }
