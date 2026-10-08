@@ -997,22 +997,23 @@ function MethodForm({
           <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
             <SheetContent
               side="bottom"
-              className="mx-auto w-full max-w-[480px] overflow-hidden rounded-t-3xl p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
-              style={{ background: "var(--sheet-surface-light)" }}
+              className="bank-help-sheet mx-auto w-full max-w-[480px] overflow-hidden rounded-t-3xl p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
             >
-              <div className="flex items-center justify-between px-4 pt-4 pb-3">
-                <SheetTitle className="font-display text-base leading-snug font-semibold">Sending money to CAL</SheetTitle>
+              <div className="bank-help-header relative">
+                <picture className="block w-full">
+                  <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
+                  <img src={bankTransferAnimation} alt="A coin moving from your phone to CAL’s bank" className="block aspect-[768/345] w-full object-cover" />
+                </picture>
                 <SheetClose asChild>
-                  <Button variant="ghost" size="icon" aria-label="Close" className="size-9 rounded-full bg-secondary text-foreground">
+                  <Button variant="ghost" size="icon" aria-label="Close" className="absolute right-5 top-5 size-9 rounded-full bg-secondary text-foreground">
                     <X className="size-4" />
                   </Button>
                 </SheetClose>
+                <div className="px-6 pt-4 pb-5">
+                  <SheetTitle className="font-display text-base leading-snug font-semibold">Sending money to CAL</SheetTitle>
+                </div>
               </div>
-              <picture className="block w-full">
-                <source media="(prefers-reduced-motion: reduce)" srcSet={bankTransferInfo} />
-                <img src={bankTransferAnimation} alt="A coin moving from your phone to CAL’s bank" className="h-32 w-full object-contain" />
-              </picture>
-              <div className="space-y-5 px-4 pt-4 pb-6">
+              <div className="space-y-6 px-6 pt-6 pb-8">
                 <section className="flex items-start gap-3">
                   <span aria-hidden="true" className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright type-caption font-semibold">
                     1

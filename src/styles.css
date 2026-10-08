@@ -124,6 +124,8 @@
   --sheet-surface-light: color-mix(in oklch, var(--card) 96%, var(--foreground));
   --sheet-card-light: color-mix(in oklch, var(--form-card) 97%, var(--foreground));
   --sheet-field-light: color-mix(in oklch, var(--form-card) 91%, var(--foreground));
+  --sheet-header-shading: linear-gradient(180deg, var(--background), var(--card));
+  --sheet-elevation: 0 -12px 48px color-mix(in oklch, var(--background) 45%, transparent);
 
   --card: var(--surface-2);
   --card-foreground: oklch(0.97 0 0);
@@ -366,4 +368,13 @@
   .fund-art-3 img { left: 0; top: -100%; }
   .fund-art-4 img { left: -100%; top: -100%; }
   .fund-art-5 img { left: -200%; top: -100%; }
+}
+
+.bank-help-sheet {
+  background: var(--sheet-surface-light);
+  box-shadow: var(--sheet-elevation);
+}
+
+.bank-help-header {
+  background: var(--sheet-header-shading);
 }
