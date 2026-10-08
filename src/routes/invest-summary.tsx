@@ -201,7 +201,7 @@ function InvestSummary() {
   const timeline = [
     {
       label: "Request date",
-      value: txDate,
+      value: fmtTimeline(today),
       hint: "When you raised this Creation Request",
       tone: "bg-rates-mint text-background",
       icon: <Check className="size-[13px]" strokeWidth={3} />,
@@ -309,8 +309,7 @@ function InvestSummary() {
         <section
           className="mx-4 mt-4 rounded-2xl px-4 py-4"
           style={{
-            background: "color-mix(in oklch, var(--card) 94%, transparent)",
-            backdropFilter: "blur(12px)",
+            background: "var(--sheet-field-light)",
           }}
         >
           <div className="flex items-start gap-3">
