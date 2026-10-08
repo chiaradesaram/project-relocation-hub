@@ -1022,12 +1022,18 @@ function MethodForm({
               </div>
               <div className="space-y-6 px-6 pt-6 pb-8">
                 <section className="flex items-start gap-3">
-                  <span aria-hidden="true" className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-pill/15 text-pill-bright type-caption font-semibold">
-                    1
+                  <span
+                    aria-hidden="true"
+                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-pill/18 text-pill-bright"
+                  >
+                    <Landmark className="size-[18px] strokeWidth={1.75}" />
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h3 className="type-label">Transfer to CAL</h3>
-                    <p className="mt-1 type-body-sm text-foreground">Send to CAL’s Deutsche Bank account.</p>
+                    <span className="block type-label-sm text-pill-bright">Step 1</span>
+                    <h3 className="mt-1 type-label">Transfer to CAL</h3>
+                    <p className="mt-1 type-body-sm text-foreground">
+                      Send to CAL’s Deutsche Bank account.
+                    </p>
                     <Button
                       type="button"
                       variant="ghost"
