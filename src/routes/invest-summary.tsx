@@ -176,8 +176,7 @@ function InvestSummary() {
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
 
-  // CAL's receiving account — shown here so it can be matched against the transfer
-  const CAL_ACCOUNT_NAME = "CAL Online (Pvt) Ltd";
+  // CAL's receiving account — the copy button copies this number
   const CAL_ACCOUNT_NUMBER = "0078 4521 0036";
 
   const copyCalAccount = () => {
