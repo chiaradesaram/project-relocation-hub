@@ -30,7 +30,6 @@ import {
   PauseCircle,
   PlayCircle,
   Trash2,
-  Landmark,
   Info,
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
@@ -837,6 +836,7 @@ function MethodForm({
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
   const [accountCopied, setAccountCopied] = useState(false);
+  const [infoSlide, setInfoSlide] = useState(0);
 
 
   const amountNum = parseFloat(amount || "0") || 0;
@@ -994,11 +994,17 @@ function MethodForm({
             </span>
             Learn how it works
           </button>
-          <Sheet open={bankInfoOpen} onOpenChange={setBankInfoOpen}>
+          <Sheet
+                open={bankInfoOpen}
+                onOpenChange={(open) => {
+                  setBankInfoOpen(open);
+                  if (!open) setInfoSlide(0);
+                }}
+              >
             <SheetContent
               side="bottom"
               className="rounded-t-[28px] p-0 pb-0 border-0 backdrop-blur-2xl"
-              style={{ background: "var(--sheet-surface)" }}
+              style={{ background: "var(--sheet-surface-light)" }}
             >
               <div className="px-5 pt-5 pb-8">
                 <div className="flex items-center justify-between">
@@ -1011,135 +1017,133 @@ function MethodForm({
                   <SheetClose
                     aria-label="Close"
                     className="w-9 h-9 rounded-full flex items-center justify-center"
-                    style={{
-                      background:
-                        "var(--sheet-card)",
-                    }}
+                    style={{ background: "var(--sheet-card-light)" }}
                   >
                     <X className="w-4 h-4 text-foreground" />
                   </SheetClose>
                 </div>
 
-                <img
-                  src={bankTransferInfo}
-                  alt=""
-                  loading="lazy"
-                  width={1024}
-                  height={768}
-                  className="w-full h-32 object-cover rounded-2xl mt-4"
-                />
-
-                <div className="mt-5 flex items-center gap-3">
-                  <div
-                    className="w-12 h-12 rounded-2xl flex items-center justify-center shrink-0"
-                    style={{ background: "var(--pill)" }}
-                  >
-                    <Landmark
-                      className="w-6 h-6"
-                      style={{ color: "var(--pill-foreground)" }}
-                    />
-                  </div>
-                  <p className="font-display text-[20px] font-bold text-foreground leading-tight">
-                    Sending money to CAL
-                  </p>
-                </div>
-                <p className="mt-2 text-[14px] text-foreground leading-snug">
-                  Two quick steps — send the money, then tell us where it
-                  goes.
-                </p>
-
-                <div className="mt-5 space-y-3">
-                  <div
-                    className="rounded-2xl p-4"
-                    style={{
-                      background:
-                        "var(--sheet-card)",
-                    }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
-                        style={{
-                          background: "var(--pill)",
-                          color: "var(--pill-foreground)",
-                        }}
-                      >
-                        1
-                      </div>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[14px] font-semibold text-foreground leading-snug pt-0.5">
-                          Transfer to CAL's Deutsche Bank account
-                        </p>
-                        <button
-                          type="button"
-                          onClick={() => {
-                            navigator.clipboard
-                              ?.writeText("0078 4521 0036")
-                              .catch(() => {});
-                            setAccountCopied(true);
-                            window.setTimeout(
-                              () => setAccountCopied(false),
-                              1500
-                            );
+                                <div
+                  className="mt-4 flex select-none snap-x snap-mandatory overflow-x-auto [&::-webkit-scrollbar]:hidden [scrollbar-width:none]"
+                  onScroll={(e) =>
+                    setInfoSlide(
+                      Math.round(
+                        e.currentTarget.scrollLeft /
+                          e.currentTarget.clientWidth
+                      )
+                    )
+                  }
+                >
+                  <div className="w-full shrink-0 snap-center">
+                    <div
+                      className="mr-1.5 h-full rounded-2xl p-4"
+                      style={{ background: "var(--sheet-card-light)" }}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold"
+                          style={{
+                            background: "var(--pill)",
+                            color: "var(--pill-foreground)",
                           }}
-                          className="mt-2.5 flex items-center gap-2 rounded-xl px-3 py-2.5 text-left"
-                          style={{ background: "var(--sheet-field)" }}
                         >
-                          <span className="text-[13px] font-medium text-foreground leading-snug">
-                            Account name: CAL Online (Pvt) Ltd
-                            <br />
-                            Account number: 0078 4521 0036
-                          </span>
-                          {accountCopied ? (
-                            <Check
-                              className="w-4 h-4 shrink-0"
-                              style={{ color: "var(--success)" }}
-                            />
-                          ) : (
-                            <Copy
-                              className="w-4 h-4 shrink-0"
-                              style={{ color: "var(--pill)" }}
-                            />
-                          )}
-                        </button>
+                          1
+                        </div>
+                        <p className="font-display text-[16px] font-bold text-foreground">
+                          Send the money
+                        </p>
                       </div>
-                    </div>
-                  </div>
-
-                  <div
-                    className="rounded-2xl p-4"
-                    style={{
-                      background:
-                        "var(--sheet-card)",
-                    }}
-                  >
-                    <div className="flex items-start gap-3">
-                      <div
-                        className="w-6 h-6 rounded-full flex items-center justify-center shrink-0 text-[12px] font-bold"
-                        style={{
-                          background: "var(--pill)",
-                          color: "var(--pill-foreground)",
+                      <button
+                        type="button"
+                        onClick={() => {
+                          navigator.clipboard
+                            ?.writeText("0078 4521 0036")
+                            .catch(() => {});
+                          setAccountCopied(true);
+                          window.setTimeout(
+                            () => setAccountCopied(false),
+                            1500
+                          );
                         }}
+                        className="mt-3 flex w-full items-center justify-between gap-2 rounded-xl px-3.5 py-3 text-left"
+                        style={{ background: "var(--sheet-field-light)" }}
                       >
-                        2
-                      </div>
-                      <p className="text-[14px] font-semibold text-foreground leading-snug pt-0.5">
-                        Come here to raise a request to tell us which fund you
-                        want it in.
+                        <span className="min-w-0">
+                          <span className="block text-[13px] font-medium text-foreground leading-snug">
+                            CAL Online (Pvt) Ltd
+                          </span>
+                          <span className="block text-[15px] font-bold tracking-wide text-foreground">
+                            0078 4521 0036
+                          </span>
+                        </span>
+                        {accountCopied ? (
+                          <Check
+                            className="w-4 h-4 shrink-0"
+                            style={{ color: "var(--success)" }}
+                          />
+                        ) : (
+                          <Copy
+                            className="w-4 h-4 shrink-0"
+                            style={{ color: "var(--pill)" }}
+                          />
+                        )}
+                      </button>
+                      <p className="mt-2.5 text-[12px] text-foreground">
+                        Deutsche Bank account
                       </p>
                     </div>
                   </div>
+
+                  <div className="w-full shrink-0 snap-center">
+                    <div
+                      className="ml-1.5 h-full rounded-2xl p-4"
+                      style={{ background: "var(--sheet-card-light)" }}
+                    >
+                      <div className="flex items-center gap-2.5">
+                        <div
+                          className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 text-[13px] font-bold"
+                          style={{
+                            background: "var(--pill)",
+                            color: "var(--pill-foreground)",
+                          }}
+                        >
+                          2
+                        </div>
+                        <p className="font-display text-[16px] font-bold text-foreground">
+                          Tell us where it goes
+                        </p>
+                      </div>
+                      <p className="mt-3 text-[14px] text-foreground leading-snug">
+                        Come back here and raise a request for the fund you
+                        want.
+                      </p>
+                      <div className="mt-3 flex items-start gap-2">
+                        <Info
+                          className="w-4 h-4 shrink-0 mt-0.5"
+                          style={{ color: "var(--pill)" }}
+                        />
+                        <p className="text-[12px] text-foreground leading-snug">
+                          Before 9am — confirmed the same working day.
+                        </p>
+                      </div>
+                    </div>
+                  </div>
                 </div>
 
-                <div className="mt-4 flex items-start gap-2.5">
-                  <Info
-                    className="w-4 h-4 shrink-0 mt-0.5"
-                    style={{ color: "var(--pill)" }}
-                  />
-                  <p className="text-[13px] text-foreground leading-snug">
-                    Requests before 9 will be confirmed on the same working
-                    day. After 9, they'll be confirmed the next working day.
-                  </p>
+                <div className="mt-4 flex items-center justify-center gap-1.5">
+                  {[0, 1].map((idx) => (
+                    <span
+                      key={idx}
+                      className="h-1.5 rounded-full transition-all duration-200"
+                      style={{
+                        width: infoSlide === idx ? 18 : 6,
+                        background:
+                          infoSlide === idx
+                            ? "var(--pill)"
+                            : "color-mix(in oklch, var(--foreground) 28%, transparent)",
+                      }}
+                    />
+                  ))}
                 </div>
               </div>
             </SheetContent>
