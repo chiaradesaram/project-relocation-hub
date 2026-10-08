@@ -13,3 +13,4 @@
 - [x] Add a "Raise a request" action to the help sheet and widen its mobile side insets
 - [x] Merge the review screen's total and details into one card and drop the confirm button icon
 - [x] Replace the confirmation sheet's Done button with "Track my request" and "Make another investment"
+- [x] Rebuild the review screen's quick-check card as a checklist with fund, account numbers and a nested amount

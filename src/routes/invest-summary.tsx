@@ -196,6 +196,11 @@ function InvestSummary() {
             LKR {total.toLocaleString()}
           </p>
           <p className="mt-2 text-[12px] font-medium text-muted-foreground">{methodLabel}</p>
+          {method === "bank" && (
+            <p className="mt-1 text-[12px] font-medium text-muted-foreground">
+              No service charge on bank transfers
+            </p>
+          )}
         </div>
         <div className="mt-4 mb-3 h-px w-full bg-border/60" />
         <div className="space-y-2.5">
