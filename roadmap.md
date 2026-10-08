@@ -8,3 +8,4 @@
 - [x] Redesign Rates with colourful fund tiles and category filters
 - [x] Add individual fund factsheet pages with graphs and breakdowns
 - [x] Verify fund filtering, factsheet navigation and graph controls
+- [x] Remove the bank transfer floating-fields concept from Invest
