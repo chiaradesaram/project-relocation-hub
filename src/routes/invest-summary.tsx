@@ -202,7 +202,7 @@ function InvestSummary() {
       value: fmtTimeline(today),
       hint: "When you raised this Creation Request",
       tone: "bg-rates-mint text-background",
-      icon: <Check className="size-[13px]" strokeWidth={3} />,
+      icon: <FilePlus2 className="size-[13px]" strokeWidth={2.25} />,
     },
     {
       label: "Creation date",
