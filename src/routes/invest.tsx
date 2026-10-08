@@ -1057,9 +1057,9 @@ function MethodForm({
                 <section className="flex items-start gap-3">
                   <span
                     aria-hidden="true"
-                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-success/18 text-rates-mint"
+                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
                   >
-                    <FilePlus2 className="size-[18px] strokeWidth={1.75}" />
+                    <FilePlus2 className="size-[18px] strokeWidth={2}" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block type-label-sm text-rates-mint">Step 2</span>
