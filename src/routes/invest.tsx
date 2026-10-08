@@ -1024,9 +1024,9 @@ function MethodForm({
                 <section className="flex items-start gap-3">
                   <span
                     aria-hidden="true"
-                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-pill/18 text-pill-bright"
+                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
                   >
-                    <Landmark className="size-[18px] strokeWidth={1.75}" />
+                    <Landmark className="size-[18px] strokeWidth={2}" />
                   </span>
                   <div className="min-w-0 flex-1">
                     <span className="block type-label-sm text-pill-bright">Step 1</span>
