@@ -1010,7 +1010,12 @@ function MethodForm({
                   </Button>
                 </SheetClose>
                 <div className="px-6 pt-4 pb-5">
-                  <SheetTitle className="font-display text-base leading-snug font-semibold">Sending money to CAL</SheetTitle>
+                  <span className="block type-label text-pill-bright">
+                    How it works
+                  </span>
+                  <SheetTitle className="mt-1 font-display text-base leading-snug font-semibold">
+                    How to invest using a bank transfer, in two simple steps
+                  </SheetTitle>
                 </div>
               </div>
               <div className="space-y-6 px-6 pt-6 pb-8">
