@@ -1,4 +1,5 @@
 import { readGoals } from "@/lib/goals";
+import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
@@ -158,10 +159,18 @@ const banks = [
   "BOC · 7700 8934 81",
 ];
 const calBankAccounts = [
-  { label: "CAL Securities Account", note: "Deutsche Bank · Auto-verified" },
-  { label: "CAL · Commercial Bank", note: "8001 2345 678" },
-  { label: "CAL · HNB", note: "7700 1234 567 · Closing soon" },
+  { label: "CAL Securities Account", note: "Deutsche Bank · Auto-verified", bankName: "Deutsche Bank", accountNumber: "0078 4521 0036" },
+  { label: "CAL · Commercial Bank", note: "8001 2345 678", bankName: "Commercial Bank", accountNumber: "8001 2345 678" },
+  { label: "CAL · HNB", note: "7700 1234 567 · Closing soon", bankName: "HNB", accountNumber: "7700 1234 567" },
 ];
+
+function selectedBankLabel(value: string): string {
+  if (!value) return "";
+  const destination = calBankAccounts.find((account) => account.label === value);
+  if (destination) return bankAccountLabel(destination.bankName, destination.accountNumber);
+  const [bankName, accountNumber = ""] = value.split("·").map((part) => part.trim());
+  return bankAccountLabel(bankName, accountNumber);
+}
 
 export const DIRECT_INVEST_LIMIT = 149950;
 export const DIRECT_INVEST_MAX_TRANSFERS = 3;
@@ -868,11 +877,11 @@ function MethodForm({
   const splits = isInstant ? directInvestSplits(amountNum) : [];
 
   const payFromLabel = isFlip ? "Transfer from" : isBank ? "Paid from" : "Paying from";
-  const payFromValue = isFlip ? selectedFund : selectedBank;
+  const payFromValue = isFlip ? selectedFund : selectedBankLabel(selectedBank);
   const payFromPlaceholder = isFlip ? "Select a fund" : "Select bank account";
 
   const sendToLabel = isFlip ? "Transfer to" : isBank ? "Sent to" : "Send to";
-  const sendToValue = isFlip ? selectedFlipTo : selectedPayTo;
+  const sendToValue = isFlip ? selectedFlipTo : selectedBankLabel(selectedPayTo);
   const sendToPlaceholder = isFlip
     ? "Select destination fund"
     : "Select CAL account";
@@ -2099,14 +2108,14 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           <DateRow label="Date" date={date} onClick={() => setDateOpen(true)} />
           <PickerRow
             label="Transfer from"
-            value={bank}
+            value={selectedBankLabel(bank)}
             placeholder="Select bank account"
             onClick={() => setPicker("bank")}
           />
           {isPayIn && (
             <PickerRow
               label="Transfer to"
-              value={payTo}
+              value={selectedBankLabel(payTo)}
               placeholder="Select CAL account"
               onClick={() => setPicker("payTo")}
             />
