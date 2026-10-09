@@ -12,6 +12,7 @@ import {
   Plus,
   Check,
   Info,
+  Loader2,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Calendar } from "@/components/ui/calendar";
@@ -50,9 +51,9 @@ export const Route = createFileRoute("/redeem")({
 const INSTANT_LIMIT = 100000;
 const EQUITY_CASH_BALANCE = 250000;
 
-const fundSubAccounts: Record<string, { name: string; value: number }[]> = {
+const fundSubAccounts: Record<string, { name: string; value: number; pending?: number }[]> = {
   "CAL Growth Fund": [
-    { name: "Chiara's wealth account", value: 150000 },
+    { name: "Chiara's wealth account", value: 170000, pending: 20000 },
     { name: "Retirement", value: 92500 },
     { name: "General", value: 41200 },
   ],
