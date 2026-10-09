@@ -467,10 +467,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             </>
           ) : (
             <>
-              <p className="text-[13px] leading-snug text-foreground">
-                Your available balance is adjusted for any redemptions you may have ongoing.
-              </p>
-              <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
+              <div className="mt-1 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
                 {[
                   ["Sub account balance", lkr(balance)],
                   ["Being redeemed", `- ${lkr(pendingRedemption)}`],
