@@ -230,14 +230,15 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                 type="button"
                 onClick={() => setBalanceInfoOpen(true)}
                 aria-label="Why is my available balance different?"
-                className="ml-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+                className="flex size-[18px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
                 style={{ background: "var(--pill)" }}
               >
-                <Info
-                  className="size-[11px]"
-                  strokeWidth={2.5}
+                <span
+                  className="text-[11px] font-bold leading-none"
                   style={{ color: "var(--pill-foreground)" }}
-                />
+                >
+                  i
+                </span>
               </button>
             </div>
           </div>
