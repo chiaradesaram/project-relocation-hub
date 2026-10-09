@@ -448,10 +448,17 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
           <p className="text-[13px] leading-snug text-foreground">
             Your available balance is adjusted for any redemptions you may have ongoing.
           </p>
-          <div className="mt-4 rounded-2xl bg-background/40 px-4 py-2 divide-y divide-border/30">
-            <ReviewRow label="Sub account balance" value={lkr(balance)} />
-            <ReviewRow label="Being redeemed" value={`- ${lkr(pendingRedemption)}`} />
-            <ReviewRow label="Available to redeem" value={lkr(available)} />
+          <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
+            {[
+              ["Sub account balance", lkr(balance)],
+              ["Being redeemed", `- ${lkr(pendingRedemption)}`],
+              ["Available to redeem", lkr(available)],
+            ].map(([k, v]) => (
+              <div key={k} className="flex items-center justify-between gap-3 py-2.5">
+                <span className="text-[13px] text-foreground">{k}</span>
+                <span className="text-[13px] font-semibold text-foreground tabular-nums">{v}</span>
+              </div>
+            ))}
           </div>
           <p className="mt-3 text-[12px] leading-snug text-foreground">
             Once the redemption in progress is processed, your balance and available amount will
