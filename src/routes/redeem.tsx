@@ -435,12 +435,15 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             <>
               <p className="text-[13px] leading-snug text-foreground">
                 You can instantly redeem up to half of your balance, capped at LKR 100,000 —
-                whichever is lower. The more you hold, the more you can redeem instantly.
+                whichever is lower.
               </p>
               <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
                 {[
-                  ["Available balance", lkr(available)],
-                  ["Half of balance", lkr(available * 0.5)],
+                  ["Sub account balance", lkr(balance)],
+                  ...(pendingRedemption > 0
+                    ? ([["Ongoing redemption", `- ${lkr(pendingRedemption)}`]] as [string, string][])
+                    : []),
+                  ["Half of remaining balance", lkr(available * 0.5)],
                   ["Instant limit", lkr(maxAmount)],
                 ].map(([k, v]) => (
                   <div key={k} className="flex items-center justify-between gap-3 py-2.5">
@@ -461,12 +464,6 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                   </div>
                 ))}
               </div>
-              {pendingRedemption > 0 && (
-                <p className="mt-3 text-[12px] leading-snug text-foreground">
-                  Your available balance is adjusted for the redemption of {lkr(pendingRedemption)}{" "}
-                  already in progress.
-                </p>
-              )}
             </>
           ) : (
             <>

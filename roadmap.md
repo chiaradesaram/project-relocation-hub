@@ -20,3 +20,5 @@
 - [x] Drop the Max quick-fill pill and put the info icon inside the redemption-in-flight pill
 - [x] Remove "no limit" wording and the Available row; make the pill's info control a solid tappable disc
 - [x] Drop the redemption-in-flight pill and nest the info icon in the available-to-redeem line
+- [x] Simplify the instant redemption hint to "Redeem up to" with the rule and examples in the info sheet
+- [x] Show the ongoing redemption inside the instant-limit breakdown and trim the sheet's extra sentences
