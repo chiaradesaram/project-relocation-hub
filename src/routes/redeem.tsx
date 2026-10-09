@@ -12,7 +12,6 @@ import {
   Plus,
   Check,
   Info,
-  Loader2,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Calendar } from "@/components/ui/calendar";
@@ -164,6 +163,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
   const [picker, setPicker] = useState<null | "fund" | "sub" | "bank" | "date" | "frequency">(null);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [sent, setSent] = useState(false);
+  const [balanceInfoOpen, setBalanceInfoOpen] = useState(false);
 
   const balance = isPayout
     ? EQUITY_CASH_BALANCE
@@ -227,8 +227,9 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
               className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
               style={{ background: "color-mix(in oklch, var(--pill) 14%, transparent)" }}
             >
-              <Loader2
-                className="w-3.5 h-3.5 shrink-0 animate-spin"
+              <Clock
+                className="w-3.5 h-3.5 shrink-0"
+                strokeWidth={2.25}
                 style={{ color: "var(--pill)" }}
               />
               <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
@@ -268,6 +269,16 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             {hasSource && (
               <div className="flex items-center px-4 py-3 text-[12px]">
                 <span className="text-muted-foreground">Available</span>
+                {pendingRedemption > 0 && (
+                  <button
+                    type="button"
+                    onClick={() => setBalanceInfoOpen(true)}
+                    aria-label="Why is my available balance different?"
+                    className="ml-1.5 flex size-5 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
+                  >
+                    <Info className="size-[13px] text-pill-bright" strokeWidth={2.25} />
+                  </button>
+                )}
                 <span className="flex-1 text-right font-semibold text-foreground">{lkr(available)}</span>
               </div>
             )}
@@ -426,6 +437,34 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             <p className="px-1 pt-1 text-[12px] text-muted-foreground">
               We'll pay out the same amount on this date every month.
             </p>
+          </div>
+        </SheetContent>
+      </Sheet>
+
+      {/* Why the available balance differs */}
+      <Sheet open={balanceInfoOpen} onOpenChange={setBalanceInfoOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHead title="Your available balance" onClose={() => setBalanceInfoOpen(false)} />
+          <p className="text-[13px] leading-snug text-foreground">
+            Your available balance is adjusted for any redemptions you may have ongoing.
+          </p>
+          <div className="mt-4 rounded-2xl bg-background/40 px-4 py-2 divide-y divide-border/30">
+            <ReviewRow label="Sub account balance" value={lkr(balance)} />
+            <ReviewRow label="Being redeemed" value={`- ${lkr(pendingRedemption)}`} />
+            <ReviewRow label="Available to redeem" value={lkr(available)} />
+          </div>
+          <p className="mt-3 text-[12px] leading-snug text-foreground">
+            Once the redemption in progress is processed, your balance and available amount will
+            both update.
+          </p>
+          <div className="pt-5 pb-6">
+            <Button
+              onClick={() => setBalanceInfoOpen(false)}
+              className="w-full py-4 h-auto rounded-full text-[15px] font-semibold"
+              style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
+            >
+              Got it
+            </Button>
           </div>
         </SheetContent>
       </Sheet>
