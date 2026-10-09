@@ -185,7 +185,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       ? ""
       : "Pick a fund and sub account to see how much you can redeem"
     : isInstant
-      ? `Max ${lkr(maxAmount)} · lower of LKR 100,000 or 50% of ${lkr(available)}`
+      ? `Redeem up to ${lkr(maxAmount)}`
       : isPlan
         ? `Per payout · available ${lkr(available)}`
         : `${lkr(available)} available to redeem`;
