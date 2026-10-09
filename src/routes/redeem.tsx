@@ -12,6 +12,7 @@ import {
   Plus,
   Check,
   Info,
+  Loader2,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { Calendar } from "@/components/ui/calendar";
@@ -50,9 +51,9 @@ export const Route = createFileRoute("/redeem")({
 const INSTANT_LIMIT = 100000;
 const EQUITY_CASH_BALANCE = 250000;
 
-const fundSubAccounts: Record<string, { name: string; value: number }[]> = {
+const fundSubAccounts: Record<string, { name: string; value: number; pending?: number }[]> = {
   "CAL Growth Fund": [
-    { name: "Chiara's wealth account", value: 150000 },
+    { name: "Chiara's wealth account", value: 170000, pending: 20000 },
     { name: "Retirement", value: 92500 },
     { name: "General", value: 41200 },
   ],
@@ -167,8 +168,12 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
   const balance = isPayout
     ? EQUITY_CASH_BALANCE
     : fundSubAccounts[fund]?.find((s) => s.name === sub)?.value ?? 0;
+  const pendingRedemption = isPayout
+    ? 0
+    : fundSubAccounts[fund]?.find((s) => s.name === sub)?.pending ?? 0;
+  const available = Math.max(0, balance - pendingRedemption);
   const hasSource = isPayout || (!!fund && !!sub);
-  const maxAmount = isInstant ? Math.min(INSTANT_LIMIT, balance * 0.5) : balance;
+  const maxAmount = isInstant ? Math.min(INSTANT_LIMIT, available * 0.5) : available;
   const amountNum = Number(amount || 0);
   const overMax = hasSource && amountNum > maxAmount;
 
@@ -180,10 +185,10 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       ? ""
       : "Pick a fund and sub account to see how much you can redeem"
     : isInstant
-      ? `Max ${lkr(maxAmount)} · lower of LKR 100,000 or 50% of ${lkr(balance)}`
+      ? `Max ${lkr(maxAmount)} · lower of LKR 100,000 or 50% of ${lkr(available)}`
       : isPlan
-        ? `Per payout · available ${lkr(balance)}`
-        : `Available ${lkr(balance)} · no limit`;
+        ? `Per payout · available ${lkr(available)}`
+        : `${lkr(available)} available to redeem · no limit`;
 
   const closePicker = () => setPicker(null);
   const { label: title } = methodMeta[method];
@@ -216,6 +221,22 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
           )}
         </div>
         {amountHint && <p className="mt-3 text-[12px] text-muted-foreground">{amountHint}</p>}
+        {hasSource && pendingRedemption > 0 && (
+          <div className="mt-3 flex justify-center">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
+              style={{ background: "color-mix(in oklch, var(--pill) 14%, transparent)" }}
+            >
+              <Loader2
+                className="w-3.5 h-3.5 shrink-0 animate-spin"
+                style={{ color: "var(--pill)" }}
+              />
+              <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
+                {lkr(pendingRedemption)} redemption being processed
+              </span>
+            </div>
+          </div>
+        )}
         {overMax && (
           <p className="mt-1 text-[12px] text-destructive">
             {isInstant
@@ -247,7 +268,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             {hasSource && (
               <div className="flex items-center px-4 py-3 text-[12px]">
                 <span className="text-muted-foreground">Available</span>
-                <span className="flex-1 text-right font-semibold text-foreground">{lkr(balance)}</span>
+                <span className="flex-1 text-right font-semibold text-foreground">{lkr(available)}</span>
               </div>
             )}
           </>
@@ -338,7 +359,9 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                 }}
               >
                 <span className="flex-1 text-sm text-foreground">{s.name}</span>
-                <span className="text-[12px] text-muted-foreground">{lkr(s.value)}</span>
+                <span className="text-[12px] text-muted-foreground">
+                  {lkr(s.value - (s.pending ?? 0))}
+                </span>
               </OptionRow>
             ))}
           </div>
