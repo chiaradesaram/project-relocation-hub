@@ -456,7 +456,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                   ["Balance of LKR 150,000", "Redeem up to LKR 75,000"],
                 ].map(([k, v]) => (
                   <div key={k} className="flex items-center justify-between gap-3">
-                    <span className="text-[12px] text-muted-foreground">{k}</span>
+                    <span className="text-[12px] text-foreground">{k}</span>
                     <span className="text-[12px] font-medium text-foreground tabular-nums">{v}</span>
                   </div>
                 ))}
