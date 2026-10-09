@@ -168,8 +168,12 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
   const balance = isPayout
     ? EQUITY_CASH_BALANCE
     : fundSubAccounts[fund]?.find((s) => s.name === sub)?.value ?? 0;
+  const pendingRedemption = isPayout
+    ? 0
+    : fundSubAccounts[fund]?.find((s) => s.name === sub)?.pending ?? 0;
+  const available = Math.max(0, balance - pendingRedemption);
   const hasSource = isPayout || (!!fund && !!sub);
-  const maxAmount = isInstant ? Math.min(INSTANT_LIMIT, balance * 0.5) : balance;
+  const maxAmount = isInstant ? Math.min(INSTANT_LIMIT, available * 0.5) : available;
   const amountNum = Number(amount || 0);
   const overMax = hasSource && amountNum > maxAmount;
 
@@ -181,10 +185,10 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       ? ""
       : "Pick a fund and sub account to see how much you can redeem"
     : isInstant
-      ? `Max ${lkr(maxAmount)} · lower of LKR 100,000 or 50% of ${lkr(balance)}`
+      ? `Max ${lkr(maxAmount)} · lower of LKR 100,000 or 50% of ${lkr(available)}`
       : isPlan
-        ? `Per payout · available ${lkr(balance)}`
-        : `Available ${lkr(balance)} · no limit`;
+        ? `Per payout · available ${lkr(available)}`
+        : `${lkr(available)} available to redeem · no limit`;
 
   const closePicker = () => setPicker(null);
   const { label: title } = methodMeta[method];
