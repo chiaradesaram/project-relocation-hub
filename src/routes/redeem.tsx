@@ -217,6 +217,22 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
           )}
         </div>
         {amountHint && <p className="mt-3 text-[12px] text-muted-foreground">{amountHint}</p>}
+        {hasSource && pendingRedemption > 0 && (
+          <div className="mt-3 flex justify-center">
+            <div
+              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
+              style={{ background: "color-mix(in oklch, var(--pill) 14%, transparent)" }}
+            >
+              <Loader2
+                className="w-3.5 h-3.5 shrink-0 animate-spin"
+                style={{ color: "var(--pill)" }}
+              />
+              <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
+                {lkr(pendingRedemption)} redemption being processed
+              </span>
+            </div>
+          </div>
+        )}
         {overMax && (
           <p className="mt-1 text-[12px] text-destructive">
             {isInstant
