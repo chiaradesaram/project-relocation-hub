@@ -443,7 +443,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                   ...(pendingRedemption > 0
                     ? ([["Ongoing redemption", `- ${lkr(pendingRedemption)}`]] as [string, string][])
                     : []),
-                  ["Half of balance", lkr(available * 0.5)],
+                  ["Half of remaining balance", lkr(available * 0.5)],
                   ["Instant limit", lkr(maxAmount)],
                 ].map(([k, v]) => (
                   <div key={k} className="flex items-center justify-between gap-3 py-2.5">
@@ -464,12 +464,6 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                   </div>
                 ))}
               </div>
-              {pendingRedemption > 0 && (
-                <p className="mt-3 text-[12px] leading-snug text-foreground">
-                  Your available balance is adjusted for the redemption of {lkr(pendingRedemption)}{" "}
-                  already in progress.
-                </p>
-              )}
             </>
           ) : (
             <>
