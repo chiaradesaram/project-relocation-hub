@@ -17,3 +17,4 @@
 - [x] Drop the duplicated amount, unify review card colours, add fund/sub-account/bank rows and an investment timeline card
 - [x] Lighten the review quick-check card (no badges, smaller icons and text) and drop the timeline header icon
 - [x] Show ongoing redemptions as a static status pill with an info sheet explaining the adjusted available balance
+- [x] Drop the Max quick-fill pill and put the info icon inside the redemption-in-flight pill
