@@ -210,20 +210,14 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             className="bg-transparent text-[44px] font-bold tracking-tight text-foreground placeholder:text-muted-foreground/40 outline-none tabular-nums leading-none text-center"
             style={{ width: `${Math.max(2, (formatAmountDisplay(amount) || "0").length)}ch` }}
           />
-          {hasSource && !isPlan && maxAmount > 0 && (
-            <button
-              type="button"
-              onClick={() => setAmount(String(Math.floor(maxAmount)))}
-              className="text-[12px] font-semibold px-3 py-1 rounded-full bg-pill/15 text-pill"
-            >
-              Max
-            </button>
-          )}
         </div>
         {amountHint && <p className="mt-3 text-[12px] text-muted-foreground">{amountHint}</p>}
         {hasSource && pendingRedemption > 0 && (
           <div className="mt-3 flex justify-center">
-            <div
+            <button
+              type="button"
+              onClick={() => setBalanceInfoOpen(true)}
+              aria-label="Why is my available balance different?"
               className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
               style={{ background: "color-mix(in oklch, var(--pill) 14%, transparent)" }}
             >
@@ -235,7 +229,13 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
               <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
                 {lkr(pendingRedemption)} redemption being processed
               </span>
-            </div>
+              <Info
+                className="w-3.5 h-3.5 shrink-0"
+                strokeWidth={2.25}
+                style={{ color: "var(--pill-bright)" }}
+                opacity={0.75}
+              />
+            </button>
           </div>
         )}
         {overMax && (
