@@ -427,26 +427,70 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       {/* Why the available balance differs */}
       <Sheet open={balanceInfoOpen} onOpenChange={setBalanceInfoOpen}>
         <SheetContent side="bottom" className="rounded-t-3xl">
-          <SheetHead title="Your available balance" onClose={() => setBalanceInfoOpen(false)} />
-          <p className="text-[13px] leading-snug text-foreground">
-            Your available balance is adjusted for any redemptions you may have ongoing.
-          </p>
-          <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
-            {[
-              ["Sub account balance", lkr(balance)],
-              ["Being redeemed", `- ${lkr(pendingRedemption)}`],
-              ["Available to redeem", lkr(available)],
-            ].map(([k, v]) => (
-              <div key={k} className="flex items-center justify-between gap-3 py-2.5">
-                <span className="text-[13px] text-foreground">{k}</span>
-                <span className="text-[13px] font-semibold text-foreground tabular-nums">{v}</span>
+          <SheetHead
+            title={isInstant ? "Your instant limit" : "Your available balance"}
+            onClose={() => setBalanceInfoOpen(false)}
+          />
+          {isInstant ? (
+            <>
+              <p className="text-[13px] leading-snug text-foreground">
+                You can instantly redeem up to half of your balance, capped at LKR 100,000 —
+                whichever is lower. The more you hold, the more you can redeem instantly.
+              </p>
+              <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
+                {[
+                  ["Available balance", lkr(available)],
+                  ["Half of balance", lkr(available * 0.5)],
+                  ["Instant limit", lkr(maxAmount)],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between gap-3 py-2.5">
+                    <span className="text-[13px] text-foreground">{k}</span>
+                    <span className="text-[13px] font-semibold text-foreground tabular-nums">{v}</span>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
-          <p className="mt-3 text-[12px] leading-snug text-foreground">
-            Once the redemption in progress is processed, your balance and available amount will
-            both update.
-          </p>
+              <div className="mt-3 space-y-1">
+                <p className="text-[12px] font-semibold text-foreground">For example</p>
+                {[
+                  ["Balance of LKR 90,000", "Redeem up to LKR 45,000"],
+                  ["Balance of LKR 150,000", "Redeem up to LKR 75,000"],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between gap-3">
+                    <span className="text-[12px] text-muted-foreground">{k}</span>
+                    <span className="text-[12px] font-medium text-foreground tabular-nums">{v}</span>
+                  </div>
+                ))}
+              </div>
+              {pendingRedemption > 0 && (
+                <p className="mt-3 text-[12px] leading-snug text-foreground">
+                  Your available balance is adjusted for the redemption of {lkr(pendingRedemption)}{" "}
+                  already in progress.
+                </p>
+              )}
+            </>
+          ) : (
+            <>
+              <p className="text-[13px] leading-snug text-foreground">
+                Your available balance is adjusted for any redemptions you may have ongoing.
+              </p>
+              <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1 divide-y divide-border/30">
+                {[
+                  ["Sub account balance", lkr(balance)],
+                  ["Being redeemed", `- ${lkr(pendingRedemption)}`],
+                  ["Available to redeem", lkr(available)],
+                ].map(([k, v]) => (
+                  <div key={k} className="flex items-center justify-between gap-3 py-2.5">
+                    <span className="text-[13px] text-foreground">{k}</span>
+                    <span className="text-[13px] font-semibold text-foreground tabular-nums">{v}</span>
+                  </div>
+                ))}
+              </div>
+              <p className="mt-3 text-[12px] leading-snug text-foreground">
+                Once the redemption in progress is processed, your balance and available amount will
+                both update.
+              </p>
+            </>
+          )}
           <div className="pt-5 pb-6">
             <Button
               onClick={() => setBalanceInfoOpen(false)}
