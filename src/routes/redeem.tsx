@@ -213,11 +213,15 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
         </div>
         {amountHint && (
           <div className="mt-3 flex items-center justify-center gap-1.5">
-            {hasSource && pendingRedemption > 0 && (
+            {hasSource && (isInstant || pendingRedemption > 0) && (
               <button
                 type="button"
                 onClick={() => setBalanceInfoOpen(true)}
-                aria-label="Why is my available balance different?"
+                aria-label={
+                  isInstant
+                    ? "Why is my instant limit this amount?"
+                    : "Why is my available balance different?"
+                }
                 className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
                 style={{ background: "var(--pill)" }}
               >
