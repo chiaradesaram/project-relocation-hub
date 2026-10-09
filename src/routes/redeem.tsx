@@ -215,17 +215,9 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
         {hasSource && pendingRedemption > 0 && (
           <div className="mt-3 flex justify-center">
             <div
-              className="inline-flex items-center gap-2 rounded-full py-1.5 pl-3 pr-1.5"
+              className="inline-flex items-center gap-2 rounded-full py-1.5 pl-1.5 pr-3"
               style={{ background: "color-mix(in oklch, var(--pill) 14%, transparent)" }}
             >
-              <Clock
-                className="w-3.5 h-3.5 shrink-0"
-                strokeWidth={2.25}
-                style={{ color: "var(--pill)" }}
-              />
-              <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
-                {lkr(pendingRedemption)} redemption being processed
-              </span>
               <button
                 type="button"
                 onClick={() => setBalanceInfoOpen(true)}
@@ -240,6 +232,9 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                   i
                 </span>
               </button>
+              <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
+                {lkr(pendingRedemption)} redemption being processed
+              </span>
             </div>
           </div>
         )}
