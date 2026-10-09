@@ -188,7 +188,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       ? `Max ${lkr(maxAmount)} · lower of LKR 100,000 or 50% of ${lkr(available)}`
       : isPlan
         ? `Per payout · available ${lkr(available)}`
-        : `${lkr(available)} available to redeem · no limit`;
+        : `${lkr(available)} available to redeem`;
 
   const closePicker = () => setPicker(null);
   const { label: title } = methodMeta[method];
@@ -214,11 +214,8 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
         {amountHint && <p className="mt-3 text-[12px] text-muted-foreground">{amountHint}</p>}
         {hasSource && pendingRedemption > 0 && (
           <div className="mt-3 flex justify-center">
-            <button
-              type="button"
-              onClick={() => setBalanceInfoOpen(true)}
-              aria-label="Why is my available balance different?"
-              className="inline-flex items-center gap-2 rounded-full px-3 py-1.5"
+            <div
+              className="inline-flex items-center gap-2 rounded-full py-1.5 pl-3 pr-1.5"
               style={{ background: "color-mix(in oklch, var(--pill) 14%, transparent)" }}
             >
               <Clock
@@ -229,13 +226,20 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
               <span className="text-[12px] font-medium" style={{ color: "var(--pill-bright)" }}>
                 {lkr(pendingRedemption)} redemption being processed
               </span>
-              <Info
-                className="w-3.5 h-3.5 shrink-0"
-                strokeWidth={2.25}
-                style={{ color: "var(--pill-bright)" }}
-                opacity={0.75}
-              />
-            </button>
+              <button
+                type="button"
+                onClick={() => setBalanceInfoOpen(true)}
+                aria-label="Why is my available balance different?"
+                className="ml-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full transition active:scale-95"
+                style={{ background: "color-mix(in oklch, var(--pill) 30%, transparent)" }}
+              >
+                <Info
+                  className="size-[11px]"
+                  strokeWidth={2.5}
+                  style={{ color: "var(--pill-bright)" }}
+                />
+              </button>
+            </div>
           </div>
         )}
         {overMax && (
@@ -266,22 +270,6 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
               placeholder={fund ? "Select sub account" : "Pick a fund first"}
               onClick={() => fund && setPicker("sub")}
             />
-            {hasSource && (
-              <div className="flex items-center px-4 py-3 text-[12px]">
-                <span className="text-muted-foreground">Available</span>
-                {pendingRedemption > 0 && (
-                  <button
-                    type="button"
-                    onClick={() => setBalanceInfoOpen(true)}
-                    aria-label="Why is my available balance different?"
-                    className="ml-1.5 flex size-5 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
-                  >
-                    <Info className="size-[13px] text-pill-bright" strokeWidth={2.25} />
-                  </button>
-                )}
-                <span className="flex-1 text-right font-semibold text-foreground">{lkr(available)}</span>
-              </div>
-            )}
           </>
         )}
       </div>
