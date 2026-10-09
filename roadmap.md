@@ -18,3 +18,4 @@
 - [x] Lighten the review quick-check card (no badges, smaller icons and text) and drop the timeline header icon
 - [x] Show ongoing redemptions as a static status pill with an info sheet explaining the adjusted available balance
 - [x] Drop the Max quick-fill pill and put the info icon inside the redemption-in-flight pill
+- [x] Remove "no limit" wording and the Available row; make the pill's info control a solid tappable disc
