@@ -268,7 +268,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             {hasSource && (
               <div className="flex items-center px-4 py-3 text-[12px]">
                 <span className="text-muted-foreground">Available</span>
-                <span className="flex-1 text-right font-semibold text-foreground">{lkr(balance)}</span>
+                <span className="flex-1 text-right font-semibold text-foreground">{lkr(available)}</span>
               </div>
             )}
           </>
@@ -359,7 +359,9 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                 }}
               >
                 <span className="flex-1 text-sm text-foreground">{s.name}</span>
-                <span className="text-[12px] text-muted-foreground">{lkr(s.value)}</span>
+                <span className="text-[12px] text-muted-foreground">
+                  {lkr(s.value - (s.pending ?? 0))}
+                </span>
               </OptionRow>
             ))}
           </div>
