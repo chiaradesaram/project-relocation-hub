@@ -20,9 +20,9 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", icon: Sprout, tone: "bg-pill text-pill-foreground", chip: "bg-pill/60 text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
-  { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", icon: BarChart2, tone: "bg-accent-purple text-foreground", chip: "bg-accent-purple/60 text-foreground", dot: "bg-accent-purple", product: "equities" },
-  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", chip: "bg-allocation-treasuries/60 text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
+  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", icon: Sprout, tone: "bg-pill text-pill-foreground", chip: "bg-pill/45 text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
+  { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", icon: BarChart2, tone: "bg-accent-purple text-foreground", chip: "bg-accent-purple/45 text-foreground", dot: "bg-accent-purple", product: "equities" },
+  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", chip: "bg-allocation-treasuries/45 text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
 ];
 const stocks = [
   { symbol: "JKH", name: "John Keells", price: "325.50", change: "+2.4%", positive: true, tone: "text-allocation-treasuries" },
