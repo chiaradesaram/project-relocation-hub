@@ -6,8 +6,12 @@ import { Check, Clock } from "lucide-react";
 export const Route = createFileRoute("/prototype-b")({
   head: () => ({
     meta: [
-      { title: "Prototype B — Transactions" },
+      { title: "Prototype B — Transactions — CAL" },
       { name: "description", content: "Prototype B: transactions with icon-only status." },
+      { property: "og:title", content: "Prototype B \u2014 Transactions \u2014 CAL" },
+      { property: "og:description", content: "Prototype B: transactions with icon-only status." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: PrototypeB,

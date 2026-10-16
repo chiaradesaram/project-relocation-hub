@@ -1,807 +1,114 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "@tanstack/react-router";
+import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, BriefcaseBusiness, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, MoreHorizontal, Plus, Sprout, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
-import { Link } from "@tanstack/react-router";
-import { Bell, BarChart2, Receipt, PieChart, X, Plus, Minus, Gamepad2, ChevronRight, Coins, Eye, FileText, HelpCircle, Sparkles, MoreHorizontal, EyeOff, Settings2, TrendingUp, TrendingDown, ArrowDownLeft, ArrowUpRight, Check } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Portfolio Dashboard — CAL" },
-      { name: "description", content: "View your CAL portfolio value, allocation, returns, rates, and recent activity." },
-      { property: "og:title", content: "Portfolio Dashboard — CAL" },
-      { property: "og:description", content: "View your CAL portfolio value, allocation, returns, rates, and recent activity." },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary" },
-    ],
-  }),
+  head: () => ({ meta: [
+    { title: "Your Investments — CAL" },
+    { name: "description", content: "Your CAL investments, portfolio, quick links and market watchlist in one overview." },
+    { property: "og:title", content: "Your Investments — CAL" },
+    { property: "og:description", content: "Your CAL investments, portfolio, quick links and market watchlist in one overview." },
+    { property: "og:type", content: "website" },
+    { name: "twitter:card", content: "summary" },
+  ] }),
   component: Dashboard,
 });
 
-const portfolioItems = [
-  {
-    name: "Unit Trusts", value: "2,450,000", earnings30d: "+10,500",
-    icon: PieChart, path: "/unit-trusts", percentage: 30, color: "oklch(0.6 0.2 260)",
-    status: null as string | null,
-  },
-  {
-    name: "Equities", value: "1,820,000", earnings30d: "+22,750",
-    icon: BarChart2, path: "/invest?product=equities", percentage: 30, color: "oklch(0.55 0.25 280)",
-    status: null as string | null,
-  },
-  {
-    name: "Treasuries", value: null, earnings30d: null,
-    icon: Receipt, path: "/invest?product=treasuries", percentage: 40, color: "oklch(0.6 0.2 350)",
-    status: "In Approval" as string | null,
-  },
+const products = [
+  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", change: "+0.42% today", icon: Sprout, tone: "bg-pill text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
+  { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", change: "+1.2% today", icon: BarChart2, tone: "bg-accent-purple text-foreground", dot: "bg-accent-purple", product: "equities" },
+  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", change: "+0.08% today", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
 ];
-
-const watchlist = [
-  { symbol: "JKH", price: "325.50", change: "+2.4%", positive: true },
-  { symbol: "COMB", price: "142.00", change: "+1.8%", positive: true },
-  { symbol: "HNB", price: "268.75", change: "-0.5%", positive: false },
+const stocks = [
+  { symbol: "JKH", name: "John Keells", price: "325.50", change: "+2.4%", positive: true, tone: "text-allocation-treasuries" },
+  { symbol: "COMB", name: "Commercial Bank", price: "142.00", change: "+1.8%", positive: true, tone: "text-pill" },
+  { symbol: "HNB", name: "Hatton National Bank", price: "268.75", change: "−0.5%", positive: false, tone: "text-accent-purple" },
 ];
-
-const aspiSeries = [12620, 12690, 12655, 12780, 12845];
-
-const RATE_CATALOG: { id: string; name: string; short: string; rate: string; tenor: string }[] = [
-  { id: "fiof",   name: "Fixed Income Opportunity Fund", short: "FI Opportunity", rate: "11.25%", tenor: "30d yield" },
-  { id: "tbill91",name: "91-Day Treasury Bill",          short: "91-Day T-Bill",  rate: "9.85%",  tenor: "Latest auction" },
-  { id: "tbill364",name:"364-Day Treasury Bill",         short: "364-Day T-Bill", rate: "10.45%", tenor: "Latest auction" },
-  { id: "cmm",    name: "CAL Money Market Fund",         short: "Money Market",   rate: "8.95%",  tenor: "30d yield" },
-  { id: "cif",    name: "CAL Income Fund",               short: "Income Fund",    rate: "9.85%",  tenor: "30d yield" },
-  { id: "cbf",    name: "CAL Balanced Fund",             short: "Balanced Fund",  rate: "9.20%",  tenor: "30d yield" },
-  { id: "cgf",    name: "CAL Growth Fund",               short: "Growth Fund",    rate: "12.50%", tenor: "30d yield" },
-];
-const DEFAULT_RATES = ["fiof", "tbill91", "cmm"];
-const RATES_KEY = "dashboard.trackedRates.v1";
-
-const QUICK_ACTION_CATALOG: { id: string; label: string; icon: typeof Gamepad2; to: string }[] = [
-  { id: "vstock",     label: "VStock",     icon: Gamepad2,   to: "/vstock" },
-  { id: "dividends",  label: "Dividends",  icon: Coins,      to: "/transactions" },
-  { id: "watchlist",  label: "Watchlist",  icon: Eye,        to: "/invest" },
-  { id: "research",   label: "Research",   icon: FileText,   to: "/learn" },
-  { id: "learn",      label: "Learn",      icon: Sparkles,   to: "/learn" },
-  { id: "help",       label: "Help",       icon: HelpCircle, to: "/help" },
-  { id: "rates",      label: "Rates",      icon: TrendingUp, to: "/invest" },
-  { id: "txns",       label: "Activity",   icon: Receipt,    to: "/transactions" },
-];
-const DEFAULT_QUICK_ACTIONS = ["vstock", "dividends", "watchlist"];
-const QUICK_KEY = "dashboard.quickActions.v1";
-
-const recentTransactions = [
-  { id: "t1", kind: "invest" as const, name: "CAL Income Fund",   sub: "Today, 10:42",   amount: "-LKR 250,000" },
-  { id: "t2", kind: "redeem" as const, name: "Money Market Fund", sub: "Yesterday",      amount: "+LKR 75,000"  },
-  { id: "t3", kind: "invest" as const, name: "91-Day T-Bill",     sub: "May 14",         amount: "-LKR 500,000" },
-];
-
-type WidgetKey = "portfolio" | "watchlist" | "aspi" | "rates" | "transactions" | "quick";
-const ALL_WIDGETS: { key: WidgetKey; label: string }[] = [
-  { key: "portfolio", label: "Portfolio" },
-  { key: "watchlist", label: "Watchlist" },
-  { key: "aspi", label: "ASPI snapshot" },
-  { key: "rates", label: "Rates to watch" },
-  { key: "transactions", label: "Latest transactions" },
-  { key: "quick", label: "Quick actions" },
-];
-const STORAGE_KEY = "dashboard.hiddenWidgets.v1";
 
 function Dashboard() {
   const navigate = useNavigate();
-  const heroScrollerRef = useRef<HTMLDivElement>(null);
-  const [heroPage, setHeroPage] = useState(0);
-  const [showActionPicker, setShowActionPicker] = useState<"invest" | "redeem" | null>(null);
-  // Demo flag — would come from user/account state in production
-  const [isFirstTimeInvestor, setIsFirstTimeInvestor] = useState(true);
-  const [hidden, setHidden] = useState<Set<WidgetKey>>(new Set());
-  const [customizing, setCustomizing] = useState(false);
-  const [trackedRates, setTrackedRates] = useState<string[]>(DEFAULT_RATES);
-  const [editingRates, setEditingRates] = useState(false);
-  const [quickActions, setQuickActions] = useState<string[]>(DEFAULT_QUICK_ACTIONS);
-  const [editingQuick, setEditingQuick] = useState(false);
-
+  const [action, setAction] = useState<"invest" | "redeem" | null>(null);
+  const [watchlistOpen, setWatchlistOpen] = useState(false);
   useEffect(() => {
-    try {
-      const raw = typeof window !== "undefined" ? window.localStorage.getItem(STORAGE_KEY) : null;
-      if (raw) setHidden(new Set(JSON.parse(raw)));
-      const r = typeof window !== "undefined" ? window.localStorage.getItem(RATES_KEY) : null;
-      if (r) setTrackedRates(JSON.parse(r));
-      const q = typeof window !== "undefined" ? window.localStorage.getItem(QUICK_KEY) : null;
-      if (q) setQuickActions(JSON.parse(q));
-    } catch {}
-  }, []);
-
-  const persist = (next: Set<WidgetKey>) => {
-    setHidden(new Set(next));
-    try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(Array.from(next)));
-    } catch {}
+    if (!action) return;
+    const onKey = (event: KeyboardEvent) => { if (event.key === "Escape") setAction(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [action]);
+  const openProduct = (product: string) => {
+    if (product === "unit-trust") navigate({ to: "/unit-trusts" });
+    else navigate({ to: "/invest", search: { product } });
   };
-  const hideWidget = (k: WidgetKey) => { const n = new Set(hidden); n.add(k); persist(n); };
-  const showWidget = (k: WidgetKey) => { const n = new Set(hidden); n.delete(k); persist(n); };
-  const isVisible = (k: WidgetKey) => !hidden.has(k);
-
-  const persistRates = (next: string[]) => {
-    setTrackedRates(next);
-    try { window.localStorage.setItem(RATES_KEY, JSON.stringify(next)); } catch {}
-  };
-  const toggleRate = (id: string) => {
-    if (trackedRates.includes(id)) persistRates(trackedRates.filter((x) => x !== id));
-    else persistRates([...trackedRates, id]);
-  };
-
-  const persistQuick = (next: string[]) => {
-    setQuickActions(next);
-    try { window.localStorage.setItem(QUICK_KEY, JSON.stringify(next)); } catch {}
-  };
-  const toggleQuick = (id: string) => {
-    if (quickActions.includes(id)) persistQuick(quickActions.filter((x) => x !== id));
-    else persistQuick([...quickActions, id]);
-  };
-
-  const productOptions = [
-    { icon: PieChart, label: "Unit Trusts", param: "unit-trust" },
-    { icon: BarChart2, label: "Equities", param: "equities" },
-    { icon: Receipt, label: "Treasuries", param: "treasuries" },
-  ];
-
-  const WidgetMenu = ({ widget, tone = "muted" }: { widget: WidgetKey; tone?: "muted" | "light" }) => (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <button
-          onClick={(e) => e.stopPropagation()}
-          className={`flex h-6 w-6 items-center justify-center rounded-full transition ${
-            tone === "light"
-              ? "text-white/60 hover:bg-white/10 hover:text-white"
-              : "text-muted-foreground/60 hover:bg-muted/20 hover:text-foreground"
-          }`}
-          aria-label="Widget options"
-        >
-          <MoreHorizontal className="h-3.5 w-3.5" />
-        </button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-44">
-        <DropdownMenuItem onClick={() => hideWidget(widget)} className="text-xs">
-          <EyeOff className="mr-2 h-3.5 w-3.5" /> Hide widget
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setCustomizing(true)} className="text-xs">
-          <Settings2 className="mr-2 h-3.5 w-3.5" /> Customize dashboard
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-
-  // ASPI sparkline geometry
-  const sparkW = 96, sparkH = 32;
-  const sMin = Math.min(...aspiSeries), sMax = Math.max(...aspiSeries);
-  const sRange = sMax - sMin || 1;
-  const sparkPoints = aspiSeries.map((v, i) => {
-    const x = (i / (aspiSeries.length - 1)) * sparkW;
-    const y = sparkH - ((v - sMin) / sRange) * sparkH;
-    return `${x.toFixed(1)},${y.toFixed(1)}`;
-  }).join(" ");
-  const aspiPositive = aspiSeries[aspiSeries.length - 1] >= aspiSeries[0];
 
   return (
     <MobileLayout>
-      {showActionPicker && (
-        <div className="fixed inset-0 z-50 flex items-end">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setShowActionPicker(null)} />
-          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up">
-            <div className="mb-5 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-foreground">
-                {showActionPicker === "invest" ? "What would you like to invest in?" : "What would you like to redeem?"}
-              </h3>
-              <button onClick={() => setShowActionPicker(null)} className="rounded-full bg-secondary p-1">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            {productOptions.map(({ icon: Icon, label, param }) => (
-              <button
-                key={param}
-                onClick={() => {
-                  setShowActionPicker(null);
-                  if (showActionPicker === "redeem") {
-                    navigate({ to: "/redeem", search: { product: param } });
-                  } else {
-                    navigate({ to: "/invest", search: { product: param } });
-                  }
-                }}
-                className="mb-2 flex w-full items-center gap-3 rounded-xl bg-secondary p-4 transition hover:bg-muted/50"
-              >
-                <Icon className="h-5 w-5 text-pill" />
-                <span className="text-sm font-medium text-foreground">{label}</span>
-              </button>
+      <header className="flex items-center justify-between px-5 pb-3 pt-4">
+        <Button variant="ghost" className="h-auto gap-2.5 px-0 hover:bg-transparent" onClick={() => navigate({ to: "/profile" })} aria-label="Profile">
+          <span className="flex size-9 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground">CS</span>
+          <span className="text-left"><span className="block text-xs font-normal text-foreground/70">Good morning</span><span className="block text-sm font-semibold">Chiara</span></span>
+        </Button>
+        <div className="flex gap-1">
+          <Button asChild variant="ghost" size="icon" className="rounded-full text-foreground/80" aria-label="Help"><Link to="/help" search={{ topic: "general" }}><HelpCircle /></Link></Button>
+          <Button variant="ghost" size="icon" className="relative rounded-full text-foreground/80" onClick={() => navigate({ to: "/notifications" })} aria-label="Notifications"><Bell /><span className="absolute right-2 top-2 size-1.5 rounded-full bg-allocation-treasuries" /></Button>
+        </div>
+      </header>
+
+      <main className="space-y-3 px-4 pb-5">
+        <section aria-label="Investment summary" className="rounded-2xl bg-card/70 px-5 py-4">
+          <div className="mb-1.5 flex items-center gap-2 text-xs text-foreground/75"><BriefcaseBusiness className="size-4 text-accent-purple" /><h1>Investments</h1></div>
+          <div className="flex items-baseline gap-2"><p className="text-[28px] font-bold leading-tight tabular-nums text-foreground">7,370,000</p><span className="text-xs font-semibold text-foreground/65">LKR</span></div>
+          <p className="mt-1 flex items-center gap-1 text-xs font-semibold text-success"><ArrowUpRight className="size-3.5" />+662,000 this month</p>
+          <div className="mt-4 flex h-1.5 overflow-hidden rounded-full" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
+          <div className="mt-2.5 flex justify-between">
+            {products.map((product) => <span key={product.short} className="flex items-center gap-1.5 text-xs text-foreground/75"><span className={`size-1.5 rounded-full ${product.dot}`} />{product.short}<span className="font-semibold">{product.allocation}</span></span>)}
+          </div>
+        </section>
+
+        <section aria-labelledby="portfolio-title" className="py-1">
+          <h2 id="portfolio-title" className="mb-2 px-1 text-sm font-semibold">Portfolio</h2>
+          <div className="space-y-2">
+            {products.map(({ name, amount, change, icon: Icon, tone, product }) => (
+              <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-16 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3 py-2.5 hover:bg-secondary">
+                <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${tone}`}><Icon className="size-4" /></span>
+                <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span><span className="mt-0.5 block text-xs font-semibold text-success">{change}</span></span>
+                <span className="shrink-0 text-xs font-semibold tabular-nums text-foreground/85"><span className="font-normal text-foreground/60">LKR </span>{amount}</span>
+                <ChevronRight className="size-3.5 text-foreground/50" />
+              </Button>
             ))}
           </div>
-        </div>
-      )}
+        </section>
 
-      <div className="flex items-center justify-between px-4 pt-4 pb-2">
-        <button
-          onClick={() => navigate({ to: "/profile" })}
-          className="flex items-center gap-2.5 -ml-1 pr-2 py-1 rounded-full transition hover:bg-muted/30"
-          aria-label="Profile"
-        >
-          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-gradient-to-br from-primary to-[oklch(0.55_0.22_290)] text-[12px] font-semibold text-primary-foreground">
-            CO
-          </span>
-          <span className="flex flex-col items-start leading-tight">
-            <span className="text-[10.5px] text-muted-foreground/80">Good morning</span>
-            <span className="text-[13.5px] font-semibold text-foreground -mt-0.5">CAL Online</span>
-          </span>
-        </button>
-        <div className="flex items-center -mr-1">
-          <Link
-            to="/help"
-            search={{ topic: "general" }}
-            className="flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
-            aria-label="Help"
-          >
-            <HelpCircle className="h-[18px] w-[18px]" />
-          </Link>
-          <button
-            onClick={() => navigate({ to: "/notifications" })}
-            className="relative flex h-9 w-9 items-center justify-center rounded-full text-muted-foreground hover:text-foreground hover:bg-muted/30 transition-colors"
-            aria-label="Notifications"
-          >
-            <Bell className="h-[18px] w-[18px]" />
-            <span className="absolute top-1.5 right-1.5 h-1.5 w-1.5 rounded-full bg-accent-magenta ring-2 ring-background" />
-          </button>
-        </div>
-      </div>
-
-      <section className="mt-2" aria-label="Portfolio summary">
-        <div
-          ref={heroScrollerRef}
-          onScroll={(event) => {
-            const maxScroll = event.currentTarget.scrollWidth - event.currentTarget.clientWidth;
-            if (maxScroll > 0) setHeroPage(event.currentTarget.scrollLeft >= maxScroll / 2 ? 1 : 0);
-          }}
-          className="scrollbar-hide flex snap-x snap-mandatory gap-3 overflow-x-auto overscroll-x-contain scroll-pl-4 px-4 pb-1"
-        >
-          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3 shadow-sm">
-            <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4 border-b border-border/55 pb-2">
-              <div className="min-w-0">
-                <p className="text-xs text-muted-foreground">Total portfolio value</p>
-                <h1 className="mt-1 truncate text-[1.3rem] font-semibold leading-none text-foreground">LKR 7.37M</h1>
-              </div>
-              <div className="shrink-0 pb-0.5 text-right">
-                <p className="text-xs text-muted-foreground">This month</p>
-                <p className="mt-0.5 text-sm font-semibold text-success">+7.8%</p>
-              </div>
-            </div>
-
-            <div className="mt-2 grid grid-cols-[56px_minmax(0,1fr)] items-center gap-3">
-              <div className="portfolio-donut relative h-[56px] w-[56px] shrink-0 rounded-full" />
-              <div className="min-w-0 divide-y divide-border/55">
-                {[
-                  { name: "Unit Trusts", value: "LKR 3.68M", path: "/unit-trusts", dot: "bg-allocation-unit-trusts" },
-                  { name: "Equities", value: "LKR 2.21M", path: "/invest?product=equities", dot: "bg-allocation-equities" },
-                  { name: "Treasuries", value: "LKR 1.48M", path: "/invest?product=treasuries", dot: "bg-allocation-treasuries" },
-                ].map((item) => (
-                  <button
-                    key={item.name}
-                    type="button"
-                    onClick={() => navigate({ to: item.path })}
-                    className="grid min-h-[36px] w-full grid-cols-[16px_minmax(0,1fr)_auto_14px] items-center gap-2 text-left transition-opacity hover:opacity-80 active:opacity-70"
-                  >
-                    <span className={`h-2 w-2 rounded-full ${item.dot}`} />
-                    <span className="min-w-0 truncate text-xs font-semibold text-foreground">{item.name}</span>
-                    <span className="text-[11px] font-medium text-muted-foreground">{item.value}</span>
-                    <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/70" />
-                  </button>
-                ))}
-              </div>
-            </div>
-          </article>
-
-          <article data-portfolio-card className="min-h-0 w-full shrink-0 snap-start rounded-2xl border border-border/45 bg-card px-4 py-3 shadow-sm">
-            <div className="grid grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 px-3 text-xs text-muted-foreground">
-              <span />
-              <span className="text-right">7D</span>
-              <span className="text-right">30D</span>
-              <span className="text-right">All time</span>
-            </div>
-            <div className="mt-1.5 space-y-1.5">
-              {[
-                { label: "UT", values: ["+66k", "+169k", "+677k"] },
-                { label: "EQ", values: ["+75k", "+135k", "+546k"] },
-                { label: "TB", values: ["+4k", "+13k", "+121k"] },
-              ].map((row) => (
-                <div key={row.label} className="grid min-h-[38px] grid-cols-[1fr_repeat(3,minmax(52px,0.72fr))] items-center gap-2 rounded-xl bg-secondary/40 px-3">
-                  <strong className="text-sm font-semibold text-foreground">{row.label}</strong>
-                  {row.values.map((value) => (
-                    <span key={value} className="text-right text-xs font-semibold text-success">{value}</span>
-                  ))}
-                </div>
-              ))}
-            </div>
-          </article>
-          <div className="w-12 shrink-0" aria-hidden="true" />
-        </div>
-        <div className="mt-2 flex justify-center gap-1.5" aria-label={`Portfolio card ${heroPage + 1} of 2`}>
-          {[0, 1].map((page) => (
-            <button
-              key={page}
-              type="button"
-              aria-label={`Show portfolio card ${page + 1}`}
-              aria-current={heroPage === page ? "true" : undefined}
-              onClick={() => {
-                const scroller = heroScrollerRef.current;
-                if (scroller) scroller.scrollTo({ left: page === 0 ? 0 : scroller.scrollWidth, behavior: "smooth" });
-              }}
-              className={`h-1.5 rounded-full transition-all ${heroPage === page ? "w-4 bg-pill" : "w-1.5 bg-muted-foreground/35"}`}
-            />
-          ))}
-        </div>
-      </section>
-
-      {isFirstTimeInvestor && (
-        <div className="mx-4 mt-4">
-          <div className="relative overflow-hidden rounded-xl bg-secondary/55 p-3">
-            <button
-              onClick={() => setIsFirstTimeInvestor(false)}
-              className="absolute right-2 top-2 flex h-5 w-5 items-center justify-center rounded-full bg-background/30 text-muted-foreground hover:text-foreground transition"
-              aria-label="Dismiss"
-            >
-              <X className="h-3 w-3" />
-            </button>
-            <button
-              onClick={() => navigate({ to: "/get-started" })}
-              className="flex w-full items-center gap-3 text-left"
-            >
-              <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-pill/15">
-                <Sparkles className="h-4 w-4 text-pill" />
-              </span>
-              <div className="min-w-0 flex-1 pr-5">
-                <p className="text-xs font-semibold leading-tight text-foreground">New here? Let's get you started</p>
-                <p className="mt-0.5 text-xs leading-snug text-muted-foreground">
-                  Not sure what to invest in? Take a 30-second quiz to find a fund that fits you.
-                </p>
-              </div>
-              <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground/70" />
-            </button>
+        <section aria-labelledby="links-title" className="border-b border-border/40 pb-4 pt-1">
+          <div className="mb-3 flex items-center justify-between px-1"><h2 id="links-title" className="text-sm font-semibold">Quick links</h2><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label="More quick links"><MoreHorizontal /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => navigate({ to: "/rates" })}>View rates</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/transactions" })}>Transactions</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/requests" })}>Requests</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div>
+          <div className="grid grid-cols-4 gap-2">
+            {[
+              { label: "Invest", icon: Plus, onClick: () => setAction("invest") },
+              { label: "Redeem", icon: ArrowDownToLine, onClick: () => setAction("redeem") },
+              { label: "VStock", icon: Gamepad2, onClick: () => navigate({ to: "/vstock" }) },
+              { label: "Watchlist", icon: Eye, onClick: () => { setWatchlistOpen(true); document.getElementById("watchlist-title")?.scrollIntoView({ behavior: "smooth", block: "center" }); } },
+            ].map(({ label, icon: Icon, onClick }) => <Button key={label} variant="ghost" onClick={onClick} className="h-auto flex-col gap-2 rounded-lg p-1 hover:bg-secondary/40"><span className="flex size-10 items-center justify-center rounded-full bg-pill text-pill-foreground"><Icon /></span><span className="text-xs font-semibold">{label}</span></Button>)}
           </div>
-        </div>
-      )}
+        </section>
 
-      {/* Compact portfolio actions */}
-      <div className="mx-4 mt-4 flex justify-center gap-12">
-        <button
-          onClick={() => setShowActionPicker("invest")}
-          className="flex min-w-16 flex-col items-center gap-1.5 text-foreground transition-opacity hover:opacity-85 active:opacity-70"
-        >
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-pill">
-            <Plus className="h-5 w-5 text-pill-foreground" strokeWidth={2.5} />
-          </span>
-          <span className="text-xs font-semibold">Invest</span>
-        </button>
-        <button
-          onClick={() => setShowActionPicker("redeem")}
-          className="flex min-w-16 flex-col items-center gap-1.5 text-foreground transition-opacity hover:opacity-85 active:opacity-70"
-        >
-          <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-secondary">
-            <Minus className="h-5 w-5 text-foreground" strokeWidth={2.5} />
-          </span>
-          <span className="text-xs font-semibold">Redeem</span>
-        </button>
-      </div>
+        <section aria-label="ASPI market overview" className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 rounded-xl bg-card/60 px-4 py-3">
+          <div><div className="mb-1 flex items-center gap-2"><h2 className="text-xs font-semibold">ASPI</h2><span className="rounded-md bg-success/15 px-1.5 py-0.5 text-xs font-semibold text-success">+1.2%</span></div><p className="text-sm font-bold tabular-nums">12,845.32</p><p className="mt-1 text-xs text-foreground/65">Turnover <span className="font-semibold text-foreground/85">LKR 2.84B</span></p></div>
+          <div className="min-w-0"><svg viewBox="0 0 200 50" className="h-12 w-full text-success" role="img" aria-label="ASPI sample trend for the last five days"><path d="M2 42 L20 35 L38 38 L56 25 L75 28 L94 18 L112 22 L132 12 L151 16 L174 10 L198 4" fill="none" stroke="currentColor" strokeWidth="2" strokeLinejoin="round" strokeLinecap="round" /></svg><div className="mt-1 flex justify-between text-[10px] text-foreground/60"><span>24</span><span>25</span><span>26</span><span>27</span><span>28</span></div></div>
+        </section>
 
-      {/* Portfolio card – purple style (hidden for now) */}
-      {false && isVisible("portfolio") && (
-      <div className="mx-4 mt-3.5">
-        <div
-          className="rounded-2xl overflow-hidden p-3.5"
-          style={{ background: "oklch(0.32 0.12 275)" }}
-        >
-          <div className="flex items-center justify-between pb-2.5">
-            <h3 className="text-[15px] font-semibold text-white">Portfolio</h3>
-            <WidgetMenu widget="portfolio" tone="light" />
+        <section aria-labelledby="watchlist-title" className="pt-1">
+          <div className="mb-1 flex items-center justify-between px-1"><h2 id="watchlist-title" className="text-sm font-semibold">Watchlist</h2><Button variant="link" className="h-7 px-0 text-xs text-pill-bright" onClick={() => setWatchlistOpen(!watchlistOpen)}>{watchlistOpen ? "Done" : "Manage"}</Button></div>
+          <div className="divide-y divide-border/45">
+            {stocks.map((stock) => <Button key={stock.symbol} variant="ghost" className="h-auto min-h-16 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-card/50" onClick={() => navigate({ to: "/invest", search: { product: "equities" } })}><span className={`flex size-9 shrink-0 items-center justify-center rounded-lg bg-foreground text-sm font-bold ${stock.tone}`}>{stock.symbol === "COMB" ? "C" : stock.symbol === "HNB" ? "H" : "JK"}</span><span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{stock.symbol}</span><span className="block truncate text-xs font-normal text-foreground/65">{stock.name}</span></span><span className="text-right"><span className="block text-[13px] font-semibold tabular-nums">{stock.price}</span><span className={`block text-xs font-semibold ${stock.positive ? "text-success" : "text-destructive"}`}>{stock.change}</span></span><ChevronRight className="size-3.5 text-foreground/45" /></Button>)}
           </div>
-          <div className="flex flex-col gap-2">
-            {portfolioItems.map((item) => {
-              const Icon = item.icon;
-              return (
-                <button
-                  key={item.name}
-                  onClick={() => navigate({ to: item.path })}
-                  className="flex w-full items-center gap-3 rounded-xl px-3.5 py-3 transition hover:brightness-110"
-                  style={{ background: "oklch(0.40 0.12 275)" }}
-                >
-                  <div className="flex h-9 w-9 items-center justify-center rounded-full" style={{ backgroundColor: item.color }}>
-                    <Icon className="h-4 w-4 text-white" />
-                  </div>
-                  <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[13px] font-semibold text-white leading-tight">{item.name}</p>
-                    {item.earnings30d && (
-                      <p className="text-[12px] font-medium text-[oklch(0.88_0.18_155)] mt-0.5 leading-tight">
-                        {item.earnings30d}
-                      </p>
-                    )}
-                  </div>
-                  {item.status ? (
-                    <span className="rounded-full bg-warning/15 px-2.5 py-0.5 text-[12px] font-medium text-warning">
-                      {item.status}
-                    </span>
-                  ) : (
-                    <p className="shrink-0 text-[13px] font-semibold text-white">
-                      {item.value ? `LKR ${item.value}` : "Pending"}
-                    </p>
-                  )}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
-      )}
+          {watchlistOpen && <Button asChild variant="secondary" className="mt-2 w-full text-xs"><Link to="/invest" search={{ product: "equities" }}><Plus />Explore equities</Link></Button>}
+        </section>
+        <p className="px-1 text-xs text-foreground/50">Illustrative portfolio and market data</p>
+      </main>
 
-      {/* Quick actions — hidden */}
-      {false && isVisible("quick") && (
-      <div className="mx-4 mt-3.5">
-        <div className="rounded-2xl bg-card backdrop-blur-md overflow-hidden p-2.5">
-          <div className="flex items-center justify-between px-1 pb-1.5">
-            <h3 className="text-[13px] font-medium text-muted-foreground">Quick actions</h3>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setEditingQuick(true)}
-                className="rounded-full p-1 text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
-                aria-label="Customize quick actions"
-              >
-                <Settings2 className="h-3.5 w-3.5" />
-              </button>
-              <WidgetMenu widget="quick" />
-            </div>
-          </div>
-          <div className="grid grid-cols-3 gap-1.5">
-            {quickActions
-              .map((id) => QUICK_ACTION_CATALOG.find((a) => a.id === id))
-              .filter((a): a is (typeof QUICK_ACTION_CATALOG)[number] => Boolean(a))
-              .map(({ id, icon: Icon, label, to }) => (
-                <button
-                  key={id}
-                  onClick={() => navigate({ to })}
-                  className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-pill/20 bg-pill/10 px-1 py-3 transition hover:bg-pill/20 hover:border-pill/40"
-                >
-                  <Icon className="h-4 w-4 text-pill" />
-                  <span className="text-[12px] font-medium text-foreground whitespace-nowrap">{label}</span>
-                </button>
-              ))}
-            {quickActions.length < 8 && (
-              <button
-                onClick={() => setEditingQuick(true)}
-                className="flex flex-col items-center justify-center gap-1.5 rounded-xl border border-dashed border-border/60 bg-card/30 px-1 py-3 transition hover:border-pill/40 hover:bg-pill/5"
-              >
-                <Plus className="h-4 w-4 text-muted-foreground" />
-                <span className="text-[12px] font-normal text-muted-foreground whitespace-nowrap">Add</span>
-              </button>
-            )}
-          </div>
-        </div>
-      </div>
-      )}
-
-      {/* Watchlist — hidden */}
-      {false && isVisible("watchlist") && (
-        <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.05 275)" }}>
-            <div className="flex items-center justify-between pb-2.5">
-              <h3 className="text-[15px] font-semibold text-white">Watchlist</h3>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => navigate({ to: "/invest" })}
-                  className="text-[12px] font-medium text-[oklch(0.78_0.16_295)] hover:brightness-110 transition"
-                >
-                  Manage
-                </button>
-                <WidgetMenu widget="watchlist" tone="light" />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              {watchlist.map((s) => (
-                <button
-                  key={s.symbol}
-                  onClick={() => navigate({ to: "/invest" })}
-                  className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
-                >
-                  <div
-                    className="flex h-10 w-10 items-center justify-center rounded-full text-[12px] font-bold text-[oklch(0.85_0.12_295)]"
-                    style={{ background: "oklch(0.38 0.10 275)" }}
-                  >
-                    {s.symbol.slice(0, 2)}
-                  </div>
-                  <div className="min-w-0 flex-1 text-left">
-                    <p className="text-[13.5px] font-semibold text-white leading-tight">{s.symbol}</p>
-                    <p className="text-[12px] text-white/55 mt-0.5">LKR {s.price}</p>
-                  </div>
-                  <p className={`text-[13px] font-semibold ${s.positive ? "text-[oklch(0.85_0.18_155)]" : "text-[oklch(0.72_0.20_25)]"}`}>
-                    {s.change}
-                  </p>
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* ASPI snapshot — hidden */}
-      {false && isVisible("aspi") && (
-        <div className="mx-4 mt-3.5">
-          <button
-            onClick={() => navigate({ to: "/rates" })}
-            className="w-full text-left rounded-2xl bg-card backdrop-blur-md overflow-hidden p-3.5 transition hover:bg-card/70"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <span className="text-[12px] font-medium text-muted-foreground">ASPI</span>
-                <span className={`flex items-center gap-0.5 text-[12px] font-semibold ${aspiPositive ? "text-success" : "text-destructive"}`}>
-                  {aspiPositive ? <TrendingUp className="h-3 w-3" /> : <TrendingDown className="h-3 w-3" />}
-                  +1.2%
-                </span>
-              </div>
-              <div onClick={(e) => e.stopPropagation()}>
-                <WidgetMenu widget="aspi" />
-              </div>
-            </div>
-            <div className="flex items-end justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[20px] font-bold text-foreground leading-none">12,845.32</p>
-                <p className="text-[10.5px] text-muted-foreground mt-1.5">
-                  Turnover <span className="text-foreground font-medium">LKR 2.84B</span>
-                </p>
-                <p className="text-[12px] text-muted-foreground/80 mt-0.5">Last 5 days</p>
-              </div>
-              <svg width={sparkW} height={sparkH} className="shrink-0 overflow-visible">
-                <defs>
-                  <linearGradient id="aspiGrad" x1="0" x2="0" y1="0" y2="1">
-                    <stop offset="0%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0.35" />
-                    <stop offset="100%" stopColor={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"} stopOpacity="0" />
-                  </linearGradient>
-                </defs>
-                <polygon points={`0,${sparkH} ${sparkPoints} ${sparkW},${sparkH}`} fill="url(#aspiGrad)" />
-                <polyline
-                  points={sparkPoints}
-                  fill="none"
-                  stroke={aspiPositive ? "oklch(0.78 0.18 155)" : "oklch(0.65 0.22 25)"}
-                  strokeWidth="1.5"
-                  strokeLinejoin="round"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-          </button>
-        </div>
-      )}
-
-      {/* Rates to watch — hidden */}
-      {false && isVisible("rates") && (
-        <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl overflow-hidden p-3.5" style={{ background: "oklch(0.28 0.05 275)" }}>
-            <div className="flex items-center justify-between pb-2.5">
-              <h3 className="text-[15px] font-semibold text-white">Rates to watch</h3>
-              <div className="flex items-center gap-1">
-                <button
-                  onClick={() => setEditingRates(true)}
-                  className="text-[12px] font-medium text-[oklch(0.78_0.16_295)] hover:brightness-110 transition"
-                >
-                  Edit
-                </button>
-                <WidgetMenu widget="rates" tone="light" />
-              </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              {trackedRates
-                .map((id) => RATE_CATALOG.find((r) => r.id === id))
-                .filter((r): r is (typeof RATE_CATALOG)[number] => !!r)
-                .map((r) => (
-                  <button
-                    key={r.id}
-                    onClick={() => navigate({ to: "/rates" })}
-                    className="flex w-full items-center gap-3 rounded-xl px-2 py-2 transition hover:bg-white/5"
-                  >
-                    <div className="min-w-0 flex-1 text-left">
-                      <p className="text-[13.5px] font-semibold text-white leading-tight truncate">{r.short}</p>
-                      <p className="text-[12px] text-white/55 mt-0.5">{r.tenor}</p>
-                    </div>
-                    <p className="text-[14px] font-semibold text-white tabular-nums">{r.rate}</p>
-                  </button>
-                ))}
-              <button
-                onClick={() => setEditingRates(true)}
-                className="flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-white/15 py-2 text-white/60 transition hover:bg-white/5 hover:text-white"
-                aria-label="Add rate to track"
-              >
-                <Plus className="h-3.5 w-3.5" />
-                <span className="text-[12px] font-medium">Add rate</span>
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Latest transactions — hidden */}
-      {false && isVisible("transactions") && (
-        <div className="mx-4 mt-3.5">
-          <div className="rounded-2xl bg-card backdrop-blur-md overflow-hidden">
-            <div className="flex items-center justify-between px-3.5 pt-2.5 pb-1.5">
-              <h3 className="text-[13px] font-medium text-muted-foreground">Latest transactions</h3>
-              <div className="flex items-center gap-1">
-                <button onClick={() => navigate({ to: "/transactions" })} className="text-[12px] font-medium text-pill hover:brightness-110 transition">See all</button>
-                <WidgetMenu widget="transactions" />
-              </div>
-            </div>
-            <div className="divide-y divide-border/15 border-t border-border/15">
-              {recentTransactions.slice(0, 2).map((t) => {
-                const isInvest = t.kind === "invest";
-                const Icon = isInvest ? ArrowUpRight : ArrowDownLeft;
-                return (
-                  <button
-                    key={t.id}
-                    onClick={() => navigate({ to: "/transactions" })}
-                    className="flex w-full items-center gap-3 px-3.5 py-2.5 transition hover:bg-primary/5"
-                  >
-                    <span
-                      className={`flex h-8 w-8 items-center justify-center rounded-full ${
-                        isInvest ? "bg-pill/15 text-pill" : "bg-[oklch(0.85_0.18_155)]/15 text-[oklch(0.78_0.18_155)]"
-                      }`}
-                    >
-                      <Icon className="h-3.5 w-3.5" />
-                    </span>
-                    <div className="min-w-0 flex-1 text-left">
-                      <p className="text-[12.5px] font-medium text-foreground leading-tight truncate">{t.name}</p>
-                      <p className="text-[12px] text-muted-foreground mt-0.5">{t.sub}</p>
-                    </div>
-                    <p className={`text-[12.5px] font-semibold ${isInvest ? "text-foreground" : "text-[oklch(0.78_0.18_155)]"}`}>
-                      {t.amount}
-                    </p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
-
-      {/* Customize entry — hidden */}
-      {false && (
-      <div className="mx-4 mt-2 mb-4 flex justify-center">
-        <button
-          onClick={() => setCustomizing(true)}
-          className="flex items-center gap-1.5 rounded-full bg-muted/30 px-3 py-1.5 text-[12px] font-medium text-muted-foreground hover:bg-muted/50 hover:text-foreground transition"
-        >
-          <Settings2 className="h-3 w-3" />
-          Customize dashboard
-        </button>
-      </div>
-      )}
-
-      {customizing && (
-        <div className="fixed inset-0 z-50 flex items-end">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setCustomizing(false)} />
-          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-foreground">Customize dashboard</h3>
-              <button onClick={() => setCustomizing(false)} className="rounded-full bg-secondary p-1">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <p className="mb-3 text-[11.5px] text-muted-foreground">Choose which widgets appear on your dashboard.</p>
-            <div className="flex flex-col gap-2">
-              {ALL_WIDGETS.map((w) => {
-                const visible = !hidden.has(w.key);
-                return (
-                  <button
-                    key={w.key}
-                    onClick={() => (visible ? hideWidget(w.key) : showWidget(w.key))}
-                    className="flex w-full items-center justify-between rounded-xl bg-secondary px-4 py-3 transition hover:bg-muted/50"
-                  >
-                    <span className="text-sm font-medium text-foreground">{w.label}</span>
-                    <span
-                      className={`relative h-5 w-9 rounded-full transition ${visible ? "bg-primary" : "bg-muted"}`}
-                    >
-                      <span
-                        className={`absolute top-0.5 h-4 w-4 rounded-full bg-white transition-all ${visible ? "left-[18px]" : "left-0.5"}`}
-                      />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {editingQuick && (
-        <div className="fixed inset-0 z-50 flex items-end">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingQuick(false)} />
-          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up max-h-[80vh] overflow-y-auto">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-foreground">Quick actions</h3>
-              <button onClick={() => setEditingQuick(false)} className="rounded-full bg-secondary p-1">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <p className="mb-3 text-[11.5px] text-muted-foreground">Pick the shortcuts you want on your dashboard.</p>
-            <div className="grid grid-cols-2 gap-2">
-              {QUICK_ACTION_CATALOG.map((a) => {
-                const on = quickActions.includes(a.id);
-                const Icon = a.icon;
-                return (
-                  <button
-                    key={a.id}
-                    onClick={() => toggleQuick(a.id)}
-                    className={`flex items-center gap-2.5 rounded-xl px-3 py-3 transition ${
-                      on ? "bg-primary/15 ring-1 ring-primary/40" : "bg-secondary hover:bg-muted/50"
-                    }`}
-                  >
-                    <span className={`flex h-8 w-8 items-center justify-center rounded-lg ${on ? "bg-primary/20 text-primary" : "bg-muted/50 text-muted-foreground"}`}>
-                      <Icon className="h-4 w-4" />
-                    </span>
-                    <span className="flex-1 text-left text-sm font-medium text-foreground">{a.label}</span>
-                    <span
-                      className={`flex h-5 w-5 items-center justify-center rounded-full ${
-                        on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-transparent"
-                      }`}
-                    >
-                      <Check className="h-3 w-3" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
-
-      {editingRates && (
-        <div className="fixed inset-0 z-50 flex items-end">
-          <div className="absolute inset-0 bg-black/60" onClick={() => setEditingRates(false)} />
-          <div className="relative w-full rounded-t-3xl bg-card p-6 pb-10 animate-slide-up max-h-[80vh] overflow-y-auto">
-            <div className="mb-4 flex items-center justify-between">
-              <h3 className="text-base font-semibold text-foreground">Track rates</h3>
-              <button onClick={() => setEditingRates(false)} className="rounded-full bg-secondary p-1">
-                <X className="h-4 w-4" />
-              </button>
-            </div>
-            <p className="mb-3 text-[11.5px] text-muted-foreground">Pick the product rates you want to see on your dashboard.</p>
-            <div className="flex flex-col gap-2">
-              {RATE_CATALOG.map((r) => {
-                const on = trackedRates.includes(r.id);
-                return (
-                  <button
-                    key={r.id}
-                    onClick={() => toggleRate(r.id)}
-                    className={`flex w-full items-center justify-between rounded-xl px-4 py-3 transition ${
-                      on ? "bg-primary/15 ring-1 ring-primary/40" : "bg-secondary hover:bg-muted/50"
-                    }`}
-                  >
-                    <div className="min-w-0 text-left">
-                      <p className="text-sm font-medium text-foreground truncate">{r.name}</p>
-                      <p className="text-[10.5px] text-muted-foreground mt-0.5">{r.tenor} · {r.rate}</p>
-                    </div>
-                    <span
-                      className={`flex h-5 w-5 items-center justify-center rounded-full ${
-                        on ? "bg-primary text-primary-foreground" : "bg-muted/60 text-transparent"
-                      }`}
-                    >
-                      <Check className="h-3 w-3" />
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
+      {action && <div className="fixed inset-0 z-50 flex items-end justify-center" role="dialog" aria-modal="true" aria-labelledby="action-title"><div className="absolute inset-0 bg-background/75 backdrop-blur-sm" onClick={() => setAction(null)} /><div className="relative w-full max-w-md rounded-t-3xl bg-card px-7 pb-10 pt-5"><div className="mx-auto mb-5 h-1 w-9 rounded-full bg-foreground/20" /><div className="mb-5 flex items-center justify-between gap-3"><h2 id="action-title" className="text-base font-semibold">{action === "invest" ? "What would you like to invest in?" : "What would you like to redeem?"}</h2><Button variant="ghost" size="icon" className="shrink-0 rounded-full bg-secondary" onClick={() => setAction(null)} aria-label="Close" autoFocus><X /></Button></div><div className="space-y-2">{products.map(({ name, icon: Icon, tone, product }) => <Button key={product} variant="secondary" className="h-16 w-full justify-start gap-3 rounded-xl px-4" onClick={() => { setAction(null); navigate({ to: action === "redeem" ? "/redeem" : "/invest", search: { product } }); }}><span className={`flex size-8 items-center justify-center rounded-full ${tone}`}><Icon /></span><span className="flex-1 text-left">{name}</span><ChevronRight /></Button>)}</div></div></div>}
     </MobileLayout>
   );
 }

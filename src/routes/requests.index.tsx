@@ -5,6 +5,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { Stamp, ClipboardList, Users, ChevronRight, FileText, ArrowLeftRight } from "lucide-react";
 
 export const Route = createFileRoute("/requests/")({
+  head: () => ({ meta: [{"title": "Your Requests \u2014 CAL"}, {"name": "description", "content": "View your requests in your CAL investment account."}, {"property": "og:title", "content": "Your Requests \u2014 CAL"}, {"property": "og:description", "content": "View your requests in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: Requests,
 });
 

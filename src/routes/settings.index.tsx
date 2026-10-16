@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { Bell, ShieldCheck, FileText, ChevronRight, Globe, Palette } from "lucide-react";
 
 export const Route = createFileRoute("/settings/")({
+  head: () => ({ meta: [{"title": "Account Settings \u2014 CAL"}, {"name": "description", "content": "View account settings in your CAL investment account."}, {"property": "og:title", "content": "Account Settings \u2014 CAL"}, {"property": "og:description", "content": "View account settings in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: Settings,
 });
 

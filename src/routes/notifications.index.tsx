@@ -5,6 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import { Settings, TrendingUp, Receipt, Megaphone, ShieldAlert, Bell, Check } from "lucide-react";
 
 export const Route = createFileRoute("/notifications/")({
+  head: () => ({ meta: [{"title": "Notifications \u2014 CAL"}, {"name": "description", "content": "View notifications in your CAL investment account."}, {"property": "og:title", "content": "Notifications \u2014 CAL"}, {"property": "og:description", "content": "View notifications in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: NotificationsInbox,
 });
 

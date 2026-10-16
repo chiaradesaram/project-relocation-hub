@@ -29,6 +29,7 @@ const monthsBetween = (from: Date, to: Date) => {
 };
 
 export const Route = createFileRoute("/unit-trusts/$subAccountId")({
+  head: () => ({ meta: [{"title": "Sub-account Portfolio \u2014 CAL"}, {"name": "description", "content": "View sub-account portfolio in your CAL investment account."}, {"property": "og:title", "content": "Sub-account Portfolio \u2014 CAL"}, {"property": "og:description", "content": "View sub-account portfolio in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   loader: ({ params }) => {
     const sub = findSubAccount(params.subAccountId);
     if (!sub) throw notFound();

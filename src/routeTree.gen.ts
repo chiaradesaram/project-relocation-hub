@@ -9,117 +9,42 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as VstockRouteImport } from './routes/vstock'
-import { Route as UnitTrustsRouteImport } from './routes/unit-trusts'
-import { Route as TransactionsRouteImport } from './routes/transactions'
-import { Route as RequestsRouteImport } from './routes/requests'
-import { Route as RedeemRouteImport } from './routes/redeem'
-import { Route as RatesRouteImport } from './routes/rates'
-import { Route as PrototypeBRouteImport } from './routes/prototype-b'
-import { Route as PrototypeActivityRouteImport } from './routes/prototype-activity'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as MoreRouteImport } from './routes/more'
-import { Route as LearnRouteImport } from './routes/learn'
-import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
-import { Route as InvestRouteImport } from './routes/invest'
-import { Route as HelpRouteImport } from './routes/help'
-import { Route as GetStartedRouteImport } from './routes/get-started'
-import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
-import { Route as AnalyticalRouteImport } from './routes/analytical'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
-import { Route as SettingsIndexRouteImport } from './routes/settings.index'
-import { Route as RequestsIndexRouteImport } from './routes/requests.index'
-import { Route as RatesIndexRouteImport } from './routes/rates.index'
-import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
+import { Route as AnalyticalRouteImport } from './routes/analytical'
+import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
+import { Route as GetStartedRouteImport } from './routes/get-started'
+import { Route as HelpRouteImport } from './routes/help'
+import { Route as InvestRouteImport } from './routes/invest'
+import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
+import { Route as LearnRouteImport } from './routes/learn'
+import { Route as MoreRouteImport } from './routes/more'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrototypeActivityRouteImport } from './routes/prototype-activity'
+import { Route as PrototypeBRouteImport } from './routes/prototype-b'
+import { Route as RatesRouteImport } from './routes/rates'
+import { Route as RedeemRouteImport } from './routes/redeem'
+import { Route as RequestsRouteImport } from './routes/requests'
+import { Route as TransactionsRouteImport } from './routes/transactions'
+import { Route as UnitTrustsRouteImport } from './routes/unit-trusts'
+import { Route as VstockRouteImport } from './routes/vstock'
 import { Route as HelpIndexRouteImport } from './routes/help.index'
-import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
-import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
-import { Route as SettingsLegalRouteImport } from './routes/settings.legal'
-import { Route as RequestsEquitySettlementRouteImport } from './routes/requests.equity-settlement'
-import { Route as RequestsEquityFundingRouteImport } from './routes/requests.equity-funding'
-import { Route as RatesFundIdRouteImport } from './routes/rates.$fundId'
-import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
 import { Route as HelpContactRouteImport } from './routes/help.contact'
+import { Route as NotificationsIndexRouteImport } from './routes/notifications.index'
+import { Route as NotificationsSettingsRouteImport } from './routes/notifications.settings'
+import { Route as RatesIndexRouteImport } from './routes/rates.index'
+import { Route as RatesFundIdRouteImport } from './routes/rates.$fundId'
+import { Route as RequestsIndexRouteImport } from './routes/requests.index'
+import { Route as RequestsEquityFundingRouteImport } from './routes/requests.equity-funding'
+import { Route as RequestsEquitySettlementRouteImport } from './routes/requests.equity-settlement'
+import { Route as SettingsIndexRouteImport } from './routes/settings.index'
+import { Route as SettingsLegalRouteImport } from './routes/settings.legal'
+import { Route as SettingsPrivacyRouteImport } from './routes/settings.privacy'
+import { Route as UnitTrustsIndexRouteImport } from './routes/unit-trusts.index'
+import { Route as UnitTrustsSubAccountIdRouteImport } from './routes/unit-trusts.$subAccountId'
 
-const VstockRoute = VstockRouteImport.update({
-  id: '/vstock',
-  path: '/vstock',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const UnitTrustsRoute = UnitTrustsRouteImport.update({
-  id: '/unit-trusts',
-  path: '/unit-trusts',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TransactionsRoute = TransactionsRouteImport.update({
-  id: '/transactions',
-  path: '/transactions',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RequestsRoute = RequestsRouteImport.update({
-  id: '/requests',
-  path: '/requests',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RedeemRoute = RedeemRouteImport.update({
-  id: '/redeem',
-  path: '/redeem',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RatesRoute = RatesRouteImport.update({
-  id: '/rates',
-  path: '/rates',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrototypeBRoute = PrototypeBRouteImport.update({
-  id: '/prototype-b',
-  path: '/prototype-b',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrototypeActivityRoute = PrototypeActivityRouteImport.update({
-  id: '/prototype-activity',
-  path: '/prototype-activity',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MoreRoute = MoreRouteImport.update({
-  id: '/more',
-  path: '/more',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LearnRoute = LearnRouteImport.update({
-  id: '/learn',
-  path: '/learn',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestSummaryRoute = InvestSummaryRouteImport.update({
-  id: '/invest-summary',
-  path: '/invest-summary',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestRoute = InvestRouteImport.update({
-  id: '/invest',
-  path: '/invest',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HelpRoute = HelpRouteImport.update({
-  id: '/help',
-  path: '/help',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const GetStartedRoute = GetStartedRouteImport.update({
-  id: '/get-started',
-  path: '/get-started',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const BankAccountsRoute = BankAccountsRouteImport.update({
-  id: '/bank-accounts',
-  path: '/bank-accounts',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AnalyticalRoute = AnalyticalRouteImport.update({
@@ -127,34 +52,84 @@ const AnalyticalRoute = AnalyticalRouteImport.update({
   path: '/analytical',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const BankAccountsRoute = BankAccountsRouteImport.update({
+  id: '/bank-accounts',
+  path: '/bank-accounts',
   getParentRoute: () => rootRouteImport,
 } as any)
-const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => UnitTrustsRoute,
-} as any)
-const SettingsIndexRoute = SettingsIndexRouteImport.update({
-  id: '/settings/',
-  path: '/settings/',
+const GetStartedRoute = GetStartedRouteImport.update({
+  id: '/get-started',
+  path: '/get-started',
   getParentRoute: () => rootRouteImport,
 } as any)
-const RequestsIndexRoute = RequestsIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => RequestsRoute,
+const HelpRoute = HelpRouteImport.update({
+  id: '/help',
+  path: '/help',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const RatesIndexRoute = RatesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => RatesRoute,
+const InvestRoute = InvestRouteImport.update({
+  id: '/invest',
+  path: '/invest',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
-  id: '/notifications/',
-  path: '/notifications/',
+const InvestSummaryRoute = InvestSummaryRouteImport.update({
+  id: '/invest-summary',
+  path: '/invest-summary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearnRoute = LearnRouteImport.update({
+  id: '/learn',
+  path: '/learn',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MoreRoute = MoreRouteImport.update({
+  id: '/more',
+  path: '/more',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrototypeActivityRoute = PrototypeActivityRouteImport.update({
+  id: '/prototype-activity',
+  path: '/prototype-activity',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrototypeBRoute = PrototypeBRouteImport.update({
+  id: '/prototype-b',
+  path: '/prototype-b',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RatesRoute = RatesRouteImport.update({
+  id: '/rates',
+  path: '/rates',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RedeemRoute = RedeemRouteImport.update({
+  id: '/redeem',
+  path: '/redeem',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RequestsRoute = RequestsRouteImport.update({
+  id: '/requests',
+  path: '/requests',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TransactionsRoute = TransactionsRouteImport.update({
+  id: '/transactions',
+  path: '/transactions',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnitTrustsRoute = UnitTrustsRouteImport.update({
+  id: '/unit-trusts',
+  path: '/unit-trusts',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VstockRoute = VstockRouteImport.update({
+  id: '/vstock',
+  path: '/vstock',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HelpIndexRoute = HelpIndexRouteImport.update({
@@ -162,20 +137,40 @@ const HelpIndexRoute = HelpIndexRouteImport.update({
   path: '/',
   getParentRoute: () => HelpRoute,
 } as any)
-const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
-  id: '/$subAccountId',
-  path: '/$subAccountId',
-  getParentRoute: () => UnitTrustsRoute,
+const HelpContactRoute = HelpContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => HelpRoute,
 } as any)
-const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
-  id: '/settings/privacy',
-  path: '/settings/privacy',
+const NotificationsIndexRoute = NotificationsIndexRouteImport.update({
+  id: '/notifications/',
+  path: '/notifications/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SettingsLegalRoute = SettingsLegalRouteImport.update({
-  id: '/settings/legal',
-  path: '/settings/legal',
+const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
+  id: '/notifications/settings',
+  path: '/notifications/settings',
   getParentRoute: () => rootRouteImport,
+} as any)
+const RatesIndexRoute = RatesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RatesRoute,
+} as any)
+const RatesFundIdRoute = RatesFundIdRouteImport.update({
+  id: '/$fundId',
+  path: '/$fundId',
+  getParentRoute: () => RatesRoute,
+} as any)
+const RequestsIndexRoute = RequestsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => RequestsRoute,
+} as any)
+const RequestsEquityFundingRoute = RequestsEquityFundingRouteImport.update({
+  id: '/equity-funding',
+  path: '/equity-funding',
+  getParentRoute: () => RequestsRoute,
 } as any)
 const RequestsEquitySettlementRoute =
   RequestsEquitySettlementRouteImport.update({
@@ -183,25 +178,30 @@ const RequestsEquitySettlementRoute =
     path: '/equity-settlement',
     getParentRoute: () => RequestsRoute,
   } as any)
-const RequestsEquityFundingRoute = RequestsEquityFundingRouteImport.update({
-  id: '/equity-funding',
-  path: '/equity-funding',
-  getParentRoute: () => RequestsRoute,
-} as any)
-const RatesFundIdRoute = RatesFundIdRouteImport.update({
-  id: '/$fundId',
-  path: '/$fundId',
-  getParentRoute: () => RatesRoute,
-} as any)
-const NotificationsSettingsRoute = NotificationsSettingsRouteImport.update({
-  id: '/notifications/settings',
-  path: '/notifications/settings',
+const SettingsIndexRoute = SettingsIndexRouteImport.update({
+  id: '/settings/',
+  path: '/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HelpContactRoute = HelpContactRouteImport.update({
-  id: '/contact',
-  path: '/contact',
-  getParentRoute: () => HelpRoute,
+const SettingsLegalRoute = SettingsLegalRouteImport.update({
+  id: '/settings/legal',
+  path: '/settings/legal',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsPrivacyRoute = SettingsPrivacyRouteImport.update({
+  id: '/settings/privacy',
+  path: '/settings/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UnitTrustsIndexRoute = UnitTrustsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UnitTrustsRoute,
+} as any)
+const UnitTrustsSubAccountIdRoute = UnitTrustsSubAccountIdRouteImport.update({
+  id: '/$subAccountId',
+  path: '/$subAccountId',
+  getParentRoute: () => UnitTrustsRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
@@ -432,116 +432,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/vstock': {
-      id: '/vstock'
-      path: '/vstock'
-      fullPath: '/vstock'
-      preLoaderRoute: typeof VstockRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/unit-trusts': {
-      id: '/unit-trusts'
-      path: '/unit-trusts'
-      fullPath: '/unit-trusts'
-      preLoaderRoute: typeof UnitTrustsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/transactions': {
-      id: '/transactions'
-      path: '/transactions'
-      fullPath: '/transactions'
-      preLoaderRoute: typeof TransactionsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/requests': {
-      id: '/requests'
-      path: '/requests'
-      fullPath: '/requests'
-      preLoaderRoute: typeof RequestsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/redeem': {
-      id: '/redeem'
-      path: '/redeem'
-      fullPath: '/redeem'
-      preLoaderRoute: typeof RedeemRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rates': {
-      id: '/rates'
-      path: '/rates'
-      fullPath: '/rates'
-      preLoaderRoute: typeof RatesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prototype-b': {
-      id: '/prototype-b'
-      path: '/prototype-b'
-      fullPath: '/prototype-b'
-      preLoaderRoute: typeof PrototypeBRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/prototype-activity': {
-      id: '/prototype-activity'
-      path: '/prototype-activity'
-      fullPath: '/prototype-activity'
-      preLoaderRoute: typeof PrototypeActivityRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/more': {
-      id: '/more'
-      path: '/more'
-      fullPath: '/more'
-      preLoaderRoute: typeof MoreRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/learn': {
-      id: '/learn'
-      path: '/learn'
-      fullPath: '/learn'
-      preLoaderRoute: typeof LearnRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invest-summary': {
-      id: '/invest-summary'
-      path: '/invest-summary'
-      fullPath: '/invest-summary'
-      preLoaderRoute: typeof InvestSummaryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invest': {
-      id: '/invest'
-      path: '/invest'
-      fullPath: '/invest'
-      preLoaderRoute: typeof InvestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/help': {
-      id: '/help'
-      path: '/help'
-      fullPath: '/help'
-      preLoaderRoute: typeof HelpRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/get-started': {
-      id: '/get-started'
-      path: '/get-started'
-      fullPath: '/get-started'
-      preLoaderRoute: typeof GetStartedRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/bank-accounts': {
-      id: '/bank-accounts'
-      path: '/bank-accounts'
-      fullPath: '/bank-accounts'
-      preLoaderRoute: typeof BankAccountsRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/analytical': {
@@ -551,46 +446,116 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AnalyticalRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/bank-accounts': {
+      id: '/bank-accounts'
+      path: '/bank-accounts'
+      fullPath: '/bank-accounts'
+      preLoaderRoute: typeof BankAccountsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/unit-trusts/': {
-      id: '/unit-trusts/'
-      path: '/'
-      fullPath: '/unit-trusts/'
-      preLoaderRoute: typeof UnitTrustsIndexRouteImport
-      parentRoute: typeof UnitTrustsRoute
-    }
-    '/settings/': {
-      id: '/settings/'
-      path: '/settings'
-      fullPath: '/settings/'
-      preLoaderRoute: typeof SettingsIndexRouteImport
+    '/get-started': {
+      id: '/get-started'
+      path: '/get-started'
+      fullPath: '/get-started'
+      preLoaderRoute: typeof GetStartedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/requests/': {
-      id: '/requests/'
-      path: '/'
-      fullPath: '/requests/'
-      preLoaderRoute: typeof RequestsIndexRouteImport
-      parentRoute: typeof RequestsRoute
+    '/help': {
+      id: '/help'
+      path: '/help'
+      fullPath: '/help'
+      preLoaderRoute: typeof HelpRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/rates/': {
-      id: '/rates/'
-      path: '/'
-      fullPath: '/rates/'
-      preLoaderRoute: typeof RatesIndexRouteImport
-      parentRoute: typeof RatesRoute
+    '/invest': {
+      id: '/invest'
+      path: '/invest'
+      fullPath: '/invest'
+      preLoaderRoute: typeof InvestRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/notifications/': {
-      id: '/notifications/'
-      path: '/notifications'
-      fullPath: '/notifications/'
-      preLoaderRoute: typeof NotificationsIndexRouteImport
+    '/invest-summary': {
+      id: '/invest-summary'
+      path: '/invest-summary'
+      fullPath: '/invest-summary'
+      preLoaderRoute: typeof InvestSummaryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learn': {
+      id: '/learn'
+      path: '/learn'
+      fullPath: '/learn'
+      preLoaderRoute: typeof LearnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/more': {
+      id: '/more'
+      path: '/more'
+      fullPath: '/more'
+      preLoaderRoute: typeof MoreRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prototype-activity': {
+      id: '/prototype-activity'
+      path: '/prototype-activity'
+      fullPath: '/prototype-activity'
+      preLoaderRoute: typeof PrototypeActivityRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/prototype-b': {
+      id: '/prototype-b'
+      path: '/prototype-b'
+      fullPath: '/prototype-b'
+      preLoaderRoute: typeof PrototypeBRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/rates': {
+      id: '/rates'
+      path: '/rates'
+      fullPath: '/rates'
+      preLoaderRoute: typeof RatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/redeem': {
+      id: '/redeem'
+      path: '/redeem'
+      fullPath: '/redeem'
+      preLoaderRoute: typeof RedeemRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/requests': {
+      id: '/requests'
+      path: '/requests'
+      fullPath: '/requests'
+      preLoaderRoute: typeof RequestsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/transactions': {
+      id: '/transactions'
+      path: '/transactions'
+      fullPath: '/transactions'
+      preLoaderRoute: typeof TransactionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unit-trusts': {
+      id: '/unit-trusts'
+      path: '/unit-trusts'
+      fullPath: '/unit-trusts'
+      preLoaderRoute: typeof UnitTrustsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/vstock': {
+      id: '/vstock'
+      path: '/vstock'
+      fullPath: '/vstock'
+      preLoaderRoute: typeof VstockRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/help/': {
@@ -600,32 +565,46 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelpIndexRouteImport
       parentRoute: typeof HelpRoute
     }
-    '/unit-trusts/$subAccountId': {
-      id: '/unit-trusts/$subAccountId'
-      path: '/$subAccountId'
-      fullPath: '/unit-trusts/$subAccountId'
-      preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
-      parentRoute: typeof UnitTrustsRoute
+    '/help/contact': {
+      id: '/help/contact'
+      path: '/contact'
+      fullPath: '/help/contact'
+      preLoaderRoute: typeof HelpContactRouteImport
+      parentRoute: typeof HelpRoute
     }
-    '/settings/privacy': {
-      id: '/settings/privacy'
-      path: '/settings/privacy'
-      fullPath: '/settings/privacy'
-      preLoaderRoute: typeof SettingsPrivacyRouteImport
+    '/notifications/': {
+      id: '/notifications/'
+      path: '/notifications'
+      fullPath: '/notifications/'
+      preLoaderRoute: typeof NotificationsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/settings/legal': {
-      id: '/settings/legal'
-      path: '/settings/legal'
-      fullPath: '/settings/legal'
-      preLoaderRoute: typeof SettingsLegalRouteImport
+    '/notifications/settings': {
+      id: '/notifications/settings'
+      path: '/notifications/settings'
+      fullPath: '/notifications/settings'
+      preLoaderRoute: typeof NotificationsSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/requests/equity-settlement': {
-      id: '/requests/equity-settlement'
-      path: '/equity-settlement'
-      fullPath: '/requests/equity-settlement'
-      preLoaderRoute: typeof RequestsEquitySettlementRouteImport
+    '/rates/': {
+      id: '/rates/'
+      path: '/'
+      fullPath: '/rates/'
+      preLoaderRoute: typeof RatesIndexRouteImport
+      parentRoute: typeof RatesRoute
+    }
+    '/rates/$fundId': {
+      id: '/rates/$fundId'
+      path: '/$fundId'
+      fullPath: '/rates/$fundId'
+      preLoaderRoute: typeof RatesFundIdRouteImport
+      parentRoute: typeof RatesRoute
+    }
+    '/requests/': {
+      id: '/requests/'
+      path: '/'
+      fullPath: '/requests/'
+      preLoaderRoute: typeof RequestsIndexRouteImport
       parentRoute: typeof RequestsRoute
     }
     '/requests/equity-funding': {
@@ -635,26 +614,47 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof RequestsEquityFundingRouteImport
       parentRoute: typeof RequestsRoute
     }
-    '/rates/$fundId': {
-      id: '/rates/$fundId'
-      path: '/$fundId'
-      fullPath: '/rates/$fundId'
-      preLoaderRoute: typeof RatesFundIdRouteImport
-      parentRoute: typeof RatesRoute
+    '/requests/equity-settlement': {
+      id: '/requests/equity-settlement'
+      path: '/equity-settlement'
+      fullPath: '/requests/equity-settlement'
+      preLoaderRoute: typeof RequestsEquitySettlementRouteImport
+      parentRoute: typeof RequestsRoute
     }
-    '/notifications/settings': {
-      id: '/notifications/settings'
-      path: '/notifications/settings'
-      fullPath: '/notifications/settings'
-      preLoaderRoute: typeof NotificationsSettingsRouteImport
+    '/settings/': {
+      id: '/settings/'
+      path: '/settings'
+      fullPath: '/settings/'
+      preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/help/contact': {
-      id: '/help/contact'
-      path: '/contact'
-      fullPath: '/help/contact'
-      preLoaderRoute: typeof HelpContactRouteImport
-      parentRoute: typeof HelpRoute
+    '/settings/legal': {
+      id: '/settings/legal'
+      path: '/settings/legal'
+      fullPath: '/settings/legal'
+      preLoaderRoute: typeof SettingsLegalRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/privacy': {
+      id: '/settings/privacy'
+      path: '/settings/privacy'
+      fullPath: '/settings/privacy'
+      preLoaderRoute: typeof SettingsPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/unit-trusts/': {
+      id: '/unit-trusts/'
+      path: '/'
+      fullPath: '/unit-trusts/'
+      preLoaderRoute: typeof UnitTrustsIndexRouteImport
+      parentRoute: typeof UnitTrustsRoute
+    }
+    '/unit-trusts/$subAccountId': {
+      id: '/unit-trusts/$subAccountId'
+      path: '/$subAccountId'
+      fullPath: '/unit-trusts/$subAccountId'
+      preLoaderRoute: typeof UnitTrustsSubAccountIdRouteImport
+      parentRoute: typeof UnitTrustsRoute
     }
   }
 }

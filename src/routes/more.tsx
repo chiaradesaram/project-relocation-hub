@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 
 export const Route = createFileRoute("/more")({
+  head: () => ({ meta: [{"title": "More from CAL \u2014 CAL"}, {"name": "description", "content": "View more from cal in your CAL investment account."}, {"property": "og:title", "content": "More from CAL \u2014 CAL"}, {"property": "og:description", "content": "View more from cal in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: More,
 });
 

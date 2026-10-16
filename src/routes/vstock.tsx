@@ -5,6 +5,7 @@ import { TrendingUp, TrendingDown, Trophy, Zap, Target } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/vstock")({
+  head: () => ({ meta: [{"title": "VStock Trading \u2014 CAL"}, {"name": "description", "content": "View vstock trading in your CAL investment account."}, {"property": "og:title", "content": "VStock Trading \u2014 CAL"}, {"property": "og:description", "content": "View vstock trading in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: VStock,
 });
 

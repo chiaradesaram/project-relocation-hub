@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/alert-dialog";
 
 export const Route = createFileRoute("/bank-accounts")({
+  head: () => ({ meta: [{"title": "Bank Accounts \u2014 CAL"}, {"name": "description", "content": "View bank accounts in your CAL investment account."}, {"property": "og:title", "content": "Bank Accounts \u2014 CAL"}, {"property": "og:description", "content": "View bank accounts in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: BankAccounts,
 });
 

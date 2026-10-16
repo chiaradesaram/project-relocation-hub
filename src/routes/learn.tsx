@@ -4,6 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import { BookOpen, Play, FileText, Award, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/learn")({
+  head: () => ({ meta: [{"title": "Learn to Invest \u2014 CAL"}, {"name": "description", "content": "View learn to invest in your CAL investment account."}, {"property": "og:title", "content": "Learn to Invest \u2014 CAL"}, {"property": "og:description", "content": "View learn to invest in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: Learn,
 });
 

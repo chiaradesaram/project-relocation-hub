@@ -101,6 +101,10 @@ export const Route = createFileRoute("/help/")({
     meta: [
       { title: "Help & FAQs — CAL Invest" },
       { name: "description", content: "Search FAQs, get quick answers, and contact CAL support." },
+      { property: "og:title", content: "Help & FAQs \u2014 CAL Invest" },
+      { property: "og:description", content: "Search FAQs, get quick answers, and contact CAL support." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: HelpIndexPage,

@@ -451,6 +451,10 @@ export const Route = createFileRoute("/help/contact")({
     meta: [
       { title: "Contact Support — CAL Invest" },
       { name: "description", content: "Get in touch with the CAL support team." },
+      { property: "og:title", content: "Contact Support \u2014 CAL Invest" },
+      { property: "og:description", content: "Get in touch with the CAL support team." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: ContactForm,

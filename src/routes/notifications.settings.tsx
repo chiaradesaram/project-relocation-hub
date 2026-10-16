@@ -6,6 +6,7 @@ import { Switch } from "@/components/ui/switch";
 import { Bell, TrendingUp, Receipt, Megaphone, ShieldAlert, BookOpen } from "lucide-react";
 
 export const Route = createFileRoute("/notifications/settings")({
+  head: () => ({ meta: [{"title": "Notification Preferences \u2014 CAL"}, {"name": "description", "content": "View notification preferences in your CAL investment account."}, {"property": "og:title", "content": "Notification Preferences \u2014 CAL"}, {"property": "og:description", "content": "View notification preferences in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: NotificationPreferences,
 });
 

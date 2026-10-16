@@ -5,6 +5,7 @@ import { Link } from "@tanstack/react-router";
 import { FileText, ScrollText, ShieldCheck, BookOpen, Scale, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/settings/legal")({
+  head: () => ({ meta: [{"title": "Legal Information \u2014 CAL"}, {"name": "description", "content": "View legal information in your CAL investment account."}, {"property": "og:title", "content": "Legal Information \u2014 CAL"}, {"property": "og:description", "content": "View legal information in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: LegalDocuments,
 });
 

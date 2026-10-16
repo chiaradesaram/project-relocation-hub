@@ -24,6 +24,7 @@ import {
 } from "@/routes/invest";
 
 export const Route = createFileRoute("/requests/equity-settlement")({
+  head: () => ({ meta: [{"title": "Equity Settlement Request \u2014 CAL"}, {"name": "description", "content": "View equity settlement request in your CAL investment account."}, {"property": "og:title", "content": "Equity Settlement Request \u2014 CAL"}, {"property": "og:description", "content": "View equity settlement request in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: EquitySettlementRequest,
 });
 
