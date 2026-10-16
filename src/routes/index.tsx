@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, Plus, SlidersHorizontal, Sprout, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
