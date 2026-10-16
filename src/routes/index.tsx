@@ -106,6 +106,9 @@ function Dashboard() {
           </div>
           {watchlistOpen && <Button asChild variant="secondary" className="mt-2 w-full text-xs"><Link to="/invest" search={{ product: "equities" }}><Plus />Explore equities</Link></Button>}
         </section>
+
+        <DashboardWidgets />
+
         <p className="px-1 text-xs text-foreground/50">Illustrative portfolio and market data</p>
       </main>
 
