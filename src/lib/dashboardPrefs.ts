@@ -1,4 +1,4 @@
-export type WidgetId = "portfolio" | "quickLinks" | "aspi" | "watchlist" | "movers" | "utFunds" | "rates";
+export type WidgetId = "portfolio" | "quickLinks" | "transactions" | "aspi" | "watchlist" | "movers" | "utFunds" | "rates";
 
 export const WIDGET_LABELS: Record<WidgetId, string> = {
   portfolio: "Portfolio",
@@ -8,6 +8,7 @@ export const WIDGET_LABELS: Record<WidgetId, string> = {
   movers: "Top movers",
   utFunds: "Unit Trust funds",
   rates: "Rates to watch",
+  transactions: "Latest transactions",
 };
 
 export type QuickLinkId = "invest" | "redeem" | "vstock" | "watchlist" | "rates" | "transactions" | "requests" | "help";
@@ -33,7 +34,7 @@ export type DashboardPrefs = {
 };
 
 export const DEFAULT_PREFS: DashboardPrefs = {
-  widgetOrder: ["portfolio", "quickLinks", "aspi", "watchlist", "movers", "utFunds", "rates"],
+  widgetOrder: ["portfolio", "quickLinks", "transactions", "aspi", "watchlist", "movers", "utFunds", "rates"],
   hiddenWidgets: [],
   quickLinkOrder: ["invest", "redeem", "vstock", "watchlist", "rates", "transactions", "requests", "help"],
   hiddenQuickLinks: ["rates", "transactions", "requests", "help"],
