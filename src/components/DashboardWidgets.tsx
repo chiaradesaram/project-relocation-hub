@@ -103,9 +103,9 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
           <button key={r.id} type="button" onClick={() => navigate({ to: "/rates" })}
             className="w-[132px] shrink-0 snap-start rounded-xl bg-secondary/60 px-3 py-2 text-left transition active:scale-[0.98]">
             <span className="block truncate text-[11px] font-medium text-foreground/65">{r.label}</span>
-            <span className="mt-1 flex items-baseline gap-1.5">
-              <span className="text-[16px] font-bold leading-none tabular-nums">{r.value}</span>
-              <span className="text-[10px] text-foreground/55">{r.note}</span>
+            <span className="mt-1 flex items-baseline gap-1">
+              <span className="text-[15px] font-bold leading-none tabular-nums">{r.value}</span>
+              <span className="whitespace-nowrap text-[10px] text-foreground/55">{r.note}</span>
             </span>
           </button>
         ))}
