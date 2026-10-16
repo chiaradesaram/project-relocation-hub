@@ -120,7 +120,7 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
         onPointerLeave={onUp}
         onClickCapture={(e) => { if (drag.current?.moved) { e.preventDefault(); e.stopPropagation(); } }}
         style={{ maskImage: fade, WebkitMaskImage: fade }}
-        className="-mx-4 flex cursor-grab touch-pan-x select-none snap-x snap-mandatory gap-2 overflow-x-auto overscroll-x-contain active:cursor-grabbing px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 flex cursor-grab touch-pan-x select-none snap-x snap-mandatory gap-1.5 overflow-x-auto overscroll-x-contain active:cursor-grabbing px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {visible.map((r) => (
           <button key={r.id} type="button" onClick={() => navigate({ to: "/rates" })}
