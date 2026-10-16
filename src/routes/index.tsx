@@ -4,6 +4,7 @@ import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Game
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DashboardWidgets } from "@/components/DashboardWidgets";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
