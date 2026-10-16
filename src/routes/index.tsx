@@ -72,9 +72,9 @@ function Dashboard() {
         <section aria-label="Portfolio" className="py-0.5">
           <div className="space-y-1.5">
             {products.map(({ name, amount, change, icon: Icon, tone, product }) => (
-              <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-12 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3 py-1.5 hover:bg-secondary">
+              <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-14 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3.5 py-2.5 hover:bg-secondary">
                 <span className={`flex size-8 shrink-0 items-center justify-center rounded-full ${tone}`}><Icon className="size-3.5" /></span>
-                <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span><span className="mt-0.5 block text-xs font-semibold text-success">{change}</span></span>
+                <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span>{change && <span className="mt-0.5 block text-xs font-semibold text-success">{change}</span>}</span>
                 <span className="shrink-0 text-xs font-semibold tabular-nums text-foreground/85"><span className="font-normal text-foreground/60">LKR </span>{amount}</span>
                 <ChevronRight className="size-3.5 text-foreground/50" />
               </Button>
