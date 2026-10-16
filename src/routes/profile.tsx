@@ -4,6 +4,7 @@ import PageHeader from "@/components/PageHeader";
 import { Camera, ChevronRight, Trash2 } from "lucide-react";
 
 export const Route = createFileRoute("/profile")({
+  head: () => ({ meta: [{"title": "Your Profile \u2014 CAL"}, {"name": "description", "content": "View your profile in your CAL investment account."}, {"property": "og:title", "content": "Your Profile \u2014 CAL"}, {"property": "og:description", "content": "View your profile in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: Profile,
 });
 

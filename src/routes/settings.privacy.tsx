@@ -7,6 +7,7 @@ import { Link } from "@tanstack/react-router";
 import { Fingerprint, KeyRound, Eye, Trash2, ChevronRight } from "lucide-react";
 
 export const Route = createFileRoute("/settings/privacy")({
+  head: () => ({ meta: [{"title": "Privacy Settings \u2014 CAL"}, {"name": "description", "content": "View privacy settings in your CAL investment account."}, {"property": "og:title", "content": "Privacy Settings \u2014 CAL"}, {"property": "og:description", "content": "View privacy settings in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: PrivacySecurity,
 });
 

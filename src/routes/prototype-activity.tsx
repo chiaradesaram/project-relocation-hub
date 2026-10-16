@@ -15,8 +15,12 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/prototype-activity")({
   head: () => ({
     meta: [
-      { title: "Prototype — Activity log B" },
+      { title: "Prototype — Activity log B — CAL" },
       { name: "description", content: "Prototype B: activity log with requests and cash movements as separate items." },
+      { property: "og:title", content: "Prototype \u2014 Activity log B \u2014 CAL" },
+      { property: "og:description", content: "Prototype B: activity log with requests and cash movements as separate items." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
   component: PrototypeActivity,

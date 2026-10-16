@@ -5,6 +5,7 @@ import { TrendingUp } from "lucide-react";
 import { useState } from "react";
 
 export const Route = createFileRoute("/analytical")({
+  head: () => ({ meta: [{"title": "Portfolio Analytics \u2014 CAL"}, {"name": "description", "content": "View portfolio analytics in your CAL investment account."}, {"property": "og:title", "content": "Portfolio Analytics \u2014 CAL"}, {"property": "og:description", "content": "View portfolio analytics in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: Analytical,
 });
 

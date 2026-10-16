@@ -5,6 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import { Sparkles, Shield, TrendingUp, Zap, ChevronRight, CheckCircle2, PiggyBank, BookOpen, Clock, Target } from "lucide-react";
 
 export const Route = createFileRoute("/get-started")({
+  head: () => ({ meta: [{"title": "Start Investing \u2014 CAL"}, {"name": "description", "content": "View start investing in your CAL investment account."}, {"property": "og:title", "content": "Start Investing \u2014 CAL"}, {"property": "og:description", "content": "View start investing in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: GetStarted,
 });
 

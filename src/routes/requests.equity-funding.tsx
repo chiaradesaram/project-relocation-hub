@@ -5,6 +5,7 @@ import PageHeader from "@/components/PageHeader";
 import { Wallet, CheckCircle2, PauseCircle, PenLine } from "lucide-react";
 
 export const Route = createFileRoute("/requests/equity-funding")({
+  head: () => ({ meta: [{"title": "Fund Your Equity Account \u2014 CAL"}, {"name": "description", "content": "View fund your equity account in your CAL investment account."}, {"property": "og:title", "content": "Fund Your Equity Account \u2014 CAL"}, {"property": "og:description", "content": "View fund your equity account in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: EquityFundingRequest,
 });
 

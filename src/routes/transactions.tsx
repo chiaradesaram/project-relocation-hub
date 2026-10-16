@@ -11,6 +11,7 @@ import { useDayPicker, UI } from "react-day-picker";
 import type { DateRange, NavProps, MonthCaptionProps } from "react-day-picker";
 
 export const Route = createFileRoute("/transactions")({
+  head: () => ({ meta: [{"title": "Your Transactions \u2014 CAL"}, {"name": "description", "content": "View your transactions in your CAL investment account."}, {"property": "og:title", "content": "Your Transactions \u2014 CAL"}, {"property": "og:description", "content": "View your transactions in your CAL investment account."}, {"property": "og:type", "content": "website"}, {"name": "twitter:card", "content": "summary"}] }),
   component: Transactions,
 });
 
