@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, BriefcaseBusiness, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, MoreHorizontal, Plus, Sprout, X } from "lucide-react";
+import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, MoreHorizontal, Plus, Sprout, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
