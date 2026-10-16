@@ -7,6 +7,7 @@ import { Calendar } from "@/components/ui/calendar";
 import { cn } from "@/lib/utils";
 import { useState } from "react";
 import { formatMonthDay, formatMonthDayYear, formatMonthYear } from "@/lib/date";
+import { logItems } from "@/lib/transactionLog";
 import { useDayPicker, UI } from "react-day-picker";
 import type { DateRange, NavProps, MonthCaptionProps } from "react-day-picker";
 
@@ -895,23 +896,6 @@ function Transactions() {
   );
 }
 
-type LogItem = {
-  label: string;
-  amount: number;
-  date: string;
-  kind: "in" | "out" | "flip" | "recurring" | "dividend";
-};
-
-const logItems: LogItem[] = [
-  { label: "Investment", amount: 125000, date: "13 Apr 2026", kind: "in" },
-  { label: "Recurring Investment", amount: 25000, date: "12 Apr 2026", kind: "recurring" },
-  { label: "Fund Flip", amount: 40000, date: "12 Apr 2026", kind: "flip" },
-  { label: "Investment", amount: 105000, date: "12 Apr 2026", kind: "in" },
-  { label: "Redemption", amount: -75000, date: "8 Apr 2026", kind: "out" },
-  { label: "Dividend", amount: 3200, date: "5 Apr 2026", kind: "dividend" },
-  { label: "Redemption", amount: -30000, date: "2 Apr 2026", kind: "out" },
-  { label: "Recurring Investment", amount: 25000, date: "12 Mar 2026", kind: "recurring" },
-];
 
 
 function TransactionLog() {
