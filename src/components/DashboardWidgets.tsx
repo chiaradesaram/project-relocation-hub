@@ -90,18 +90,40 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
     const max = el.scrollWidth - el.clientWidth;
     setProgress(max > 0 ? Math.min(1, el.scrollLeft / max) : 1);
   };
+  const drag = useRef<{ x: number; left: number; moved: boolean } | null>(null);
+  const onDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType !== "mouse") return;
+    drag.current = { x: e.clientX, left: e.currentTarget.scrollLeft, moved: false };
+  };
+  const onMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current; if (!d) return;
+    const dx = e.clientX - d.x;
+    if (Math.abs(dx) > 4) { d.moved = true; e.currentTarget.style.scrollSnapType = "none"; }
+    e.currentTarget.scrollLeft = d.left - dx;
+  };
+  const onUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    const d = drag.current; if (!d) return;
+    const el = e.currentTarget; el.style.scrollSnapType = "";
+    if (d.moved) { const step = 140; el.scrollTo({ left: Math.round(el.scrollLeft / step) * step, behavior: "smooth" }); }
+    setTimeout(() => { drag.current = null; }, 0);
+  };
   const fade = progress >= 0.98 ? "none" : "linear-gradient(to right, #000 0 86%, transparent 100%)";
   return (
     <section aria-labelledby="rates-title" className="rounded-2xl bg-card/70 px-4 py-3">
       <WidgetHeader id="rates-title" title="Rates to watch" onCustomise={() => setSheetOpen(true)} label="Customise rates" />
       <div
         onScroll={trackScroll}
+        onPointerDown={onDown}
+        onPointerMove={onMove}
+        onPointerUp={onUp}
+        onPointerLeave={onUp}
+        onClickCapture={(e) => { if (drag.current?.moved) { e.preventDefault(); e.stopPropagation(); } }}
         style={{ maskImage: fade, WebkitMaskImage: fade }}
-        className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+        className="-mx-4 flex cursor-grab touch-pan-x select-none snap-x snap-mandatory scroll-smooth gap-2 overflow-x-auto overscroll-x-contain active:cursor-grabbing px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
         {visible.map((r) => (
           <button key={r.id} type="button" onClick={() => navigate({ to: "/rates" })}
-            className="w-[132px] shrink-0 snap-start rounded-xl bg-secondary/60 px-3 py-2 text-left transition active:scale-[0.98]">
+            className="w-[132px] shrink-0 snap-start rounded-xl bg-secondary/60 px-3 py-2 text-left transition [-webkit-user-drag:none] active:scale-[0.98]">
             <span className="block truncate text-[11px] font-medium text-foreground/65">{r.label}</span>
             <span className="mt-1 flex items-baseline gap-1">
               <span className="text-[15px] font-bold leading-none tabular-nums">{r.value}</span>
