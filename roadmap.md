@@ -1,6 +1,6 @@
 # Roadmap
 
-- [ ] Replace dashboard carousel/pie chart with the supplied compact overview and verify portfolio, quick links and market sections
+- [x] Replace dashboard carousel/pie chart with the supplied compact overview and verify portfolio, quick links and market sections
 
 - [x] Add recurring investments empty-state landing and saved plan card
 - [x] Connect recurring setup and review confirmation to saved plan
