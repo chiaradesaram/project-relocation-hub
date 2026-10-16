@@ -83,7 +83,7 @@ function Dashboard() {
         </section>
 
         <section aria-labelledby="links-title" className="border-b border-border/40 pb-4 pt-1">
-          <div className="mb-3 flex items-center justify-between px-1"><h2 id="links-title" className="text-sm font-semibold">Quick links</h2><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label="More quick links"><MoreHorizontal /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => navigate({ to: "/rates" })}>View rates</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/transactions" })}>Transactions</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/requests" })}>Requests</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div>
+          <div className="mb-3 flex items-center justify-between px-1"><h2 id="links-title" className="text-sm font-semibold">Quick links</h2><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label="Customise quick links"><SlidersHorizontal /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => navigate({ to: "/rates" })}>View rates</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/transactions" })}>Transactions</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/requests" })}>Requests</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div>
           <div className="grid grid-cols-4 gap-2">
             {[
               { label: "Invest", icon: Plus, onClick: () => setAction("invest") },
@@ -100,7 +100,7 @@ function Dashboard() {
         </section>
 
         <section aria-labelledby="watchlist-title" className="pt-1">
-          <div className="mb-1 flex items-center justify-between px-1"><h2 id="watchlist-title" className="text-sm font-semibold">Watchlist</h2><Button variant="link" className="h-7 px-0 text-xs text-pill-bright" onClick={() => setWatchlistOpen(!watchlistOpen)}>{watchlistOpen ? "Done" : "Manage"}</Button></div>
+          <div className="mb-1 flex items-center justify-between px-1"><h2 id="watchlist-title" className="text-sm font-semibold">Watchlist</h2><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label={watchlistOpen ? "Done editing watchlist" : "Customise watchlist"} onClick={() => setWatchlistOpen(!watchlistOpen)}><SlidersHorizontal /></Button></div>
           <div className="divide-y divide-border/45">
             {stocks.map((stock) => <Button key={stock.symbol} variant="ghost" className="h-auto min-h-16 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-card/50" onClick={() => navigate({ to: "/invest", search: { product: "equities" } })}><span className={`flex size-9 shrink-0 items-center justify-center rounded-lg bg-foreground text-sm font-bold ${stock.tone}`}>{stock.symbol === "COMB" ? "C" : stock.symbol === "HNB" ? "H" : "JK"}</span><span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{stock.symbol}</span><span className="block truncate text-xs font-normal text-foreground/65">{stock.name}</span></span><span className="text-right"><span className="block text-[13px] font-semibold tabular-nums">{stock.price}</span><span className={`block text-xs font-semibold ${stock.positive ? "text-success" : "text-destructive"}`}>{stock.change}</span></span><ChevronRight className="size-3.5 text-foreground/45" /></Button>)}
           </div>
