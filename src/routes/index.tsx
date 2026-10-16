@@ -159,8 +159,8 @@ function Dashboard() {
 
       <main className="space-y-3 px-4 pb-5">
         <div className="flex justify-end">
-          <Button variant="ghost" size="sm" className="-mr-1 h-auto gap-1.5 px-1 text-xs font-semibold text-pill hover:bg-transparent" onClick={() => setCustomiseOpen(true)}>
-            <SlidersHorizontal className="size-3.5" />Customise dashboard
+          <Button variant="ghost" size="sm" className="h-auto w-auto max-w-none gap-1.5 px-1 text-xs font-semibold text-pill hover:bg-transparent" onClick={() => setCustomiseOpen(true)}>
+            <SlidersHorizontal className="size-3.5 shrink-0" /><span className="whitespace-nowrap">Customise dashboard</span>
           </Button>
         </div>
         <section aria-label="Investment summary" className="rounded-2xl bg-card/70 px-4 py-3">
@@ -169,7 +169,7 @@ function Dashboard() {
             <p className="flex items-center gap-1 text-xs font-semibold text-success"><ArrowUpRight className="size-3" />+662,000 this month</p>
           </div>
           <div className="mt-0.5 flex items-baseline gap-2"><p className="text-[28px] font-bold leading-tight tabular-nums text-foreground">7,370,000</p><span className="text-xs font-semibold text-foreground/65">LKR</span></div>
-          <div className="mt-3 flex h-1.5 overflow-hidden rounded-full opacity-60" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
+          <div className="mt-3 flex h-1.5 overflow-hidden rounded-full opacity-45" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
           <div className="mt-2 flex justify-between">
             {products.map((product) => <span key={product.short} className="flex items-center gap-1.5 text-xs text-foreground/75"><span className={`size-1.5 rounded-full ${product.dot}`} />{product.short}<span className="font-semibold">{product.allocation}</span></span>)}
           </div>
