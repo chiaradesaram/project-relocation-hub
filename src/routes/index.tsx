@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { ArrowDownToLine, BarChart2, Bell, ChevronRight, Eye, FileText, Gamepad2, HelpCircle, Landmark, Percent, PieChart, Plus, ReceiptText, SlidersHorizontal, X, type LucideIcon } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
-import { MoversCard, RatesCard, UtFundsCard } from "@/components/DashboardWidgets";
+import { MoversCard, RatesCard, TransactionsCard, UtFundsCard } from "@/components/DashboardWidgets";
 import { ReorderSheet } from "@/components/ReorderSheet";
 import { DEFAULT_PREFS, QUICK_LINK_LABELS, WIDGET_LABELS, loadDashboardPrefs, saveDashboardPrefs, toggleItem, type DashboardPrefs, type QuickLinkId, type WidgetId } from "@/lib/dashboardPrefs";
 
@@ -110,6 +110,8 @@ function Dashboard() {
             </div>
           </section>
         );
+      case "transactions":
+        return <TransactionsCard key={id} />;
       case "aspi":
         return (
           <section key={id} aria-label="ASPI market overview" className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-4 rounded-xl bg-card/60 px-4 py-3">
