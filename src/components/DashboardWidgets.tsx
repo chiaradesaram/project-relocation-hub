@@ -47,9 +47,9 @@ export function DashboardWidgets() {
             </Button>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div aria-labelledby="ut-title" className="mt-3 border-t border-border/45 pt-3">
+      <section aria-labelledby="ut-title" className="rounded-2xl bg-card/70 px-4 py-3">
         <WidgetHeader id="ut-title" title="Unit Trust funds" right={<span className="text-xs text-foreground/65">7d earnings</span>} />
         <div className="divide-y divide-border/45">
           {utFunds.map((f) => (
@@ -62,9 +62,9 @@ export function DashboardWidgets() {
             </Button>
           ))}
         </div>
-      </div>
+      </section>
 
-      <div aria-labelledby="rates-title" className="mt-3 border-t border-border/45 pt-3">
+      <section aria-labelledby="rates-title" className="rounded-2xl bg-card/70 px-4 py-3">
         <WidgetHeader id="rates-title" title="Rates to watch" onCustomise={() => setEditRates(!editRates)} label={editRates ? "Done customising rates" : "Customise rates"} />
         {editRates && <p className="mb-2 px-1 text-xs text-foreground/75">Tap a rate to show or hide it</p>}
         <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
@@ -80,7 +80,7 @@ export function DashboardWidgets() {
             );
           })}
         </div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
