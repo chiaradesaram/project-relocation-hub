@@ -186,7 +186,7 @@ function Dashboard() {
           subtitle="Pick the widgets you want to see and arrange them in your order."
           items={prefs.widgetOrder.map((id) => ({ id, label: WIDGET_LABELS[id], on: !prefs.hiddenWidgets.includes(id) }))}
           onToggle={(id) => setPrefs({ ...prefs, hiddenWidgets: toggleItem(prefs.hiddenWidgets, id as WidgetId) })}
-          onMove={(id, dir) => setPrefs({ ...prefs, widgetOrder: moveItem(prefs.widgetOrder, id as WidgetId, dir) })}
+          onReorder={(ids) => setPrefs({ ...prefs, widgetOrder: ids as WidgetId[] })}
           onClose={() => setCustomiseOpen(false)}
         />
       )}
@@ -196,7 +196,7 @@ function Dashboard() {
           subtitle="Pick your shortcuts and arrange them in your order."
           items={prefs.quickLinkOrder.map((id) => ({ id, label: QUICK_LINK_LABELS[id], on: !prefs.hiddenQuickLinks.includes(id) }))}
           onToggle={(id) => setPrefs({ ...prefs, hiddenQuickLinks: toggleItem(prefs.hiddenQuickLinks, id as QuickLinkId) })}
-          onMove={(id, dir) => setPrefs({ ...prefs, quickLinkOrder: moveItem(prefs.quickLinkOrder, id as QuickLinkId, dir) })}
+          onReorder={(ids) => setPrefs({ ...prefs, quickLinkOrder: ids as QuickLinkId[] })}
           onClose={() => setLinksOpen(false)}
         />
       )}

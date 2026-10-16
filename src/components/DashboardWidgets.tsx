@@ -102,7 +102,7 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
           subtitle="Pick the rates you want and arrange them in your order."
           items={ordered.map((r) => ({ id: r.id, label: r.label, hint: `${r.value} · ${r.note}`, on: !hiddenRates.includes(r.id) }))}
           onToggle={(id) => onHiddenRates(toggleItem(hiddenRates, id))}
-          onMove={(id, dir) => onRateOrder(moveItem(rateOrder, id, dir))}
+          onReorder={(ids) => onRateOrder(ids)}
           onClose={() => setSheetOpen(false)}
         />
       )}
