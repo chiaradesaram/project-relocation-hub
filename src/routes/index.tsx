@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, FileText, Gamepad2, HelpCircle, Landmark, Percent, Plus, ReceiptText, SlidersHorizontal, Sprout, X, type LucideIcon } from "lucide-react";
+import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, FileText, Gamepad2, HelpCircle, Landmark, Percent, PieChart, Plus, ReceiptText, SlidersHorizontal, X, type LucideIcon } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { MoversCard, RatesCard, UtFundsCard } from "@/components/DashboardWidgets";
