@@ -3,7 +3,7 @@ import { useState, type ReactNode } from "react";
 import { ChevronRight, SlidersHorizontal, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReorderSheet } from "@/components/ReorderSheet";
-import { moveItem, toggleItem } from "@/lib/dashboardPrefs";
+import { toggleItem } from "@/lib/dashboardPrefs";
 
 const movers = [
   { symbol: "DIAL", change: 3.1 }, { symbol: "JKH", change: 2.4 }, { symbol: "COMB", change: 1.8 }, { symbol: "HNB", change: -0.5 },

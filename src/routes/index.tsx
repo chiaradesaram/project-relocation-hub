@@ -5,7 +5,7 @@ import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { MoversCard, RatesCard, UtFundsCard } from "@/components/DashboardWidgets";
 import { ReorderSheet } from "@/components/ReorderSheet";
-import { DEFAULT_PREFS, QUICK_LINK_LABELS, WIDGET_LABELS, loadDashboardPrefs, moveItem, saveDashboardPrefs, toggleItem, type DashboardPrefs, type QuickLinkId, type WidgetId } from "@/lib/dashboardPrefs";
+import { DEFAULT_PREFS, QUICK_LINK_LABELS, WIDGET_LABELS, loadDashboardPrefs, saveDashboardPrefs, toggleItem, type DashboardPrefs, type QuickLinkId, type WidgetId } from "@/lib/dashboardPrefs";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
