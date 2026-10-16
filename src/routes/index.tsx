@@ -20,9 +20,9 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", icon: Sprout, tone: "bg-pill text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
-  { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", icon: BarChart2, tone: "bg-accent-purple text-foreground", dot: "bg-accent-purple", product: "equities" },
-  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
+  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", icon: Sprout, tone: "bg-pill text-pill-foreground", chip: "bg-pill/45 text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
+  { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", icon: BarChart2, tone: "bg-accent-purple text-foreground", chip: "bg-accent-purple/45 text-foreground", dot: "bg-accent-purple", product: "equities" },
+  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", chip: "bg-allocation-treasuries/45 text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
 ];
 const stocks = [
   { symbol: "JKH", name: "John Keells", price: "325.50", change: "+2.4%", positive: true, tone: "text-allocation-treasuries" },
@@ -78,9 +78,9 @@ function Dashboard() {
         return (
           <section key={id} aria-label="Portfolio" className="py-0.5">
             <div className="space-y-1.5">
-              {products.map(({ name, amount, icon: Icon, tone, product }) => (
+              {products.map(({ name, amount, icon: Icon, chip, product }) => (
                 <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-14 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3.5 py-2.5 hover:bg-secondary">
-                  <span className={`flex size-8 shrink-0 items-center justify-center rounded-full ${tone}`}><Icon className="size-3.5" /></span>
+                  <span className={`flex size-8 shrink-0 items-center justify-center rounded-full ${chip}`}><Icon className="size-3.5" /></span>
                   <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span></span>
                   <span className="shrink-0 text-xs font-semibold tabular-nums text-foreground/85"><span className="font-normal text-foreground/60">LKR </span>{amount}</span>
                   <ChevronRight className="size-3.5 text-foreground/50" />
@@ -158,16 +158,18 @@ function Dashboard() {
       </header>
 
       <main className="space-y-3 px-4 pb-5">
+        <div className="flex justify-end">
+          <Button variant="ghost" size="sm" className="h-auto w-auto max-w-none gap-1.5 px-1 text-xs font-semibold text-pill hover:bg-transparent" onClick={() => setCustomiseOpen(true)}>
+            <SlidersHorizontal className="size-3.5 shrink-0" /><span className="whitespace-nowrap">Customise dashboard</span>
+          </Button>
+        </div>
         <section aria-label="Investment summary" className="rounded-2xl bg-card/70 px-4 py-3">
           <div className="flex items-center justify-between text-xs text-foreground/75">
             <h1>Investments</h1>
-            <div className="flex items-center gap-2">
-              <p className="flex items-center gap-1 text-xs font-semibold text-success"><ArrowUpRight className="size-3" />+662,000 this month</p>
-              <Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label="Customise dashboard" onClick={() => setCustomiseOpen(true)}><SlidersHorizontal /></Button>
-            </div>
+            <p className="flex items-center gap-1 text-xs font-semibold text-success"><ArrowUpRight className="size-3" />+662,000 this month</p>
           </div>
           <div className="mt-0.5 flex items-baseline gap-2"><p className="text-[28px] font-bold leading-tight tabular-nums text-foreground">7,370,000</p><span className="text-xs font-semibold text-foreground/65">LKR</span></div>
-          <div className="mt-3 flex h-1.5 overflow-hidden rounded-full" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
+          <div className="mt-3 flex h-1.5 overflow-hidden rounded-full opacity-45" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
           <div className="mt-2 flex justify-between">
             {products.map((product) => <span key={product.short} className="flex items-center gap-1.5 text-xs text-foreground/75"><span className={`size-1.5 rounded-full ${product.dot}`} />{product.short}<span className="font-semibold">{product.allocation}</span></span>)}
           </div>
