@@ -1,15 +1,15 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useState, type ReactNode } from "react";
-import { ChevronRight, SlidersHorizontal } from "lucide-react";
+import { ChevronRight, SlidersHorizontal, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const movers = [
   { symbol: "DIAL", change: 3.1 }, { symbol: "JKH", change: 2.4 }, { symbol: "COMB", change: 1.8 }, { symbol: "HNB", change: -0.5 },
 ];
 const utFunds = [
-  { code: "FIO", name: "Fixed Income Opportunities", value: "LKR 1.48M", earned: "+LKR 12,400", pct: "+0.85%" },
-  { code: "HYF", name: "High Yield", value: "LKR 1.25M", earned: "+LKR 18,900", pct: "+1.54%" },
-  { code: "IGF", name: "Investment Grade", value: "LKR 950k", earned: "+LKR 6,120", pct: "+0.65%" },
+  { code: "FIO", name: "Fixed Income Opportunities", value: "LKR 1.48M", earned: "+LKR 12,400" },
+  { code: "HYF", name: "High Yield", value: "LKR 1.25M", earned: "+LKR 18,900" },
+  { code: "IGF", name: "Investment Grade", value: "LKR 950k", earned: "+LKR 6,120" },
 ];
 const allRates = [
   { id: "fio", value: "11.25%", label: "FI Opportunity", note: "30d yield" },
@@ -56,7 +56,7 @@ export function DashboardWidgets() {
             <Button key={f.code} asChild variant="ghost" className="h-auto min-h-14 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-card/50">
               <Link to="/unit-trusts">
                 <span className="min-w-0 flex-1 text-left"><span className="block truncate text-[13px] font-semibold">{f.name}</span><span className="block text-xs font-normal text-foreground/65">{f.value}</span></span>
-                <span className="text-right"><span className="block text-[13px] font-semibold tabular-nums text-success">{f.earned}</span><span className="block text-xs text-success/80">{f.pct}</span></span>
+                <span className="flex items-center gap-1.5 text-[13px] font-semibold tabular-nums text-success"><Sprout className="size-3.5 shrink-0 text-success/80" />{f.earned}</span>
                 <ChevronRight className="size-3.5 text-foreground/45" />
               </Link>
             </Button>
