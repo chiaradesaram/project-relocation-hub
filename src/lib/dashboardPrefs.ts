@@ -44,12 +44,29 @@ export const DEFAULT_PREFS: DashboardPrefs = {
 
 const KEY = "cal-dashboard-prefs";
 
+/** Keep a saved list usable: drop ids that no longer exist and append ids added since it was saved. */
+function mergeOrder<T>(stored: T[] | undefined, defaults: T[]): T[] {
+  const known = (stored ?? []).filter((id) => defaults.includes(id));
+  return [...known, ...defaults.filter((id) => !known.includes(id))];
+}
+
+function mergeHidden<T>(stored: T[] | undefined, defaults: T[]): T[] {
+  return (stored ?? []).filter((id) => defaults.includes(id));
+}
+
 export function loadDashboardPrefs(): DashboardPrefs {
   try {
     const raw = window.localStorage.getItem(KEY);
     if (!raw) return DEFAULT_PREFS;
     const parsed = JSON.parse(raw) as Partial<DashboardPrefs>;
-    return { ...DEFAULT_PREFS, ...parsed };
+    return {
+      widgetOrder: mergeOrder(parsed.widgetOrder, DEFAULT_PREFS.widgetOrder),
+      hiddenWidgets: mergeHidden(parsed.hiddenWidgets, DEFAULT_PREFS.widgetOrder),
+      quickLinkOrder: mergeOrder(parsed.quickLinkOrder, DEFAULT_PREFS.quickLinkOrder),
+      hiddenQuickLinks: mergeHidden(parsed.hiddenQuickLinks, DEFAULT_PREFS.quickLinkOrder),
+      rateOrder: mergeOrder(parsed.rateOrder, DEFAULT_PREFS.rateOrder),
+      hiddenRates: mergeHidden(parsed.hiddenRates, DEFAULT_PREFS.rateOrder),
+    };
   } catch {
     return DEFAULT_PREFS;
   }
