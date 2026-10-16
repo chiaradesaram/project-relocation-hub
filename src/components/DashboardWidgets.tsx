@@ -55,7 +55,6 @@ export function DashboardWidgets() {
           {utFunds.map((f) => (
             <Button key={f.code} asChild variant="ghost" className="h-auto min-h-14 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-card/50">
               <Link to="/unit-trusts">
-                <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary/20 text-[11px] font-bold text-primary">{f.code}</span>
                 <span className="min-w-0 flex-1 text-left"><span className="block truncate text-[13px] font-semibold">{f.name}</span><span className="block text-xs font-normal text-foreground/65">{f.value}</span></span>
                 <span className="text-right"><span className="block text-[13px] font-semibold tabular-nums text-success">{f.earned}</span><span className="block text-xs text-success/80">{f.pct}</span></span>
                 <ChevronRight className="size-3.5 text-foreground/45" />
