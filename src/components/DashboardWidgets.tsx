@@ -85,7 +85,7 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
   const [progress, setProgress] = useState(0);
   const ordered = rateOrder.map((id) => allRates.find((r) => r.id === id)).filter((r): r is (typeof allRates)[number] => Boolean(r));
   const visible = ordered.filter((r) => !hiddenRates.includes(r.id));
-  const scrollable = visible.length > 2;
+  const scrollable = visible.length > 4;
   const trackScroll = (event: UIEvent<HTMLDivElement>) => {
     const el = event.currentTarget;
     const max = el.scrollWidth - el.clientWidth;
@@ -105,7 +105,7 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
   const onUp = (e: React.PointerEvent<HTMLDivElement>) => {
     const d = drag.current; if (!d) return;
     const el = e.currentTarget; el.style.scrollSnapType = "";
-    if (d.moved) { const step = 140; el.scrollTo({ left: Math.round(el.scrollLeft / step) * step, behavior: "smooth" }); }
+    if (d.moved) { const step = 84; el.scrollTo({ left: Math.round(el.scrollLeft / step) * step, behavior: "smooth" }); }
     setTimeout(() => { drag.current = null; }, 0);
   };
   const fade = progress >= 0.98 ? "none" : "linear-gradient(to right, #000 0 86%, transparent 100%)";
@@ -124,18 +124,19 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
       >
         {visible.map((r) => (
           <button key={r.id} type="button" onClick={() => navigate({ to: "/rates" })}
-            className="w-[132px] shrink-0 snap-start rounded-xl bg-secondary/60 px-3 py-2 text-left transition [-webkit-user-drag:none] active:scale-[0.98]">
-            <span className="block truncate text-[11px] font-medium text-foreground/65">{r.label}</span>
-            <span className="mt-1 flex items-baseline gap-1">
-              <span className="text-[15px] font-bold leading-none tabular-nums">{r.value}</span>
-              <span className="whitespace-nowrap text-[10px] text-foreground/55">{r.note}</span>
-            </span>
+            className="w-[78px] shrink-0 snap-start rounded-2xl bg-secondary/60 px-2.5 py-2.5 text-left transition [-webkit-user-drag:none] active:scale-[0.98]">
+            <span className="block truncate text-[10px] font-medium text-foreground/65">{r.label}</span>
+            <span className="mt-1.5 block text-[15px] font-bold leading-none tabular-nums">{r.value}</span>
+            <span className="mt-1 block truncate text-[9px] text-foreground/55">{r.note}</span>
           </button>
         ))}
       </div>
       {scrollable && (
-        <div className="mx-auto mt-2 h-0.5 w-16 overflow-hidden rounded-full bg-foreground/12" aria-hidden="true">
-          <div className="h-full w-[42%] rounded-full bg-foreground/40 transition-transform duration-150" style={{ transform: `translateX(${progress * 138}%)` }} />
+        <div className="mt-2.5 flex justify-center gap-1.5" aria-hidden="true">
+          {Array.from({ length: visible.length - 3 }).map((_, i) => {
+            const active = Math.round(progress * (visible.length - 4)) === i;
+            return <span key={i} className={`h-1.5 rounded-full transition-all duration-200 ${active ? "w-4 bg-primary" : "w-1.5 bg-primary/30"}`} />;
+          })}
         </div>
       )}
       {sheetOpen && (
