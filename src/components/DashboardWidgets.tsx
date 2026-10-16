@@ -33,12 +33,12 @@ export function DashboardWidgets() {
   const [shown, setShown] = useState<string[]>(allRates.map((r) => r.id));
   const rates = editRates ? allRates : allRates.filter((r) => shown.includes(r.id));
   return (
-    <>
-      <section aria-labelledby="movers-title" className="pt-1">
+    <section aria-label="Dashboard widgets" className="rounded-2xl bg-card/70 px-4 py-3">
+      <div aria-labelledby="movers-title" className="pt-1">
         <WidgetHeader id="movers-title" title="Top movers" right={<span className="text-xs text-foreground/65">Today</span>} />
         <div className="divide-y divide-border/45">
           {movers.map((m, i) => (
-            <Button key={m.symbol} variant="ghost" className="h-auto min-h-12 w-full justify-start gap-3 rounded-none px-1 py-2 hover:bg-card/50" onClick={() => navigate({ to: "/invest", search: { product: "equities" } })}>
+            <Button key={m.symbol} variant="ghost" className="h-auto min-h-12 w-full justify-start gap-3 rounded-none px-1 py-2 hover:bg-secondary/40" onClick={() => navigate({ to: "/invest", search: { product: "equities" } })}>
               <span className="w-4 text-xs text-foreground/60 tabular-nums">{i + 1}</span>
               <span className="flex size-8 items-center justify-center rounded-full bg-secondary text-[11px] font-bold">{m.symbol.slice(0, 2)}</span>
               <span className="flex-1 text-left text-[13px] font-semibold">{m.symbol}</span>
@@ -47,13 +47,13 @@ export function DashboardWidgets() {
             </Button>
           ))}
         </div>
-      </section>
+      </div>
 
-      <section aria-labelledby="ut-title" className="pt-1">
+      <div aria-labelledby="ut-title" className="mt-3 border-t border-border/45 pt-3">
         <WidgetHeader id="ut-title" title="Unit Trust funds" right={<span className="text-xs text-foreground/65">7d earnings</span>} />
         <div className="divide-y divide-border/45">
           {utFunds.map((f) => (
-            <Button key={f.code} asChild variant="ghost" className="h-auto min-h-14 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-card/50">
+            <Button key={f.code} asChild variant="ghost" className="h-auto min-h-14 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-secondary/40">
               <Link to="/unit-trusts">
                 <span className="min-w-0 flex-1 text-left"><span className="block truncate text-[13px] font-semibold">{f.name}</span><span className="block text-xs font-normal text-foreground/65">{f.value}</span></span>
                 <span className="flex items-center gap-1.5 text-[13px] font-semibold tabular-nums text-success"><Sprout className="size-3.5 shrink-0 text-success/80" />{f.earned}</span>
@@ -62,9 +62,9 @@ export function DashboardWidgets() {
             </Button>
           ))}
         </div>
-      </section>
+      </div>
 
-      <section aria-labelledby="rates-title" className="pt-1">
+      <div aria-labelledby="rates-title" className="mt-3 border-t border-border/45 pt-3">
         <WidgetHeader id="rates-title" title="Rates to watch" onCustomise={() => setEditRates(!editRates)} label={editRates ? "Done customising rates" : "Customise rates"} />
         {editRates && <p className="mb-2 px-1 text-xs text-foreground/75">Tap a rate to show or hide it</p>}
         <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
@@ -72,7 +72,7 @@ export function DashboardWidgets() {
             const on = shown.includes(r.id);
             return (
               <button key={r.id} type="button" onClick={() => (editRates ? setShown(on ? shown.filter((x) => x !== r.id) : [...shown, r.id]) : navigate({ to: "/rates" }))}
-                className={`min-w-[7.5rem] snap-start rounded-xl bg-card/70 px-3 py-2.5 text-left transition ${editRates && !on ? "opacity-40" : ""} ${editRates && on ? "ring-1 ring-primary" : ""}`}>
+                className={`min-w-[7.5rem] snap-start rounded-xl bg-secondary/60 px-3 py-2.5 text-left transition ${editRates && !on ? "opacity-40" : ""} ${editRates && on ? "ring-1 ring-primary" : ""}`}>
                 <span className="block text-base font-bold tabular-nums">{r.value}</span>
                 <span className="block text-xs font-semibold text-primary">{r.label}</span>
                 <span className="mt-1 block text-[11px] text-foreground/65">{r.note}</span>
@@ -80,7 +80,7 @@ export function DashboardWidgets() {
             );
           })}
         </div>
-      </section>
-    </>
+      </div>
+    </section>
   );
 }
