@@ -38,7 +38,7 @@ export const DEFAULT_PREFS: DashboardPrefs = {
   quickLinkOrder: ["invest", "redeem", "vstock", "watchlist", "rates", "transactions", "requests", "help"],
   hiddenQuickLinks: ["rates", "transactions", "requests", "help"],
   rateOrder: ["fio", "income", "growth", "balanced", "mm", "tbill", "usd"],
-  hiddenRates: ["income", "growth", "balanced"],
+  hiddenRates: [],
 };
 
 const KEY = "cal-dashboard-prefs";
