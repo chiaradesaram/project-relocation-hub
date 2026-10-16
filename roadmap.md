@@ -24,3 +24,4 @@
 - [x] Drop the redemption-in-flight pill and nest the info icon in the available-to-redeem line
 - [x] Simplify the instant redemption hint to "Redeem up to" with the rule and examples in the info sheet
 - [x] Show the ongoing redemption inside the instant-limit breakdown and trim the sheet's extra sentences
+- [x] Add dashboard customisation: widget show/hide/reorder sheet, quick-link picker with ordering, rates picker with ordering, persisted locally
