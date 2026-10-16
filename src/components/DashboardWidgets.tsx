@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useState, type ReactNode, type UIEvent } from "react";
 import { ChevronRight, SlidersHorizontal, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReorderSheet } from "@/components/ReorderSheet";
@@ -81,23 +81,40 @@ type RatesCardProps = {
 export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }: RatesCardProps) {
   const navigate = useNavigate();
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [progress, setProgress] = useState(0);
   const ordered = rateOrder.map((id) => allRates.find((r) => r.id === id)).filter((r): r is (typeof allRates)[number] => Boolean(r));
   const visible = ordered.filter((r) => !hiddenRates.includes(r.id));
+  const scrollable = visible.length > 2;
+  const trackScroll = (event: UIEvent<HTMLDivElement>) => {
+    const el = event.currentTarget;
+    const max = el.scrollWidth - el.clientWidth;
+    setProgress(max > 0 ? Math.min(1, el.scrollLeft / max) : 1);
+  };
+  const fade = progress >= 0.98 ? "none" : "linear-gradient(to right, #000 0 86%, transparent 100%)";
   return (
     <section aria-labelledby="rates-title" className="rounded-2xl bg-card/70 px-4 py-3">
       <WidgetHeader id="rates-title" title="Rates to watch" onCustomise={() => setSheetOpen(true)} label="Customise rates" />
-      <div className="grid grid-cols-2 gap-2">
+      <div
+        onScroll={trackScroll}
+        style={{ maskImage: fade, WebkitMaskImage: fade }}
+        className="-mx-4 flex snap-x snap-mandatory gap-2 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
         {visible.map((r) => (
           <button key={r.id} type="button" onClick={() => navigate({ to: "/rates" })}
-            className="rounded-xl bg-secondary/60 px-3 py-2 text-left transition">
+            className="w-[132px] shrink-0 snap-start rounded-xl bg-secondary/60 px-3 py-2 text-left transition active:scale-[0.98]">
             <span className="block truncate text-[11px] font-medium text-foreground/65">{r.label}</span>
-            <span className="mt-0.5 flex items-baseline gap-1.5">
-              <span className="text-[15px] font-bold tabular-nums">{r.value}</span>
-              <span className="text-[10px] text-foreground/55">{r.note}</span>
+            <span className="mt-1 flex items-baseline gap-1">
+              <span className="text-[15px] font-bold leading-none tabular-nums">{r.value}</span>
+              <span className="whitespace-nowrap text-[10px] text-foreground/55">{r.note}</span>
             </span>
           </button>
         ))}
       </div>
+      {scrollable && (
+        <div className="mx-auto mt-2 h-0.5 w-16 overflow-hidden rounded-full bg-foreground/12" aria-hidden="true">
+          <div className="h-full w-[42%] rounded-full bg-foreground/40 transition-transform duration-150" style={{ transform: `translateX(${progress * 138}%)` }} />
+        </div>
+      )}
       {sheetOpen && (
         <ReorderSheet
           title="Rates to watch"
