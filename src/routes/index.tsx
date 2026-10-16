@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, MoreHorizontal, Plus, Sprout, X } from "lucide-react";
+import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, Plus, SlidersHorizontal, Sprout, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -18,9 +18,9 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", change: "+0.42% today", icon: Sprout, tone: "bg-pill text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
+  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", change: "+15,400 7d earnings", icon: Sprout, tone: "bg-pill text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
   { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", change: "+1.2% today", icon: BarChart2, tone: "bg-accent-purple text-foreground", dot: "bg-accent-purple", product: "equities" },
-  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", change: "+0.08% today", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
+  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", change: "", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
 ];
 const stocks = [
   { symbol: "JKH", name: "John Keells", price: "325.50", change: "+2.4%", positive: true, tone: "text-allocation-treasuries" },
