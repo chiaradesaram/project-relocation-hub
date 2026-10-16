@@ -33,8 +33,8 @@ export function DashboardWidgets() {
   const [shown, setShown] = useState<string[]>(allRates.map((r) => r.id));
   const rates = editRates ? allRates : allRates.filter((r) => shown.includes(r.id));
   return (
-    <section aria-label="Dashboard widgets" className="rounded-2xl bg-card/70 px-4 py-3">
-      <div aria-labelledby="movers-title" className="pt-1">
+    <>
+      <section aria-labelledby="movers-title" className="rounded-2xl bg-card/70 px-4 py-3">
         <WidgetHeader id="movers-title" title="Top movers" right={<span className="text-xs text-foreground/65">Today</span>} />
         <div className="divide-y divide-border/45">
           {movers.map((m, i) => (
