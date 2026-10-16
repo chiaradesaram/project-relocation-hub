@@ -1,9 +1,10 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, Plus, SlidersHorizontal, Sprout, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { DashboardWidgets } from "@/components/DashboardWidgets";
 
 export const Route = createFileRoute("/")({
   head: () => ({ meta: [
@@ -106,6 +107,9 @@ function Dashboard() {
           </div>
           {watchlistOpen && <Button asChild variant="secondary" className="mt-2 w-full text-xs"><Link to="/invest" search={{ product: "equities" }}><Plus />Explore equities</Link></Button>}
         </section>
+
+        <DashboardWidgets />
+
         <p className="px-1 text-xs text-foreground/50">Illustrative portfolio and market data</p>
       </main>
 
