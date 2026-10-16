@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, MoreHorizontal, Plus, Sprout, X } from "lucide-react";
+import { ArrowDownToLine, ArrowUpRight, BarChart2, Bell, ChevronRight, Eye, Gamepad2, HelpCircle, Landmark, Plus, SlidersHorizontal, Sprout, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -18,9 +18,9 @@ export const Route = createFileRoute("/")({
 });
 
 const products = [
-  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", change: "+0.42% today", icon: Sprout, tone: "bg-pill text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
+  { name: "Unit Trusts", short: "UT", amount: "3,680,000", allocation: "50%", change: "+15,400 7d earnings", icon: Sprout, tone: "bg-pill text-pill-foreground", dot: "bg-pill", product: "unit-trust" },
   { name: "Equities", short: "EQ", amount: "2,210,000", allocation: "30%", change: "+1.2% today", icon: BarChart2, tone: "bg-accent-purple text-foreground", dot: "bg-accent-purple", product: "equities" },
-  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", change: "+0.08% today", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
+  { name: "Treasuries", short: "TB", amount: "1,480,000", allocation: "20%", change: "", icon: Landmark, tone: "bg-allocation-treasuries text-foreground", dot: "bg-allocation-treasuries", product: "treasuries" },
 ];
 const stocks = [
   { symbol: "JKH", name: "John Keells", price: "325.50", change: "+2.4%", positive: true, tone: "text-allocation-treasuries" },
@@ -72,9 +72,9 @@ function Dashboard() {
         <section aria-label="Portfolio" className="py-0.5">
           <div className="space-y-1.5">
             {products.map(({ name, amount, change, icon: Icon, tone, product }) => (
-              <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-12 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3 py-1.5 hover:bg-secondary">
+              <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-14 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3.5 py-2.5 hover:bg-secondary">
                 <span className={`flex size-8 shrink-0 items-center justify-center rounded-full ${tone}`}><Icon className="size-3.5" /></span>
-                <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span><span className="mt-0.5 block text-xs font-semibold text-success">{change}</span></span>
+                <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span>{change && <span className="mt-0.5 block text-xs font-semibold text-success">{change}</span>}</span>
                 <span className="shrink-0 text-xs font-semibold tabular-nums text-foreground/85"><span className="font-normal text-foreground/60">LKR </span>{amount}</span>
                 <ChevronRight className="size-3.5 text-foreground/50" />
               </Button>
@@ -83,7 +83,7 @@ function Dashboard() {
         </section>
 
         <section aria-labelledby="links-title" className="border-b border-border/40 pb-4 pt-1">
-          <div className="mb-3 flex items-center justify-between px-1"><h2 id="links-title" className="text-sm font-semibold">Quick links</h2><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label="More quick links"><MoreHorizontal /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => navigate({ to: "/rates" })}>View rates</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/transactions" })}>Transactions</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/requests" })}>Requests</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div>
+          <div className="mb-3 flex items-center justify-between px-1"><h2 id="links-title" className="text-sm font-semibold">Quick links</h2><DropdownMenu><DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label="Customise quick links"><SlidersHorizontal /></Button></DropdownMenuTrigger><DropdownMenuContent align="end"><DropdownMenuItem onClick={() => navigate({ to: "/rates" })}>View rates</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/transactions" })}>Transactions</DropdownMenuItem><DropdownMenuItem onClick={() => navigate({ to: "/requests" })}>Requests</DropdownMenuItem></DropdownMenuContent></DropdownMenu></div>
           <div className="grid grid-cols-4 gap-2">
             {[
               { label: "Invest", icon: Plus, onClick: () => setAction("invest") },
@@ -100,7 +100,7 @@ function Dashboard() {
         </section>
 
         <section aria-labelledby="watchlist-title" className="pt-1">
-          <div className="mb-1 flex items-center justify-between px-1"><h2 id="watchlist-title" className="text-sm font-semibold">Watchlist</h2><Button variant="link" className="h-7 px-0 text-xs text-pill-bright" onClick={() => setWatchlistOpen(!watchlistOpen)}>{watchlistOpen ? "Done" : "Manage"}</Button></div>
+          <div className="mb-1 flex items-center justify-between px-1"><h2 id="watchlist-title" className="text-sm font-semibold">Watchlist</h2><Button variant="ghost" size="icon" className="size-6 text-foreground/65" aria-label={watchlistOpen ? "Done editing watchlist" : "Customise watchlist"} onClick={() => setWatchlistOpen(!watchlistOpen)}><SlidersHorizontal /></Button></div>
           <div className="divide-y divide-border/45">
             {stocks.map((stock) => <Button key={stock.symbol} variant="ghost" className="h-auto min-h-16 w-full justify-start gap-3 rounded-none px-1 py-2.5 hover:bg-card/50" onClick={() => navigate({ to: "/invest", search: { product: "equities" } })}><span className={`flex size-9 shrink-0 items-center justify-center rounded-lg bg-foreground text-sm font-bold ${stock.tone}`}>{stock.symbol === "COMB" ? "C" : stock.symbol === "HNB" ? "H" : "JK"}</span><span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{stock.symbol}</span><span className="block truncate text-xs font-normal text-foreground/65">{stock.name}</span></span><span className="text-right"><span className="block text-[13px] font-semibold tabular-nums">{stock.price}</span><span className={`block text-xs font-semibold ${stock.positive ? "text-success" : "text-destructive"}`}>{stock.change}</span></span><ChevronRight className="size-3.5 text-foreground/45" /></Button>)}
           </div>
