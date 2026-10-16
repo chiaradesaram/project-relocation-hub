@@ -3,7 +3,7 @@ import { useState, type ReactNode } from "react";
 import { ChevronRight, SlidersHorizontal, Sprout } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ReorderSheet } from "@/components/ReorderSheet";
-import { moveItem, toggleItem } from "@/lib/dashboardPrefs";
+import { toggleItem } from "@/lib/dashboardPrefs";
 
 const movers = [
   { symbol: "DIAL", change: 3.1 }, { symbol: "JKH", change: 2.4 }, { symbol: "COMB", change: 1.8 }, { symbol: "HNB", change: -0.5 },
@@ -102,7 +102,7 @@ export function RatesCard({ rateOrder, hiddenRates, onRateOrder, onHiddenRates }
           subtitle="Pick the rates you want and arrange them in your order."
           items={ordered.map((r) => ({ id: r.id, label: r.label, hint: `${r.value} · ${r.note}`, on: !hiddenRates.includes(r.id) }))}
           onToggle={(id) => onHiddenRates(toggleItem(hiddenRates, id))}
-          onMove={(id, dir) => onRateOrder(moveItem(rateOrder, id, dir))}
+          onReorder={(ids) => onRateOrder(ids)}
           onClose={() => setSheetOpen(false)}
         />
       )}
