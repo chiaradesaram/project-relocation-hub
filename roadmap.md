@@ -26,3 +26,4 @@
 - [x] Show the ongoing redemption inside the instant-limit breakdown and trim the sheet's extra sentences
 - [x] Add dashboard customisation: widget show/hide/reorder sheet, quick-link picker with ordering, rates picker with ordering, persisted locally
 - [x] Add a "Latest transactions" dashboard widget showing the last 3 entries from the Transactions log tab
+- [x] Move the "Latest transactions" widget to the end of the default dashboard order
