@@ -34,7 +34,7 @@ export type DashboardPrefs = {
 };
 
 export const DEFAULT_PREFS: DashboardPrefs = {
-  widgetOrder: ["portfolio", "quickLinks", "transactions", "aspi", "watchlist", "movers", "utFunds", "rates"],
+  widgetOrder: ["portfolio", "quickLinks", "aspi", "watchlist", "movers", "utFunds", "rates", "transactions"],
   hiddenWidgets: [],
   quickLinkOrder: ["invest", "redeem", "vstock", "watchlist", "rates", "transactions", "requests", "help"],
   hiddenQuickLinks: ["rates", "transactions", "requests", "help"],
