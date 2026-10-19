@@ -1,5 +1,5 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
 import {
@@ -10,6 +10,7 @@ import {
   Info,
   Lightbulb,
   TrendingUp,
+  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { bankAccountLabel } from "@/lib/bankAccountLabel";
@@ -25,6 +26,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
 
