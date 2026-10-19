@@ -73,6 +73,7 @@ function InvestSummary() {
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [submittedOpen, setSubmittedOpen] = useState(false);
   const [accountCopied, setAccountCopied] = useState(false);
+  const [creationInfoOpen, setCreationInfoOpen] = useState(false);
 
   const isInstant = method === "instant";
   const isRecurring = method === "recurring";
@@ -182,18 +183,24 @@ function InvestSummary() {
   ];
 
   // Investment timeline — bank transfer
-  const timeline = [
+  const timeline: {
+    label: string;
+    value: string;
+    hint?: string;
+    info?: boolean;
+    tone: string;
+    icon: ReactNode;
+  }[] = [
     {
       label: "Request date",
       value: fmtTimeline(today),
-      hint: "When you raised this Creation Request",
       tone: "bg-rates-mint text-background",
       icon: <FilePlus2 className="size-[13px]" strokeWidth={2.25} />,
     },
     {
       label: "Creation date",
       value: unitCreationDate,
-      hint: "The date your investment will be valued",
+      info: true,
       tone: "bg-pill text-pill-foreground",
       icon: <CalendarDays className="size-[13px]" strokeWidth={2.25} />,
     },
@@ -357,13 +364,33 @@ function InvestSummary() {
                   {step.icon}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-baseline justify-between gap-2">
+                  <div className="flex items-center justify-between gap-2">
                     <span className="text-[13px] text-muted-foreground">{step.label}</span>
-                    <span className="text-[13px] font-semibold whitespace-nowrap text-foreground tabular-nums">
-                      {step.value}
+                    <span className="flex items-center gap-1.5">
+                      {step.info && (
+                        <button
+                          type="button"
+                          onClick={() => setCreationInfoOpen(true)}
+                          aria-label="About the creation date"
+                          className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+                          style={{ background: "var(--pill)" }}
+                        >
+                          <span
+                            className="text-[10px] font-bold leading-none"
+                            style={{ color: "var(--pill-foreground)" }}
+                          >
+                            i
+                          </span>
+                        </button>
+                      )}
+                      <span className="text-[13px] font-semibold whitespace-nowrap text-foreground tabular-nums">
+                        {step.value}
+                      </span>
                     </span>
                   </div>
-                  <p className="mt-0.5 text-[12px] text-muted-foreground">{step.hint}</p>
+                  {step.hint && (
+                    <p className="mt-0.5 text-[12px] text-muted-foreground">{step.hint}</p>
+                  )}
                 </div>
               </li>
             ))}
@@ -384,6 +411,34 @@ function InvestSummary() {
           {isRecurring ? "Confirm recurring investment" : "Confirm & Invest"}
         </Button>
       </div>
+
+      {/* Creation date — what the info icon explains */}
+      <Sheet open={creationInfoOpen} onOpenChange={setCreationInfoOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetHead title="Creation date" onClose={() => setCreationInfoOpen(false)} />
+          <p className="text-[13px] leading-snug text-foreground">
+            This is the date your investment will be valued. Your units are created at this
+            date&rsquo;s price.
+          </p>
+          <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1">
+            <div className="flex items-center justify-between gap-3 py-2.5">
+              <span className="text-[13px] text-foreground">Creation date</span>
+              <span className="text-[13px] font-semibold text-foreground tabular-nums">
+                {unitCreationDate}
+              </span>
+            </div>
+          </div>
+          <div className="pt-5 pb-6">
+            <Button
+              onClick={() => setCreationInfoOpen(false)}
+              className="w-full py-4 h-auto rounded-full text-[15px] font-semibold"
+              style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
+            >
+              Got it
+            </Button>
+          </div>
+        </SheetContent>
+      </Sheet>
 
       {/* Request sent — same confirmation sheet as redemptions */}
       <Sheet open={submittedOpen} onOpenChange={(o) => (o ? setSubmittedOpen(true) : trackRequest())}>
@@ -424,6 +479,17 @@ function InvestSummary() {
         </SheetContent>
       </Sheet>
     </MobileLayout>
+  );
+}
+
+function SheetHead({ title, onClose }: { title: string; onClose: () => void }) {
+  return (
+    <SheetHeader className="flex-row items-center justify-between space-y-0 pb-3">
+      <SheetTitle>{title}</SheetTitle>
+      <button onClick={onClose} className="rounded-full bg-secondary p-1" aria-label="Close">
+        <X className="h-4 w-4" />
+      </button>
+    </SheetHeader>
   );
 }
 
