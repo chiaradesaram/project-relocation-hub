@@ -120,7 +120,7 @@ function InvestSummary() {
   const unitCreationDate = fmtTimeline(unitCreation);
   const portalDate = fmtTimeline(nextWorkingDay(unitCreation));
 
-  const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
+  const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Justpay (Direct Invest)" : "Bank Transfer";
   const recurringDate = startDate
     ? new Date(`${startDate}T00:00:00`).toLocaleDateString("en-GB", {
         day: "2-digit",
