@@ -233,7 +233,7 @@ function Invest() {
           {
             id: "instant",
             icon: Zap,
-            label: "Direct Invest",
+            label: "Justpay (Direct Invest)",
             desc:
               "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically (using Justpay).",
           },
@@ -255,7 +255,7 @@ function Invest() {
       {
         id: "instant",
         icon: Zap,
-        label: "Direct Invest",
+        label: "Justpay (Direct Invest)",
         desc:
           "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically (using Justpay).",
       },
@@ -836,7 +836,7 @@ function MethodForm({
 
   const title =
     method === "instant"
-      ? "Direct Invest"
+      ? "Justpay (Direct Invest)"
       : method === "bank"
         ? "Bank transfer"
         : method === "recurring"
@@ -1907,7 +1907,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const title = isPayIn
     ? "Pay in"
     : isDirect
-      ? "Direct Invest"
+      ? "Justpay (Direct Invest)"
       : "Transfer from Unit Trust";
 
   const amountNum = parseFloat(amount || "0") || 0;

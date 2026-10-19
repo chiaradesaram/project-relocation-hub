@@ -120,7 +120,7 @@ function InvestSummary() {
   const unitCreationDate = fmtTimeline(unitCreation);
   const portalDate = fmtTimeline(nextWorkingDay(unitCreation));
 
-  const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Direct Invest" : "Bank Transfer";
+  const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Justpay (Direct Invest)" : "Bank Transfer";
   const recurringDate = startDate
     ? new Date(`${startDate}T00:00:00`).toLocaleDateString("en-GB", {
         day: "2-digit",
@@ -282,7 +282,7 @@ function InvestSummary() {
             >
               <Lightbulb className="w-3.5 h-3.5 mt-0.5 shrink-0" style={{ color: "var(--portfolio-blue)" }} />
               <p className="text-[12px] text-muted-foreground">
-                Justpay is the payment provider that powers Direct Invest. To remove this charge, link a{" "}
+                Justpay is the payment provider that powers this investment method. To remove this charge, link a{" "}
                 <span className="text-foreground font-medium">Seylan Bank</span> account.
               </p>
             </div>
