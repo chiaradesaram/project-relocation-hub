@@ -10,9 +10,9 @@ import {
   Info,
   Lightbulb,
   TrendingUp,
-  X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { directInvestSplits } from "./invest";
 import {
   RECURRING_INVESTMENT_SAVED_KEY,
@@ -24,12 +24,9 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetTitle,
 } from "@/components/ui/sheet";
-import requestSubmittedAnimation from "@/assets/request-submitted.gif";
-import requestSubmittedInfo from "@/assets/request-submitted.png";
 
 type SummarySearch = {
   method?: "instant" | "bank" | "flip" | "recurring";
@@ -109,16 +106,7 @@ function InvestSummary() {
           : "th";
   const fmtTimeline = (d: Date) =>
     `${d.getDate()}${ordinal(d.getDate())} ${d.toLocaleDateString("en-GB", { month: "long" })}, ${d.toLocaleDateString("en-GB", { weekday: "short" })}`;
-  // The portal shows the creation price one working day later (weekends skipped)
-  const nextWorkingDay = (d: Date) => {
-    const n = new Date(d);
-    do {
-      n.setDate(n.getDate() + 1);
-    } while (n.getDay() === 0 || n.getDay() === 6);
-    return n;
-  };
   const unitCreationDate = fmtTimeline(unitCreation);
-  const portalDate = fmtTimeline(nextWorkingDay(unitCreation));
 
   const methodLabel = isRecurring ? "Recurring Investment" : isInstant ? "Justpay (Direct Invest)" : "Bank Transfer";
   const recurringDate = startDate
@@ -209,13 +197,6 @@ function InvestSummary() {
       tone: "bg-pill text-pill-foreground",
       icon: <CalendarDays className="size-[13px]" strokeWidth={2.25} />,
     },
-    {
-      label: "Reflected on the portal",
-      value: portalDate,
-      hint: "A working day after creation",
-      tone: "bg-secondary text-pill-bright",
-      icon: <TrendingUp className="size-[13px]" strokeWidth={2.25} />,
-    },
   ];
 
   return (
@@ -225,7 +206,7 @@ function InvestSummary() {
       {/* Total + investment details — one card */}
       <div
         className="mx-4 mt-2 rounded-2xl px-4 pt-4 pb-3"
-        style={{ background: "var(--sheet-field-light)" }}
+        style={{ background: "var(--sheet-field)" }}
       >
         <div className="text-center">
           <p className="text-[13px] font-medium text-muted-foreground">Total to invest</p>
@@ -242,8 +223,8 @@ function InvestSummary() {
           {account && <Row label="Sub account" value={account} />}
           {method === "bank" && (fromBankName || fromBankAcctNo) && (
             <Row
-              label="Bank transferred from"
-              value={[fromBankName, fromBankAcctNo].filter(Boolean).join(" · ")}
+              label="Transferred from"
+              value={bankAccountLabel(fromBankName ?? "", fromBankAcctNo ?? "")}
             />
           )}
           {method !== "bank" && (
@@ -404,52 +385,42 @@ function InvestSummary() {
         </Button>
       </div>
 
-      {/* Request submitted — Monzo-style confirmation sheet */}
-      <Sheet open={submittedOpen} onOpenChange={setSubmittedOpen}>
-        <SheetContent
-          side="bottom"
-          className="bank-help-sheet mx-auto w-full max-w-[480px] overflow-hidden rounded-t-3xl p-0 pb-0 border-0 backdrop-blur-2xl text-foreground"
-        >
-          <div className="bank-help-header relative">
-            <picture className="block w-full">
-              <source media="(prefers-reduced-motion: reduce)" srcSet={requestSubmittedInfo} />
-              <img
-                src={requestSubmittedAnimation}
-                alt="A paper plane taking off with your investment request"
-                className="block aspect-[768/345] w-full object-cover"
-              />
-            </picture>
-            <SheetClose asChild>
-              <Button variant="ghost" size="icon" aria-label="Close" className="absolute right-5 top-5 size-9 rounded-full bg-secondary text-foreground">
-                <X className="size-4" />
-              </Button>
-            </SheetClose>
-          </div>
-          <div className="px-7 pt-5 pb-1 text-center">
-            <SheetTitle className="font-display text-xl leading-tight font-bold text-foreground">
-              Your request has been submitted
-            </SheetTitle>
-            <p className="mt-2.5 type-body-sm leading-snug text-foreground">
-              Once the money is matched, you will receive a{" "}
-              <span className="font-semibold text-rates-mint">confirmation email</span>.
+      {/* Request sent — same confirmation sheet as redemptions */}
+      <Sheet open={submittedOpen} onOpenChange={(o) => (o ? setSubmittedOpen(true) : trackRequest())}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <SheetTitle className="sr-only">Request sent</SheetTitle>
+          <div className="px-1 pb-4 pt-6 flex flex-col items-center text-center">
+            <div
+              className="w-16 h-16 rounded-full flex items-center justify-center"
+              style={{ background: "color-mix(in oklch, var(--success) 22%, transparent)" }}
+            >
+              <Check className="w-8 h-8" strokeWidth={2.5} style={{ color: "var(--success)" }} />
+            </div>
+            <p className="text-base font-semibold text-foreground mt-4">
+              {isRecurring ? "Plan created" : "Request sent"}
+            </p>
+            <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+              {isRecurring
+                ? `LKR ${amountNum.toLocaleString()} will be invested in ${fund} every month`
+                : `LKR ${total.toLocaleString()} into ${fund || "your fund"} — we'll email you once it's matched`}
             </p>
           </div>
-          <div className="space-y-2.5 px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
+          <div className="pt-2 pb-6 space-y-2.5">
             <Button
               onClick={trackRequest}
-              className="flex h-12 w-full items-center justify-center rounded-full bg-pill type-label text-pill-foreground hover:bg-pill/90"
+              className="w-full py-4 h-auto rounded-full text-[15px] font-semibold"
+              style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
             >
               Track my request
             </Button>
             <Button
-              variant="secondary"
+              variant="ghost"
               onClick={makeAnotherInvestment}
-              className="flex h-12 w-full items-center justify-center rounded-full type-label hover:bg-secondary/80"
+              className="w-full h-auto py-2 rounded-full text-[13px] font-semibold text-pill-bright"
             >
               Make another investment
             </Button>
           </div>
-
         </SheetContent>
       </Sheet>
     </MobileLayout>
