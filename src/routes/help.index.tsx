@@ -27,8 +27,8 @@ interface FAQItem {
 }
 
 const FAQS: FAQItem[] = [
-  { topic: "invest", q: "How long does Direct Invest take?", a: "Funds are debited instantly via Justpay. Your investment reflects on the portal within 1 business day.", featured: true },
-  { topic: "invest", q: "Why is there a LKR 149,950 limit on Direct Invest?", a: "This is the per-transfer limit set by Justpay. You can make multiple transfers in a day." },
+  { topic: "invest", q: "How long does Justpay (Direct Invest) take?", a: "Funds are debited instantly from your linked bank account. Your investment reflects on the portal within 1 business day.", featured: true },
+  { topic: "invest", q: "Why is there a LKR 149,950 limit on Justpay (Direct Invest)?", a: "This is the per-transfer limit set by Justpay. You can make multiple transfers in a day." },
   { topic: "invest", q: "How long do bank transfers take?", a: "Typically 1–2 business days after we receive your proof of payment and funds clear." },
   { topic: "invest", q: "Can I cancel a recurring investment?", a: "Yes — manage or delete any recurring plan from the Recurring Investments tab at any time." },
   { topic: "invest", q: "What is Flip?", a: "Flip moves funds instantly between your CAL fund accounts with no fees and no bank involved." },
@@ -39,7 +39,7 @@ const FAQS: FAQItem[] = [
   { topic: "unit-trusts", q: "How do I redeem units?", a: "Tap Redeem on any holding. Settlement typically takes 1–3 business days depending on the fund.", featured: true },
   { topic: "unit-trusts", q: "Are there exit fees?", a: "Most CAL funds have no exit fee. Specific terms are listed on each fund's detail page." },
   { topic: "transactions", q: "Why is my transaction pending?", a: "Bank transfers and certain fund operations take 1–2 business days to settle and reflect as completed.", featured: true },
-  { topic: "transactions", q: "Can I cancel a pending transaction?", a: "Direct Invest and Flip transactions cannot be cancelled once submitted. Contact support if you need help." },
+  { topic: "transactions", q: "Can I cancel a pending transaction?", a: "Justpay (Direct Invest) and Flip transactions cannot be cancelled once submitted. Contact support if you need help." },
   { topic: "transactions", q: "Where can I download a statement?", a: "Tap any transaction for details, or use Statements from More to download monthly summaries." },
   { topic: "account", q: "How do I update my profile?", a: "Go to Profile from the More menu to update your contact details and preferences." },
   { topic: "account", q: "Is my money safe?", a: "All investments are held in regulated CAL custody accounts and overseen by the SEC of Sri Lanka." },
@@ -62,7 +62,7 @@ const TOPIC_SECTIONS: {
   {
     id: "invest",
     label: "Investing",
-    description: "Direct Invest, recurring plans and Flip.",
+    description: "Justpay (Direct Invest), recurring plans and Flip.",
     icon: TrendingUp,
   },
   {
