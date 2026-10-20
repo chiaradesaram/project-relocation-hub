@@ -1,17 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import {
-  CalendarDays,
-  Check,
-  Copy,
-  FilePlus2,
-  Info,
-  Lightbulb,
-  TrendingUp,
-  X,
-} from "lucide-react";
+import { Check, Info, Lightbulb, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { directInvestSplits } from "./invest";
@@ -74,7 +65,6 @@ function InvestSummary() {
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [submittedOpen, setSubmittedOpen] = useState(false);
-  const [accountCopied, setAccountCopied] = useState(false);
   const [creationInfoOpen, setCreationInfoOpen] = useState(false);
 
   const isInstant = method === "instant";
@@ -165,46 +155,23 @@ function InvestSummary() {
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
 
-  // CAL's receiving account — the copy button copies this number
-  const CAL_ACCOUNT_NUMBER = "0078 4521 0036";
-
-  const copyCalAccount = () => {
-    navigator.clipboard?.writeText(CAL_ACCOUNT_NUMBER).catch(() => {});
-    setAccountCopied(true);
-    window.setTimeout(() => setAccountCopied(false), 1500);
-  };
-
   const quickChecks = [
-    {
-      title: "Money sent to CAL's Deutsche Bank account",
-      copy: true,
-    },
-    {
-      title: "It's a bank account, not a wallet",
-    },
+    "You have sent to CAL's Deutsche Bank account",
+    "You have not transferred from a wallet account",
   ];
 
   // Investment timeline — bank transfer
-  const timeline: {
-    label: string;
-    value: string;
-    hint?: string;
-    info?: boolean;
-    tone: string;
-    icon: ReactNode;
-  }[] = [
+  const timeline: { label: string; value: string; info?: boolean; tone: string }[] = [
     {
       label: "Request date",
       value: fmtTimeline(today),
-      tone: "bg-rates-mint text-background",
-      icon: <FilePlus2 className="size-[13px]" strokeWidth={2.25} />,
+      tone: "bg-rates-mint",
     },
     {
       label: "Creation date",
       value: unitCreationDate,
       info: true,
-      tone: "bg-pill text-pill-foreground",
-      icon: <CalendarDays className="size-[13px]" strokeWidth={2.25} />,
+      tone: "bg-pill",
     },
   ];
 
@@ -300,9 +267,9 @@ function InvestSummary() {
           </h2>
 
           <ul className="mt-1 divide-y divide-border/40">
-            {quickChecks.map((item, i) => (
+            {quickChecks.map((title, i) => (
               <li
-                key={item.title}
+                key={title}
                 className="flex animate-fade-in items-center gap-2.5 py-2"
                 style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
               >
@@ -311,21 +278,7 @@ function InvestSummary() {
                   className="size-[13px] shrink-0 text-rates-mint"
                   strokeWidth={2.75}
                 />
-                <p className="text-[12px] min-w-0 flex-1 text-foreground">{item.title}</p>
-                {item.copy && (
-                  <button
-                    type="button"
-                    aria-label="Copy CAL bank account number"
-                    onClick={copyCalAccount}
-                    className="flex size-8 shrink-0 items-center justify-center rounded-full hover:bg-sheet-field"
-                  >
-                    {accountCopied ? (
-                      <Check className="size-[15px] text-success" />
-                    ) : (
-                      <Copy className="size-[15px] text-pill-bright" />
-                    )}
-                  </button>
-                )}
+                <p className="text-[12px] min-w-0 flex-1 text-foreground">{title}</p>
               </li>
             ))}
           </ul>
@@ -343,56 +296,49 @@ function InvestSummary() {
             Investment timeline
           </h2>
 
-          <ol className="mt-3">
+          <ol className="mt-4">
             {timeline.map((step, i) => (
               <li
                 key={step.label}
-                className="relative flex animate-fade-in gap-3 pb-4 last:pb-0"
+                className="relative flex animate-fade-in gap-3 pb-5 last:pb-0"
                 style={{ animationDelay: `${i * 70}ms`, animationFillMode: "backwards" }}
               >
                 {i < timeline.length - 1 && (
                   <span
                     aria-hidden="true"
-                    className="absolute bottom-0 left-3 top-7 w-px bg-border/70"
+                    className="absolute -bottom-1 left-[5px] top-4 w-px bg-border/70"
                   />
                 )}
                 <span
                   aria-hidden="true"
                   className={cn(
-                    "relative z-10 mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full",
+                    "relative z-10 mt-1 size-[11px] shrink-0 rounded-full",
                     step.tone,
                   )}
-                >
-                  {step.icon}
-                </span>
+                />
                 <div className="min-w-0 flex-1">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[13px] text-muted-foreground">{step.label}</span>
-                    <span className="flex items-center gap-1.5">
-                      {step.info && (
-                        <button
-                          type="button"
-                          onClick={() => setCreationInfoOpen(true)}
-                          aria-label="About the creation date"
-                          className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
-                          style={{ background: "var(--pill)" }}
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[13px] font-semibold text-foreground">{step.label}</span>
+                    {step.info && (
+                      <button
+                        type="button"
+                        onClick={() => setCreationInfoOpen(true)}
+                        aria-label="About the creation date"
+                        className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+                        style={{ background: "var(--pill)" }}
+                      >
+                        <span
+                          className="text-[10px] font-bold leading-none"
+                          style={{ color: "var(--pill-foreground)" }}
                         >
-                          <span
-                            className="text-[10px] font-bold leading-none"
-                            style={{ color: "var(--pill-foreground)" }}
-                          >
-                            i
-                          </span>
-                        </button>
-                      )}
-                      <span className="text-[13px] font-semibold whitespace-nowrap text-foreground tabular-nums">
-                        {step.value}
-                      </span>
-                    </span>
+                          i
+                        </span>
+                      </button>
+                    )}
                   </div>
-                  {step.hint && (
-                    <p className="mt-0.5 text-[12px] text-muted-foreground">{step.hint}</p>
-                  )}
+                  <p className="mt-0.5 text-[13px] text-muted-foreground tabular-nums">
+                    {step.value}
+                  </p>
                 </div>
               </li>
             ))}
@@ -410,7 +356,7 @@ function InvestSummary() {
             color: "var(--pill-foreground)",
           }}
         >
-          {isRecurring ? "Confirm recurring investment" : "Confirm & Invest"}
+          Confirm Request
         </Button>
       </div>
 
