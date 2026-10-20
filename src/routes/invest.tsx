@@ -1640,12 +1640,14 @@ function FlipAccountRow({
       </span>
       <span className="min-w-0 flex-1">
         <span
-          className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold leading-none"
-          style={{
-            background: `color-mix(in oklch, ${tint} 16%, transparent)`,
-            color: tint,
-          }}
+          className="flex items-center gap-1.5 text-[12px] font-semibold leading-none"
+          style={{ color: tint }}
         >
+          <span
+            aria-hidden="true"
+            className="size-1.5 shrink-0 rounded-full"
+            style={{ background: tint }}
+          />
           {label}
         </span>
         <span className="mt-2 block truncate text-[15px] font-semibold leading-tight text-foreground">
