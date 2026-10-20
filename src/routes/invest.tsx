@@ -1143,13 +1143,10 @@ function MethodForm({
               icon="source"
               onClick={() => openFlipSheet("from")}
               balance={
-                showFlipPreview
-                  ? isOverBalance
-                    ? `−${fmtLkrShort(Math.abs(projectedFrom))}`
-                    : fmtLkrShort(projectedFrom)
+                showFlipPreview && !isOverBalance
+                  ? fmtLkrShort(projectedFrom)
                   : fmtLkrShort(flipFromBalance)
               }
-              balanceLabel="Available"
               tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
             />
 
@@ -1173,11 +1170,15 @@ function MethodForm({
                   ? fmtLkrShort(flipToBalance + amountNum)
                   : fmtLkrShort(flipToBalance)
               }
-              balanceLabel="Available"
               tone={showFlipPreview ? "success" : "muted"}
             />
           </div>
 
+          {isOverBalance && (
+            <p className="px-1 pt-2 text-[12px] text-destructive">
+              Balance limit is reached.
+            </p>
+          )}
           {isSameAccount && (
             <p className="px-1 pt-2 text-[12px] text-destructive">
               Pick a different fund or sub account to transfer to.
@@ -1602,7 +1603,6 @@ function FlipAccountRow({
   sub,
   icon,
   balance,
-  balanceLabel,
   tone,
   onClick,
 }: {
@@ -1611,7 +1611,6 @@ function FlipAccountRow({
   sub: string;
   icon: "source" | "target";
   balance: string;
-  balanceLabel: string;
   tone: "muted" | "normal" | "success" | "danger";
   onClick: () => void;
 }) {
@@ -1660,9 +1659,6 @@ function FlipAccountRow({
       <span className="shrink-0 text-right">
         <span className={`block text-[14px] font-semibold tabular-nums ${balanceClass}`}>
           {balance}
-        </span>
-        <span className="mt-0.5 block text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
-          {balanceLabel}
         </span>
       </span>
       <ChevronRight className="size-4 shrink-0 text-muted-foreground/60" />
