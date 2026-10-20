@@ -2181,18 +2181,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     return !!sourceFund;
   })();
 
-  const handleReview = () =>
-    navigate({
-      to: "/invest-summary",
-      search: {
-        method: isUtFlip ? "flip" : isDirect ? "instant" : "bank",
-        amount: amount || "0",
-        fund: isUtFlip ? sourceFund : "Equity Account",
-        account: "Equity Account",
-        bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
-        repeats: String(Math.max(1, splits.length)),
-      },
-    });
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const handleReview = () => setReviewOpen(true);
 
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
