@@ -1670,7 +1670,13 @@ function PickerRow({
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
-function SplitTransfersCard({ splits }: { splits: number[] }) {
+function SplitTransfersCard({
+  splits,
+  onInfo,
+}: {
+  splits: number[];
+  onInfo: () => void;
+}) {
   return (
     <div className="mx-4 mt-2 rounded-2xl bg-card/60 backdrop-blur-md p-4">
       <div className="flex items-center gap-3">
@@ -1680,7 +1686,7 @@ function SplitTransfersCard({ splits }: { splits: number[] }) {
         >
           <Split className="w-5 h-5" style={{ color: "var(--pill)" }} />
         </div>
-        <div>
+        <div className="min-w-0 flex-1">
           <p className="text-[13px] font-semibold text-foreground">
             Split into {splits.length} transfers
           </p>
@@ -1688,7 +1694,22 @@ function SplitTransfersCard({ splits }: { splits: number[] }) {
             Each is debited separately, with its own LKR 50 Justpay charge
           </p>
         </div>
+        <button
+          type="button"
+          onClick={onInfo}
+          aria-label="About split transfers"
+          className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+          style={{ background: "var(--pill)" }}
+        >
+          <span
+            className="text-[10px] font-bold leading-none"
+            style={{ color: "var(--pill-foreground)" }}
+          >
+            i
+          </span>
+        </button>
       </div>
+
       <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5">
         {splits.map((part, i) => (
           <div key={i} className="flex items-center justify-between">
