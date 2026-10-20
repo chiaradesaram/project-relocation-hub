@@ -951,29 +951,29 @@ function MethodForm({
     return false;
   })();
 
-  const handleReview = () => {
-    navigate({
-      to: "/invest-summary",
-      search: {
-        method,
-        amount: amount || "0",
-        fund: isFlip ? flipFromFund : selectedFund,
-        account: isFlip ? flipFromSub : selectedAccount,
-        bank: isFlip
-          ? `${flipToFund} · ${flipToSub}`
-          : isInstant
-            ? selectedBank
-            : selectedPayTo,
-        fromBank: isBank ? selectedBank : undefined,
-        repeats: String(Math.max(1, splits.length)),
-        startDate: isRecurringMethod
-          ? recurringStartDate.toISOString().slice(0, 10)
-          : undefined,
-        frequency: isRecurringMethod ? recurringFrequency : undefined,
-        edit: isRecurringMethod ? editPlanId : undefined,
-      },
-    });
+  const [reviewOpen, setReviewOpen] = useState(false);
+
+  // Recurring investments are saved on confirm, inside the review sheet
+  const confirmInvestment = () => {
+    if (!isRecurringMethod) return;
+    const plans = readRecurringInvestments();
+    const next: Omit<RecurringInvestmentPlan, "id"> = {
+      amount: amount || "0",
+      fund: isFlip ? flipFromFund : selectedFund,
+      account: isFlip ? flipFromSub : selectedAccount,
+      bank: selectedBank,
+      startDate: recurringStartDate.toISOString().slice(0, 10),
+      frequency: recurringFrequency,
+      active: true,
+    };
+    const idx = editPlanId ? plans.findIndex((p) => p.id === editPlanId) : -1;
+    if (idx >= 0) plans[idx] = { ...plans[idx]!, ...next };
+    else plans.push({ ...next, id: newRecurringInvestmentId() });
+    writeRecurringInvestments(plans);
+    localStorage.setItem(RECURRING_INVESTMENT_SAVED_KEY, "true");
   };
+
+  const handleReview = () => setReviewOpen(true);
 
   // ---- Picker options ----
   const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
