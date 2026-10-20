@@ -36,3 +36,4 @@
 - [x] Replace the investment review page with a redemption-style bottom sheet on all invest forms
 - [x] Centre the "Review" title in the invest and redeem review sheets
 - [x] Replace the Fund Flip fund and sub-account list sheets with compact dropdowns
+- [x] Move the Fund Flip fund and sub-account dropdowns into a bottom sheet opened from each compact side card, matching the Equities "Transfer from Unit Trusts" picker
