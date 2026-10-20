@@ -1129,45 +1129,54 @@ function MethodForm({
       )}
 
 
-      {/* Fund Flip — compact cards; fund and sub account picked in a bottom sheet */}
+      {/* Fund Flip — Wise-style rows joined by a connector; picked in a bottom sheet */}
       {isFlip && (
-        <div className="mx-4 mt-3 space-y-2">
-          <FlipAccountCard
-            label="Transfer from"
-            fund={flipFromFund}
-            sub={flipFromSub}
-            onClick={() => openFlipSheet("from")}
-            balance={
-              showFlipPreview
-                ? isOverBalance
-                  ? `−${fmtLkr(Math.abs(projectedFrom))}`
-                  : fmtLkr(projectedFrom)
-                : fmtLkr(flipFromBalance)
-            }
-            balanceLabel={showFlipPreview ? "After transfer" : "Available"}
-            tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
-          />
+        <div className="mx-4 mt-4">
+          <div className="rounded-3xl bg-card/60 px-4 backdrop-blur-md">
+            <FlipAccountRow
+              label="Transfer from"
+              fund={flipFromFund}
+              sub={flipFromSub}
+              icon="source"
+              onClick={() => openFlipSheet("from")}
+              balance={
+                showFlipPreview
+                  ? isOverBalance
+                    ? `−${fmtLkr(Math.abs(projectedFrom))}`
+                    : fmtLkr(projectedFrom)
+                  : fmtLkr(flipFromBalance)
+              }
+              balanceLabel={showFlipPreview ? "After transfer" : "Available"}
+              tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
+            />
 
-          <div className="pl-5">
-            <ArrowDown className="w-4 h-4 text-muted-foreground" />
+            <div className="relative ml-[22px] h-12 w-px bg-border/60">
+              <span
+                aria-hidden="true"
+                className="absolute left-1/2 top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-pill text-pill-foreground shadow-lg"
+              >
+                <ArrowDown className="size-[18px]" strokeWidth={2.5} />
+              </span>
+            </div>
+
+            <FlipAccountRow
+              label="Transfer to"
+              fund={flipToFund}
+              sub={flipToSub}
+              icon="target"
+              onClick={() => openFlipSheet("to")}
+              balance={
+                showFlipPreview
+                  ? fmtLkr(flipToBalance + amountNum)
+                  : fmtLkr(flipToBalance)
+              }
+              balanceLabel={showFlipPreview ? "After transfer" : "Available"}
+              tone={showFlipPreview ? "success" : "muted"}
+            />
           </div>
 
-          <FlipAccountCard
-            label="Transfer to"
-            fund={flipToFund}
-            sub={flipToSub}
-            onClick={() => openFlipSheet("to")}
-            balance={
-              showFlipPreview
-                ? fmtLkr(flipToBalance + amountNum)
-                : fmtLkr(flipToBalance)
-            }
-            balanceLabel={showFlipPreview ? "After transfer" : "Available"}
-            tone={showFlipPreview ? "success" : "muted"}
-          />
-
           {isSameAccount && (
-            <p className="px-1 pt-1 text-[12px] text-destructive">
+            <p className="px-1 pt-2 text-[12px] text-destructive">
               Pick a different fund or sub account to transfer to.
             </p>
           )}
@@ -1584,10 +1593,11 @@ function MethodForm({
   );
 }
 
-function FlipAccountCard({
+function FlipAccountRow({
   label,
   fund,
   sub,
+  icon,
   balance,
   balanceLabel,
   tone,
@@ -1596,6 +1606,7 @@ function FlipAccountCard({
   label: string;
   fund: string;
   sub: string;
+  icon: "source" | "target";
   balance: string;
   balanceLabel: string;
   tone: "muted" | "normal" | "success" | "danger";
@@ -1609,38 +1620,45 @@ function FlipAccountCard({
         : tone === "normal"
           ? "text-foreground"
           : "text-muted-foreground";
+  const tint = icon === "source" ? "var(--pill)" : "var(--rates-mint)";
+  const Icon = icon === "source" ? PieChart : BarChart3;
   return (
     <button
       type="button"
       onClick={onClick}
-      className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
+      className="flex w-full items-center gap-3 py-4 text-left transition active:bg-muted/10"
     >
-      <div
-        className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-        style={{
-          background: "color-mix(in oklch, var(--pill) 25%, transparent)",
-        }}
+      <span
+        aria-hidden="true"
+        className="flex size-11 shrink-0 items-center justify-center rounded-full"
+        style={{ background: `color-mix(in oklch, ${tint} 22%, transparent)` }}
       >
-        <PieChart className="w-5 h-5" style={{ color: "var(--pill)" }} />
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/80">
+        <Icon className="size-[22px]" style={{ color: tint }} />
+      </span>
+      <span className="min-w-0 flex-1">
+        <span className="block text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/70">
           {label}
-        </p>
-        <p className="mt-0.5 text-sm font-semibold leading-tight text-foreground truncate">
+        </span>
+        <span className="mt-1 block truncate text-[15px] font-semibold leading-tight text-foreground">
           {fund}
-        </p>
-        <p className="mt-0.5 text-[12px] text-muted-foreground truncate">{sub}</p>
-        <p
-          className={`mt-0.5 text-[12px] font-medium tabular-nums ${balanceClass}`}
-        >
-          {balanceLabel} {balance}
-        </p>
-      </div>
-      <ChevronRight className="w-4 h-4 shrink-0 text-muted-foreground" />
+        </span>
+        <span className="mt-0.5 block truncate text-[12px] text-muted-foreground">
+          {sub}
+        </span>
+      </span>
+      <span className="shrink-0 text-right">
+        <span className={`block text-[14px] font-semibold tabular-nums ${balanceClass}`}>
+          {balance}
+        </span>
+        <span className="mt-0.5 block text-[10px] uppercase tracking-[0.08em] text-muted-foreground/70">
+          {balanceLabel}
+        </span>
+      </span>
+      <ChevronRight className="size-4 shrink-0 text-muted-foreground/60" />
     </button>
   );
 }
+
 
 
 
