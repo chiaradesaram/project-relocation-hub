@@ -1693,28 +1693,31 @@ function SplitTransfersCard({
           <Split className="w-5 h-5" style={{ color: "var(--pill)" }} />
         </div>
         <div className="min-w-0 flex-1">
-          <p className="text-[13px] font-semibold text-foreground">
-            Split into {splits.length} transfers
-          </p>
+          <div className="flex items-center gap-1.5">
+            <p className="text-[13px] font-semibold text-foreground">
+              Split into {splits.length} transfers
+            </p>
+            <button
+              type="button"
+              onClick={onInfo}
+              aria-label="About split transfers"
+              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+              style={{ background: "var(--pill)" }}
+            >
+              <span
+                className="text-[10px] font-bold leading-none"
+                style={{ color: "var(--pill-foreground)" }}
+              >
+                i
+              </span>
+            </button>
+          </div>
           <p className="text-[11px] text-muted-foreground">
             Each is debited separately, with its own LKR 50 Justpay charge
           </p>
         </div>
-        <button
-          type="button"
-          onClick={onInfo}
-          aria-label="About split transfers"
-          className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
-          style={{ background: "var(--pill)" }}
-        >
-          <span
-            className="text-[10px] font-bold leading-none"
-            style={{ color: "var(--pill-foreground)" }}
-          >
-            i
-          </span>
-        </button>
       </div>
+
 
       <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5">
         {splits.map((part, i) => (
