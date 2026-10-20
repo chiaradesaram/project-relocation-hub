@@ -2203,12 +2203,34 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         ) : (
           <p className="mt-3 text-[12px] text-muted-foreground">
             {isDirect
-              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger amounts split into up to ${DIRECT_INVEST_MAX_TRANSFERS}`
+              ? "Investment amount"
               : isPayIn
                 ? "Amount to pay in"
                 : "Amount to transfer"}
           </p>
         )}
+        {isDirect && splits.length > 1 && (
+          <div className="mt-2 flex items-center justify-center gap-1.5">
+            <p className="text-[12px] text-muted-foreground">
+              Will be split into {splits.length} transfers
+            </p>
+            <button
+              type="button"
+              onClick={() => setSplitInfoOpen(true)}
+              aria-label="About split transfers"
+              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+              style={{ background: "var(--pill)" }}
+            >
+              <span
+                className="text-[10px] font-bold leading-none"
+                style={{ color: "var(--pill-foreground)" }}
+              >
+                i
+              </span>
+            </button>
+          </div>
+        )}
+
       </div>
 
       {/* Details */}
@@ -2324,6 +2346,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
       {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+
+      <SplitInfoSheet
+        open={splitInfoOpen}
+        onOpenChange={setSplitInfoOpen}
+        splits={splits}
+      />
+
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
