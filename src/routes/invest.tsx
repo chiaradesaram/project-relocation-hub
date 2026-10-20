@@ -2458,6 +2458,27 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         </button>
       </div>
 
+      {/* Review — same bottom sheet as redemptions */}
+      <InvestReviewSheet
+        open={reviewOpen}
+        onOpenChange={setReviewOpen}
+        data={{
+          method: isUtFlip ? "flip" : isDirect ? "instant" : "bank",
+          amount: amountNum,
+          fund: isUtFlip ? sourceFund : "Equity Account",
+          account: isUtFlip ? sourceSub : undefined,
+          destinationLabel: isUtFlip
+            ? "Equity Account"
+            : isPayIn
+              ? selectedBankLabel(payTo)
+              : undefined,
+          fromBankLabel: isPayIn ? selectedBankLabel(bank) : undefined,
+          splits,
+          sentTarget: "your equity account",
+          showBankExtras: false,
+        }}
+      />
+
       {/* Date sheet */}
       <Sheet open={dateOpen} onOpenChange={setDateOpen}>
         <SheetContent
