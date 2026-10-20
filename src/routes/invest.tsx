@@ -801,8 +801,32 @@ function MethodForm({
   );
   const [flipToFund, setFlipToFund] = useState(funds[1]!);
   const [flipToSub, setFlipToSub] = useState(subAccountsOf(funds[1]!)[0]!.name);
+  // Fund Flip: fund + sub account picked from dropdowns inside a bottom sheet
+  const [flipSheet, setFlipSheet] = useState<null | "from" | "to">(null);
+  const [flipDraftFund, setFlipDraftFund] = useState(funds[0]!);
+  const [flipDraftSub, setFlipDraftSub] = useState(
+    subAccountsOf(funds[0]!)[0]!.name,
+  );
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
+
+  const openFlipSheet = (side: "from" | "to") => {
+    setFlipDraftFund(side === "from" ? flipFromFund : flipToFund);
+    setFlipDraftSub(side === "from" ? flipFromSub : flipToSub);
+    setFlipSheet(side);
+  };
+
+  const confirmFlipSheet = () => {
+    if (flipSheet === "from") {
+      setFlipFromFund(flipDraftFund);
+      setFlipFromSub(flipDraftSub);
+    } else if (flipSheet === "to") {
+      setFlipToFund(flipDraftFund);
+      setFlipToSub(flipDraftSub);
+    }
+    setFlipSheet(null);
+  };
+
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
   const isRecurringMethod = method === "recurring";
   const [recurring, setRecurring] = useState(isRecurringMethod);
@@ -1105,18 +1129,14 @@ function MethodForm({
       )}
 
 
-      {/* Fund Flip — fund and sub account picked from dropdowns */}
+      {/* Fund Flip — compact cards; fund and sub account picked in a bottom sheet */}
       {isFlip && (
         <div className="mx-4 mt-3 space-y-2">
-          <FlipPickerCard
+          <FlipAccountCard
             label="Transfer from"
             fund={flipFromFund}
             sub={flipFromSub}
-            onFundChange={(f) => {
-              setFlipFromFund(f);
-              setFlipFromSub(subAccountsOf(f)[0]?.name ?? "");
-            }}
-            onSubChange={setFlipFromSub}
+            onClick={() => openFlipSheet("from")}
             balance={
               showFlipPreview
                 ? isOverBalance
@@ -1132,15 +1152,11 @@ function MethodForm({
             <ArrowDown className="w-4 h-4 text-muted-foreground" />
           </div>
 
-          <FlipPickerCard
+          <FlipAccountCard
             label="Transfer to"
             fund={flipToFund}
             sub={flipToSub}
-            onFundChange={(f) => {
-              setFlipToFund(f);
-              setFlipToSub(subAccountsOf(f)[0]?.name ?? "");
-            }}
-            onSubChange={setFlipToSub}
+            onClick={() => openFlipSheet("to")}
             balance={
               showFlipPreview
                 ? fmtLkr(flipToBalance + amountNum)
@@ -1490,24 +1506,22 @@ function MethodForm({
   );
 }
 
-function FlipPickerCard({
+function FlipAccountCard({
   label,
   fund,
   sub,
-  onFundChange,
-  onSubChange,
   balance,
   balanceLabel,
   tone,
+  onClick,
 }: {
   label: string;
   fund: string;
   sub: string;
-  onFundChange: (fund: string) => void;
-  onSubChange: (sub: string) => void;
   balance: string;
   balanceLabel: string;
   tone: "muted" | "normal" | "success" | "danger";
+  onClick: () => void;
 }) {
   const balanceClass =
     tone === "danger"
@@ -1518,46 +1532,38 @@ function FlipPickerCard({
           ? "text-foreground"
           : "text-muted-foreground";
   return (
-    <div className="rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3">
-      <div className="mb-2 flex items-baseline justify-between gap-3">
+    <button
+      type="button"
+      onClick={onClick}
+      className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
+    >
+      <div
+        className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+        style={{
+          background: "color-mix(in oklch, var(--pill) 25%, transparent)",
+        }}
+      >
+        <PieChart className="w-5 h-5" style={{ color: "var(--pill)" }} />
+      </div>
+      <div className="min-w-0 flex-1">
         <p className="text-[11px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/80">
           {label}
         </p>
-        <p className={`text-[12px] font-medium tabular-nums ${balanceClass}`}>
+        <p className="mt-0.5 text-sm font-semibold leading-tight text-foreground truncate">
+          {fund}
+        </p>
+        <p className="mt-0.5 text-[12px] text-muted-foreground truncate">{sub}</p>
+        <p
+          className={`mt-0.5 text-[12px] font-medium tabular-nums ${balanceClass}`}
+        >
           {balanceLabel} {balance}
         </p>
       </div>
-      <ModernSelect
-        value={fund}
-        onChange={(e) => onFundChange(e.target.value)}
-        contentClassName="z-[120]"
-        className="text-[13px]"
-      >
-        {funds.map((f) => (
-          <option
-            key={f}
-            value={f}
-            data-pill={isPopularFund(f) ? "Popular" : undefined}
-          >
-            {f}
-          </option>
-        ))}
-      </ModernSelect>
-      <ModernSelect
-        value={sub}
-        onChange={(e) => onSubChange(e.target.value)}
-        contentClassName="z-[120]"
-        className="mt-2"
-      >
-        {subAccountsOf(fund).map((s) => (
-          <option key={s.name} value={s.name} data-pill={s.value}>
-            {s.name}
-          </option>
-        ))}
-      </ModernSelect>
-    </div>
+      <ChevronRight className="w-4 h-4 shrink-0 text-muted-foreground" />
+    </button>
   );
 }
+
 
 
 function PickerRow({
