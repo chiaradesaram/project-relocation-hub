@@ -1377,6 +1377,35 @@ function MethodForm({
         </button>
       </div>
 
+      {/* Review — same bottom sheet as redemptions */}
+      <InvestReviewSheet
+        open={reviewOpen}
+        onOpenChange={setReviewOpen}
+        data={{
+          method: isRecurringMethod ? "recurring" : method === "flip" ? "flip" : isBank ? "bank" : "instant",
+          amount: amountNum,
+          fund: isFlip ? flipFromFund : selectedFund,
+          account: isFlip ? flipFromSub : selectedAccount,
+          destinationLabel: isFlip
+            ? `${flipToFund} · ${flipToSub}`
+            : isBank
+              ? selectedBankLabel(selectedPayTo)
+              : undefined,
+          fromBankLabel: isBank ? selectedBankLabel(selectedBank) : undefined,
+          splits,
+          recurring: isRecurringMethod
+            ? {
+                startDate: recurringStartDate,
+                frequency: recurringFrequency,
+                edit: editPlanId,
+              }
+            : undefined,
+          sentTarget: isFlip ? flipToFund : undefined,
+          showBankExtras: isBank,
+          onConfirm: confirmInvestment,
+        }}
+      />
+
       {/* Picker Sheet */}
       <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
         <SheetContent
