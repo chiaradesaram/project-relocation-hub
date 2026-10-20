@@ -777,7 +777,7 @@ function ManageRow({ label, value, last }: { label: string; value: string; last?
   );
 }
 
-type PickerKind = null | "fund" | "account" | "payFrom" | "payTo" | "flipTo";
+type PickerKind = null | "fund" | "account" | "payFrom" | "payTo";
 
 function MethodForm({
   method,
@@ -794,7 +794,6 @@ function MethodForm({
   );
   const [selectedBank, setSelectedBank] = useState("");
   const [selectedPayTo, setSelectedPayTo] = useState("");
-  const [selectedFlipTo, setSelectedFlipTo] = useState("");
   // Fund Flip: source and destination fund + sub account
   const [flipFromFund, setFlipFromFund] = useState(funds[0]!);
   const [flipFromSub, setFlipFromSub] = useState(
@@ -802,9 +801,6 @@ function MethodForm({
   );
   const [flipToFund, setFlipToFund] = useState(funds[1]!);
   const [flipToSub, setFlipToSub] = useState(subAccountsOf(funds[1]!)[0]!.name);
-  const [flipPicker, setFlipPicker] = useState<null | "from" | "to">(null);
-  const [draftFund, setDraftFund] = useState(funds[0]!);
-  const [draftSub, setDraftSub] = useState(subAccountsOf(funds[0]!)[0]!.name);
   const [proofName, setProofName] = useState<string | null>(null);
   const [picker, setPicker] = useState<PickerKind>(null);
   const [linkedGoal, setLinkedGoal] = useState<string | null>(null);
@@ -888,15 +884,13 @@ function MethodForm({
 
   const splits = isInstant ? directInvestSplits(amountNum) : [];
 
-  const payFromLabel = isFlip ? "Transfer from" : isBank ? "Paid from" : "Paying from";
-  const payFromValue = isFlip ? selectedFund : selectedBankLabel(selectedBank);
-  const payFromPlaceholder = isFlip ? "Select a fund" : "Select bank account";
+  const payFromLabel = isBank ? "Paid from" : "Paying from";
+  const payFromValue = selectedBankLabel(selectedBank);
+  const payFromPlaceholder = "Select bank account";
 
-  const sendToLabel = isFlip ? "Transfer to" : isBank ? "Sent to" : "Send to";
-  const sendToValue = isFlip ? selectedFlipTo : selectedBankLabel(selectedPayTo);
-  const sendToPlaceholder = isFlip
-    ? "Select destination fund"
-    : "Select CAL account";
+  const sendToLabel = isBank ? "Sent to" : "Send to";
+  const sendToValue = selectedBankLabel(selectedPayTo);
+  const sendToPlaceholder = "Select CAL account";
 
   const isDeutsche = selectedPayTo.toLowerCase().includes("deutsche");
   const needsProof = isBank && !!selectedPayTo && !isDeutsche;
@@ -934,13 +928,6 @@ function MethodForm({
   const isSameAccount =
     isFlip && flipFromFund === flipToFund && flipFromSub === flipToSub;
   const showFlipPreview = isFlip && amountNum > 0;
-
-  const openFlipPicker = (which: "from" | "to") => {
-    setDraftFund(which === "from" ? flipFromFund : flipToFund);
-    setDraftSub(which === "from" ? flipFromSub : flipToSub);
-    setFlipPicker(which);
-  };
-  const draftSubOptions = subAccountsOf(draftFund);
 
   const canReview = (() => {
     if (amountNum <= 0) return false;
