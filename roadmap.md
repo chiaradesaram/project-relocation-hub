@@ -37,3 +37,4 @@
 - [x] Centre the "Review" title in the invest and redeem review sheets
 - [x] Replace the Fund Flip fund and sub-account list sheets with compact dropdowns
 - [x] Move the Fund Flip fund and sub-account dropdowns into a bottom sheet opened from each compact side card, matching the Equities "Transfer from Unit Trusts" picker
+- [x] Restyle Fund Flip as a Wise-style paired row: distinct icons per side, right-aligned whole-rupee balances, and a connector hairline with a circular arrow badge
