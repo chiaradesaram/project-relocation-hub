@@ -1344,7 +1344,13 @@ function MethodForm({
       )}
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
-      {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+      {isInstant && splits.length > 1 && (
+        <SplitTransfersCard
+          splits={splits}
+          onInfo={() => setSplitInfoOpen(true)}
+        />
+      )}
+
 
       <SplitInfoSheet
         open={splitInfoOpen}
@@ -2400,7 +2406,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
       )}
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
-      {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+      {isDirect && splits.length > 1 && (
+        <SplitTransfersCard
+          splits={splits}
+          onInfo={() => setSplitInfoOpen(true)}
+        />
+      )}
+
 
       <SplitInfoSheet
         open={splitInfoOpen}
