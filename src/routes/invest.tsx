@@ -1413,6 +1413,84 @@ function MethodForm({
         }}
       />
 
+      {/* Fund Flip — fund and sub account dropdowns, picked in a bottom sheet */}
+      <Sheet
+        open={flipSheet !== null}
+        onOpenChange={(o) => !o && setFlipSheet(null)}
+      >
+        <SheetContent
+          side="bottom"
+          className="rounded-t-3xl border-t border-border/30 bg-card px-0 pb-8"
+        >
+          <SheetHeader className="px-5 pb-0">
+            <div className="flex items-center justify-between">
+              <SheetTitle className="text-base font-semibold text-foreground">
+                {flipSheet === "to" ? "Transfer to" : "Transfer from"}
+              </SheetTitle>
+              <button
+                onClick={() => setFlipSheet(null)}
+                className="rounded-full p-1 hover:bg-muted/20 transition"
+              >
+                <X className="h-4 w-4 text-muted-foreground" />
+              </button>
+            </div>
+          </SheetHeader>
+          <div className="px-5 mt-4 space-y-4 pb-2">
+            <div>
+              <p className="mb-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/80">
+                Fund
+              </p>
+              <ModernSelect
+                value={flipDraftFund}
+                onChange={(e) => {
+                  const name = e.target.value;
+                  setFlipDraftFund(name);
+                  setFlipDraftSub(subAccountsOf(name)[0]?.name ?? "");
+                }}
+                contentClassName="z-[120]"
+              >
+                <option value="">Select fund</option>
+                {funds.map((f) => (
+                  <option
+                    key={f}
+                    value={f}
+                    data-pill={isPopularFund(f) ? "Popular" : undefined}
+                  >
+                    {f}
+                  </option>
+                ))}
+              </ModernSelect>
+            </div>
+            <div>
+              <p className="mb-1.5 text-[12px] font-semibold uppercase tracking-[0.08em] text-muted-foreground/80">
+                Sub account
+              </p>
+              <ModernSelect
+                value={flipDraftSub}
+                onChange={(e) => setFlipDraftSub(e.target.value)}
+                contentClassName="z-[120]"
+              >
+                <option value="">Select sub account</option>
+                {subAccountsOf(flipDraftFund).map((s) => (
+                  <option key={s.name} value={s.name} data-pill={s.value}>
+                    {s.name}
+                  </option>
+                ))}
+              </ModernSelect>
+            </div>
+            <button
+              type="button"
+              disabled={!flipDraftFund || !flipDraftSub}
+              onClick={confirmFlipSheet}
+              className="w-full rounded-full py-3.5 text-[15px] font-semibold transition disabled:opacity-40"
+              style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
+            >
+              Confirm
+            </button>
+          </div>
+        </SheetContent>
+      </Sheet>
+
       {/* Picker Sheet */}
       <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
         <SheetContent
