@@ -1124,13 +1124,18 @@ function MethodForm({
       )}
 
 
-      {/* Fund Flip — transfer from / transfer to with balances */}
+      {/* Fund Flip — fund and sub account picked from dropdowns */}
       {isFlip && (
         <div className="mx-4 mt-3 space-y-2">
-          <FlipAccountCard
+          <FlipPickerCard
             label="Transfer from"
             fund={flipFromFund}
             sub={flipFromSub}
+            onFundChange={(f) => {
+              setFlipFromFund(f);
+              setFlipFromSub(subAccountsOf(f)[0]?.name ?? "");
+            }}
+            onSubChange={setFlipFromSub}
             balance={
               showFlipPreview
                 ? isOverBalance
@@ -1138,25 +1143,30 @@ function MethodForm({
                   : fmtLkr(projectedFrom)
                 : fmtLkr(flipFromBalance)
             }
+            balanceLabel={showFlipPreview ? "After transfer" : "Available"}
             tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
-            onClick={() => openFlipPicker("from")}
           />
 
           <div className="pl-5">
             <ArrowDown className="w-4 h-4 text-muted-foreground" />
           </div>
 
-          <FlipAccountCard
+          <FlipPickerCard
             label="Transfer to"
             fund={flipToFund}
             sub={flipToSub}
+            onFundChange={(f) => {
+              setFlipToFund(f);
+              setFlipToSub(subAccountsOf(f)[0]?.name ?? "");
+            }}
+            onSubChange={setFlipToSub}
             balance={
               showFlipPreview
                 ? fmtLkr(flipToBalance + amountNum)
                 : fmtLkr(flipToBalance)
             }
+            balanceLabel={showFlipPreview ? "After transfer" : "Available"}
             tone={showFlipPreview ? "success" : "muted"}
-            onClick={() => openFlipPicker("to")}
           />
 
           {isSameAccount && (
