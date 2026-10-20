@@ -158,7 +158,7 @@ export function InvestReviewSheet({
             </div>
           ) : (
             <>
-              <SheetHead title="Review" onClose={() => handleOpenChange(false)} />
+              <SheetHead title="Review" onClose={() => handleOpenChange(false)} centered />
               <div className="text-center pb-4">
                 <p className="text-[12px] text-muted-foreground">
                   {isBank ? "Total to invest" : methodLabel}
@@ -399,16 +399,33 @@ export function InvestReviewSheet({
   );
 }
 
-function SheetHead({ title, onClose }: { title: string; onClose: () => void }) {
+function SheetHead({
+  title,
+  onClose,
+  centered,
+}: {
+  title: string;
+  onClose: () => void;
+  centered?: boolean;
+}) {
   return (
-    <SheetHeader className="flex-row items-center justify-between space-y-0 pb-3">
-      <SheetTitle>{title}</SheetTitle>
-      <button onClick={onClose} className="rounded-full bg-secondary p-1" aria-label="Close">
+    <SheetHeader
+      className={`flex-row items-center space-y-0 pb-3 ${
+        centered ? "relative justify-center" : "justify-between"
+      }`}
+    >
+      <SheetTitle className={centered ? "text-center" : undefined}>{title}</SheetTitle>
+      <button
+        onClick={onClose}
+        className={`rounded-full bg-secondary p-1 ${centered ? "absolute right-0" : ""}`}
+        aria-label="Close"
+      >
         <X className="h-4 w-4" />
       </button>
     </SheetHeader>
   );
 }
+
 
 function ReviewRow({ label, value }: { label: string; value: string }) {
   return (

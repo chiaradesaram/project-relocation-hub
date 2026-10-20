@@ -525,7 +525,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
             </div>
           ) : (
             <>
-              <SheetHead title="Review" onClose={() => setReviewOpen(false)} />
+              <SheetHead title="Review" onClose={() => setReviewOpen(false)} centered />
               <div className="text-center pb-4">
                 <p className="text-[12px] text-muted-foreground">{title}</p>
                 <p className="text-2xl font-bold text-foreground mt-1">{lkr(amountNum)}</p>
@@ -617,15 +617,21 @@ function SheetHead({
   title,
   onClose,
   extra,
+  centered,
 }: {
   title: string;
   onClose: () => void;
   extra?: React.ReactNode;
+  centered?: boolean;
 }) {
   return (
-    <SheetHeader className="flex-row items-center justify-between space-y-0 pb-3">
-      <SheetTitle>{title}</SheetTitle>
-      <div className="flex items-center gap-3">
+    <SheetHeader
+      className={`flex-row items-center space-y-0 pb-3 ${
+        centered ? "relative justify-center" : "justify-between"
+      }`}
+    >
+      <SheetTitle className={centered ? "text-center" : undefined}>{title}</SheetTitle>
+      <div className={`flex items-center gap-3 ${centered ? "absolute right-0" : ""}`}>
         {extra}
         <button onClick={onClose} className="rounded-full bg-secondary p-1" aria-label="Close">
           <X className="h-4 w-4" />
@@ -634,6 +640,7 @@ function SheetHead({
     </SheetHeader>
   );
 }
+
 
 function OptionRow({
   selected,
