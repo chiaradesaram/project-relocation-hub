@@ -1,17 +1,8 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, type ReactNode } from "react";
+import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
-import {
-  CalendarDays,
-  Check,
-  Copy,
-  FilePlus2,
-  Info,
-  Lightbulb,
-  TrendingUp,
-  X,
-} from "lucide-react";
+import { Check, Info, Lightbulb, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { directInvestSplits } from "./invest";
@@ -74,7 +65,6 @@ function InvestSummary() {
   const { method, amount, fund, account, bank, fromBank, repeats, startDate, frequency, edit } = Route.useSearch();
   const [showJustpayInfo, setShowJustpayInfo] = useState(false);
   const [submittedOpen, setSubmittedOpen] = useState(false);
-  const [accountCopied, setAccountCopied] = useState(false);
   const [creationInfoOpen, setCreationInfoOpen] = useState(false);
 
   const isInstant = method === "instant";
@@ -165,46 +155,23 @@ function InvestSummary() {
   // Quick check (bank transfer): derive the paying-from bank from the search param
   const [fromBankName, fromBankAcctNo] = (fromBank || "").split("·").map((p) => p.trim());
 
-  // CAL's receiving account — the copy button copies this number
-  const CAL_ACCOUNT_NUMBER = "0078 4521 0036";
-
-  const copyCalAccount = () => {
-    navigator.clipboard?.writeText(CAL_ACCOUNT_NUMBER).catch(() => {});
-    setAccountCopied(true);
-    window.setTimeout(() => setAccountCopied(false), 1500);
-  };
-
   const quickChecks = [
-    {
-      title: "Money sent to CAL's Deutsche Bank account",
-      copy: true,
-    },
-    {
-      title: "It's a bank account, not a wallet",
-    },
+    "You have sent to CAL's Deutsche Bank account",
+    "You have not transferred from a wallet account",
   ];
 
   // Investment timeline — bank transfer
-  const timeline: {
-    label: string;
-    value: string;
-    hint?: string;
-    info?: boolean;
-    tone: string;
-    icon: ReactNode;
-  }[] = [
+  const timeline: { label: string; value: string; info?: boolean; tone: string }[] = [
     {
       label: "Request date",
       value: fmtTimeline(today),
-      tone: "bg-rates-mint text-background",
-      icon: <FilePlus2 className="size-[13px]" strokeWidth={2.25} />,
+      tone: "bg-rates-mint",
     },
     {
       label: "Creation date",
       value: unitCreationDate,
       info: true,
-      tone: "bg-pill text-pill-foreground",
-      icon: <CalendarDays className="size-[13px]" strokeWidth={2.25} />,
+      tone: "bg-pill",
     },
   ];
 
