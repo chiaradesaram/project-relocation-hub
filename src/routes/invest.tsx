@@ -1705,7 +1705,58 @@ function SplitTransfersCard({ splits }: { splits: number[] }) {
   );
 }
 
+// Quiet note under the Justpay amount: the ceiling, then how the amount splits.
+function SplitHint({
+  overMax,
+  splits,
+  onInfo,
+  gap = "mt-3",
+}: {
+  overMax: boolean;
+  splits: number[];
+  onInfo: () => void;
+  gap?: string;
+}) {
+  if (!overMax && splits.length <= 1) return null;
+  const maxTotal = DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS;
+  return (
+    <div className={`${gap} text-center`}>
+      {overMax && (
+        <p className="text-[12px] font-semibold text-foreground">
+          Max limit is LKR {maxTotal.toLocaleString()}
+        </p>
+      )}
+      <div
+        className={`flex items-center justify-center gap-1.5 ${
+          overMax ? "mt-1" : ""
+        }`}
+      >
+        <p className="text-[12px] text-muted-foreground">
+          {overMax
+            ? `and it will be split into ${splits.length} transfers`
+            : `Will be split into ${splits.length} transfers`}
+        </p>
+        <button
+          type="button"
+          onClick={onInfo}
+          aria-label="About split transfers"
+          className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+          style={{ background: "var(--pill)" }}
+        >
+          <span
+            className="text-[10px] font-bold leading-none"
+            style={{ color: "var(--pill-foreground)" }}
+          >
+            i
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function SplitInfoSheet({
+
   open,
   onOpenChange,
   splits,
