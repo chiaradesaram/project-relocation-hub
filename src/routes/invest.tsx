@@ -1149,7 +1149,7 @@ function MethodForm({
                     : fmtLkrShort(projectedFrom)
                   : fmtLkrShort(flipFromBalance)
               }
-              balanceLabel={showFlipPreview ? "After transfer" : "Available"}
+              balanceLabel="Available"
               tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
             />
 
@@ -1173,7 +1173,7 @@ function MethodForm({
                   ? fmtLkrShort(flipToBalance + amountNum)
                   : fmtLkrShort(flipToBalance)
               }
-              balanceLabel={showFlipPreview ? "After transfer" : "Available"}
+              balanceLabel="Available"
               tone={showFlipPreview ? "success" : "muted"}
             />
           </div>
@@ -1639,10 +1639,16 @@ function FlipAccountRow({
         <Icon className="size-[22px]" style={{ color: tint }} />
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block text-[10px] font-semibold uppercase tracking-[0.1em] text-muted-foreground/70">
+        <span
+          className="inline-flex items-center rounded-full px-2.5 py-1 text-[11px] font-semibold leading-none"
+          style={{
+            background: `color-mix(in oklch, ${tint} 16%, transparent)`,
+            color: tint,
+          }}
+        >
           {label}
         </span>
-        <span className="mt-1 block truncate text-[15px] font-semibold leading-tight text-foreground">
+        <span className="mt-2 block truncate text-[15px] font-semibold leading-tight text-foreground">
           {fund}
         </span>
         <span className="mt-0.5 block truncate text-[12px] text-muted-foreground">
