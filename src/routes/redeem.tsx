@@ -1,3 +1,5 @@
+import { ValidationField, ValidationSummary, useFormValidation } from "@/components/FormValidation";
+import { getFormIssues } from "@/lib/formValidation";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
@@ -177,8 +179,15 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
   const amountNum = Number(amount || 0);
   const overMax = hasSource && amountNum > maxAmount;
 
-  const canReview =
-    hasSource && !!bank && amountNum > 0 && !overMax && (!isPlan || !!startDate);
+  const validation = useFormValidation(getFormIssues([
+    { field: "Amount", valid: amountNum > 0 && !overMax, message: overMax ? (isInstant ? "Enter an amount within your instant limit, or choose Normal Redemption." : "Enter an amount within your available balance.") : "Enter an amount greater than zero." },
+    ...(!isPayout ? [
+      { field: "Fund", valid: !!fund, message: "Choose the fund to redeem from." },
+      { field: "Sub account", valid: !!sub, message: "Choose a sub account." },
+    ] : []),
+    ...(isPlan ? [{ field: "Start date", valid: !!startDate, message: "Choose when your payouts should start." }] : []),
+    { field: "Bank account", valid: !!bank, message: "Choose the bank account to pay into." },
+  ]));
 
   const amountHint = !hasSource
     ? isPayout
@@ -198,11 +207,13 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       <PageHeader title={title} showBack />
 
       {/* Amount hero */}
-      <div className="px-4 pt-6 pb-6 text-center">
+      <ValidationField field="Amount" error={validation.error("Amount")}><div className="px-4 pt-6 pb-6 text-center">
         <div className="inline-flex items-baseline gap-2">
           <span className="text-[18px] font-medium text-muted-foreground">LKR</span>
           <input
             type="text"
+            aria-label="Redemption amount"
+            aria-invalid={!!validation.error("Amount")}
             inputMode="decimal"
             value={formatAmountDisplay(amount)}
             onChange={(e) => setAmount(sanitizeAmountInput(e.target.value))}
@@ -246,6 +257,8 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
         )}
       </div>
 
+      </ValidationField>
+
       {/* From */}
       <SectionTitle>{isPayout ? "Withdraw from" : "Redeem from"}</SectionTitle>
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
@@ -258,12 +271,12 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
           </div>
         ) : (
           <>
-            <PickerRow label="Fund" value={fund} placeholder="Select fund" onClick={() => setPicker("fund")} />
+            <PickerRow label="Fund" error={validation.error("Fund")} value={fund} placeholder="Select fund" onClick={() => setPicker("fund")} />
             <PickerRow
-              label="Sub account"
+              label="Sub account" error={validation.error("Sub account")}
               value={sub}
               placeholder={fund ? "Select sub account" : "Pick a fund first"}
-              onClick={() => fund && setPicker("sub")}
+              onClick={() => setPicker(fund ? "sub" : "fund")}
             />
           </>
         )}
@@ -275,12 +288,12 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
           <SectionTitle>Schedule</SectionTitle>
           <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
             <PickerRow
-              label="Start date"
+              label="Start date" error={validation.error("Start date")}
               value={startDate ? fmtDate(startDate) : ""}
               placeholder="Select date"
               onClick={() => setPicker("date")}
             />
-            <PickerRow label="Frequency" value="Monthly" placeholder="" onClick={() => setPicker("frequency")} />
+            <PickerRow label="Frequency" error={validation.error("Frequency")} value="Monthly" placeholder="" onClick={() => setPicker("frequency")} />
           </div>
         </>
       )}
@@ -288,7 +301,7 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       {/* Pay to */}
       <SectionTitle>Pay to</SectionTitle>
       <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
-        <PickerRow label="Bank account" value={bank} placeholder="Select bank" onClick={() => setPicker("bank")} />
+        <PickerRow label="Bank account" error={validation.error("Bank account")} value={bank} placeholder="Select bank" onClick={() => setPicker("bank")} />
       </div>
 
       {isInstant && (
@@ -301,9 +314,9 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
       )}
 
       <div className="mx-4 mt-6 mb-6">
+        <ValidationSummary issues={validation.issues} />
         <Button
-          disabled={!canReview}
-          onClick={() => setReviewOpen(true)}
+          onClick={() => { if (validation.validate()) setReviewOpen(true); }}
           className="w-full py-4 h-auto rounded-full text-[15px] font-semibold disabled:opacity-50"
           style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
         >
@@ -588,17 +601,20 @@ function PickerRow({
   value,
   placeholder,
   onClick,
+  error,
 }: {
   label: string;
   value: string;
   placeholder: string;
   onClick: () => void;
+  error?: string;
 }) {
   return (
-    <button
+    <ValidationField field={label} error={error}><Button variant="ghost"
       type="button"
+      aria-invalid={!!error}
       onClick={onClick}
-      className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted/10 border-b border-border/20 last:border-b-0"
+      className="h-auto rounded-none w-full flex items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted/10 border-b border-border/20 last:border-b-0"
     >
       <span className="text-sm text-muted-foreground shrink-0">{label}</span>
       <span
@@ -609,7 +625,7 @@ function PickerRow({
         {value || placeholder}
       </span>
       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-    </button>
+    </Button></ValidationField>
   );
 }
 

@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Keep investment and redemption bottom actions enabled with friendly missing-field guidance and verify every method
+
 - [x] Replace dashboard carousel/pie chart with the supplied compact overview and verify portfolio, quick links and market sections
 
 - [x] Add recurring investments empty-state landing and saved plan card

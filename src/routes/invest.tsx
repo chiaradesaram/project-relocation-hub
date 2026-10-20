@@ -1,3 +1,5 @@
+import { ValidationField, ValidationSummary, useFormValidation } from "@/components/FormValidation";
+import { getFormIssues } from "@/lib/formValidation";
 import { readGoals } from "@/lib/goals";
 import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -931,16 +933,23 @@ function MethodForm({
   };
   const draftSubOptions = subAccountsOf(draftFund);
 
-  const canReview = (() => {
-    if (amountNum <= 0) return false;
-    if (isFlip) return !isOverBalance && !isSameAccount;
-    if (!selectedFund || !selectedAccount) return false;
-    if (isInstant) return !!selectedBank;
-    if (isBank) return !!selectedBank && !!selectedPayTo && (!needsProof || !!proofName);
-    return false;
-  })();
+  const validation = useFormValidation(getFormIssues([
+    { field: "Amount", valid: amountNum > 0 && !isOverBalance, message: isOverBalance ? "Enter an amount within your available balance." : "Enter an amount greater than zero." },
+    ...(isFlip ? [
+      { field: "Transfer to", valid: !isSameAccount, message: "Choose a different fund or sub account to transfer to." },
+    ] : [
+      { field: "Fund", valid: !!selectedFund, message: "Choose the fund to invest in." },
+      { field: "Sub-account", valid: !!selectedAccount, message: "Choose a sub account." },
+      { field: payFromLabel, valid: !!selectedBank, message: "Choose the bank account you are paying from." },
+      ...(isBank ? [
+        { field: sendToLabel, valid: !!selectedPayTo, message: "Choose the CAL account you transferred to." },
+        { field: "Proof of payment", valid: !needsProof || !!proofName, message: "Attach your transfer receipt." },
+      ] : []),
+    ]),
+  ]));
 
   const handleReview = () => {
+    if (!validation.validate()) return;
     navigate({
       to: "/invest-summary",
       search: {
@@ -1135,7 +1144,7 @@ function MethodForm({
             <ArrowDown className="w-4 h-4 text-muted-foreground" />
           </div>
 
-          <FlipAccountCard
+          <ValidationField field="Transfer to" error={validation.error("Transfer to")}><FlipAccountCard
             label="Transfer to"
             fund={flipToFund}
             sub={flipToSub}
@@ -1146,7 +1155,7 @@ function MethodForm({
             }
             tone={showFlipPreview ? "success" : "muted"}
             onClick={() => openFlipPicker("to")}
-          />
+          /></ValidationField>
 
           {isSameAccount && (
             <p className="px-1 pt-1 text-[12px] text-destructive">
@@ -1157,7 +1166,7 @@ function MethodForm({
       )}
 
       {/* Amount hero */}
-      <div className="px-4 pt-6 pb-6 text-center">
+      <ValidationField field="Amount" error={validation.error("Amount")}><div className="px-4 pt-6 pb-6 text-center">
         <div className="inline-flex items-baseline gap-2">
           <span className="text-[18px] font-medium text-muted-foreground">
             LKR
@@ -1165,6 +1174,8 @@ function MethodForm({
           <input
             ref={amountInputRef}
             type="text"
+            aria-label="Investment amount"
+            aria-invalid={!!validation.error("Amount")}
             inputMode="decimal"
             value={formatAmountDisplay(amount)}
             onChange={(e) => handleAmountChange(e.target.value)}
@@ -1186,23 +1197,28 @@ function MethodForm({
         )}
       </div>
 
+      </ValidationField>
+
       {/* Details */}
       {!isFlip && (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <PickerRow
             label="Fund"
+            error={validation.error("Fund")}
             value={selectedFund}
             placeholder="Select a fund"
             onClick={() => setPicker("fund")}
           />
           <PickerRow
             label="Sub-account"
+            error={validation.error("Sub-account")}
             value={selectedAccount}
             placeholder="Select sub-account"
             onClick={() => setPicker("account")}
           />
           <PickerRow
             label={payFromLabel}
+            error={validation.error(payFromLabel)}
             value={payFromValue}
             placeholder={payFromPlaceholder}
             onClick={() => setPicker("payFrom")}
@@ -1211,6 +1227,7 @@ function MethodForm({
             <>
               <PickerRow
                 label={sendToLabel}
+            error={validation.error(sendToLabel)}
                 value={sendToValue}
                 placeholder={sendToPlaceholder}
                 onClick={() => setPicker("payTo")}
@@ -1246,7 +1263,7 @@ function MethodForm({
 
       {/* Proof of payment — Bank transfer, non-Deutsche */}
       {needsProof && (
-        <div className="mx-4 mt-6">
+        <div className="mx-4 mt-6"><ValidationField field="Proof of payment" error={validation.error("Proof of payment")}>
           <p className="px-1 mb-2 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
             Proof of payment
           </p>
@@ -1297,7 +1314,7 @@ function MethodForm({
               </span>
             </button>
           )}
-        </div>
+        </ValidationField></div>
       )}
 
       {/* Link to a goal — hidden for now */}
@@ -1339,17 +1356,10 @@ function MethodForm({
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
-        <button
-          disabled={!canReview}
-          onClick={handleReview}
-          className="w-full py-4 rounded-full text-[15px] font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{
-            background: "var(--pill)",
-            color: "var(--pill-foreground)",
-          }}
-        >
+        <ValidationSummary issues={validation.issues} />
+        <Button onClick={handleReview} className="h-12 w-full rounded-full bg-pill text-[15px] font-semibold text-pill-foreground hover:bg-pill/90">
           Review
-        </button>
+        </Button>
       </div>
 
       {/* Picker Sheet */}
@@ -1624,18 +1634,21 @@ function PickerRow({
   value,
   placeholder,
   onClick,
+  error,
 }: {
   label: string;
   value: string;
   placeholder: string;
   onClick: () => void;
+  error?: string;
 }) {
   const hasValue = !!value;
   return (
-    <button
+    <ValidationField field={label} error={error}><Button variant="ghost"
       type="button"
+      aria-invalid={!!error}
       onClick={onClick}
-      className="w-full flex items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted/10 border-b border-border/20 last:border-b-0"
+      className="h-auto rounded-none w-full flex items-center gap-3 px-4 py-3.5 text-left transition hover:bg-muted/10 border-b border-border/20 last:border-b-0"
     >
       <span className="text-sm text-muted-foreground shrink-0">{label}</span>
       <span
@@ -1646,7 +1659,7 @@ function PickerRow({
         {hasValue ? value : placeholder}
       </span>
       <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-    </button>
+    </Button></ValidationField>
   );
 }
 
@@ -1965,15 +1978,21 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
   const transferAmt = isUtFlip ? amountNum : 0;
   const showPreview = isUtFlip && amountNum > 0;
 
-  const canReview = (() => {
-    if (amountNum <= 0) return false;
-    if (isUtFlip && (isOverBalance || !authorized)) return false;
-    if (isPayIn) return !!bank && !!payTo && !!proofName;
-    if (isDirect) return !!bank;
-    return !!sourceFund;
-  })();
+  const validation = useFormValidation(getFormIssues([
+    { field: "Amount", valid: amountNum > 0 && !isOverBalance, message: isOverBalance ? "Enter an amount within your available balance." : "Enter an amount greater than zero." },
+    ...(isUtFlip ? [
+      { field: "Authorisation", valid: authorized, message: "Tick the authorisation box to continue." },
+    ] : [
+      { field: "Transfer from", valid: !!bank, message: "Choose the bank account you are paying from." },
+      ...(isPayIn ? [
+        { field: "Transfer to", valid: !!payTo, message: "Choose the CAL account you transferred to." },
+        { field: "Proof of payment", valid: !!proofName, message: "Attach your transfer receipt." },
+      ] : []),
+    ]),
+  ]));
 
-  const handleReview = () =>
+  const handleReview = () => {
+    if (!validation.validate()) return;
     navigate({
       to: "/invest-summary",
       search: {
@@ -1985,6 +2004,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         repeats: String(Math.max(1, splits.length)),
       },
     });
+  };
 
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
@@ -2080,13 +2100,15 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
       )}
 
       {/* Amount hero */}
-      <div className="px-4 pt-6 pb-6 text-center">
+      <ValidationField field="Amount" error={validation.error("Amount")}><div className="px-4 pt-6 pb-6 text-center">
         <div ref={amountRef} className="inline-flex items-baseline gap-2">
           <span className="text-[18px] font-medium text-muted-foreground">
             LKR
           </span>
           <input
             type="text"
+            aria-label="Investment amount"
+            aria-invalid={!!validation.error("Amount")}
             inputMode="decimal"
             value={formatAmountDisplay(amount)}
             onChange={(e) => handleAmountChange(e.target.value)}
@@ -2113,12 +2135,15 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         )}
       </div>
 
+      </ValidationField>
+
       {/* Details */}
       {!isUtFlip && (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <DateRow label="Date" date={date} onClick={() => setDateOpen(true)} />
           <PickerRow
             label="Transfer from"
+            error={validation.error("Transfer from")}
             value={selectedBankLabel(bank)}
             placeholder="Select bank account"
             onClick={() => setPicker("bank")}
@@ -2126,6 +2151,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           {isPayIn && (
             <PickerRow
               label="Transfer to"
+            error={validation.error("Transfer to")}
               value={selectedBankLabel(payTo)}
               placeholder="Select CAL account"
               onClick={() => setPicker("payTo")}
@@ -2152,7 +2178,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
       {/* Attach proof — Pay in */}
       {isPayIn && (
-        <div className="mx-4 mt-6">
+        <div className="mx-4 mt-6"><ValidationField field="Proof of payment" error={validation.error("Proof of payment")}>
           <p className="px-1 mb-2 text-[12px] font-semibold tracking-[0.08em] uppercase text-muted-foreground/80">
             Attach proof
           </p>
@@ -2203,12 +2229,12 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               </span>
             </button>
           )}
-        </div>
+        </ValidationField></div>
       )}
 
       {/* Authorization — Unit Trust to equity only */}
       {isUtFlip && (
-        <div className="mx-4 mt-5">
+        <div className="mx-4 mt-5"><ValidationField field="Authorisation" error={validation.error("Authorisation")}>
           <label className="flex items-start gap-2.5 cursor-pointer">
             <input
               type="checkbox"
@@ -2221,7 +2247,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               auto-settle equity trades from the Unit Trust.
             </span>
           </label>
-        </div>
+        </ValidationField></div>
       )}
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
@@ -2229,14 +2255,10 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
-        <button
-          disabled={!canReview}
-          onClick={handleReview}
-          className="w-full py-4 rounded-full text-[15px] font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
-        >
+        <ValidationSummary issues={validation.issues} />
+        <Button onClick={handleReview} className="h-12 w-full rounded-full bg-pill text-[15px] font-semibold text-pill-foreground hover:bg-pill/90">
           Review
-        </button>
+        </Button>
       </div>
 
       {/* Date sheet */}
@@ -2427,7 +2449,10 @@ function DefaultFundForm() {
     "Your transfer is automatically applied to your default fund, no extra steps needed.",
   ];
 
-  const canSave = enabled && !!fund && !!account;
+  const validation = useFormValidation(getFormIssues([
+    { field: "Default fund", valid: enabled && !!fund, message: enabled ? "Choose your default fund." : "Turn on Default fund to save your selection." },
+    { field: "Default sub account", valid: !!account, message: "Choose your default sub account." },
+  ]));
 
   return (
     <MobileLayout>
@@ -2484,7 +2509,7 @@ function DefaultFundForm() {
       <div
         className={`mx-4 mt-4 space-y-3 transition-opacity ${enabled ? "" : "pointer-events-none opacity-40"}`}
       >
-        <div>
+        <ValidationField field="Default fund" error={validation.error("Default fund")}>
           <label className="mb-1.5 block text-[12px] text-muted-foreground">
             Default fund
           </label>
@@ -2516,9 +2541,9 @@ function DefaultFundForm() {
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
-        </div>
+        </ValidationField>
 
-        <div>
+        <ValidationField field="Default sub account" error={validation.error("Default sub account")}>
           <label className="mb-1.5 block text-[12px] text-muted-foreground">
             Default sub account
           </label>
@@ -2536,7 +2561,7 @@ function DefaultFundForm() {
             </span>
             <ChevronRight className="h-4 w-4 text-muted-foreground" />
           </button>
-        </div>
+        </ValidationField>
       </div>
 
       <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
@@ -2621,8 +2646,10 @@ function DefaultFundForm() {
       </div>
 
       <div className="mx-4 mt-5 mb-8">
-        <button
+        <ValidationSummary issues={validation.issues} />
+        <Button
           onClick={() => {
+            if (!validation.validate()) return;
             if (confirmTimer.current) window.clearTimeout(confirmTimer.current);
             setConfirmOpen(true);
             confirmTimer.current = window.setTimeout(() => {
@@ -2630,12 +2657,10 @@ function DefaultFundForm() {
               confirmTimer.current = null;
             }, 1300);
           }}
-          disabled={!canSave}
-          className="w-full rounded-xl py-3 text-sm font-semibold transition disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ background: "var(--pill)", color: "#000" }}
+          className="h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90"
         >
           Save default
-        </button>
+        </Button>
       </div>
 
       {/* Saved confirmation sheet */}
