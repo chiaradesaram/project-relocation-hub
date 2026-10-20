@@ -847,6 +847,7 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
+  const [bankInfoStep, setBankInfoStep] = useState<1 | 2>(1); // guide is revealed step by step
   const [accountCopied, setAccountCopied] = useState(false);
   const amountInputRef = useRef<HTMLInputElement>(null);
 
@@ -1000,7 +1001,10 @@ function MethodForm({
         <div className="mx-4 mt-4">
           <button
             type="button"
-            onClick={() => setBankInfoOpen(true)}
+            onClick={() => {
+              setBankInfoStep(1);
+              setBankInfoOpen(true);
+            }}
             className="inline-flex items-center gap-1.5 text-[13px] font-medium"
             style={{ color: "var(--pill)" }}
           >
@@ -1040,60 +1044,67 @@ function MethodForm({
                 </div>
               </div>
               <div className="space-y-6 px-7 pt-6 pb-2">
-                <section className="flex items-start gap-3">
-                  <span
-                    aria-hidden="true"
-                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
-                  >
-                    <Landmark className="size-[18px] strokeWidth={2}" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <span className="block type-label-sm text-pill-bright">Step 1</span>
-                    <h3 className="mt-1 type-label">Transfer to CAL</h3>
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      aria-label="Copy CAL bank account number"
-                      onClick={() => {
-                        navigator.clipboard?.writeText("0078 4521 0036").catch(() => {});
-                        setAccountCopied(true);
-                        window.setTimeout(() => setAccountCopied(false), 1500);
-                      }}
-                      className="mt-3 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-foreground hover:bg-sheet-field"
-                      style={{ background: "var(--sheet-field-light)" }}
+                {bankInfoStep === 1 && (
+                  <section className="flex items-start gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"
                     >
-                      <span className="min-w-0">
-                        <span className="block type-caption">CAL Online (Pvt) Ltd</span>
-                        <span className="block type-label mt-0.5">0078 4521 0036</span>
-                      </span>
-                      {accountCopied ? <Check className="size-4 shrink-0 text-success" /> : <Copy className="size-4 shrink-0 text-pill-bright" />}
-                    </Button>
-                  </div>
-                </section>
-                <section className="flex items-start gap-3">
-                  <span
-                    aria-hidden="true"
-                    className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
-                  >
-                    <FilePlus2 className="size-[18px] strokeWidth={2}" />
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <span className="block type-label-sm text-rates-mint">Step 2</span>
-                    <h3 className="mt-1 type-label">Raise a request</h3>
-                    <p className="mt-1 type-body-sm text-foreground">
-                      Return here to make a Creation Request to tell us which fund to invest it in.
-                    </p>
-                  </div>
-                </section>
+                      <Landmark className="size-[18px] strokeWidth={2}" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <span className="block type-label-sm text-pill-bright">Step 1</span>
+                      <h3 className="mt-1 type-label">Transfer to CAL</h3>
+                      <p className="mt-1 type-body-sm text-foreground">
+                        Send your funds to CAL's Deutsche Bank account below.
+                      </p>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        aria-label="Copy CAL bank account number"
+                        onClick={() => {
+                          navigator.clipboard?.writeText("0078 4521 0036").catch(() => {});
+                          setAccountCopied(true);
+                          window.setTimeout(() => setAccountCopied(false), 1500);
+                        }}
+                        className="mt-3 flex h-auto w-full items-center justify-between gap-3 rounded-lg px-3 py-2.5 text-left text-foreground hover:bg-sheet-field"
+                        style={{ background: "var(--sheet-field-light)" }}
+                      >
+                        <span className="min-w-0">
+                          <span className="block type-caption">CAL Online (Pvt) Ltd</span>
+                          <span className="block type-label mt-0.5">0078 4521 0036</span>
+                        </span>
+                        {accountCopied ? <Check className="size-4 shrink-0 text-success" /> : <Copy className="size-4 shrink-0 text-pill-bright" />}
+                      </Button>
+                    </div>
+                  </section>
+                )}
+                {bankInfoStep === 2 && (
+                  <section className="flex items-start gap-3">
+                    <span
+                      aria-hidden="true"
+                      className="mt-0.5 flex size-9 shrink-0 items-center justify-center rounded-full bg-rates-mint text-background"
+                    >
+                      <FilePlus2 className="size-[18px] strokeWidth={2}" />
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <span className="block type-label-sm text-rates-mint">Step 2</span>
+                      <h3 className="mt-1 type-label">Raise a request</h3>
+                      <p className="mt-1 type-body-sm text-foreground">
+                        Now make a Creation Request to tell us which fund to invest your transfer in.
+                      </p>
+                    </div>
+                  </section>
+                )}
               </div>
               <div className="px-7 pt-3 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
                 <Button
                   type="button"
-                  onClick={raiseRequest}
+                  onClick={bankInfoStep === 1 ? () => setBankInfoStep(2) : raiseRequest}
                   className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-pill type-label text-pill-foreground hover:bg-pill/90"
                 >
                   <FilePlus2 className="size-[18px] strokeWidth={2}" />
-                  Raise a request
+                  {bankInfoStep === 1 ? "I have made my transfer" : "Raise a request"}
                 </Button>
               </div>
             </SheetContent>
