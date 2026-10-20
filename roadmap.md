@@ -1,6 +1,6 @@
 # Roadmap
 
-- [x] Keep investment and redemption bottom actions enabled with friendly missing-field guidance and verify every method
+- [x] Revert investment and redemption bottom actions to disabled until the form is complete
 
 - [x] Replace dashboard carousel/pie chart with the supplied compact overview and verify portfolio, quick links and market sections
 
