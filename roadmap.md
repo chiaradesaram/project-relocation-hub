@@ -31,3 +31,4 @@
 - [x] Move the "Latest transactions" widget to the end of the default dashboard order
 - [x] Reword the review quick-check lines, drop the copy button, simplify the timeline to two connected bullets with dates under each header, and rename the button "Confirm Request"
 - [x] Drop the standing Justpay per-transfer limit note and show a split-transfers hint with an info sheet only above the limit
+- [x] Show "Max limit is LKR 449,850" with the split note when a Justpay amount passes the ceiling

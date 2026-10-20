@@ -848,6 +848,8 @@ function MethodForm({
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
   const [splitInfoOpen, setSplitInfoOpen] = useState(false); // explains split transfers
+  const [overMax, setOverMax] = useState(false); // typed past the Justpay ceiling
+
 
   const [bankInfoStep, setBankInfoStep] = useState<1 | 2>(1); // guide is revealed step by step
   const [accountCopied, setAccountCopied] = useState(false);
@@ -869,13 +871,17 @@ function MethodForm({
     const sanitized = sanitizeAmountInput(raw);
     if (isInstant) {
       const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS) {
-        setAmount(String(DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS));
+      const maxTotal = DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS;
+      if (n > maxTotal) {
+        setAmount(String(maxTotal));
+        setOverMax(true);
         return;
       }
+      setOverMax(false);
     }
     setAmount(sanitized);
   };
+
 
   const splits = isInstant ? directInvestSplits(amountNum) : [];
 
@@ -1180,27 +1186,12 @@ function MethodForm({
             }}
           />
         </div>
-        {isInstant && splits.length > 1 && (
-          <div className="mt-3 flex items-center justify-center gap-1.5">
-            <p className="text-[12px] text-muted-foreground">
-              Will be split into {splits.length} transfers
-            </p>
-            <button
-              type="button"
-              onClick={() => setSplitInfoOpen(true)}
-              aria-label="About split transfers"
-              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
-              style={{ background: "var(--pill)" }}
-            >
-              <span
-                className="text-[10px] font-bold leading-none"
-                style={{ color: "var(--pill-foreground)" }}
-              >
-                i
-              </span>
-            </button>
-          </div>
-        )}
+        <SplitHint
+          overMax={overMax}
+          splits={splits}
+          onInfo={() => setSplitInfoOpen(true)}
+        />
+
 
       </div>
 
@@ -1714,7 +1705,58 @@ function SplitTransfersCard({ splits }: { splits: number[] }) {
   );
 }
 
+// Quiet note under the Justpay amount: the ceiling, then how the amount splits.
+function SplitHint({
+  overMax,
+  splits,
+  onInfo,
+  gap = "mt-3",
+}: {
+  overMax: boolean;
+  splits: number[];
+  onInfo: () => void;
+  gap?: string;
+}) {
+  if (!overMax && splits.length <= 1) return null;
+  const maxTotal = DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS;
+  return (
+    <div className={`${gap} text-center`}>
+      {overMax && (
+        <p className="text-[12px] font-semibold text-foreground">
+          Max limit is LKR {maxTotal.toLocaleString()}
+        </p>
+      )}
+      <div
+        className={`flex items-center justify-center gap-1.5 ${
+          overMax ? "mt-1" : ""
+        }`}
+      >
+        <p className="text-[12px] text-muted-foreground">
+          {overMax
+            ? `and it will be split into ${splits.length} transfers`
+            : `Will be split into ${splits.length} transfers`}
+        </p>
+        <button
+          type="button"
+          onClick={onInfo}
+          aria-label="About split transfers"
+          className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+          style={{ background: "var(--pill)" }}
+        >
+          <span
+            className="text-[10px] font-bold leading-none"
+            style={{ color: "var(--pill-foreground)" }}
+          >
+            i
+          </span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
 function SplitInfoSheet({
+
   open,
   onOpenChange,
   splits,
@@ -2043,17 +2085,23 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     }
   }, [amount, isOverBalance]);
 
+  const [overMax, setOverMax] = useState(false); // typed past the Justpay ceiling
+
   const handleAmountChange = (raw: string) => {
     const sanitized = sanitizeAmountInput(raw);
     if (isDirect) {
       const n = parseFloat(sanitized || "0") || 0;
-      if (n > DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS) {
-        setAmount(String(DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS));
+      const maxTotal = DIRECT_INVEST_LIMIT * DIRECT_INVEST_MAX_TRANSFERS;
+      if (n > maxTotal) {
+        setAmount(String(maxTotal));
+        setOverMax(true);
         return;
       }
+      setOverMax(false);
     }
     setAmount(sanitized);
   };
+
 
   const [splitInfoOpen, setSplitInfoOpen] = useState(false); // explains split transfers
 
@@ -2209,27 +2257,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                 : "Amount to transfer"}
           </p>
         )}
-        {isDirect && splits.length > 1 && (
-          <div className="mt-2 flex items-center justify-center gap-1.5">
-            <p className="text-[12px] text-muted-foreground">
-              Will be split into {splits.length} transfers
-            </p>
-            <button
-              type="button"
-              onClick={() => setSplitInfoOpen(true)}
-              aria-label="About split transfers"
-              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
-              style={{ background: "var(--pill)" }}
-            >
-              <span
-                className="text-[10px] font-bold leading-none"
-                style={{ color: "var(--pill-foreground)" }}
-              >
-                i
-              </span>
-            </button>
-          </div>
-        )}
+        <SplitHint
+          overMax={overMax}
+          splits={splits}
+          onInfo={() => setSplitInfoOpen(true)}
+          gap="mt-2"
+        />
+
 
       </div>
 
