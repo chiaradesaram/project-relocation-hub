@@ -34,3 +34,4 @@
 - [x] Show "Max limit is LKR 449,850" with the split note when a Justpay amount passes the ceiling
 - [x] Add an info icon beside the "Split into N transfers" card heading that opens the same split-transfers sheet
 - [x] Replace the investment review page with a redemption-style bottom sheet on all invest forms
+- [x] Centre the "Review" title in the invest and redeem review sheets
