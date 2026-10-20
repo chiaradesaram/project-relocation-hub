@@ -1468,7 +1468,7 @@ function MethodForm({
                   </button>
                 );
               })}
-            {picker === "payFrom" && !isFlip && (
+            {picker === "payFrom" && (
               <button
                 onClick={() => {
                   setPicker(null);
