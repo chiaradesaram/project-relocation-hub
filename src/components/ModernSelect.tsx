@@ -85,7 +85,7 @@ export function ModernSelect({
           className,
         )}
       >
-        <SelectValue placeholder={ph} />
+        <SelectValue className="min-w-0 flex-1" placeholder={ph} />
       </SelectTrigger>
       <SelectContent
         className={cn(
