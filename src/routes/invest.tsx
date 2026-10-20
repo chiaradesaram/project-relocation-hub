@@ -1344,7 +1344,13 @@ function MethodForm({
       )}
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
-      {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+      {isInstant && splits.length > 1 && (
+        <SplitTransfersCard
+          splits={splits}
+          onInfo={() => setSplitInfoOpen(true)}
+        />
+      )}
+
 
       <SplitInfoSheet
         open={splitInfoOpen}
@@ -1670,7 +1676,13 @@ function PickerRow({
 /* Shared bits                                                         */
 /* ------------------------------------------------------------------ */
 
-function SplitTransfersCard({ splits }: { splits: number[] }) {
+function SplitTransfersCard({
+  splits,
+  onInfo,
+}: {
+  splits: number[];
+  onInfo: () => void;
+}) {
   return (
     <div className="mx-4 mt-2 rounded-2xl bg-card/60 backdrop-blur-md p-4">
       <div className="flex items-center gap-3">
@@ -1680,15 +1692,33 @@ function SplitTransfersCard({ splits }: { splits: number[] }) {
         >
           <Split className="w-5 h-5" style={{ color: "var(--pill)" }} />
         </div>
-        <div>
-          <p className="text-[13px] font-semibold text-foreground">
-            Split into {splits.length} transfers
-          </p>
+        <div className="min-w-0 flex-1">
+          <div className="flex items-center gap-1.5">
+            <p className="text-[13px] font-semibold text-foreground">
+              Split into {splits.length} transfers
+            </p>
+            <button
+              type="button"
+              onClick={onInfo}
+              aria-label="About split transfers"
+              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+              style={{ background: "var(--pill)" }}
+            >
+              <span
+                className="text-[10px] font-bold leading-none"
+                style={{ color: "var(--pill-foreground)" }}
+              >
+                i
+              </span>
+            </button>
+          </div>
           <p className="text-[11px] text-muted-foreground">
             Each is debited separately, with its own LKR 50 Justpay charge
           </p>
         </div>
       </div>
+
+
       <div className="mt-3 pt-3 border-t border-white/5 space-y-1.5">
         {splits.map((part, i) => (
           <div key={i} className="flex items-center justify-between">
@@ -2379,7 +2409,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
       )}
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
-      {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+      {isDirect && splits.length > 1 && (
+        <SplitTransfersCard
+          splits={splits}
+          onInfo={() => setSplitInfoOpen(true)}
+        />
+      )}
+
 
       <SplitInfoSheet
         open={splitInfoOpen}
