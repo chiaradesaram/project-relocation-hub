@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
+import { InvestReviewSheet } from "@/components/InvestReviewSheet";
 import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
@@ -96,6 +97,8 @@ import { RadioDot } from "@/components/RadioDot";
 import { Button } from "@/components/ui/button";
 import {
   type RecurringInvestmentPlan,
+  RECURRING_INVESTMENT_SAVED_KEY,
+  newRecurringInvestmentId,
   readRecurringInvestments,
   writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
@@ -948,29 +951,29 @@ function MethodForm({
     return false;
   })();
 
-  const handleReview = () => {
-    navigate({
-      to: "/invest-summary",
-      search: {
-        method,
-        amount: amount || "0",
-        fund: isFlip ? flipFromFund : selectedFund,
-        account: isFlip ? flipFromSub : selectedAccount,
-        bank: isFlip
-          ? `${flipToFund} · ${flipToSub}`
-          : isInstant
-            ? selectedBank
-            : selectedPayTo,
-        fromBank: isBank ? selectedBank : undefined,
-        repeats: String(Math.max(1, splits.length)),
-        startDate: isRecurringMethod
-          ? recurringStartDate.toISOString().slice(0, 10)
-          : undefined,
-        frequency: isRecurringMethod ? recurringFrequency : undefined,
-        edit: isRecurringMethod ? editPlanId : undefined,
-      },
-    });
+  const [reviewOpen, setReviewOpen] = useState(false);
+
+  // Recurring investments are saved on confirm, inside the review sheet
+  const confirmInvestment = () => {
+    if (!isRecurringMethod) return;
+    const plans = readRecurringInvestments();
+    const next: Omit<RecurringInvestmentPlan, "id"> = {
+      amount: amount || "0",
+      fund: isFlip ? flipFromFund : selectedFund,
+      account: isFlip ? flipFromSub : selectedAccount,
+      bank: selectedBank,
+      startDate: recurringStartDate.toISOString().slice(0, 10),
+      frequency: recurringFrequency,
+      active: true,
+    };
+    const idx = editPlanId ? plans.findIndex((p) => p.id === editPlanId) : -1;
+    if (idx >= 0) plans[idx] = { ...plans[idx]!, ...next };
+    else plans.push({ ...next, id: newRecurringInvestmentId() });
+    writeRecurringInvestments(plans);
+    localStorage.setItem(RECURRING_INVESTMENT_SAVED_KEY, "true");
   };
+
+  const handleReview = () => setReviewOpen(true);
 
   // ---- Picker options ----
   const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
@@ -1373,6 +1376,35 @@ function MethodForm({
           Review
         </button>
       </div>
+
+      {/* Review — same bottom sheet as redemptions */}
+      <InvestReviewSheet
+        open={reviewOpen}
+        onOpenChange={setReviewOpen}
+        data={{
+          method: isRecurringMethod ? "recurring" : method === "flip" ? "flip" : isBank ? "bank" : "instant",
+          amount: amountNum,
+          fund: isFlip ? flipFromFund : selectedFund,
+          account: isFlip ? flipFromSub : selectedAccount,
+          destinationLabel: isFlip
+            ? `${flipToFund} · ${flipToSub}`
+            : isBank
+              ? selectedBankLabel(selectedPayTo)
+              : undefined,
+          fromBankLabel: isBank ? selectedBankLabel(selectedBank) : undefined,
+          splits,
+          recurring: isRecurringMethod
+            ? {
+                startDate: recurringStartDate,
+                frequency: recurringFrequency,
+                edit: editPlanId,
+              }
+            : undefined,
+          sentTarget: isFlip ? flipToFund : undefined,
+          showBankExtras: isBank,
+          onConfirm: confirmInvestment,
+        }}
+      />
 
       {/* Picker Sheet */}
       <Sheet open={picker !== null} onOpenChange={(o) => !o && setPicker(null)}>
@@ -2149,18 +2181,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     return !!sourceFund;
   })();
 
-  const handleReview = () =>
-    navigate({
-      to: "/invest-summary",
-      search: {
-        method: isUtFlip ? "flip" : isDirect ? "instant" : "bank",
-        amount: amount || "0",
-        fund: isUtFlip ? sourceFund : "Equity Account",
-        account: "Equity Account",
-        bank: isUtFlip ? "Equity Account" : isPayIn ? payTo : bank,
-        repeats: String(Math.max(1, splits.length)),
-      },
-    });
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const handleReview = () => setReviewOpen(true);
 
   const pickerOptions: Record<"bank" | "payTo" | "sourceFund", string[]> = {
     bank: banks,
@@ -2435,6 +2457,27 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
           Review
         </button>
       </div>
+
+      {/* Review — same bottom sheet as redemptions */}
+      <InvestReviewSheet
+        open={reviewOpen}
+        onOpenChange={setReviewOpen}
+        data={{
+          method: isUtFlip ? "flip" : isDirect ? "instant" : "bank",
+          amount: amountNum,
+          fund: isUtFlip ? sourceFund : "Equity Account",
+          account: isUtFlip ? sourceSub : undefined,
+          destinationLabel: isUtFlip
+            ? "Equity Account"
+            : isPayIn
+              ? selectedBankLabel(payTo)
+              : undefined,
+          fromBankLabel: isPayIn ? selectedBankLabel(bank) : undefined,
+          splits,
+          sentTarget: "your equity account",
+          showBankExtras: false,
+        }}
+      />
 
       {/* Date sheet */}
       <Sheet open={dateOpen} onOpenChange={setDateOpen}>
