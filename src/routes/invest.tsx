@@ -945,6 +945,9 @@ function MethodForm({
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
   const fmtLkr = (n: number) =>
     `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  // Compact form for the flip rows — whole rupees, so the fund name keeps its room
+  const fmtLkrShort = (n: number) =>
+    `LKR ${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
   const flipFromBalance = parseLkr(balanceOf(flipFromFund, flipFromSub));
   const flipToBalance = parseLkr(balanceOf(flipToFund, flipToSub));
   const projectedFrom = flipFromBalance - amountNum;
@@ -1142,9 +1145,9 @@ function MethodForm({
               balance={
                 showFlipPreview
                   ? isOverBalance
-                    ? `−${fmtLkr(Math.abs(projectedFrom))}`
-                    : fmtLkr(projectedFrom)
-                  : fmtLkr(flipFromBalance)
+                    ? `−${fmtLkrShort(Math.abs(projectedFrom))}`
+                    : fmtLkrShort(projectedFrom)
+                  : fmtLkrShort(flipFromBalance)
               }
               balanceLabel={showFlipPreview ? "After transfer" : "Available"}
               tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
@@ -1167,8 +1170,8 @@ function MethodForm({
               onClick={() => openFlipSheet("to")}
               balance={
                 showFlipPreview
-                  ? fmtLkr(flipToBalance + amountNum)
-                  : fmtLkr(flipToBalance)
+                  ? fmtLkrShort(flipToBalance + amountNum)
+                  : fmtLkrShort(flipToBalance)
               }
               balanceLabel={showFlipPreview ? "After transfer" : "Available"}
               tone={showFlipPreview ? "success" : "muted"}
