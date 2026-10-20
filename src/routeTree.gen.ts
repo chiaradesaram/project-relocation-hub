@@ -15,7 +15,6 @@ import { Route as BankAccountsRouteImport } from './routes/bank-accounts'
 import { Route as GetStartedRouteImport } from './routes/get-started'
 import { Route as HelpRouteImport } from './routes/help'
 import { Route as InvestRouteImport } from './routes/invest'
-import { Route as InvestSummaryRouteImport } from './routes/invest-summary'
 import { Route as LearnRouteImport } from './routes/learn'
 import { Route as MoreRouteImport } from './routes/more'
 import { Route as ProfileRouteImport } from './routes/profile'
@@ -70,11 +69,6 @@ const HelpRoute = HelpRouteImport.update({
 const InvestRoute = InvestRouteImport.update({
   id: '/invest',
   path: '/invest',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const InvestSummaryRoute = InvestSummaryRouteImport.update({
-  id: '/invest-summary',
-  path: '/invest-summary',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LearnRoute = LearnRouteImport.update({
@@ -211,7 +205,6 @@ export interface FileRoutesByFullPath {
   '/get-started': typeof GetStartedRoute
   '/help': typeof HelpRouteWithChildren
   '/invest': typeof InvestRoute
-  '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
@@ -244,7 +237,6 @@ export interface FileRoutesByTo {
   '/bank-accounts': typeof BankAccountsRoute
   '/get-started': typeof GetStartedRoute
   '/invest': typeof InvestRoute
-  '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
@@ -276,7 +268,6 @@ export interface FileRoutesById {
   '/get-started': typeof GetStartedRoute
   '/help': typeof HelpRouteWithChildren
   '/invest': typeof InvestRoute
-  '/invest-summary': typeof InvestSummaryRoute
   '/learn': typeof LearnRoute
   '/more': typeof MoreRoute
   '/profile': typeof ProfileRoute
@@ -312,7 +303,6 @@ export interface FileRouteTypes {
     | '/get-started'
     | '/help'
     | '/invest'
-    | '/invest-summary'
     | '/learn'
     | '/more'
     | '/profile'
@@ -345,7 +335,6 @@ export interface FileRouteTypes {
     | '/bank-accounts'
     | '/get-started'
     | '/invest'
-    | '/invest-summary'
     | '/learn'
     | '/more'
     | '/profile'
@@ -376,7 +365,6 @@ export interface FileRouteTypes {
     | '/get-started'
     | '/help'
     | '/invest'
-    | '/invest-summary'
     | '/learn'
     | '/more'
     | '/profile'
@@ -411,7 +399,6 @@ export interface RootRouteChildren {
   GetStartedRoute: typeof GetStartedRoute
   HelpRoute: typeof HelpRouteWithChildren
   InvestRoute: typeof InvestRoute
-  InvestSummaryRoute: typeof InvestSummaryRoute
   LearnRoute: typeof LearnRoute
   MoreRoute: typeof MoreRoute
   ProfileRoute: typeof ProfileRoute
@@ -472,13 +459,6 @@ declare module '@tanstack/react-router' {
       path: '/invest'
       fullPath: '/invest'
       preLoaderRoute: typeof InvestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/invest-summary': {
-      id: '/invest-summary'
-      path: '/invest-summary'
-      fullPath: '/invest-summary'
-      preLoaderRoute: typeof InvestSummaryRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/learn': {
@@ -720,7 +700,6 @@ const rootRouteChildren: RootRouteChildren = {
   GetStartedRoute: GetStartedRoute,
   HelpRoute: HelpRouteWithChildren,
   InvestRoute: InvestRoute,
-  InvestSummaryRoute: InvestSummaryRoute,
   LearnRoute: LearnRoute,
   MoreRoute: MoreRoute,
   ProfileRoute: ProfileRoute,
