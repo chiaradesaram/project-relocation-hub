@@ -1001,7 +1001,10 @@ function MethodForm({
         <div className="mx-4 mt-4">
           <button
             type="button"
-            onClick={() => setBankInfoOpen(true)}
+            onClick={() => {
+              setBankInfoStep(1);
+              setBankInfoOpen(true);
+            }}
             className="inline-flex items-center gap-1.5 text-[13px] font-medium"
             style={{ color: "var(--pill)" }}
           >
