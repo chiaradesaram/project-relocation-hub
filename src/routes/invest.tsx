@@ -1150,12 +1150,12 @@ function MethodForm({
               tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
             />
 
-            <div className="relative ml-[22px] h-12 w-px bg-border/60">
+            <div className="relative ml-[21px] h-16 w-0.5 rounded-full bg-border/70">
               <span
                 aria-hidden="true"
-                className="absolute left-1/2 top-1/2 flex size-9 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-pill text-pill-foreground shadow-lg"
+                className="absolute left-1/2 top-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-pill text-pill-foreground"
               >
-                <ArrowDown className="size-[18px]" strokeWidth={2.5} />
+                <ArrowDown className="size-4" strokeWidth={2.5} />
               </span>
             </div>
 
