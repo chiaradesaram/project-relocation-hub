@@ -37,6 +37,7 @@ import {
 } from "lucide-react";
 import { EQUITY_SETTLEMENT_KEY } from "./requests.equity-settlement";
 import SavedConfirmation from "@/components/SavedConfirmation";
+import { InvestReviewSheet } from "@/components/InvestReviewSheet";
 import { Switch } from "@/components/ui/switch";
 import { Calendar } from "@/components/ui/calendar";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
@@ -96,6 +97,8 @@ import { RadioDot } from "@/components/RadioDot";
 import { Button } from "@/components/ui/button";
 import {
   type RecurringInvestmentPlan,
+  RECURRING_INVESTMENT_SAVED_KEY,
+  newRecurringInvestmentId,
   readRecurringInvestments,
   writeRecurringInvestments,
 } from "@/lib/recurringInvestment";
