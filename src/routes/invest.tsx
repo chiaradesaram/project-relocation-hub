@@ -966,27 +966,21 @@ function MethodForm({
   const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
     fund: presetFund && !funds.includes(presetFund) ? [...funds, presetFund] : funds,
     account: Array.from(new Set([...accounts, ...goalNames, ...(presetSub ? [presetSub] : [])])),
-    payFrom: isFlip ? funds : banks,
+    payFrom: banks,
     payTo: calBankAccounts.map((a) => a.label),
-    flipTo: funds,
   };
   const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
     fund: "Select fund",
     account: "Select sub-account",
-    payFrom: isFlip ? "Transfer from" : isBank ? "Paid from" : "Paying from",
+    payFrom: isBank ? "Paid from" : "Paying from",
     payTo: isBank ? "Sent to" : "Send to",
-    flipTo: "Transfer to",
   };
 
   const handlePick = (value: string) => {
     if (picker === "fund") setSelectedFund(value);
     if (picker === "account") setSelectedAccount(value);
-    if (picker === "payFrom") {
-      if (isFlip) setSelectedFund(value);
-      else setSelectedBank(value);
-    }
+    if (picker === "payFrom") setSelectedBank(value);
     if (picker === "payTo") setSelectedPayTo(value);
-    if (picker === "flipTo") setSelectedFlipTo(value);
     setPicker(null);
   };
 
@@ -1422,29 +1416,21 @@ function MethodForm({
               </button>
             </div>
           </SheetHeader>
-          {picker &&
-            (picker === "fund" ||
-              picker === "flipTo" ||
-              (picker === "payFrom" && isFlip)) && (
-              <div className="px-5 mt-3 flex justify-end">
-                <ViewRatesLink />
-              </div>
-            )}
+          {picker === "fund" && (
+            <div className="px-5 mt-3 flex justify-end">
+              <ViewRatesLink />
+            </div>
+          )}
           <div className="px-5 mt-4 space-y-2">
             {picker &&
               pickerOptions[picker].map((opt) => {
                 const isSelected =
                   (picker === "fund" && opt === selectedFund) ||
                   (picker === "account" && opt === selectedAccount) ||
-                  (picker === "payFrom" &&
-                    opt === (isFlip ? selectedFund : selectedBank)) ||
-                  (picker === "payTo" && opt === selectedPayTo) ||
-                  (picker === "flipTo" && opt === selectedFlipTo);
-                const isFundPicker =
-                  picker === "fund" ||
-                  picker === "flipTo" ||
-                  (picker === "payFrom" && isFlip);
-                const isBankPicker = picker === "payFrom" && !isFlip;
+                  (picker === "payFrom" && opt === selectedBank) ||
+                  (picker === "payTo" && opt === selectedPayTo);
+                const isFundPicker = picker === "fund";
+                const isBankPicker = picker === "payFrom";
                 const logo = isBankPicker ? bankLogoFor(opt) : undefined;
                 return (
                   <button
