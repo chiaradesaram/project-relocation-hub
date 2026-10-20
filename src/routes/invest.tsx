@@ -847,6 +847,8 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
+  const [splitInfoOpen, setSplitInfoOpen] = useState(false); // explains split transfers
+
   const [bankInfoStep, setBankInfoStep] = useState<1 | 2>(1); // guide is revealed step by step
   const [accountCopied, setAccountCopied] = useState(false);
   const amountInputRef = useRef<HTMLInputElement>(null);
@@ -1178,12 +1180,28 @@ function MethodForm({
             }}
           />
         </div>
-        {isInstant && (
-          <p className="mt-3 text-[12px] text-muted-foreground">
-            Max LKR {DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger
-            amounts split into up to {DIRECT_INVEST_MAX_TRANSFERS}
-          </p>
+        {isInstant && splits.length > 1 && (
+          <div className="mt-3 flex items-center justify-center gap-1.5">
+            <p className="text-[12px] text-muted-foreground">
+              Will be split into {splits.length} transfers
+            </p>
+            <button
+              type="button"
+              onClick={() => setSplitInfoOpen(true)}
+              aria-label="About split transfers"
+              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+              style={{ background: "var(--pill)" }}
+            >
+              <span
+                className="text-[10px] font-bold leading-none"
+                style={{ color: "var(--pill-foreground)" }}
+              >
+                i
+              </span>
+            </button>
+          </div>
         )}
+
       </div>
 
       {/* Details */}
@@ -1336,6 +1354,13 @@ function MethodForm({
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
       {isInstant && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+
+      <SplitInfoSheet
+        open={splitInfoOpen}
+        onOpenChange={setSplitInfoOpen}
+        splits={splits}
+      />
+
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
@@ -1689,6 +1714,76 @@ function SplitTransfersCard({ splits }: { splits: number[] }) {
   );
 }
 
+function SplitInfoSheet({
+  open,
+  onOpenChange,
+  splits,
+}: {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  splits: number[];
+}) {
+  const charge = 50 * splits.length;
+  return (
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent
+        side="bottom"
+        className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-6"
+      >
+        <SheetHeader className="flex-row items-center justify-between space-y-0 pb-3">
+          <SheetTitle className="text-base font-semibold text-foreground">
+            Split transfers
+          </SheetTitle>
+          <SheetClose asChild>
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Close"
+              className="size-8 rounded-full bg-secondary text-foreground"
+            >
+              <X className="size-4" />
+            </Button>
+          </SheetClose>
+        </SheetHeader>
+        <p className="text-[13px] leading-snug text-foreground">
+          Justpay accepts one transfer of up to LKR{" "}
+          {DIRECT_INVEST_LIMIT.toLocaleString()}, so this amount goes as{" "}
+          {splits.length} separate transfers. Each one carries its own LKR 50
+          service charge.
+        </p>
+        <div className="mt-4 rounded-2xl bg-background/40 px-4 py-1">
+          {splits.map((part, i) => (
+            <div
+              key={i}
+              className="flex items-center justify-between gap-3 border-b border-border/30 py-2.5"
+            >
+              <span className="text-[13px] text-foreground">Transfer {i + 1}</span>
+              <span className="text-[13px] font-semibold text-foreground tabular-nums">
+                LKR {part.toLocaleString()}
+              </span>
+            </div>
+          ))}
+          <div className="flex items-center justify-between gap-3 py-2.5">
+            <span className="text-[13px] text-foreground">Service charge</span>
+            <span className="text-[13px] font-semibold text-foreground tabular-nums">
+              LKR {charge.toLocaleString()}
+            </span>
+          </div>
+        </div>
+        <SheetClose asChild>
+          <Button
+            className="mt-5 w-full h-auto py-4 rounded-full text-[15px] font-semibold"
+            style={{ background: "var(--pill)", color: "var(--pill-foreground)" }}
+          >
+            Got it
+          </Button>
+        </SheetClose>
+      </SheetContent>
+    </Sheet>
+  );
+}
+
+
 function RecurringToggle({
   value,
   onChange,
@@ -1960,7 +2055,10 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     setAmount(sanitized);
   };
 
+  const [splitInfoOpen, setSplitInfoOpen] = useState(false); // explains split transfers
+
   const splits = isDirect ? directInvestSplits(amountNum) : [];
+
 
   const transferAmt = isUtFlip ? amountNum : 0;
   const showPreview = isUtFlip && amountNum > 0;
@@ -2105,12 +2203,34 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         ) : (
           <p className="mt-3 text-[12px] text-muted-foreground">
             {isDirect
-              ? `Investment amount · max LKR ${DIRECT_INVEST_LIMIT.toLocaleString()} per transfer · larger amounts split into up to ${DIRECT_INVEST_MAX_TRANSFERS}`
+              ? "Investment amount"
               : isPayIn
                 ? "Amount to pay in"
                 : "Amount to transfer"}
           </p>
         )}
+        {isDirect && splits.length > 1 && (
+          <div className="mt-2 flex items-center justify-center gap-1.5">
+            <p className="text-[12px] text-muted-foreground">
+              Will be split into {splits.length} transfers
+            </p>
+            <button
+              type="button"
+              onClick={() => setSplitInfoOpen(true)}
+              aria-label="About split transfers"
+              className="flex size-[16px] shrink-0 items-center justify-center rounded-full transition active:scale-90"
+              style={{ background: "var(--pill)" }}
+            >
+              <span
+                className="text-[10px] font-bold leading-none"
+                style={{ color: "var(--pill-foreground)" }}
+              >
+                i
+              </span>
+            </button>
+          </div>
+        )}
+
       </div>
 
       {/* Details */}
@@ -2226,6 +2346,13 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
       {/* Split transfers — Direct Invest above the per-transfer limit */}
       {isDirect && splits.length > 1 && <SplitTransfersCard splits={splits} />}
+
+      <SplitInfoSheet
+        open={splitInfoOpen}
+        onOpenChange={setSplitInfoOpen}
+        splits={splits}
+      />
+
 
       {/* Review CTA */}
       <div className="mx-4 mt-8 mb-8">
