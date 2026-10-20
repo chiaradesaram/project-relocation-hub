@@ -847,6 +847,7 @@ function MethodForm({
   const isFlip = method === "flip";
   const isInstant = method === "instant" || isRecurringMethod;
   const [bankInfoOpen, setBankInfoOpen] = useState(false); // opens the info bottom sheet
+  const [bankInfoStep, setBankInfoStep] = useState<1 | 2>(1); // guide is revealed step by step
   const [accountCopied, setAccountCopied] = useState(false);
   const amountInputRef = useRef<HTMLInputElement>(null);
 
