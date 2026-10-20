@@ -81,7 +81,7 @@ export function ModernSelect({
     >
       <SelectTrigger
         className={cn(
-          "h-auto w-full rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] font-normal text-foreground shadow-none backdrop-blur-md transition hover:border-primary/40 focus:ring-0 focus-visible:ring-0 data-[placeholder]:text-muted-foreground",
+          "h-auto w-full rounded-xl border border-border/50 bg-card/70 px-3 py-2.5 text-[13px] font-normal text-foreground shadow-none backdrop-blur-md transition hover:border-primary/40 focus:ring-0 focus-visible:ring-0 data-[placeholder]:text-muted-foreground [&>span]:min-w-0 [&>span]:flex-1",
           className,
         )}
       >
@@ -98,17 +98,17 @@ export function ModernSelect({
             key={opt.value}
             value={opt.value}
             disabled={opt.disabled}
-            className="rounded-lg text-[13px] py-2 focus:bg-primary/15 focus:text-foreground"
+            className="rounded-lg text-[13px] py-2 focus:bg-primary/15 focus:text-foreground [&>span:last-child]:min-w-0 [&>span:last-child]:flex-1"
           >
-            <span className="flex items-center gap-2">
+            <span className="flex w-full items-center gap-2">
               {opt.label}
               {opt.pill && (
-                <span className="px-1.5 py-0.5 rounded text-[12px] font-semibold bg-primary/25 text-primary border border-primary/20">
+                <span className="ml-auto px-1.5 py-0.5 rounded text-[12px] font-semibold bg-primary/25 text-primary border border-primary/20">
                   {opt.pill}
                 </span>
               )}
               {opt.action && (
-                <span className="px-2 py-0.5 rounded-md text-[12px] font-semibold bg-primary text-primary-foreground shadow-sm">
+                <span className="ml-auto px-2 py-0.5 rounded-md text-[12px] font-semibold bg-primary text-primary-foreground shadow-sm">
                   {opt.action}
                 </span>
               )}
