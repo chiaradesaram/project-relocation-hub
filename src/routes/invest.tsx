@@ -2296,13 +2296,9 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             Your balance is too low. The most you can move is{" "}
             {fmtLkr(sourceBalance)}.
           </p>
-        ) : (
+        ) : isPayIn ? null : (
           <p className="mt-3 text-[12px] text-muted-foreground">
-            {isDirect
-              ? "Investment amount"
-              : isPayIn
-                ? "Amount to pay in"
-                : "Amount to transfer"}
+            {isDirect ? "Investment amount" : "Amount to transfer"}
           </p>
         )}
         <SplitHint
