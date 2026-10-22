@@ -209,6 +209,7 @@ function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const isEquities = search.product === "equities";
+  const isTreasuries = search.product === "treasuries";
   const [equitySettlementEnabled, setEquitySettlementEnabled] = useState(false);
   const [settlementFund, setSettlementFund] = useState("");
   const [settlementAccount, setSettlementAccount] = useState("");
@@ -228,6 +229,67 @@ function Invest() {
 
   // Method picker landing
   if (!search.method) {
+    // Treasuries first ask bills vs bonds, then show the method panel
+    if (isTreasuries && !search.treasury) {
+      const treasuryCards = [
+        {
+          id: "bills" as const,
+          icon: CalendarClock,
+          label: "Treasury Bills",
+          desc: "Short-term government securities — 91, 182 or 364 days.",
+        },
+        {
+          id: "bonds" as const,
+          icon: Landmark,
+          label: "Treasury Bonds",
+          desc: "Longer-term government securities with fixed interest.",
+        },
+      ];
+      return (
+        <MobileLayout>
+          <PageHeader title="Invest" showBack helpTopic="invest" />
+          <div className="px-4 mt-2">
+            <p className="text-[13px] text-muted-foreground leading-snug">
+              What would you like to invest in?
+            </p>
+          </div>
+          <div className="mx-4 mt-4 space-y-2.5">
+            {treasuryCards.map(({ id, icon: Icon, label, desc }) => (
+              <button
+                key={id}
+                onClick={() =>
+                  navigate({
+                    to: "/invest",
+                    search: { ...search, treasury: id },
+                  })
+                }
+                className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4 text-left transition hover:bg-muted/10"
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
+                  }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: "var(--pill)" }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground leading-tight">
+                    {label}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+                    {desc}
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              </button>
+            ))}
+          </div>
+        </MobileLayout>
+      );
+    }
+
     const methodCards: {
       id: InvestMethod;
       icon: typeof Zap;
