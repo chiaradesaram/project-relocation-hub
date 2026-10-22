@@ -61,7 +61,7 @@ type InvestMethod =
 export const Route = createFileRoute("/invest")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string; fund?: string; sub?: string } => ({
+  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string; fund?: string; sub?: string; treasury?: "bills" | "bonds" } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
@@ -77,6 +77,10 @@ export const Route = createFileRoute("/invest")({
     edit: typeof search.edit === "string" ? search.edit : undefined,
     fund: typeof search.fund === "string" ? search.fund : undefined,
     sub: typeof search.sub === "string" ? search.sub : undefined,
+    treasury:
+      search.treasury === "bills" || search.treasury === "bonds"
+        ? search.treasury
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -129,6 +133,11 @@ const funds = [
   "CAL Balanced Fund",
   "CAL Money Market Fund",
 ];
+// Treasury invest options, picked after choosing bills or bonds
+const treasuryFunds: Record<"bills" | "bonds", string[]> = {
+  bills: ["91-day Treasury Bill", "182-day Treasury Bill", "364-day Treasury Bill"],
+  bonds: ["2-year Treasury Bond", "5-year Treasury Bond", "10-year Treasury Bond"],
+};
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
 
 // Sub accounts with available balances, used by Fund Flip (transfer from / to)
@@ -200,6 +209,7 @@ function Invest() {
   const navigate = useNavigate();
   const search = Route.useSearch();
   const isEquities = search.product === "equities";
+  const isTreasuries = search.product === "treasuries";
   const [equitySettlementEnabled, setEquitySettlementEnabled] = useState(false);
   const [settlementFund, setSettlementFund] = useState("");
   const [settlementAccount, setSettlementAccount] = useState("");
@@ -219,6 +229,67 @@ function Invest() {
 
   // Method picker landing
   if (!search.method) {
+    // Treasuries first ask bills vs bonds, then show the method panel
+    if (isTreasuries && !search.treasury) {
+      const treasuryCards = [
+        {
+          id: "bills" as const,
+          icon: CalendarClock,
+          label: "Treasury Bills",
+          desc: "Short-term government securities — 91, 182 or 364 days.",
+        },
+        {
+          id: "bonds" as const,
+          icon: Landmark,
+          label: "Treasury Bonds",
+          desc: "Longer-term government securities with fixed interest.",
+        },
+      ];
+      return (
+        <MobileLayout>
+          <PageHeader title="Invest" showBack helpTopic="invest" />
+          <div className="px-4 mt-2">
+            <p className="text-[13px] text-muted-foreground leading-snug">
+              What would you like to invest in?
+            </p>
+          </div>
+          <div className="mx-4 mt-4 space-y-2.5">
+            {treasuryCards.map(({ id, icon: Icon, label, desc }) => (
+              <button
+                key={id}
+                onClick={() =>
+                  navigate({
+                    to: "/invest",
+                    search: { ...search, treasury: id },
+                  })
+                }
+                className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-4 py-4 text-left transition hover:bg-muted/10"
+              >
+                <div
+                  className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                  style={{
+                    background:
+                      "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
+                  }}
+                >
+                  <Icon className="w-5 h-5" style={{ color: "var(--pill)" }} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold text-foreground leading-tight">
+                    {label}
+                  </p>
+                  <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+                    {desc}
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
+              </button>
+            ))}
+          </div>
+        </MobileLayout>
+      );
+    }
+
     const methodCards: {
       id: InvestMethod;
       icon: typeof Zap;
@@ -247,7 +318,24 @@ function Invest() {
             desc: "Move money from a unit trust into your equity account.",
           },
         ]
-      : [
+      : isTreasuries
+        ? [
+            {
+              id: "bank",
+              icon: Building2,
+              label: "Bank Transfer",
+              desc:
+                "Transfer funds to CAL's bank account and make a Creation Request.",
+            },
+            {
+              id: "instant",
+              icon: Zap,
+              label: "Justpay (Direct Invest)",
+              desc:
+                "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically (using Justpay).",
+            },
+          ]
+        : [
       {
         id: "bank",
         icon: Building2,
@@ -551,6 +639,13 @@ function Invest() {
   if (search.method === "recurring" && search.mode !== "setup") {
     return <RecurringInvestments />;
   }
+  if (isTreasuries)
+    return (
+      <MethodForm
+        method={search.method === "bank" ? "bank" : "instant"}
+        treasury={search.treasury}
+      />
+    );
   if (isEquities) return <EquitiesForm method={search.method} />;
   if (search.method === "payin" || search.method === "utflip")
     return <EquitiesForm method={search.method} />;
@@ -781,10 +876,13 @@ type PickerKind = null | "fund" | "account" | "payFrom" | "payTo";
 
 function MethodForm({
   method,
+  treasury,
 }: {
   method: Exclude<InvestMethod, "payin" | "utflip" | "default">;
+  treasury?: "bills" | "bonds";
 }) {
   const navigate = useNavigate();
+  const fundList = treasury ? treasuryFunds[treasury] : funds;
 
   const [amount, setAmount] = useState("");
   const [selectedFund, setSelectedFund] = useState("");
@@ -991,13 +1089,13 @@ function MethodForm({
 
   // ---- Picker options ----
   const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
-    fund: presetFund && !funds.includes(presetFund) ? [...funds, presetFund] : funds,
+    fund: presetFund && !fundList.includes(presetFund) ? [...fundList, presetFund] : fundList,
     account: Array.from(new Set([...accounts, ...goalNames, ...(presetSub ? [presetSub] : [])])),
     payFrom: banks,
     payTo: calBankAccounts.map((a) => a.label),
   };
   const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
-    fund: "Select fund",
+    fund: treasury ? "Select treasury" : "Select fund",
     account: "Select sub-account",
     payFrom: isBank ? "Paid from" : "Paying from",
     payTo: isBank ? "Sent to" : "Send to",
@@ -1222,9 +1320,9 @@ function MethodForm({
       {!isFlip && (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <PickerRow
-            label="Fund"
+            label={treasury ? "Treasury" : "Fund"}
             value={selectedFund}
-            placeholder="Select a fund"
+            placeholder={treasury ? "Select a treasury" : "Select a fund"}
             onClick={() => setPicker("fund")}
           />
           <PickerRow
