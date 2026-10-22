@@ -871,10 +871,13 @@ type PickerKind = null | "fund" | "account" | "payFrom" | "payTo";
 
 function MethodForm({
   method,
+  treasury,
 }: {
   method: Exclude<InvestMethod, "payin" | "utflip" | "default">;
+  treasury?: "bills" | "bonds";
 }) {
   const navigate = useNavigate();
+  const fundList = treasury ? treasuryFunds[treasury] : funds;
 
   const [amount, setAmount] = useState("");
   const [selectedFund, setSelectedFund] = useState("");
@@ -1081,13 +1084,13 @@ function MethodForm({
 
   // ---- Picker options ----
   const pickerOptions: Record<Exclude<PickerKind, null>, string[]> = {
-    fund: presetFund && !funds.includes(presetFund) ? [...funds, presetFund] : funds,
+    fund: presetFund && !fundList.includes(presetFund) ? [...fundList, presetFund] : fundList,
     account: Array.from(new Set([...accounts, ...goalNames, ...(presetSub ? [presetSub] : [])])),
     payFrom: banks,
     payTo: calBankAccounts.map((a) => a.label),
   };
   const pickerTitles: Record<Exclude<PickerKind, null>, string> = {
-    fund: "Select fund",
+    fund: treasury ? "Select treasury" : "Select fund",
     account: "Select sub-account",
     payFrom: isBank ? "Paid from" : "Paying from",
     payTo: isBank ? "Sent to" : "Send to",
@@ -1312,9 +1315,9 @@ function MethodForm({
       {!isFlip && (
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <PickerRow
-            label="Fund"
+            label={treasury ? "Treasury" : "Fund"}
             value={selectedFund}
-            placeholder="Select a fund"
+            placeholder={treasury ? "Select a treasury" : "Select a fund"}
             onClick={() => setPicker("fund")}
           />
           <PickerRow
