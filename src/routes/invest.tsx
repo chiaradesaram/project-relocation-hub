@@ -318,7 +318,24 @@ function Invest() {
             desc: "Move money from a unit trust into your equity account.",
           },
         ]
-      : [
+      : isTreasuries
+        ? [
+            {
+              id: "bank",
+              icon: Building2,
+              label: "Bank Transfer",
+              desc:
+                "Transfer funds to CAL's bank account and make a Creation Request.",
+            },
+            {
+              id: "instant",
+              icon: Zap,
+              label: "Justpay (Direct Invest)",
+              desc:
+                "Transfer and Create: Invest directly through the CAL app, your bank account is debited automatically (using Justpay).",
+            },
+          ]
+        : [
       {
         id: "bank",
         icon: Building2,
@@ -622,6 +639,8 @@ function Invest() {
   if (search.method === "recurring" && search.mode !== "setup") {
     return <RecurringInvestments />;
   }
+  if (isTreasuries)
+    return <MethodForm method={search.method} treasury={search.treasury} />;
   if (isEquities) return <EquitiesForm method={search.method} />;
   if (search.method === "payin" || search.method === "utflip")
     return <EquitiesForm method={search.method} />;
