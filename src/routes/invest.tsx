@@ -640,7 +640,12 @@ function Invest() {
     return <RecurringInvestments />;
   }
   if (isTreasuries)
-    return <MethodForm method={search.method} treasury={search.treasury} />;
+    return (
+      <MethodForm
+        method={search.method === "bank" ? "bank" : "instant"}
+        treasury={search.treasury}
+      />
+    );
   if (isEquities) return <EquitiesForm method={search.method} />;
   if (search.method === "payin" || search.method === "utflip")
     return <EquitiesForm method={search.method} />;
