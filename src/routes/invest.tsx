@@ -61,7 +61,7 @@ type InvestMethod =
 export const Route = createFileRoute("/invest")({
   validateSearch: (
     search: Record<string, unknown>,
-  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string; fund?: string; sub?: string } => ({
+  ): { product?: string; method?: InvestMethod; mode?: "setup"; edit?: string; fund?: string; sub?: string; treasury?: "bills" | "bonds" } => ({
     product: typeof search.product === "string" ? search.product : undefined,
     method:
       search.method === "instant" ||
@@ -77,6 +77,10 @@ export const Route = createFileRoute("/invest")({
     edit: typeof search.edit === "string" ? search.edit : undefined,
     fund: typeof search.fund === "string" ? search.fund : undefined,
     sub: typeof search.sub === "string" ? search.sub : undefined,
+    treasury:
+      search.treasury === "bills" || search.treasury === "bonds"
+        ? search.treasury
+        : undefined,
   }),
   head: () => ({
     meta: [
@@ -129,6 +133,11 @@ const funds = [
   "CAL Balanced Fund",
   "CAL Money Market Fund",
 ];
+// Treasury invest options, picked after choosing bills or bonds
+const treasuryFunds: Record<"bills" | "bonds", string[]> = {
+  bills: ["91-day Treasury Bill", "182-day Treasury Bill", "364-day Treasury Bill"],
+  bonds: ["2-year Treasury Bond", "5-year Treasury Bond", "10-year Treasury Bond"],
+};
 const accounts = ["Main Account", "Joint Account", "Minor Account"];
 
 // Sub accounts with available balances, used by Fund Flip (transfer from / to)
