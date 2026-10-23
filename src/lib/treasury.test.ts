@@ -1,6 +1,18 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { TREASURY_MIN_INVESTMENT, TRANSFER_WINDOW_MINUTES, faceValue, bondPrice, couponSchedule } from "./treasury";
+import { TREASURY_MIN_INVESTMENT, TRANSFER_WINDOW_MINUTES, TREASURY_JUSTPAY_MIN, TREASURY_JUSTPAY_MAX, validTreasuryJustpayAmount, faceValue, bondPrice, couponSchedule } from "./treasury";
+
+test("treasury Justpay minimum is LKR 40,000, inclusive", () => {
+  assert.equal(TREASURY_JUSTPAY_MIN, 40000);
+  assert.equal(validTreasuryJustpayAmount(39999.99), false);
+  assert.equal(validTreasuryJustpayAmount(40000), true);
+});
+test("treasury Justpay maximum is LKR 74,940, inclusive", () => {
+  assert.equal(TREASURY_JUSTPAY_MAX, 74940);
+  assert.equal(validTreasuryJustpayAmount(74940), true);
+  assert.equal(validTreasuryJustpayAmount(74940.01), false);
+  assert.equal(validTreasuryJustpayAmount(Infinity), false);
+});
 
 test("minimum investment is LKR 500,000", () => {
   assert.equal(TREASURY_MIN_INVESTMENT, 500000);

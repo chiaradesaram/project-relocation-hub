@@ -1,5 +1,7 @@
 # Project architecture decisions
 
+- Share treasury security selection and face-value calculation between bank transfer and Justpay via a payment-method prop; keep method-specific limits and subsequent steps separate to prevent divergent treasury displays.
+
 - Keep the dashboard as a single compact overview with a CSS allocation bar and lightweight SVG market sparkline; no carousel dependency is needed.
 - Keep Rates as a layout with directory and fund-detail leaf routes backed by a shared fund catalogue; this supports shareable factsheets without duplicating fund data.
 - Label illustrative fund chart series as sample data and leave unavailable holdings/documents unlinked; financial examples must not appear to be live disclosures.
