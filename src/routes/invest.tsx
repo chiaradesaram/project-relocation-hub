@@ -2216,8 +2216,8 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
 
   // Live balance preview for the unit trust -> equity transfer
   const parseLkr = (v: string) => Number(v.replace(/[^\d.]/g, "")) || 0;
-  const fmtLkr = (n: number) =>
-    `LKR ${n.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  const fmtLkrShort = (n: number) =>
+    `LKR ${n.toLocaleString("en-US", { maximumFractionDigits: 0 })}`;
   const sourceBalance = parseLkr(selectedSub?.value ?? source.value);
   const equityBalance = 25000;
   const projectedSourceBalance = sourceBalance - amountNum;
@@ -2287,79 +2287,95 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     <MobileLayout>
       <PageHeader title={title} showBack helpTopic="invest" />
 
-      {/* Unit trust -> equity account visual */}
+      {/* Unit trust -> equity — Wise-style rows joined by a connector */}
       {isUtFlip && (
-        <div className="mx-4 mt-3 space-y-2">
-          <button
-            type="button"
-            onClick={openFundPicker}
-            className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3 text-left transition hover:bg-muted/10"
-          >
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-              style={{
-                background:
-                  "color-mix(in oklch, var(--portfolio-blue) 30%, transparent)",
-              }}
+        <div className="mx-4 mt-4">
+          <div className="rounded-3xl bg-card/60 px-4 backdrop-blur-md">
+            <button
+              type="button"
+              onClick={openFundPicker}
+              className="flex w-full items-center gap-3 py-4 text-left transition active:bg-muted/10"
             >
-              <PieChart className="w-5 h-5" style={{ color: "var(--pill)" }} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground leading-tight">
-                {source.name}
-              </p>
-              <p className="text-[12px] text-muted-foreground mt-0.5">
-                {selectedSub?.name ?? source.sub}
-              </p>
-              {showPreview ? (
-                <p
-                  className={`text-[12px] font-medium mt-0.5 ${
-                    isOverBalance ? "text-destructive" : "text-foreground"
+              <span className="min-w-0 flex-1">
+                <span
+                  className="flex items-center gap-1.5 text-[12px] font-semibold leading-none"
+                  style={{ color: "var(--pill)" }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 shrink-0 rounded-full"
+                    style={{ background: "var(--pill)" }}
+                  />
+                  Transfer from
+                </span>
+                <span className="mt-2 block truncate text-[15px] font-semibold leading-tight text-foreground">
+                  {source.name}
+                </span>
+                <span className="mt-0.5 block truncate text-[12px] text-muted-foreground">
+                  {selectedSub?.name ?? source.sub}
+                </span>
+              </span>
+              <span className="shrink-0 text-right">
+                <span
+                  className={`block text-[14px] font-semibold tabular-nums ${
+                    isOverBalance
+                      ? "text-destructive"
+                      : showPreview
+                        ? "text-foreground"
+                        : "text-muted-foreground"
                   }`}
                 >
-                  {isOverBalance
-                    ? `−${fmtLkr(Math.abs(projectedSourceBalance))}`
-                    : fmtLkr(projectedSourceBalance)}
-                </p>
-              ) : (
-                <p className="text-[12px] text-muted-foreground">
-                  {selectedSub?.value ?? source.value}
-                </p>
-              )}
-            </div>
-            <ChevronRight className="w-4 h-4 text-muted-foreground shrink-0" />
-          </button>
+                  {showPreview && !isOverBalance
+                    ? fmtLkrShort(projectedSourceBalance)
+                    : fmtLkrShort(sourceBalance)}
+                </span>
+              </span>
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground/60" />
+            </button>
 
-          <div className="pl-5">
-            <ArrowDown className="w-4 h-4 text-muted-foreground" />
+            <div className="relative ml-[2px] h-16 w-0.5 rounded-full bg-border/70">
+              <span
+                aria-hidden="true"
+                className="absolute left-1/2 top-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-pill text-pill-foreground"
+              >
+                <ArrowDown className="size-4" strokeWidth={2.5} />
+              </span>
+            </div>
+
+            <div className="flex w-full items-center gap-3 py-4">
+              <span className="min-w-0 flex-1">
+                <span
+                  className="flex items-center gap-1.5 text-[12px] font-semibold leading-none"
+                  style={{ color: "var(--rates-mint)" }}
+                >
+                  <span
+                    aria-hidden="true"
+                    className="size-1.5 shrink-0 rounded-full"
+                    style={{ background: "var(--rates-mint)" }}
+                  />
+                  Transfer to
+                </span>
+                <span className="mt-2 block truncate text-[15px] font-semibold leading-tight text-foreground">
+                  Equity Account
+                </span>
+              </span>
+              <span className="shrink-0 text-right">
+                <span
+                  className={`block text-[14px] font-semibold tabular-nums ${
+                    showPreview ? "text-success" : "text-muted-foreground"
+                  }`}
+                >
+                  {fmtLkrShort(equityBalance + transferAmt)}
+                </span>
+              </span>
+            </div>
           </div>
 
-          <div className="w-full flex items-center gap-3 rounded-2xl bg-card/60 backdrop-blur-md px-3 py-3">
-            <div
-              className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
-              style={{
-                background:
-                  "color-mix(in oklch, var(--pill) 25%, transparent)",
-              }}
-            >
-              <BarChart3 className="w-5 h-5" style={{ color: "var(--pill)" }} />
-            </div>
-            <div className="min-w-0 flex-1">
-              <p className="text-sm font-semibold text-foreground leading-tight">
-                Equity Account
-              </p>
-              {showPreview ? (
-                <p className="text-[12px] font-medium text-success mt-0.5">
-                  {fmtLkr(equityBalance + transferAmt)}
-                </p>
-              ) : (
-                <p className="text-[12px] text-muted-foreground mt-0.5">
-                  {fmtLkr(equityBalance)}
-                </p>
-              )}
-            </div>
-          </div>
-
+          {isOverBalance && (
+            <p className="px-1 pt-2 text-[12px] text-destructive">
+              Balance limit is reached.
+            </p>
+          )}
         </div>
       )}
 
@@ -2381,12 +2397,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
             }}
           />
         </div>
-        {isUtFlip && isOverBalance ? (
-          <p className="mt-3 text-[12px] font-medium text-destructive">
-            Your balance is too low. The most you can move is{" "}
-            {fmtLkr(sourceBalance)}.
-          </p>
-        ) : isPayIn ? null : (
+        {isPayIn ? null : (
           <p className="mt-3 text-[12px] text-muted-foreground">
             {isDirect ? "Investment amount" : "Amount to transfer"}
           </p>
