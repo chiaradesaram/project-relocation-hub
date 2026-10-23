@@ -11,3 +11,12 @@ test("transfer window is 30 minutes", () => {
 test("face value of LKR 500,000 at 8% for 365 days is LKR 540,000", () => {
   assert.equal(faceValue(500000, 8, 365), 540000);
 });
+import { bondPrice, couponSchedule } from "./treasury";
+test("bond priced at par when yield equals coupon", () => {
+  assert.equal(Math.round(bondPrice(10, 10, 730) * 100) / 100, 100);
+});
+test("coupon payments are semi-annual: LKR 1,000,000 at 10% pays LKR 50,000 each", () => {
+  const s = couponSchedule(1000000, 10, "2028-10-15", 730);
+  assert.equal(s.length, 4);
+  assert.equal(s[0].amount, 50000);
+});
