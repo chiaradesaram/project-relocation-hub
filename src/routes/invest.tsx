@@ -1,3 +1,4 @@
+import TreasuryBankFlow from "@/components/TreasuryBankFlow";
 import { readGoals } from "@/lib/goals";
 import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
