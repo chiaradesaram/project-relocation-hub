@@ -89,7 +89,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
   };
 
   return (
-    <MobileLayout hideNav>
+    <MobileLayout>
       {/* Header */}
       <div className="sticky top-0 z-30 bg-background/80 backdrop-blur-lg px-4 pt-3 pb-3">
         <div className="flex items-center">
@@ -113,7 +113,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
         </div>
       </div>
 
-      <div className="px-4 pt-3 pb-32">
+      <div className="px-4 pt-3">
         {step === 0 && (
           <>
             <h2 className="text-xl font-bold text-foreground">Pick a {kind === "bills" ? "bill" : "bond"}</h2>
@@ -327,7 +327,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
 
       {/* Bottom action */}
       {step > 0 && (
-        <div className="fixed bottom-0 left-0 right-0 z-40 mx-auto max-w-md bg-background/85 px-4 pb-6 pt-3 backdrop-blur-lg">
+        <div className="mx-4 mt-8 mb-8">
           {step === 1 && (
             calculated === null ? (
               <Action
