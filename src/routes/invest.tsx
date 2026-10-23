@@ -1238,7 +1238,7 @@ function MethodForm({
               label="Transfer from"
               fund={flipFromFund}
               sub={flipFromSub}
-              icon="source"
+              side="source"
               onClick={() => openFlipSheet("from")}
               balance={
                 showFlipPreview && !isOverBalance
@@ -1248,7 +1248,7 @@ function MethodForm({
               tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
             />
 
-            <div className="relative ml-[21px] h-16 w-0.5 rounded-full bg-border/70">
+            <div className="relative ml-[2px] h-16 w-0.5 rounded-full bg-border/70">
               <span
                 aria-hidden="true"
                 className="absolute left-1/2 top-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-pill text-pill-foreground"
@@ -1261,7 +1261,7 @@ function MethodForm({
               label="Transfer to"
               fund={flipToFund}
               sub={flipToSub}
-              icon="target"
+              side="target"
               onClick={() => openFlipSheet("to")}
               balance={
                 showFlipPreview
