@@ -10,6 +10,7 @@ import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import {
   TREASURY_MIN_INVESTMENT,
   TRANSFER_WINDOW_MINUTES,
+  couponSchedule,
   faceValue,
   treasurySecurities,
   type TreasurySecurity,
@@ -55,6 +56,11 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
   const list = useMemo(() => treasurySecurities.filter((s) => s.kind === kind), [kind]);
   const amountNum = Number(amount) || 0;
   const belowMin = amountNum > 0 && amountNum < TREASURY_MIN_INVESTMENT;
+  const coupons =
+    security?.couponRate !== undefined && calculated !== null
+      ? couponSchedule(calculated, security.couponRate, security.maturityDate, security.days)
+      : [];
+  const couponTotal = coupons.reduce((t, c) => t + c.amount, 0);
   const title = kind === "bills" ? "Treasury Bills" : "Treasury Bonds";
 
   useEffect(() => {
@@ -326,7 +332,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
             calculated === null ? (
               <Action
                 disabled={amountNum < TREASURY_MIN_INVESTMENT}
-                onClick={() => security && setCalculated(faceValue(amountNum, security.rate, security.days))}
+                onClick={() => security && setCalculated(faceValue(amountNum, security.rate, security.days, security.couponRate))}
               >
                 Calculate face value
               </Action>
