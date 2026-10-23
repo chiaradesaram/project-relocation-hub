@@ -1699,7 +1699,7 @@ function FlipAccountRow({
   label,
   fund,
   sub,
-  icon,
+  side,
   balance,
   tone,
   onClick,
@@ -1707,7 +1707,7 @@ function FlipAccountRow({
   label: string;
   fund: string;
   sub: string;
-  icon: "source" | "target";
+  side: "source" | "target";
   balance: string;
   tone: "muted" | "normal" | "success" | "danger";
   onClick: () => void;
@@ -1720,21 +1720,13 @@ function FlipAccountRow({
         : tone === "normal"
           ? "text-foreground"
           : "text-muted-foreground";
-  const tint = icon === "source" ? "var(--pill)" : "var(--rates-mint)";
-  const Icon = icon === "source" ? PieChart : BarChart3;
+  const tint = side === "source" ? "var(--pill)" : "var(--rates-mint)";
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3 py-4 text-left transition active:bg-muted/10"
     >
-      <span
-        aria-hidden="true"
-        className="flex size-11 shrink-0 items-center justify-center rounded-full"
-        style={{ background: `color-mix(in oklch, ${tint} 22%, transparent)` }}
-      >
-        <Icon className="size-[22px]" style={{ color: tint }} />
-      </span>
       <span className="min-w-0 flex-1">
         <span
           className="flex items-center gap-1.5 text-[12px] font-semibold leading-none"
