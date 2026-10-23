@@ -10,6 +10,7 @@ import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import {
   TREASURY_MIN_INVESTMENT,
   TRANSFER_WINDOW_MINUTES,
+  couponSchedule,
   faceValue,
   treasurySecurities,
   type TreasurySecurity,
@@ -55,6 +56,11 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
   const list = useMemo(() => treasurySecurities.filter((s) => s.kind === kind), [kind]);
   const amountNum = Number(amount) || 0;
   const belowMin = amountNum > 0 && amountNum < TREASURY_MIN_INVESTMENT;
+  const coupons =
+    security?.couponRate !== undefined && calculated !== null
+      ? couponSchedule(calculated, security.couponRate, security.maturityDate, security.days)
+      : [];
+  const couponTotal = coupons.reduce((t, c) => t + c.amount, 0);
   const title = kind === "bills" ? "Treasury Bills" : "Treasury Bonds";
 
   useEffect(() => {
@@ -112,32 +118,42 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
           <>
             <h2 className="text-xl font-bold text-foreground">Pick a {kind === "bills" ? "bill" : "bond"}</h2>
             <p className="mt-1 text-[13px] text-muted-foreground">Sample securities currently on offer.</p>
-            <div className="mt-4 space-y-2">
-              {list.map((s) => (
-                <button
-                  key={s.isin}
-                  onClick={() => {
-                    setSecurity(s);
-                    setCalculated(null);
-                    setStep(1);
-                  }}
-                  className="w-full rounded-2xl bg-card/60 px-4 py-3.5 text-left transition active:scale-[0.99]"
-                >
-                  <div className="flex items-center justify-between gap-3">
-                    <div className="min-w-0">
-                      <p className="text-[15px] font-semibold text-foreground">{s.days} days</p>
-                      <p className="mt-0.5 text-[12px] text-muted-foreground tabular-nums">{s.isin}</p>
+            <div className="mt-4 overflow-hidden rounded-2xl bg-card/60">
+              <div className="flex items-center gap-3 px-4 pt-2.5 pb-1.5 text-[11px] text-muted-foreground">
+                <span className="flex-1">Period · Maturity</span>
+                {kind === "bonds" && <span className="w-14 text-right">Coupon</span>}
+                <span className="w-14 text-right">Rate</span>
+                <span className="w-3.5" />
+              </div>
+              <div className="divide-y divide-border/30">
+                {list.map((s) => (
+                  <button
+                    key={s.isin}
+                    onClick={() => {
+                      setSecurity(s);
+                      setCalculated(null);
+                      setStep(1);
+                    }}
+                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition active:bg-muted/30"
+                  >
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-[13px] font-semibold text-foreground tabular-nums">
+                        {s.days}d <span className="font-normal text-muted-foreground">· {fmtDate(s.maturityDate)}</span>
+                      </p>
+                      <p className="text-[11px] text-muted-foreground tabular-nums">{s.isin}</p>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-lg font-bold text-rates-mint tabular-nums">{s.rate.toFixed(2)}%</span>
-                      <ChevronRight className="size-4 text-muted-foreground" />
-                    </div>
-                  </div>
-                  <p className="mt-2 text-[12px] text-muted-foreground">
-                    Matures {fmtDate(s.maturityDate)}
-                  </p>
-                </button>
-              ))}
+                    {s.couponRate !== undefined && (
+                      <span className="w-14 text-right text-[13px] font-medium text-foreground tabular-nums">
+                        {s.couponRate.toFixed(2)}%
+                      </span>
+                    )}
+                    <span className="w-14 text-right text-[14px] font-bold text-rates-mint tabular-nums">
+                      {s.rate.toFixed(2)}%
+                    </span>
+                    <ChevronRight className="size-3.5 text-muted-foreground" />
+                  </button>
+                ))}
+              </div>
             </div>
           </>
         )}
@@ -147,6 +163,9 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
             <div className="rounded-2xl bg-card/60 px-4 py-2 divide-y divide-border/30">
               <Row label="ISIN" value={security.isin} />
               <Row label="Rate" value={`${security.rate.toFixed(2)}%`} />
+              {security.couponRate !== undefined && (
+                <Row label="Coupon rate" value={`${security.couponRate.toFixed(2)}% · twice a year`} />
+              )}
               <Row label="Maturity period" value={`${security.days} days`} />
               <Row label="Maturity date" value={fmtDate(security.maturityDate)} />
             </div>
@@ -173,8 +192,54 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
               <div className="mt-5 rounded-2xl bg-card/60 px-4 py-4 text-center">
                 <p className="text-[12px] text-muted-foreground">Face value at maturity</p>
                 <p className="mt-1 text-2xl font-bold text-rates-mint tabular-nums">{lkr(calculated)}</p>
-                <p className="mt-1 text-[12px] text-muted-foreground">
-                  You earn {lkr(calculated - amountNum)} on {fmtDate(security.maturityDate)}
+                {coupons.length === 0 && (
+                  <p className="mt-1 text-[12px] text-muted-foreground">
+                    You earn {lkr(calculated - amountNum)} on {fmtDate(security.maturityDate)}
+                  </p>
+                )}
+              </div>
+            )}
+
+            {calculated !== null && coupons.length > 0 && (
+              <div className="mt-3 rounded-2xl bg-card/60 px-4 py-4">
+                <div className="flex items-baseline justify-between">
+                  <p className="text-[12px] font-semibold text-muted-foreground">Coupon payments</p>
+                  <p className="text-[12px] text-muted-foreground tabular-nums">
+                    {coupons.length} × {lkr(coupons[0].amount)}
+                  </p>
+                </div>
+                <div className="mt-3 grid grid-cols-2 gap-2">
+                  <div className="rounded-xl bg-background/40 px-3 py-2">
+                    <p className="text-[11px] text-muted-foreground">Every 6 months</p>
+                    <p className="text-[14px] font-semibold text-foreground tabular-nums">{lkr(coupons[0].amount)}</p>
+                  </div>
+                  <div className="rounded-xl bg-background/40 px-3 py-2">
+                    <p className="text-[11px] text-muted-foreground">Total coupons</p>
+                    <p className="text-[14px] font-semibold text-rates-mint tabular-nums">{lkr(couponTotal)}</p>
+                  </div>
+                </div>
+                <ol className="mt-3 max-h-52 overflow-y-auto pr-1">
+                  {coupons.map((c, i) => (
+                    <li key={i} className="relative flex items-center gap-3 py-1.5">
+                      {i < coupons.length - 1 && (
+                        <span aria-hidden className="absolute left-[3.5px] top-1/2 h-full w-px bg-border/60" />
+                      )}
+                      <span
+                        aria-hidden
+                        className={`relative z-10 size-2 shrink-0 rounded-full ${i === coupons.length - 1 ? "bg-rates-mint" : "bg-pill"}`}
+                      />
+                      <span className="flex-1 text-[12px] text-muted-foreground tabular-nums">
+                        {c.date.toLocaleDateString("en-GB", { day: "2-digit", month: "short", year: "numeric" })}
+                        {i === coupons.length - 1 && " · plus face value"}
+                      </span>
+                      <span className="text-[12px] font-medium text-foreground tabular-nums">
+                        {lkr(i === coupons.length - 1 ? c.amount + calculated : c.amount)}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+                <p className="mt-2 border-t border-border/30 pt-2 text-[12px] text-muted-foreground">
+                  You receive {lkr(couponTotal + calculated)} in total over the life of the bond.
                 </p>
               </div>
             )}
@@ -267,7 +332,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
             calculated === null ? (
               <Action
                 disabled={amountNum < TREASURY_MIN_INVESTMENT}
-                onClick={() => security && setCalculated(faceValue(amountNum, security.rate, security.days))}
+                onClick={() => security && setCalculated(faceValue(amountNum, security.rate, security.days, security.couponRate))}
               >
                 Calculate face value
               </Action>
