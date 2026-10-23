@@ -1,8 +1,12 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
-import { ArrowLeft, Check, ChevronRight, Clock, Copy, Paperclip, X } from "lucide-react";
+import { ArrowLeft, Check, ChevronRight, Clock, Copy, Paperclip, Plus, X } from "lucide-react";
 import MobileLayout from "@/components/MobileLayout";
-import ModernSelect from "@/components/ModernSelect";
+import { RadioDot } from "@/components/RadioDot";
+import commercialLogo from "@/assets/banks/commercial.png";
+import sampathLogo from "@/assets/banks/sampath.png";
+import hnbLogo from "@/assets/banks/hnb.png";
+import bocLogo from "@/assets/banks/boc.png";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { formatAmountDisplay, sanitizeAmountInput } from "@/lib/format";
@@ -33,6 +37,13 @@ const USER_BANKS = [
   "BOC · 7700 8934 81",
 ];
 
+const BANK_LOGOS: Record<string, string> = {
+  "Commercial Bank": commercialLogo,
+  "Sampath Bank": sampathLogo,
+  HNB: hnbLogo,
+  BOC: bocLogo,
+};
+
 const STEPS = ["Pick", "Amount", "Transfer", "Proof"];
 const lkr = (n: number) => `LKR ${n.toLocaleString("en-US")}`;
 const fmtDate = (iso: string) =>
@@ -56,7 +67,6 @@ export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bil
   const [done, setDone] = useState(false);
   const [reviewOpen, setReviewOpen] = useState(false);
   const [bankPickerOpen, setBankPickerOpen] = useState(false);
-  const [draftBank, setDraftBank] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const list = useMemo(() => treasurySecurities.filter((s) => s.kind === kind), [kind]);
@@ -207,7 +217,7 @@ export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bil
             {isJustpay && (
               <Button
                 variant="ghost"
-                onClick={() => { setDraftBank(fromBank); setBankPickerOpen(true); }}
+                onClick={() => setBankPickerOpen(true)}
                 className="mt-5 h-auto w-full justify-between rounded-xl bg-card/60 px-4 py-3 text-[13px]"
               >
                 <span>Paying from</span>
@@ -313,11 +323,10 @@ export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bil
             <p className="mt-1 text-[13px] text-muted-foreground">Attach your receipt and tell us where it came from.</p>
 
             <p className="mt-5 mb-1.5 text-[12px] text-muted-foreground">Transferred from</p>
-            <ModernSelect value={fromBank} onChange={(e) => setFromBank(e.target.value)} placeholder="Select your bank account">
-              {USER_BANKS.map((b) => (
-                <option key={b} value={b}>{b}</option>
-              ))}
-            </ModernSelect>
+            <Button variant="ghost" onClick={() => setBankPickerOpen(true)} className="h-auto w-full justify-between rounded-xl bg-card/60 px-4 py-3 text-[13px]">
+              <span>{fromBank ? compactBank(fromBank) : "Select your bank account"}</span>
+              <ChevronRight className="size-4 shrink-0" />
+            </Button>
 
             <p className="mt-4 mb-1.5 text-[12px] text-muted-foreground">Proof of transfer</p>
             <input
@@ -384,15 +393,29 @@ export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bil
       )}
 
       <Sheet open={bankPickerOpen} onOpenChange={setBankPickerOpen}>
-        <SheetContent side="bottom" className="rounded-t-3xl">
-          <div className="relative mb-5">
-            <SheetHeader><SheetTitle className="text-center text-base">Paying from</SheetTitle></SheetHeader>
+        <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-8">
+          <div className="relative mb-4">
+            <SheetHeader><SheetTitle className="text-left text-base">{isJustpay ? "Paying from" : "Transferred from"}</SheetTitle></SheetHeader>
             <Button variant="ghost" size="icon" aria-label="Close bank picker" onClick={() => setBankPickerOpen(false)} className="absolute right-0 top-0 size-7 rounded-full"><X className="size-4" /></Button>
           </div>
-          <ModernSelect value={draftBank} onChange={(e) => setDraftBank(e.target.value)} placeholder="Select your bank account">
-            {USER_BANKS.map((b) => <option key={b} value={b}>{b}</option>)}
-          </ModernSelect>
-          <div className="mt-6"><Action disabled={!draftBank} onClick={() => { setFromBank(draftBank); setBankPickerOpen(false); }}>Confirm</Action></div>
+          <div className="space-y-2">
+            {USER_BANKS.map((bank) => {
+              const name = bank.split(" · ")[0] ?? "";
+              const selected = fromBank === bank;
+              return (
+                <Button key={bank} variant="ghost" onClick={() => { setFromBank(bank); setBankPickerOpen(false); }} className={`h-auto w-full justify-between gap-3 rounded-xl px-4 py-3 text-left ${selected ? "bg-muted/20" : "bg-background/40 hover:bg-muted/10"}`}>
+                  <span className="flex min-w-0 items-center gap-3">
+                    <img src={BANK_LOGOS[name]} alt={`${name} logo`} className="size-8 shrink-0 rounded-lg" />
+                    <span className="min-w-0 whitespace-normal text-sm font-normal text-foreground">{bank}</span>
+                  </span>
+                  <RadioDot selected={selected} />
+                </Button>
+              );
+            })}
+            <Button variant="ghost" onClick={() => { setBankPickerOpen(false); navigate({ to: "/bank-accounts" }); }} className="h-auto w-full justify-start gap-3 rounded-xl border border-dashed border-border/40 bg-background/30 px-4 py-3 text-sm text-pill">
+              <Plus className="size-4 shrink-0" />Add bank account
+            </Button>
+          </div>
         </SheetContent>
       </Sheet>
 
