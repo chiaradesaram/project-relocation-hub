@@ -40,3 +40,4 @@
 - [x] Restyle Fund Flip as a Wise-style paired row: distinct icons per side, right-aligned whole-rupee balances, and a connector hairline with a circular arrow badge
 
 - [x] Treasuries invest flow: bills/bonds picker, then Bank Transfer or Justpay panel, reusing the standard form and review sheet
+- [x] Remove the per-fund icon badges from both Fund Flip rows
