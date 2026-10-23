@@ -134,23 +134,23 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
                       setCalculated(null);
                       setStep(1);
                     }}
-                    className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted/30"
+                    className="flex w-full items-start gap-3 px-4 py-3.5 text-left transition active:bg-muted/30"
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[14px] font-semibold text-foreground tabular-nums">
+                      <p className="truncate text-[14px] font-semibold leading-[20px] text-foreground tabular-nums">
                         {s.days}d <span className="font-normal text-foreground">· {fmtDate(s.maturityDate)}</span>
                       </p>
                       <p className="mt-1.5 text-[11px] text-muted-foreground tabular-nums">{s.isin}</p>
                     </div>
                     {s.couponRate !== undefined && (
-                      <span className="w-14 text-right text-[13px] font-medium text-foreground tabular-nums">
+                      <span className="w-14 shrink-0 text-right text-[14px] font-medium leading-[20px] text-foreground tabular-nums">
                         {s.couponRate.toFixed(2)}%
                       </span>
                     )}
-                    <span className="w-14 text-right text-[14px] font-bold text-rates-mint tabular-nums">
+                    <span className="w-14 shrink-0 text-right text-[14px] font-bold leading-[20px] text-rates-mint tabular-nums">
                       {s.rate.toFixed(2)}%
                     </span>
-                    <ChevronRight className="size-3.5 text-muted-foreground" />
+                    <ChevronRight className="mt-[3px] size-3.5 shrink-0 text-muted-foreground" />
                   </button>
                 ))}
               </div>
