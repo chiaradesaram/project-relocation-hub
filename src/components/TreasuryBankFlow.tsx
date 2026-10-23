@@ -119,7 +119,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
             <h2 className="text-xl font-bold text-foreground">Pick a {kind === "bills" ? "bill" : "bond"}</h2>
             <p className="mt-1 text-[13px] text-muted-foreground">Sample securities currently on offer.</p>
             <div className="mt-4 overflow-hidden rounded-2xl bg-card/60">
-              <div className="flex items-center gap-3 px-4 pt-2.5 pb-1.5 text-[11px] text-muted-foreground">
+              <div className="flex items-center gap-3 px-4 pt-3 pb-2 text-[11px] text-muted-foreground">
                 <span className="flex-1">Period · Maturity</span>
                 {kind === "bonds" && <span className="w-14 text-right">Coupon</span>}
                 <span className="w-14 text-right">Rate</span>
@@ -134,13 +134,13 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
                       setCalculated(null);
                       setStep(1);
                     }}
-                    className="flex w-full items-center gap-3 px-4 py-2.5 text-left transition active:bg-muted/30"
+                    className="flex w-full items-center gap-3 px-4 py-3.5 text-left transition active:bg-muted/30"
                   >
                     <div className="min-w-0 flex-1">
-                      <p className="truncate text-[13px] font-semibold text-foreground tabular-nums">
-                        {s.days}d <span className="font-normal text-muted-foreground">· {fmtDate(s.maturityDate)}</span>
+                      <p className="truncate text-[14px] font-semibold text-foreground tabular-nums">
+                        {s.days}d <span className="font-normal text-foreground">· {fmtDate(s.maturityDate)}</span>
                       </p>
-                      <p className="text-[11px] text-muted-foreground tabular-nums">{s.isin}</p>
+                      <p className="mt-1.5 text-[11px] text-muted-foreground tabular-nums">{s.isin}</p>
                     </div>
                     {s.couponRate !== undefined && (
                       <span className="w-14 text-right text-[13px] font-medium text-foreground tabular-nums">
