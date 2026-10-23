@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Add treasury Justpay security selection, face-value calculation, LKR 40,000–74,940 limits, bank picker and review/confirm; verify bills and bonds
+
 - [x] Revert investment and redemption bottom actions to disabled until the form is complete
 
 - [x] Replace dashboard carousel/pie chart with the supplied compact overview and verify portfolio, quick links and market sections

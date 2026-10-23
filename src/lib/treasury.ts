@@ -1,5 +1,11 @@
 export const TREASURY_MIN_INVESTMENT = 500000;
 export const TRANSFER_WINDOW_MINUTES = 30;
+export const TREASURY_JUSTPAY_MIN = 40000;
+export const TREASURY_JUSTPAY_MAX = 74940;
+
+export function validTreasuryJustpayAmount(amount: number): boolean {
+  return Number.isFinite(amount) && amount >= TREASURY_JUSTPAY_MIN && amount <= TREASURY_JUSTPAY_MAX;
+}
 
 export type TreasurySecurity = {
   isin: string;
