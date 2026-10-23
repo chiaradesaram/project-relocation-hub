@@ -639,6 +639,8 @@ function Invest() {
   if (search.method === "recurring" && search.mode !== "setup") {
     return <RecurringInvestments />;
   }
+  if (isTreasuries && search.method === "bank" && search.treasury)
+    return <TreasuryBankFlow kind={search.treasury} />;
   if (isTreasuries)
     return (
       <MethodForm
