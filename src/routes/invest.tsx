@@ -1238,7 +1238,7 @@ function MethodForm({
               label="Transfer from"
               fund={flipFromFund}
               sub={flipFromSub}
-              icon="source"
+              side="source"
               onClick={() => openFlipSheet("from")}
               balance={
                 showFlipPreview && !isOverBalance
@@ -1248,7 +1248,7 @@ function MethodForm({
               tone={isOverBalance ? "danger" : showFlipPreview ? "normal" : "muted"}
             />
 
-            <div className="relative ml-[21px] h-16 w-0.5 rounded-full bg-border/70">
+            <div className="relative ml-[2px] h-16 w-0.5 rounded-full bg-border/70">
               <span
                 aria-hidden="true"
                 className="absolute left-1/2 top-1/2 flex size-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-pill text-pill-foreground"
@@ -1261,7 +1261,7 @@ function MethodForm({
               label="Transfer to"
               fund={flipToFund}
               sub={flipToSub}
-              icon="target"
+              side="target"
               onClick={() => openFlipSheet("to")}
               balance={
                 showFlipPreview
@@ -1699,7 +1699,7 @@ function FlipAccountRow({
   label,
   fund,
   sub,
-  icon,
+  side,
   balance,
   tone,
   onClick,
@@ -1707,7 +1707,7 @@ function FlipAccountRow({
   label: string;
   fund: string;
   sub: string;
-  icon: "source" | "target";
+  side: "source" | "target";
   balance: string;
   tone: "muted" | "normal" | "success" | "danger";
   onClick: () => void;
@@ -1720,21 +1720,13 @@ function FlipAccountRow({
         : tone === "normal"
           ? "text-foreground"
           : "text-muted-foreground";
-  const tint = icon === "source" ? "var(--pill)" : "var(--rates-mint)";
-  const Icon = icon === "source" ? PieChart : BarChart3;
+  const tint = side === "source" ? "var(--pill)" : "var(--rates-mint)";
   return (
     <button
       type="button"
       onClick={onClick}
       className="flex w-full items-center gap-3 py-4 text-left transition active:bg-muted/10"
     >
-      <span
-        aria-hidden="true"
-        className="flex size-11 shrink-0 items-center justify-center rounded-full"
-        style={{ background: `color-mix(in oklch, ${tint} 22%, transparent)` }}
-      >
-        <Icon className="size-[22px]" style={{ color: tint }} />
-      </span>
       <span className="min-w-0 flex-1">
         <span
           className="flex items-center gap-1.5 text-[12px] font-semibold leading-none"
