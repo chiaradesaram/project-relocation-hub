@@ -10,6 +10,9 @@ import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import {
   TREASURY_MIN_INVESTMENT,
   TRANSFER_WINDOW_MINUTES,
+  TREASURY_JUSTPAY_MIN,
+  TREASURY_JUSTPAY_MAX,
+  validTreasuryJustpayAmount,
   couponSchedule,
   faceValue,
   treasurySecurities,
@@ -39,7 +42,7 @@ const fmtDate = (iso: string) =>
     year: "numeric",
   });
 
-export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) {
+export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bills" | "bonds"; method?: "bank" | "instant" }) {
   const navigate = useNavigate();
   const [step, setStep] = useState(0);
   const [security, setSecurity] = useState<TreasurySecurity | null>(null);
@@ -51,11 +54,23 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
   const [fromBank, setFromBank] = useState("");
   const [copied, setCopied] = useState(false);
   const [done, setDone] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [bankPickerOpen, setBankPickerOpen] = useState(false);
+  const [draftBank, setDraftBank] = useState("");
   const fileRef = useRef<HTMLInputElement>(null);
 
   const list = useMemo(() => treasurySecurities.filter((s) => s.kind === kind), [kind]);
   const amountNum = Number(amount) || 0;
-  const belowMin = amountNum > 0 && amountNum < TREASURY_MIN_INVESTMENT;
+  const isJustpay = method === "instant";
+  const minimum = isJustpay ? TREASURY_JUSTPAY_MIN : TREASURY_MIN_INVESTMENT;
+  const belowMin = amountNum > 0 && amountNum < minimum;
+  const validAmount = isJustpay ? validTreasuryJustpayAmount(amountNum) : Number.isFinite(amountNum) && amountNum >= minimum;
+  const steps = isJustpay ? ["Pick", "Amount", "Review"] : STEPS;
+  const compactBank = (value: string) => {
+    const [bank = "", number = ""] = value.split(" · ");
+    return bankAccountLabel(bank, number);
+  };
+  const serviceCharge = fromBank.startsWith("Seylan") ? 0 : 50;
   const coupons =
     security?.couponRate !== undefined && calculated !== null
       ? couponSchedule(calculated, security.couponRate, security.maturityDate, security.days)
@@ -104,7 +119,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
           <div className="size-8" />
         </div>
         <div className="mt-3 flex gap-1.5">
-          {STEPS.map((s, i) => (
+          {steps.map((s, i) => (
             <div
               key={s}
               className={`h-1 flex-1 rounded-full ${i <= step ? "bg-pill" : "bg-muted/50"}`}
@@ -174,6 +189,7 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
             <div className="mt-1 flex items-baseline justify-center gap-1.5">
               <span className="text-lg font-semibold text-muted-foreground">LKR</span>
               <input
+                aria-label="Investment amount"
                 inputMode="decimal"
                 placeholder="0"
                 value={formatAmountDisplay(amount)}
@@ -185,8 +201,22 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
               />
             </div>
             <p className={`mt-1 text-center text-[12px] ${belowMin ? "text-destructive" : "text-muted-foreground"}`}>
-              Minimum {lkr(TREASURY_MIN_INVESTMENT)}
+              {isJustpay ? `${lkr(minimum)} – ${lkr(TREASURY_JUSTPAY_MAX)}` : `Minimum ${lkr(minimum)}`}
             </p>
+
+            {isJustpay && (
+              <Button
+                variant="ghost"
+                onClick={() => { setDraftBank(fromBank); setBankPickerOpen(true); }}
+                className="mt-5 h-auto w-full justify-between rounded-xl bg-card/60 px-4 py-3 text-[13px]"
+              >
+                <span>Paying from</span>
+                <span className="flex items-center gap-2 font-medium">
+                  {fromBank ? compactBank(fromBank) : "Select bank account"}
+                  <ChevronRight className="size-4 shrink-0" />
+                </span>
+              </Button>
+            )}
 
             {calculated !== null && (
               <div className="mt-5 rounded-2xl bg-card/60 px-4 py-4 text-center">
@@ -331,13 +361,17 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
           {step === 1 && (
             calculated === null ? (
               <Action
-                disabled={amountNum < TREASURY_MIN_INVESTMENT}
+                disabled={!validAmount}
                 onClick={() => security && setCalculated(faceValue(amountNum, security.rate, security.days, security.couponRate))}
               >
                 Calculate face value
               </Action>
             ) : (
-              <Action onClick={goTransfer}>Continue to transfer</Action>
+              isJustpay ? (
+                <Action disabled={!validAmount || !fromBank} onClick={() => setReviewOpen(true)}>Review</Action>
+              ) : (
+                <Action onClick={goTransfer}>Continue to transfer</Action>
+              )
             )
           )}
           {step === 2 && (
@@ -349,8 +383,58 @@ export default function TreasuryBankFlow({ kind }: { kind: "bills" | "bonds" }) 
         </div>
       )}
 
+      <Sheet open={bankPickerOpen} onOpenChange={setBankPickerOpen}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <div className="relative mb-5">
+            <SheetHeader><SheetTitle className="text-center text-base">Paying from</SheetTitle></SheetHeader>
+            <Button variant="ghost" size="icon" aria-label="Close bank picker" onClick={() => setBankPickerOpen(false)} className="absolute right-0 top-0 size-7 rounded-full"><X className="size-4" /></Button>
+          </div>
+          <ModernSelect value={draftBank} onChange={(e) => setDraftBank(e.target.value)} placeholder="Select your bank account">
+            {USER_BANKS.map((b) => <option key={b} value={b}>{b}</option>)}
+          </ModernSelect>
+          <div className="mt-6"><Action disabled={!draftBank} onClick={() => { setFromBank(draftBank); setBankPickerOpen(false); }}>Confirm</Action></div>
+        </SheetContent>
+      </Sheet>
+
+      <Sheet open={reviewOpen} onOpenChange={(open) => { setReviewOpen(open); if (!open && done) navigate({ to: "/transactions" }); }}>
+        <SheetContent side="bottom" className="rounded-t-3xl">
+          <div className="relative mb-5">
+            <SheetHeader><SheetTitle className="text-center text-base">{done ? "Request sent" : "Review"}</SheetTitle></SheetHeader>
+            <Button variant="ghost" size="icon" aria-label="Close review" onClick={() => { setReviewOpen(false); if (done) navigate({ to: "/transactions" }); }} className="absolute right-0 top-0 size-7 rounded-full"><X className="size-4" /></Button>
+          </div>
+          {done ? (
+            <div className="flex flex-col items-center pb-10 pt-3 text-center">
+              <div className="flex size-16 items-center justify-center rounded-full bg-success/20 text-success"><Check className="size-8" strokeWidth={2.5} /></div>
+              <p className="mt-4 text-base font-semibold text-foreground">Request sent</p>
+              <p className="mt-1 text-[12px] text-foreground">{lkr(amountNum)} into {security?.days}-day {kind === "bills" ? "bill" : "bond"} from {compactBank(fromBank)}</p>
+            </div>
+          ) : (
+            <>
+              <div className="pb-4 text-center">
+                <p className="text-[12px] text-foreground">Justpay (Direct Invest)</p>
+                <p className="mt-1 text-2xl font-bold text-foreground tabular-nums">{lkr(amountNum + serviceCharge)}</p>
+              </div>
+              <div className="rounded-2xl bg-background/40 px-4 py-2 divide-y divide-border/30 [&_span]:text-foreground">
+                <Row label="Security" value={title} />
+                <Row label="ISIN" value={security?.isin ?? ""} />
+                <Row label="Maturity period" value={`${security?.days} days`} />
+                <Row label="Maturity date" value={security ? fmtDate(security.maturityDate) : ""} />
+                <Row label="Rate" value={`${security?.rate.toFixed(2)}%`} />
+                {security?.couponRate !== undefined && <Row label="Coupon rate" value={`${security.couponRate.toFixed(2)}%`} />}
+                <Row label="Paying from" value={compactBank(fromBank)} />
+                <Row label="Investment amount" value={lkr(amountNum)} />
+                <Row label="Face value at maturity" value={lkr(calculated ?? 0)} />
+                {coupons.length > 0 && <Row label="Total coupons" value={lkr(couponTotal)} />}
+                <Row label="Justpay service charge" value={lkr(serviceCharge)} />
+              </div>
+              <div className="mt-6"><Action disabled={!validAmount || !fromBank || calculated === null} onClick={() => setDone(true)}>Confirm Request</Action></div>
+            </>
+          )}
+        </SheetContent>
+      </Sheet>
+
       <Sheet
-        open={done}
+        open={done && !isJustpay}
         onOpenChange={(o) => {
           setDone(o);
           if (!o) navigate({ to: "/transactions" });
