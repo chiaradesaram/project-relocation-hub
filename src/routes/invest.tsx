@@ -1,3 +1,4 @@
+import TreasuryBankFlow from "@/components/TreasuryBankFlow";
 import { readGoals } from "@/lib/goals";
 import { bankAccountLabel } from "@/lib/bankAccountLabel";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
@@ -639,6 +640,8 @@ function Invest() {
   if (search.method === "recurring" && search.mode !== "setup") {
     return <RecurringInvestments />;
   }
+  if (isTreasuries && search.method === "bank" && search.treasury)
+    return <TreasuryBankFlow kind={search.treasury} />;
   if (isTreasuries)
     return (
       <MethodForm
