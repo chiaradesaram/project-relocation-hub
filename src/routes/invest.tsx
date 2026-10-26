@@ -1521,7 +1521,6 @@ function MethodForm({
                 edit: editPlanId,
               }
             : undefined,
-          sentTarget: isFlip ? flipToFund : undefined,
           showBankExtras: isBank,
           onConfirm: confirmInvestment,
         }}
@@ -2570,7 +2569,6 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
               : undefined,
           fromBankLabel: isPayIn ? selectedBankLabel(bank) : undefined,
           splits,
-          sentTarget: "your equity account",
           showBankExtras: false,
         }}
       />

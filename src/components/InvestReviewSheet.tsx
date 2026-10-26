@@ -24,8 +24,6 @@ export type InvestReviewData = {
   /** Justpay split parts — at most 3 */
   splits: number[];
   recurring?: { startDate?: Date | string; frequency: string; edit?: string };
-  /** Overrides the fund named in the confirmation line */
-  sentTarget?: string;
   /** Bank-transfer extras: quick check + investment timeline */
   showBankExtras?: boolean;
   /** Data side effects, e.g. saving a recurring plan */
@@ -102,7 +100,6 @@ export function InvestReviewSheet({
     fromBankLabel,
     splits,
     recurring,
-    sentTarget,
     showBankExtras,
     onConfirm,
   } = data;
@@ -150,10 +147,10 @@ export function InvestReviewSheet({
               <p className="text-base font-semibold text-foreground mt-4">
                 {isRecurring ? "Plan created" : "Request sent"}
               </p>
-              <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
+              <p className="text-[12px] text-muted-foreground mt-1 leading-snug text-balance">
                 {isRecurring
                   ? `${`LKR ${amount.toLocaleString()}`} will be invested in ${fund} every month`
-                  : `${`LKR ${total.toLocaleString()}`} into ${sentTarget || fund || "your fund"}. You'll be emailed once your transfer is matched with this request.`}
+                  : "You'll be emailed once your transfer is matched with this request."}
               </p>
             </div>
           ) : (
