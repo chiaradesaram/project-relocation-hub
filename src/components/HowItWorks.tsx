@@ -105,15 +105,15 @@ export default function HowItWorks() {
             <Button variant="secondary" size="icon" aria-label="Close How it works" onClick={close} className="absolute right-4 top-4 rounded-full"><X /></Button>
           </div>
           <div className="px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-            <div className="flex items-center justify-between gap-3">
+            <div className="flex gap-1.5" aria-label="Story steps">
+              {story.steps.map((item, i) => <button key={item.title} type="button" aria-label={`Go to step ${i + 1}`} aria-current={i === index ? "step" : undefined} onClick={() => setIndex(i)} className="flex-1 py-1.5"><span className={`block h-1 rounded-full transition-colors motion-reduce:transition-none ${i <= index ? "bg-pill" : "bg-muted/50"}`} /></button>)}
+            </div>
+            <div className="mt-2 flex items-center justify-between gap-3">
               <span className="type-label text-pill-bright">How it works</span>
               <span className="type-caption text-foreground">{index + 1} of {story.steps.length}</span>
             </div>
             <SheetTitle className="mt-1 text-base leading-snug">{story.title}</SheetTitle>
             <SheetDescription id="money-story-description" className="sr-only">Step-by-step overview of {story.title}</SheetDescription>
-            <div className="mt-4 flex justify-center gap-2" aria-label="Story steps">
-              {story.steps.map((item, i) => <Button key={item.title} variant="ghost" size="icon" aria-label={`Go to step ${i + 1}`} aria-current={i === index ? "step" : undefined} onClick={() => setIndex(i)} className="size-6 p-0 hover:bg-transparent"><span className={`h-1.5 rounded-full transition-all motion-reduce:transition-none ${i === index ? "w-5 bg-pill" : "w-1.5 bg-pill/35"}`} /></Button>)}
-            </div>
             <section key={index} aria-live="polite" className="mt-4 min-h-44 motion-safe:animate-fade-in">
               <div className="flex items-start gap-3">
                 <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${index % 2 === 0 ? "bg-pill text-pill-foreground" : "bg-rates-mint text-background"}`}><Icon className="size-[18px]" /></span>
@@ -130,10 +130,7 @@ export default function HowItWorks() {
                 </div>
               </div>
             </section>
-            <div className="mt-5 flex items-center gap-3">
-              {index > 0 && <Button variant="secondary" size="icon" aria-label="Previous step" onClick={() => setIndex(index - 1)} className="size-12 shrink-0 rounded-full"><ArrowLeft /></Button>}
-              <Button onClick={() => last ? close() : setIndex(index + 1)} className="h-12 min-w-0 flex-1 rounded-full bg-pill text-pill-foreground hover:bg-pill/90">{current.action ?? (last ? "Got it" : "Next")}{!last && <ArrowRight />}</Button>
-            </div>
+            <Button onClick={() => last ? close() : setIndex(index + 1)} className="mt-5 h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90">{current.action ?? (last ? "Got it" : "Next")}{!last && <ArrowRight />}</Button>
           </div>
         </SheetContent>
       </Sheet>
