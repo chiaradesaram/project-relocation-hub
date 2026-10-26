@@ -153,7 +153,7 @@ export function InvestReviewSheet({
               <p className="text-[12px] text-muted-foreground mt-1 leading-snug">
                 {isRecurring
                   ? `${`LKR ${amount.toLocaleString()}`} will be invested in ${fund} every month`
-                  : `${`LKR ${total.toLocaleString()}`} into ${sentTarget || fund || "your fund"} — we'll email you once it's matched`}
+                  : `${`LKR ${total.toLocaleString()}`} into ${sentTarget || fund || "your fund"}. You'll be emailed once your transfer is matched with this request.`}
               </p>
             </div>
           ) : (
