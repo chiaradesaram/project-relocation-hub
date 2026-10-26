@@ -1159,7 +1159,7 @@ function MethodForm({
                     How it works
                   </span>
                   <SheetTitle className="mt-1 font-display text-base leading-snug font-semibold">
-                    How to invest using a bank transfer, in two simple steps
+                    Invest by bank transfer
                   </SheetTitle>
                 </div>
               </div>
