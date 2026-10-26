@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useLocation } from "@tanstack/react-router";
-import { ArrowLeft, ArrowRight, ArrowLeftRight, Building2, CalendarDays, Check, CheckCircle2, Copy, FilePlus2, HelpCircle, Landmark, Link2, PieChart, Wallet, X, Zap } from "lucide-react";
+import { ArrowRight, ArrowLeftRight, Building2, CalendarDays, Check, CheckCircle2, Copy, FilePlus2, HelpCircle, Landmark, Link2, PieChart, Wallet, X, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
 import transferGif from "@/assets/bank-transfer-info.gif";
