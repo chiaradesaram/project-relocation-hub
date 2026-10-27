@@ -209,6 +209,8 @@
      - no italics in UI */
   html { font-size: 16px; }
   body, body * { font-style: normal !important; letter-spacing: 0 !important; }
+  /* Exception: the "Best for" accent line in the How it works guides keeps its italic display face */
+  body .font-accent, body .font-accent * { font-style: italic !important; }
   h1, h2, h3, h4, h5, h6 { font-family: var(--font-display); }
 }
 
