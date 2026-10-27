@@ -45,3 +45,5 @@
 
 - [x] Treasuries invest flow: bills/bonds picker, then Bank Transfer or Justpay panel, reusing the standard form and review sheet
 - [x] Remove the per-fund icon badges from both Fund Flip rows
+
+- [x] Remove the "For example" worked rows from the instant redemption limit sheet
