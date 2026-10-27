@@ -452,18 +452,6 @@ function RedeemForm({ method }: { method: RedeemMethod }) {
                   </div>
                 ))}
               </div>
-              <div className="mt-3 space-y-1">
-                <p className="text-[12px] font-semibold text-foreground">For example</p>
-                {[
-                  ["Balance of LKR 90,000", "Redeem up to LKR 45,000"],
-                  ["Balance of LKR 150,000", "Redeem up to LKR 75,000"],
-                ].map(([k, v]) => (
-                  <div key={k} className="flex items-center justify-between gap-3">
-                    <span className="text-[12px] text-foreground">{k}</span>
-                    <span className="text-[12px] font-medium text-foreground tabular-nums">{v}</span>
-                  </div>
-                ))}
-              </div>
             </>
           ) : (
             <>
