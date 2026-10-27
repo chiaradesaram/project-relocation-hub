@@ -125,7 +125,7 @@ export default function HowItWorks() {
             <SheetTitle className="mt-3 text-base leading-snug">{story.title}</SheetTitle>
             <SheetDescription id="money-story-description" className="sr-only">Overview of {story.title}</SheetDescription>
 
-            <section key={index} aria-live="polite" className="mt-4 min-h-44 motion-safe:animate-fade-in">
+            <section key={index} aria-live="polite" className="mt-4 min-h-40 motion-safe:animate-fade-in">
               <div className="flex items-start gap-3">
                 <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${index % 2 === 0 ? "bg-pill text-pill-foreground" : "bg-rates-mint text-background"}`}><Icon className="size-[18px]" /></span>
                 <div className="min-w-0 flex-1">
@@ -141,7 +141,7 @@ export default function HowItWorks() {
                 </div>
               </div>
             </section>
-            {current.bestFor && <p className="mt-9 pl-12 font-accent text-[17px] italic leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
+            {current.bestFor && <p className="mt-6 mb-1 pl-12 font-accent text-[16px] font-semibold leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
             <Button onClick={() => last ? close() : setIndex(index + 1)} className="mt-5 h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90">{current.action ?? (last ? "Got it" : "Next")}{!last && <ArrowRight />}</Button>
           </div>
         </SheetContent>
