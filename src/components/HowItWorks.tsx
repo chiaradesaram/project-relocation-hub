@@ -16,10 +16,12 @@ function storyFor(path: string, method: string, product: string): Story {
   const equity = product === "equities";
   const treasury = product === "treasuries";
   if (path === "/redeem") {
-    if (!method) return { title: equity ? "Money back to your bank" : "Your money, your next move", steps: [
-      step("Choose your way", equity ? "Pay out from your equity cash balance." : "Choose a normal redemption, instant redemption or a monthly redemption plan.", Wallet),
-      step("Make it yours", "Choose an amount and the bank account you want to receive it in.", Building2),
-      step("One last look", "Review your details and confirm your request. Follow it in Transactions.", CheckCircle2),
+    if (!method) return { title: equity ? "Your withdrawal option" : "Compare ways to redeem", steps: equity ? [
+      step("Pay Out", "Move money from your available equity cash balance to your bank. Choose an amount and bank account, then review and confirm your request.", Wallet),
+    ] : [
+      step("Normal Redemption", "For a withdrawal that can wait until processing. Choose an amount within your available balance. Requests before 9 AM are processed the same working day; later requests, the next working day.", Building2),
+      step("Instant Redemption", "For money you need right away, including weekends and holidays. Redeem up to half your available balance, capped at LKR 100,000 — whichever is lower. Ongoing redemptions reduce that balance first.", Zap),
+      step("Redemption Plan", "For regular monthly payouts rather than a one-off withdrawal. Choose your fund, sub account, monthly amount, start date and receiving bank account.", CalendarDays),
     ] };
     const title = method === "instant" ? "Instant Redemption" : method === "normal" ? "Normal Redemption" : method === "plan" ? "Redemption Plan" : "Pay Out";
     return { title, steps: [
@@ -29,10 +31,21 @@ function storyFor(path: string, method: string, product: string): Story {
       step("You're all set", method === "normal" ? "Requests before 9 AM are processed the same working day. After 9 AM, the next working day. Follow your request in Transactions." : method === "instant" ? "Instant redemption is available anytime, including weekends and holidays. Follow your request in Transactions." : "Find your request in Transactions after you confirm.", CheckCircle2),
     ] };
   }
-  if (!method) return { title: treasury ? "A little guide to treasuries" : equity ? "Top up your equity account" : "Make your next money move", steps: [
-    step("Choose your way", treasury ? "Start with Treasury Bills or Treasury Bonds, then choose Bank Transfer or Justpay (Direct Invest)." : equity ? "Choose Pay in, Justpay (Direct Invest) or Transfer from Unit Trusts." : "Choose Bank Transfer, Justpay (Direct Invest), Fund Flip, Recurring Investment or Default Fund.", treasury ? Landmark : PieChart),
-    step("Make it yours", treasury ? "Pick a security and calculate its estimated face value. Bonds also show expected coupon payments." : "Choose where your money goes and how much you want to invest.", Wallet),
-    step("Ready when you are", "Each method has its own short guide. Open How it works on the next screen for the details.", CheckCircle2),
+  if (!method) return { title: "Compare ways to invest", steps: treasury ? [
+    step("Treasury Bills", "For a shorter-term investment with a payout at maturity. Compare the listed maturity dates and rates, then calculate your estimated face value. The listed securities are samples, not live offers.", Landmark),
+    step("Treasury Bonds", "For an investment with coupon payments along the way. Compare both the rate and coupon rate, then see your estimated face value and expected coupon payments.", CalendarDays),
+    step("Bank Transfer", "For investments of at least LKR 500,000. After calculating your face value, transfer to CAL within 30 minutes, attach proof and select the bank you transferred from.", Building2),
+    step("Justpay (Direct Invest)", "For investments from LKR 40,000 to LKR 74,940. Calculate your face value, choose your linked bank account and confirm. Money is debited directly — no separate transfer or proof upload.", Zap),
+  ] : equity ? [
+    step("Pay in", "For topping up with a bank transfer. Transfer to CAL, enter the amount, choose the sending bank and CAL account, then attach your receipt and confirm the request.", Building2),
+    step("Justpay (Direct Invest)", "For topping up directly from your bank. Activate Justpay if needed, choose your bank and submit a request. Money is debited directly into your CAL equity account — no separate bank transfer.", Zap),
+    step("Transfer from Unit Trusts", "For using money already invested with CAL. Choose a Unit Trust fund and sub account, then move an amount within its balance into your equity account instead of paying from your bank.", ArrowLeftRight),
+  ] : [
+    step("Bank Transfer", "For investing money you transfer yourself. Send money to CAL's Deutsche Bank account, then raise a request with your fund, sub account and sending bank. You'll be emailed once the transfer is matched with your request.", Building2),
+    step("Justpay (Direct Invest)", "For investing directly from your bank. Activate Justpay if needed, choose your bank and submit a request. Money is debited directly and added to your CAL portfolio — no separate bank transfer.", Zap),
+    step("Fund Flip", "For moving money already invested with CAL. Choose a source fund and sub account, then a different destination. Move an amount within your source balance without making a new bank transfer.", ArrowLeftRight),
+    step("Recurring Investment", "For investing a little every month. Choose your fund, sub account, amount, bank and start date. Justpay funds your monthly plan; you can edit, pause or resume it later.", CalendarDays),
+    step("Default Fund", "For giving future bank transfers a usual destination. Save your preferred fund and sub account so transfers to CAL don't need a separate Creation Request each time. This sets a destination, not a monthly plan.", PieChart),
   ] };
   const justpay: StoryStep[] = [
     step("Link your bank", "Choose your bank account and activate Justpay to link it, if you haven't already.", Link2),
