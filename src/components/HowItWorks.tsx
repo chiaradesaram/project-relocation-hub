@@ -132,7 +132,6 @@ export default function HowItWorks() {
                   <h3 className="text-[17px] font-semibold leading-snug">{current.title}</h3>
 
                   <p className="mt-2 type-body-sm text-foreground">{current.text}</p>
-                  {current.bestFor && <p className="mt-3 text-[13px] leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
                   {current.bank && <Button variant="secondary" aria-label="Copy CAL bank account number" onClick={async () => {
                     try { await navigator.clipboard.writeText("007845210036"); setCopied(true); } catch { setCopied(false); }
                   }} className="mt-3 h-auto w-full justify-between whitespace-normal rounded-lg bg-sheet-field px-3 py-3 text-left text-foreground hover:bg-sheet-field">
@@ -142,6 +141,7 @@ export default function HowItWorks() {
                 </div>
               </div>
             </section>
+            {current.bestFor && <p className="mt-9 pl-12 font-accent text-[17px] italic leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
             <Button onClick={() => last ? close() : setIndex(index + 1)} className="mt-5 h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90">{current.action ?? (last ? "Got it" : "Next")}{!last && <ArrowRight />}</Button>
           </div>
         </SheetContent>
