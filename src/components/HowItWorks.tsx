@@ -118,21 +118,18 @@ export default function HowItWorks() {
             <Button variant="secondary" size="icon" aria-label="Close How it works" onClick={close} className="absolute right-4 top-4 rounded-full"><X /></Button>
           </div>
           <div className="px-7 pt-4 pb-[max(1.25rem,env(safe-area-inset-bottom))]">
-            <div className="flex gap-1.5" aria-label="Story steps">
-              {story.steps.map((item, i) => <button key={item.title} type="button" aria-label={`Go to step ${i + 1}`} aria-current={i === index ? "step" : undefined} onClick={() => setIndex(i)} className="flex-1 py-1.5"><span className={`block h-1 rounded-full transition-colors motion-reduce:transition-none ${i <= index ? "bg-pill" : "bg-muted/50"}`} /></button>)}
+            <div className="flex gap-1.5" aria-label="Story sections">
+              {story.steps.map((item, i) => <button key={item.title} type="button" aria-label={`Go to ${item.title}`} aria-current={i === index ? "true" : undefined} onClick={() => setIndex(i)} className="flex-1 py-1.5"><span className={`block h-1 rounded-full transition-colors motion-reduce:transition-none ${i <= index ? "bg-pill" : "bg-muted/50"}`} /></button>)}
             </div>
-            <div className="mt-2 flex items-center justify-between gap-3">
-              <span className="type-label text-pill-bright">How it works</span>
-              <span className="type-caption text-foreground">{index + 1} of {story.steps.length}</span>
-            </div>
-            <SheetTitle className="mt-1 text-base leading-snug">{story.title}</SheetTitle>
-            <SheetDescription id="money-story-description" className="sr-only">Step-by-step overview of {story.title}</SheetDescription>
+            <SheetTitle className="mt-3 text-base leading-snug">{story.title}</SheetTitle>
+            <SheetDescription id="money-story-description" className="sr-only">Overview of {story.title}</SheetDescription>
+
             <section key={index} aria-live="polite" className="mt-4 min-h-44 motion-safe:animate-fade-in">
               <div className="flex items-start gap-3">
                 <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${index % 2 === 0 ? "bg-pill text-pill-foreground" : "bg-rates-mint text-background"}`}><Icon className="size-[18px]" /></span>
                 <div className="min-w-0 flex-1">
-                  <p className="type-caption text-pill-bright">Step {index + 1}</p>
-                  <h3 className="mt-1 text-[15px] font-semibold leading-snug">{current.title}</h3>
+                  <h3 className="text-[17px] font-semibold leading-snug">{current.title}</h3>
+
                   <p className="mt-2 type-body-sm text-foreground">{current.text}</p>
                   {current.bank && <Button variant="secondary" aria-label="Copy CAL bank account number" onClick={async () => {
                     try { await navigator.clipboard.writeText("007845210036"); setCopied(true); } catch { setCopied(false); }
