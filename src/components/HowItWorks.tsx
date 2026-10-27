@@ -125,13 +125,14 @@ export default function HowItWorks() {
             <SheetTitle className="mt-3 text-base leading-snug">{story.title}</SheetTitle>
             <SheetDescription id="money-story-description" className="sr-only">Overview of {story.title}</SheetDescription>
 
-            <section key={index} aria-live="polite" className="mt-4 min-h-40 motion-safe:animate-fade-in">
-              <div className="flex items-start gap-3">
+            <section key={index} aria-live="polite" className="mt-4 flex min-h-44 flex-col motion-safe:animate-fade-in">
+              <div className="mt-auto flex items-start gap-3">
                 <span className={`flex size-9 shrink-0 items-center justify-center rounded-full ${index % 2 === 0 ? "bg-pill text-pill-foreground" : "bg-rates-mint text-background"}`}><Icon className="size-[18px]" /></span>
                 <div className="min-w-0 flex-1">
                   <h3 className="text-[17px] font-semibold leading-snug">{current.title}</h3>
 
                   <p className="mt-2 type-body-sm text-foreground">{current.text}</p>
+                  {current.bestFor && <p className="mt-5 font-accent text-[16px] font-semibold leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
                   {current.bank && <Button variant="secondary" aria-label="Copy CAL bank account number" onClick={async () => {
                     try { await navigator.clipboard.writeText("007845210036"); setCopied(true); } catch { setCopied(false); }
                   }} className="mt-3 h-auto w-full justify-between whitespace-normal rounded-lg bg-sheet-field px-3 py-3 text-left text-foreground hover:bg-sheet-field">
@@ -141,7 +142,6 @@ export default function HowItWorks() {
                 </div>
               </div>
             </section>
-            {current.bestFor && <p className="mt-6 mb-1 pl-12 font-accent text-[16px] font-semibold leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
             <Button onClick={() => last ? close() : setIndex(index + 1)} className="mt-5 h-12 w-full rounded-full bg-pill text-pill-foreground hover:bg-pill/90">{current.action ?? (last ? "Got it" : "Next")}{!last && <ArrowRight />}</Button>
           </div>
         </SheetContent>
