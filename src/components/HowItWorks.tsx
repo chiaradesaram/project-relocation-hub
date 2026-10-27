@@ -8,9 +8,10 @@ import transferStill from "@/assets/bank-transfer-info.png";
 import sentGif from "@/assets/request-submitted.gif";
 import sentStill from "@/assets/request-submitted.png";
 
-type StoryStep = { title: string; text: string; icon: typeof Zap; action?: string; bank?: boolean };
+type StoryStep = { title: string; text: string; icon: typeof Zap; action?: string; bank?: boolean; bestFor?: string };
 type Story = { title: string; steps: StoryStep[] };
 const step = (title: string, text: string, icon: typeof Zap): StoryStep => ({ title, text, icon });
+const pick = (title: string, text: string, bestFor: string, icon: typeof Zap): StoryStep => ({ title, text, bestFor, icon });
 
 function storyFor(path: string, method: string, product: string): Story {
   const equity = product === "equities";
@@ -41,11 +42,11 @@ function storyFor(path: string, method: string, product: string): Story {
     step("Justpay (Direct Invest)", "For topping up directly from your bank. Activate Justpay if needed, choose your bank and submit a request. Money is debited directly into your CAL equity account — no separate bank transfer.", Zap),
     step("Transfer from Unit Trusts", "For using money already invested with CAL. Choose a Unit Trust fund and sub account, then move an amount within its balance into your equity account instead of paying from your bank.", ArrowLeftRight),
   ] : [
-    step("Bank Transfer", "For investing money you transfer yourself. Send money to CAL's Deutsche Bank account, then raise a request with your fund, sub account and sending bank. You'll be emailed once the transfer is matched with your request.", Building2),
-    step("Justpay (Direct Invest)", "For investing directly from your bank. Activate Justpay if needed, choose your bank and submit a request. Money is debited directly and added to your CAL portfolio — no separate bank transfer.", Zap),
-    step("Fund Flip", "For moving money already invested with CAL. Choose a source fund and sub account, then a different destination. Move an amount within your source balance without making a new bank transfer.", ArrowLeftRight),
-    step("Recurring Investment", "For investing a little every month. Choose your fund, sub account, amount, bank and start date. Justpay funds your monthly plan; you can edit, pause or resume it later.", CalendarDays),
-    step("Default Fund", "For giving future bank transfers a usual destination. Save your preferred fund and sub account so transfers to CAL don't need a separate Creation Request each time. This sets a destination, not a monthly plan.", PieChart),
+    pick("Justpay (Direct Invest)", "Invest directly from your bank. Activate Justpay, choose your bank and submit a request. The money is debited from your account and added to your portfolio, with no separate transfer.", "quick investments", Zap),
+    pick("Bank Transfer", "Transfer money to CAL's Deutsche Bank account, then raise a request telling us which fund to invest in. We'll match your transfer to the request.", "paying from your own banking app", Building2),
+    pick("Recurring Investment", "Invest every month, automatically. Choose a fund and a bank, and the money is taken from your account and added to your portfolio each month.", "building your portfolio steadily", CalendarDays),
+    pick("Fund Flip", "Move money between funds in your portfolio, without withdrawing first.", "changing where your money is invested", ArrowLeftRight),
+    pick("Default Fund", "Save your preferred fund and sub account so transfers to CAL don't need a separate Creation Request each time.", "a usual destination for future transfers", PieChart),
   ] };
   const justpay: StoryStep[] = [
     step("Link your bank", "Choose your bank account and activate Justpay to link it, if you haven't already.", Link2),
@@ -131,6 +132,7 @@ export default function HowItWorks() {
                   <h3 className="text-[17px] font-semibold leading-snug">{current.title}</h3>
 
                   <p className="mt-2 type-body-sm text-foreground">{current.text}</p>
+                  {current.bestFor && <p className="mt-3 text-[13px] leading-snug text-foreground"><span className="text-muted-foreground">Best for: </span>{current.bestFor}</p>}
                   {current.bank && <Button variant="secondary" aria-label="Copy CAL bank account number" onClick={async () => {
                     try { await navigator.clipboard.writeText("007845210036"); setCopied(true); } catch { setCopied(false); }
                   }} className="mt-3 h-auto w-full justify-between whitespace-normal rounded-lg bg-sheet-field px-3 py-3 text-left text-foreground hover:bg-sheet-field">
