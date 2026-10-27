@@ -47,3 +47,5 @@
 - [x] Remove the per-fund icon badges from both Fund Flip rows
 
 - [x] Remove the "For example" worked rows from the instant redemption limit sheet
+- [x] Drop "Step N" labels, the "N of M" counter and the steps header from the How it works guides; each slide leads with its method heading
+
