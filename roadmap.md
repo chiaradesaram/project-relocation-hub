@@ -49,4 +49,5 @@
 - [x] Remove the "For example" worked rows from the instant redemption limit sheet
 - [x] Drop "Step N" labels, the "N of M" counter and the steps header from the How it works guides; each slide leads with its method heading
 - [x] Rewrite the Unit Trust comparison guide with Chiara's copy and a "Best for:" line on each method
+- [x] Move the "Best for:" line to the bottom of each guide slide in a rounded accent face with even spacing
 
