@@ -84,17 +84,17 @@ const methodMeta: Record<RedeemMethod, { label: string; icon: typeof Zap; desc: 
   instant: {
     icon: Zap,
     label: "Instant Redemption",
-    desc: "Get money in your bank account right away. Up to LKR 100,000 or 50% of your sub account value, whichever is lower.",
+    desc: "Get money in your bank account instantly, up to LKR 100,000 or 50% of your sub-account value, whichever is lower.",
   },
   normal: {
     icon: Clock,
     label: "Normal Redemption",
-    desc: "Redeem any amount, no limit. Requests before 9 AM are processed the same working day, after 9 AM the next working day.",
+    desc: "Redeem up to your full balance, with requests placed before 9:00 AM processed on the same working day.",
   },
   plan: {
     icon: Repeat,
     label: "Redemption Plan",
-    desc: "Get a regular payout from a sub account to your bank on a schedule you choose.",
+    desc: "Have the returns on your investment paid into your bank account automatically every month.",
   },
   payout: {
     icon: Wallet,
