@@ -89,7 +89,7 @@ const methodMeta: Record<RedeemMethod, { label: string; icon: typeof Zap; desc: 
   normal: {
     icon: Clock,
     label: "Normal Redemption",
-    desc: "Redeem up to your full balance, with requests placed before 9:00 AM processed on the same working day.",
+    desc: "Redeem up to your full balance.",
   },
   plan: {
     icon: Repeat,
