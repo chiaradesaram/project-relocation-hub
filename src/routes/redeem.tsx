@@ -1,4 +1,4 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, getRouteApi, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import MobileLayout from "@/components/MobileLayout";
 import PageHeader from "@/components/PageHeader";
@@ -25,6 +25,8 @@ import sampathLogo from "@/assets/banks/sampath.png";
 import hnbLogo from "@/assets/banks/hnb.png";
 
 type RedeemMethod = "instant" | "normal" | "plan" | "payout";
+
+const redeemRouteApi = getRouteApi("/redeem");
 
 export const Route = createFileRoute("/redeem")({
   validateSearch: (s: Record<string, unknown>): { product?: string; method?: RedeemMethod } => ({
@@ -105,7 +107,7 @@ const methodMeta: Record<RedeemMethod, { label: string; icon: typeof Zap; desc: 
 
 function Redeem() {
   const navigate = useNavigate();
-  const search = Route.useSearch();
+  const search = redeemRouteApi.useSearch();
   const isEquities = search.product === "equities";
 
   if (!search.method) {

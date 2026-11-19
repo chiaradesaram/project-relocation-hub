@@ -1,5 +1,7 @@
 # Project architecture decisions
 
+- Read Redeem search state through getRouteApi("/redeem"), not the mutable Route instance; automatic splitting and hot updates must not change the matched route ID.
+
 - Use one route-aware HowItWorks story sheet inserted after the MobileLayout header on Invest and Redeem; shared navigation and GIF handling keep every product guide consistent without altering form logic.
 
 - Share treasury security selection and face-value calculation between bank transfer and Justpay via a payment-method prop; keep method-specific limits and subsequent steps separate to prevent divergent treasury displays.
