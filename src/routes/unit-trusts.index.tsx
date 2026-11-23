@@ -48,86 +48,37 @@ function UnitTrustPortfolio() {
   const navigate = useNavigate();
   const [expandedFund, setExpandedFund] = useState<string | null>(null);
   const [selectedSubAccount, setSelectedSubAccount] = useState<SubAccount | null>(null);
-  const [earningsRange, setEarningsRange] = useState<"7d" | "30d" | "all">("7d");
   const [goals, setGoals] = useState<Goal[]>([]);
   const [goalOpen, setGoalOpen] = useState(false);
   const [goalFund, setGoalFund] = useState<string | undefined>();
   useEffect(() => setGoals(readGoals()), []);
 
   const allSubAccounts = funds.flatMap((f) => f.subAccounts);
-  const earningsRanges = [
-    {
-      key: "7d" as const,
-      label: "7d",
-      caption: "the last 7 days",
-      value: allSubAccounts.reduce((sum, s) => sum + s.earnings7dNum, 0),
-    },
-    {
-      key: "30d" as const,
-      label: "30d",
-      caption: "the last 30 days",
-      value: allSubAccounts.reduce((sum, s) => sum + s.earnings30dNum, 0),
-    },
-    {
-      key: "all" as const,
-      label: "All time",
-      caption: "all time",
-      value: allSubAccounts.reduce((sum, s) => sum + s.earningsAllNum, 0),
-    },
-  ];
-  const activeEarnings =
-    earningsRanges.find((r) => r.key === earningsRange) ?? earningsRanges[0];
+  const totalEarnings30d = allSubAccounts.reduce((sum, s) => sum + s.earnings30dNum, 0);
 
-  const fundEarningsForRange = (fund: Fund) => {
-    if (earningsRange === "7d")
-      return fund.subAccounts.reduce((s, a) => s + a.earnings7dNum, 0);
-    if (earningsRange === "30d")
-      return fund.subAccounts.reduce((s, a) => s + a.earnings30dNum, 0);
-    return fund.subAccounts.reduce((s, a) => s + a.earningsAllNum, 0);
-  };
+  const fundEarningsForRange = (fund: Fund) =>
+    fund.subAccounts.reduce((s, a) => s + a.earnings30dNum, 0);
 
-  const subEarningsForRange = (sub: SubAccount) => {
-    if (earningsRange === "7d") return sub.earnings7dNum;
-    if (earningsRange === "30d") return sub.earnings30dNum;
-    return sub.earningsAllNum;
-  };
+  const subEarningsForRange = (sub: SubAccount) => sub.earnings30dNum;
 
 
   return (
     <MobileLayout>
       <PageHeader title="Unit Trusts" showBack />
 
-      <div className="px-5 pt-5 text-center">
-        <p className="text-[13px] font-medium text-muted-foreground">Total portfolio</p>
-        <p className="mt-1.5 font-display text-[28px] font-semibold leading-tight text-foreground">
+      <div className="px-5 pt-3 text-center">
+        <p className="text-[12px] font-medium text-muted-foreground">Total portfolio</p>
+        <p className="mt-1 font-display text-[24px] font-semibold leading-tight text-foreground">
           LKR 2,450,000
         </p>
-        <div className="mt-4 flex flex-col items-center">
-          <div className="flex items-center gap-1.5">
-            <Sprout className="h-4 w-4 shrink-0 text-success" />
-            <p className="font-display text-[17px] font-semibold leading-none text-success">
-              +LKR {activeEarnings.value.toLocaleString("en-LK")}
-            </p>
-          </div>
-          <p className="mt-1.5 text-[12px] font-medium text-muted-foreground">
-            Earned in {activeEarnings.caption}
+        <div className="mt-1.5 flex items-center justify-center gap-1.5">
+          <Sprout className="h-3.5 w-3.5 shrink-0 text-success" />
+          <p className="text-[13px] font-semibold leading-none text-success">
+            +LKR {totalEarnings30d.toLocaleString("en-LK")}
           </p>
-          <div className="mt-3 flex items-center gap-1 rounded-full bg-card p-1">
-            {earningsRanges.map((r) => (
-              <button
-                key={r.key}
-                type="button"
-                onClick={() => setEarningsRange(r.key)}
-                className={`rounded-full px-3.5 py-1.5 text-[12px] font-semibold transition-colors ${
-                  earningsRange === r.key
-                    ? "bg-pill/20 text-pill"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}
-              >
-                {r.label}
-              </button>
-            ))}
-          </div>
+          <p className="text-[12px] font-medium text-muted-foreground">
+            in the last 30 days
+          </p>
         </div>
       </div>
 
@@ -155,12 +106,10 @@ function UnitTrustPortfolio() {
         </div>
       )}
 
-      <section className="mx-4 mt-8">
+      <section className="mx-4 mt-6">
         <div className="flex items-center justify-between px-1">
           <h2 className="text-[13px] font-semibold text-foreground">Your funds</h2>
-          <p className="text-[11px] font-semibold text-pill">
-            {activeEarnings.key === "all" ? "All-time earnings" : `${activeEarnings.label} earnings`}
-          </p>
+          <p className="text-[11px] font-semibold text-pill">30d earnings</p>
         </div>
         <div className="mt-2 space-y-2.5">
           {funds.map((fund) => {
