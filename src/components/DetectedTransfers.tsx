@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowDownLeft, ArrowLeft, ArrowRight, Check, ChevronRight, PieChart, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetDescription, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useDetectedTransfers } from "./DetectedTransferProvider";
 import { TRANSFER_FUNDS, TRANSFER_REFLECTION_WORKING_DAYS } from "@/lib/detectedTransfers";
 import sampathLogo from "@/assets/banks/sampath.png";
@@ -47,8 +47,6 @@ export default function DetectedTransfers() {
           <SheetTitle className="text-center text-base">{confirmed ? "Fund confirmed" : selected ? "Choose a fund" : "Your money has arrived"}</SheetTitle>
           <Button variant="ghost" size="icon" aria-label="Close transfers" onClick={() => setOpen(false)} className="absolute right-0 size-8 rounded-full bg-secondary"><X className="size-4" /></Button>
         </div>
-        <SheetDescription className="mt-1 text-center text-xs text-foreground">Preview examples · no real money is moved</SheetDescription>
-
         {confirmed ? <div className="pt-7 text-center" aria-live="polite">
           <span className="mx-auto flex size-16 items-center justify-center rounded-full bg-success/20 text-success"><Check className="size-8" /></span>
           <p className="mt-4 text-2xl font-bold tabular-nums">{money(confirmed.amount)}</p>
