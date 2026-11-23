@@ -5,6 +5,7 @@ import MobileLayout from "@/components/MobileLayout";
 import { Button } from "@/components/ui/button";
 import { MoversCard, RatesCard, TransactionsCard, UtFundsCard } from "@/components/DashboardWidgets";
 import { ReorderSheet } from "@/components/ReorderSheet";
+import DetectedTransfers from "@/components/DetectedTransfers";
 import { DEFAULT_PREFS, QUICK_LINK_LABELS, WIDGET_LABELS, loadDashboardPrefs, saveDashboardPrefs, toggleItem, type DashboardPrefs, type QuickLinkId, type WidgetId } from "@/lib/dashboardPrefs";
 
 export const Route = createFileRoute("/")({
@@ -160,6 +161,7 @@ function Dashboard() {
       </header>
 
       <main className="space-y-3 px-4 pb-5">
+        <DetectedTransfers />
         <div className="flex justify-end">
           <Button variant="ghost" size="sm" className="h-auto w-auto max-w-none gap-1.5 px-1 text-xs font-semibold text-pill hover:bg-transparent" onClick={() => setCustomiseOpen(true)}>
             <SlidersHorizontal className="size-3.5 shrink-0" /><span className="whitespace-nowrap">Customise dashboard</span>

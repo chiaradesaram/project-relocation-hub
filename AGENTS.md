@@ -1,5 +1,7 @@
 # Project architecture decisions
 
+- Keep detected-transfer preview state in a root React provider, with a dashboard sheet and pure per-transfer assignment helper; assignments survive navigation without pretending sample data is durable bank data.
+
 - Read Redeem search state through getRouteApi("/redeem"), not the mutable Route instance; automatic splitting and hot updates must not change the matched route ID.
 
 - Use one route-aware HowItWorks story sheet inserted after the MobileLayout header on Invest and Redeem; shared navigation and GIF handling keep every product guide consistent without altering form logic.

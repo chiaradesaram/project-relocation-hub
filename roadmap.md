@@ -1,5 +1,9 @@
 # Roadmap
 
+- [x] Build preview detected-transfer sheet, individual fund assignment and dashboard reminder
+- [x] Verify multiple transfers, dismissal, confirmation and mobile layout
+- [ ] Connect real detected transfers and login trigger — awaiting CAL transfer service details
+
 - [x] Add and verify tappable How it works stories across Invest and Redeem, preserving GIFs
 
 - [x] Add treasury Justpay security selection, face-value calculation, LKR 40,000–74,940 limits, bank picker and review/confirm; verify bills and bonds

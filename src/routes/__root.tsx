@@ -2,6 +2,7 @@ import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/r
 
 import appCss from "../styles.css?url";
 import { Toaster } from "@/components/ui/sonner";
+import { DetectedTransferProvider } from "@/components/DetectedTransferProvider";
 
 function NotFoundComponent() {
   return (
@@ -39,8 +40,6 @@ export const Route = createRootRoute({
       { name: "twitter:card", content: "summary" },
       { name: "twitter:title", content: "CAL Digital" },
       { name: "twitter:description", content: "CAL Digital - Investment Dashboard" },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/521414f8-65c2-4a03-9b0d-64a32bd59f5f/id-preview-8d9a4c79--e397c0e2-00f4-4f57-9ad3-81d68dca3bdc.lovable.app-1778236396291.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/521414f8-65c2-4a03-9b0d-64a32bd59f5f/id-preview-8d9a4c79--e397c0e2-00f4-4f57-9ad3-81d68dca3bdc.lovable.app-1778236396291.png" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
@@ -81,7 +80,7 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <>
-      <Outlet />
+      <DetectedTransferProvider><Outlet /></DetectedTransferProvider>
       <Toaster position="top-center" />
     </>
   );
