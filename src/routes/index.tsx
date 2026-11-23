@@ -79,9 +79,9 @@ function Dashboard() {
         return (
           <section key={id} aria-label="Portfolio" className="py-0.5">
             <div className="space-y-1.5">
-              {products.map(({ name, amount, icon: Icon, tone, product }) => (
+              {products.map(({ name, amount, dot, product }) => (
                 <Button key={name} variant="ghost" onClick={() => openProduct(product)} className="h-auto min-h-14 w-full justify-start gap-2.5 rounded-xl bg-secondary/60 px-3.5 py-2.5 hover:bg-secondary">
-                  <span className={`flex size-8 shrink-0 items-center justify-center rounded-full ${tone}`}><Icon className="size-3.5" /></span>
+                  <span className={`size-2.5 shrink-0 rounded-full ${dot}`} />
                   <span className="min-w-0 flex-1 text-left"><span className="block text-[13px] font-semibold">{name}</span></span>
                   <span className="shrink-0 text-xs font-semibold tabular-nums text-foreground/85"><span className="font-normal text-foreground/60">LKR </span>{amount}</span>
                   <ChevronRight className="size-3.5 text-foreground/50" />
@@ -168,7 +168,7 @@ function Dashboard() {
             <h1>Investments</h1>
           </div>
           <div className="mt-0.5 flex items-baseline gap-2"><p className="text-[28px] font-bold leading-tight tabular-nums text-foreground">7,370,000</p><span className="text-xs font-semibold text-foreground/65">LKR</span></div>
-          <div className="mt-3 flex h-1.5 overflow-hidden rounded-full opacity-45" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
+          <div className="mt-3 flex h-1.5 overflow-hidden rounded-full" role="img" aria-label="Allocation: Unit Trusts 50%, Equities 30%, Treasuries 20%"><span className="w-1/2 bg-pill" /><span className="w-[30%] bg-accent-purple" /><span className="w-1/5 bg-allocation-treasuries" /></div>
           <div className="mt-2 flex justify-between">
             {products.map((product) => <span key={product.short} className="flex items-center gap-1.5 text-xs text-foreground/75"><span className={`size-1.5 rounded-full ${product.dot}`} />{product.short}<span className="font-semibold">{product.allocation}</span></span>)}
           </div>
