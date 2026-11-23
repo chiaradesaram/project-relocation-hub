@@ -9,7 +9,7 @@ import sampathLogo from "@/assets/banks/sampath.png";
 const money = (amount: number) => `LKR ${amount.toLocaleString("en-LK")}`;
 
 export default function DetectedTransfers() {
-  const { transfers, prompted, markPrompted, assign } = useDetectedTransfers();
+  const { transfers, prompted, autoOpen, markPrompted, assign } = useDetectedTransfers();
   const [open, setOpen] = useState(false);
   const [selectedId, setSelectedId] = useState<string>();
   const [fund, setFund] = useState("");
@@ -19,11 +19,14 @@ export default function DetectedTransfers() {
   const confirmed = transfers.find((transfer) => transfer.id === confirmedId);
 
   useEffect(() => {
-    if (!prompted && pending.length > 0) {
+    if (!prompted) {
+      setSelectedId(undefined);
+      setConfirmedId(undefined);
+      setFund("");
       markPrompted();
-      setOpen(true);
+      setOpen(autoOpen && pending.length > 0);
     }
-  }, [prompted, pending.length, markPrompted]);
+  }, [prompted, autoOpen, pending.length, markPrompted]);
 
   const showList = () => { setSelectedId(undefined); setConfirmedId(undefined); setFund(""); };
   const reopen = () => { showList(); setOpen(true); };

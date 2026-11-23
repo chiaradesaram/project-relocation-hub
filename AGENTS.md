@@ -1,5 +1,7 @@
 # Project architecture decisions
 
+- Keep presentation scenarios in a typed catalogue and mount the presenter once above the root Outlet; future scenarios reuse the same launcher while transfer replay resets only illustrative provider state.
+
 - Keep detected-transfer preview state in a root React provider, with a dashboard sheet and pure per-transfer assignment helper; assignments survive navigation without pretending sample data is durable bank data.
 
 - Read Redeem search state through getRouteApi("/redeem"), not the mutable Route instance; automatic splitting and hot updates must not change the matched route ID.

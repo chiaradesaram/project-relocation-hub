@@ -1,5 +1,8 @@
 # Roadmap
 
+- [x] Add a shared top-bar flow presenter with replayable transfer scenarios and existing investment/redemption flows
+- [x] Verify scenario replay, reminder state, cross-page launch and mobile layout
+
 - [x] Build preview detected-transfer sheet, individual fund assignment and dashboard reminder
 - [x] Verify multiple transfers, dismissal, confirmation and mobile layout
 - [ ] Connect real detected transfers and login trigger — awaiting CAL transfer service details
