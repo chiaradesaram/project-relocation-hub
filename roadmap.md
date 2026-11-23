@@ -1,5 +1,7 @@
 # Roadmap
 
+- [x] Restyle dashboard header with prominent notification/help/customise icons and a Monzo-style transfer banner; verify actions and mobile layout
+
 - [x] Add a shared top-bar flow presenter with replayable transfer scenarios and existing investment/redemption flows
 - [x] Verify scenario replay, reminder state, cross-page launch and mobile layout
 

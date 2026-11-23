@@ -149,24 +149,20 @@ function Dashboard() {
 
   return (
     <MobileLayout>
-      <header className="flex items-center justify-between px-5 pb-3 pt-4">
-        <Button variant="ghost" className="h-auto gap-2.5 px-0 hover:bg-transparent" onClick={() => navigate({ to: "/profile" })} aria-label="Profile">
-          <span className="flex size-9 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-foreground">CS</span>
-          <span className="text-left"><span className="block text-xs font-normal text-foreground/70">Good morning</span><span className="block text-sm font-semibold">Chiara</span></span>
+      <header className="flex items-center justify-between gap-3 px-4 pb-4 pt-4">
+        <Button variant="ghost" className="h-auto min-w-0 gap-2.5 p-0 hover:bg-transparent" onClick={() => navigate({ to: "/profile" })} aria-label="Profile">
+          <span className="flex size-11 shrink-0 items-center justify-center rounded-full bg-allocation-treasuries/25 text-base font-bold text-foreground">CS</span>
+          <span className="min-w-0 text-left"><span className="block text-xs font-normal text-foreground/70">Good morning</span><span className="block text-sm font-semibold">Chiara</span></span>
         </Button>
-        <div className="flex gap-1">
-          <Button asChild variant="ghost" size="icon" className="rounded-full text-foreground/80" aria-label="Help"><Link to="/help" search={{ topic: "general" }}><HelpCircle /></Link></Button>
-          <Button variant="ghost" size="icon" className="relative rounded-full text-foreground/80" onClick={() => navigate({ to: "/notifications" })} aria-label="Notifications"><Bell /><span className="absolute right-2 top-2 size-1.5 rounded-full bg-allocation-treasuries" /></Button>
+        <div className="flex shrink-0 gap-2">
+          <Button variant="ghost" size="icon" className="relative size-11 rounded-full bg-secondary/70 text-foreground hover:bg-secondary [&_svg]:size-[22px]" onClick={() => navigate({ to: "/notifications" })} aria-label="Notifications" title="Notifications"><Bell strokeWidth={1.8} /><span className="absolute right-2.5 top-2 size-2 rounded-full bg-allocation-treasuries ring-2 ring-card" /></Button>
+          <Button asChild variant="ghost" size="icon" className="size-11 rounded-full bg-secondary/70 text-foreground hover:bg-secondary [&_svg]:size-[22px]" aria-label="Help" title="Help"><Link to="/help" search={{ topic: "general" }}><HelpCircle strokeWidth={1.8} /></Link></Button>
+          <Button variant="ghost" size="icon" className="size-11 rounded-full bg-pill text-pill-foreground hover:bg-pill-bright [&_svg]:size-[22px]" onClick={() => setCustomiseOpen(true)} aria-label="Customise dashboard" title="Customise dashboard"><SlidersHorizontal strokeWidth={1.8} /></Button>
         </div>
       </header>
 
       <main className="space-y-3 px-4 pb-5">
         <DetectedTransfers />
-        <div className="flex justify-end">
-          <Button variant="ghost" size="sm" className="h-auto w-auto max-w-none gap-1.5 px-1 text-xs font-semibold text-pill hover:bg-transparent" onClick={() => setCustomiseOpen(true)}>
-            <SlidersHorizontal className="size-3.5 shrink-0" /><span className="whitespace-nowrap">Customise dashboard</span>
-          </Button>
-        </div>
         <section aria-label="Investment summary" className="rounded-2xl bg-card/70 px-4 py-3">
           <div className="flex items-center justify-between text-xs text-foreground/75">
             <h1>Investments</h1>

@@ -33,10 +33,10 @@ export default function DetectedTransfers() {
   const choose = (id: string) => { setSelectedId(id); setConfirmedId(undefined); setFund(""); };
 
   return <>
-    {pending.length > 0 && <Button variant="ghost" onClick={reopen} aria-label={`Choose funds for ${pending.length} received transfers`} className="h-auto w-full justify-start gap-3 whitespace-normal rounded-lg bg-pill/15 px-4 py-3 text-left hover:bg-pill/20">
-      <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-pill text-pill-foreground"><ArrowDownLeft className="size-5" /></span>
-      <span className="min-w-0 flex-1"><span className="block text-[13px] font-semibold">{pending.length === 1 ? "1 transfer needs a fund" : `${pending.length} transfers need a fund`}</span><span className="mt-0.5 block text-xs font-normal">{money(pending.reduce((total, transfer) => total + transfer.amount, 0))} received · Preview examples</span></span>
-      <ChevronRight className="size-4 shrink-0 text-pill-bright" />
+    {pending.length > 0 && <Button variant="ghost" onClick={reopen} aria-label={`Choose funds for ${pending.length} received transfers`} className="h-auto min-h-28 w-full justify-start gap-3 whitespace-normal rounded-2xl bg-card px-4 py-4 text-left hover:bg-secondary/70">
+      <span className="relative flex size-11 shrink-0 items-center justify-center rounded-full bg-rates-mint/15 text-rates-mint"><ArrowDownLeft className="size-6" strokeWidth={2.3} /><span className="absolute right-0 top-0 size-2.5 rounded-full bg-allocation-treasuries ring-2 ring-card" /></span>
+      <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{pending.length === 1 ? "Your transfer is here" : `${pending.length} transfers have arrived`}</span><span className="mt-1 block text-xs font-normal text-foreground/75">{money(pending.reduce((total, transfer) => total + transfer.amount, 0))} · Choose {pending.length === 1 ? "a fund" : "your funds"}</span><span className="mt-1 block text-xs font-normal text-foreground/50">Preview examples</span></span>
+      <span className="flex shrink-0 items-center gap-0.5 text-xs font-semibold text-pill-bright">View<ChevronRight className="size-4" /></span>
     </Button>}
 
     <Sheet open={open} onOpenChange={setOpen}>
