@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowDownLeft, ArrowLeft, ArrowRight, Check, ChevronRight, PieChart, X } from "lucide-react";
+import { ArrowDownLeft, ArrowLeft, ArrowRight, Check, ChevronRight, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { useDetectedTransfers } from "./DetectedTransferProvider";
@@ -54,10 +54,10 @@ export default function DetectedTransfers() {
           <p className="mx-auto mt-5 max-w-xs text-sm leading-relaxed">You’ll see this reflected on your portal in {TRANSFER_REFLECTION_WORKING_DAYS} working day.</p>
           {pending.length > 0 ? <><p className="mt-6 text-xs">{pending.length} {pending.length === 1 ? "transfer still needs" : "transfers still need"} a fund</p><Button onClick={() => { const next = pending[0]; if (next) choose(next.id); }} className="mt-3 h-12 w-full rounded-full bg-pill text-pill-foreground">Choose next fund<ArrowRight className="size-4" /></Button><Button variant="link" onClick={() => setOpen(false)} className="mt-2 text-foreground">I’ll do the rest later</Button></> : <><p className="mt-6 text-sm font-semibold text-rates-mint">{transfers.length === 1 ? "Your transfer is taken care of" : `All ${transfers.length} transfers are taken care of`}</p><Button onClick={() => setOpen(false)} className="mt-4 h-12 w-full rounded-full bg-pill text-pill-foreground">Done</Button></>}
         </div> : selected ? <>
-          <div className="py-6 text-center"><p className="text-2xl font-bold tabular-nums">{money(selected.amount)}</p><p className="mt-1 text-xs">Received at CAL’s Sampath Bank</p><p className="mt-1 text-xs">{selected.received} · {selected.reference}</p></div>
+          <div className="py-6 text-center"><p className="text-2xl font-bold tabular-nums">{money(selected.amount)}</p><p className="mt-1.5 text-sm text-foreground/70">{selected.received} · {selected.reference}</p></div>
           <p className="mb-3 text-sm">Where would you like to invest it?</p>
           <div className="space-y-2">{TRANSFER_FUNDS.map((name) => <Button key={name} variant="ghost" aria-pressed={fund === name} onClick={() => setFund(name)} className={`h-auto min-h-14 w-full justify-start gap-3 whitespace-normal rounded-lg px-3.5 py-3 text-left ${fund === name ? "bg-pill/20 hover:bg-pill/25" : "bg-sheet-field hover:bg-secondary"}`}>
-            <PieChart className="size-4 shrink-0 text-pill-bright" /><span className="flex-1 text-sm">{name}</span><span className={`flex size-5 shrink-0 items-center justify-center rounded-full ${fund === name ? "bg-pill text-pill-foreground" : "border border-foreground/50"}`}>{fund === name && <Check className="size-3.5" />}</span>
+            <span className="flex-1 text-sm">{name}</span><span className={`flex size-5 shrink-0 items-center justify-center rounded-full ${fund === name ? "bg-pill text-pill-foreground" : "border border-foreground/50"}`}>{fund === name && <Check className="size-3.5" />}</span>
           </Button>)}</div>
           <Button disabled={!fund} onClick={() => { if (!fund || selected.fund) return; assign(selected.id, fund); setConfirmedId(selected.id); }} className="mt-6 h-12 w-full rounded-full bg-pill text-pill-foreground disabled:opacity-40">Confirm fund</Button>
         </> : <>
