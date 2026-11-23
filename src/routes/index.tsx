@@ -152,7 +152,6 @@ function Dashboard() {
       <header className="flex items-center justify-between gap-3 px-4 pb-3 pt-3">
         <Button variant="ghost" className="h-auto min-w-0 gap-2.5 p-0 hover:bg-transparent" onClick={() => navigate({ to: "/profile" })} aria-label="Profile">
           <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-foreground/95 text-sm font-bold text-pill">CS</span>
-          <span className="min-w-0 text-left"><span className="block text-xs font-normal text-foreground/70">Good morning</span><span className="block text-sm font-semibold">Chiara</span></span>
         </Button>
         <div className="flex shrink-0 gap-2">
           <Button variant="ghost" size="icon" className="relative size-9 rounded-full bg-secondary/70 text-foreground hover:bg-secondary [&_svg]:size-[18px]" onClick={() => navigate({ to: "/notifications" })} aria-label="Notifications" title="Notifications"><Bell strokeWidth={1.8} /><span className="absolute right-2 top-1.5 size-1.5 rounded-full bg-allocation-treasuries ring-2 ring-card" /></Button>
