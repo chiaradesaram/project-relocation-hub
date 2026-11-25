@@ -1106,7 +1106,7 @@ function MethodForm({
         <div className="mx-4 mt-4">
           <div className="rounded-3xl bg-card/60 px-4 backdrop-blur-md">
             <FlipAccountRow
-              label="Transfer from"
+              label="Paid from"
               fund={flipFromFund}
               sub={flipFromSub}
               side="source"
@@ -1129,7 +1129,7 @@ function MethodForm({
             </div>
 
             <FlipAccountRow
-              label="Transfer to"
+              label="Sent to"
               fund={flipToFund}
               sub={flipToSub}
               side="target"
@@ -1406,7 +1406,7 @@ function MethodForm({
           <SheetHeader className="px-5 pb-0">
             <div className="flex items-center justify-between">
               <SheetTitle className="text-base font-semibold text-foreground">
-                {flipSheet === "to" ? "Transfer to" : "Transfer from"}
+                {flipSheet === "to" ? "Sent to" : "Paid from"}
               </SheetTitle>
               <button
                 onClick={() => setFlipSheet(null)}
@@ -2146,9 +2146,9 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
     sourceFund: equityFundSources.map((f) => f.name),
   };
   const pickerTitles: Record<"bank" | "payTo" | "sourceFund", string> = {
-    bank: "Transfer from",
-    payTo: "Transfer to",
-    sourceFund: "Transfer from unit trust",
+    bank: "Paid from",
+    payTo: "Sent to",
+    sourceFund: "Paid from",
   };
   const selectedFor = (kind: "bank" | "payTo" | "sourceFund") =>
     kind === "bank" ? bank : kind === "payTo" ? payTo : sourceFund;
@@ -2176,7 +2176,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                     className="size-1.5 shrink-0 rounded-full"
                     style={{ background: "var(--pill)" }}
                   />
-                  Transfer from
+                  Paid from
                 </span>
                 <span className="mt-2 block truncate text-[15px] font-semibold leading-tight text-foreground">
                   {source.name}
@@ -2223,7 +2223,7 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
                     className="size-1.5 shrink-0 rounded-full"
                     style={{ background: "var(--rates-mint)" }}
                   />
-                  Transfer to
+                  Sent to
                 </span>
                 <span className="mt-2 block truncate text-[15px] font-semibold leading-tight text-foreground">
                   Equity Account
@@ -2287,14 +2287,14 @@ function EquitiesForm({ method }: { method: InvestMethod }) {
         <div className="mx-4 rounded-2xl bg-card/60 backdrop-blur-md overflow-hidden">
           <DateRow label="Date" date={date} onClick={() => setDateOpen(true)} />
           <PickerRow
-            label="Transfer from"
+            label="Paid from"
             value={selectedBankLabel(bank)}
             placeholder="Select bank account"
             onClick={() => setPicker("bank")}
           />
           {isPayIn && (
             <PickerRow
-              label="Transfer to"
+              label="Sent to"
               value={selectedBankLabel(payTo)}
               placeholder="Select CAL account"
               onClick={() => setPicker("payTo")}

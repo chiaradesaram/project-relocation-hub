@@ -67,8 +67,8 @@ function storyFor(path: string, method: string, product: string): Story {
     { title: "Raise a request", text: "Return here to make a Creation Request. Choose your fund, sub account and the bank you transferred from. You'll be emailed once your transfer is matched with this request.", icon: FilePlus2, action: "Raise a request" },
   ] };
   if (method === "flip" || method === "utflip") return { title: method === "flip" ? "A fresh home for your investment" : "Unit Trusts to equities", steps: [
-    step("Choose where it comes from", "Tap Transfer from to choose your fund and sub account.", PieChart),
-    step("Choose its next home", method === "flip" ? "Tap Transfer to and choose a different fund or sub account." : "Your money will move into your equity account. Check the transfer authorisation before reviewing.", ArrowLeftRight),
+    step("Choose where it comes from", "Tap Paid from to choose your fund and sub account.", PieChart),
+    step("Choose its next home", method === "flip" ? "Tap Sent to and choose a different fund or sub account." : "Your money will move into your equity account. Check the transfer authorisation before reviewing.", ArrowLeftRight),
     step("Make your move", "Enter an amount within your source balance, review your details and confirm your request.", CheckCircle2),
   ] };
   if (method === "payin") return { title: "Pay in to your equity account", steps: [

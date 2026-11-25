@@ -17,7 +17,7 @@ export type InvestReviewData = {
   amount: number;
   fund: string;
   account?: string;
-  /** "Sent to" (bank transfer) or "Transfer to" (fund flip) */
+  /** "Sent to" (bank transfer or fund flip destination) */
   destinationLabel?: string;
   /** Paying-from bank, shown on bank transfers */
   fromBankLabel?: string;
@@ -171,16 +171,16 @@ export function InvestReviewSheet({
                     {fund && <ReviewRow label="Fund" value={fund} />}
                     {account && <ReviewRow label="Sub account" value={account} />}
                     {fromBankLabel && (
-                      <ReviewRow label="Transferred from" value={fromBankLabel} />
+                      <ReviewRow label="Paid from" value={fromBankLabel} />
                     )}
                     {destinationLabel && <ReviewRow label="Sent to" value={destinationLabel} />}
                   </>
                 ) : isFlip ? (
                   <>
-                    {fund && <ReviewRow label="Transfer from" value={fund} />}
+                    {fund && <ReviewRow label="Paid from" value={fund} />}
                     {account && <ReviewRow label="Sub account" value={account} />}
                     {destinationLabel && (
-                      <ReviewRow label="Transfer to" value={destinationLabel} />
+                      <ReviewRow label="Sent to" value={destinationLabel} />
                     )}
                     <ReviewRow
                       label="Investment amount"

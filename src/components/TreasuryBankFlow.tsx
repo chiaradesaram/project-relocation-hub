@@ -322,7 +322,7 @@ export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bil
             <h2 className="text-xl font-bold text-foreground">Confirm your transfer</h2>
             <p className="mt-1 text-[13px] text-muted-foreground">Attach your receipt and tell us where it came from.</p>
 
-            <p className="mt-5 mb-1.5 text-[12px] text-muted-foreground">Transferred from</p>
+            <p className="mt-5 mb-1.5 text-[12px] text-muted-foreground">Paid from</p>
             <Button variant="ghost" onClick={() => setBankPickerOpen(true)} className="h-auto w-full justify-between rounded-xl bg-card/60 px-4 py-3 text-[13px]">
               <span>{fromBank ? compactBank(fromBank) : "Select your bank account"}</span>
               <ChevronRight className="size-4 shrink-0" />
@@ -395,7 +395,7 @@ export default function TreasuryBankFlow({ kind, method = "bank" }: { kind: "bil
       <Sheet open={bankPickerOpen} onOpenChange={setBankPickerOpen}>
         <SheetContent side="bottom" className="rounded-t-3xl border-t border-border/30 bg-card px-5 pb-8">
           <div className="relative mb-4">
-            <SheetHeader><SheetTitle className="text-left text-base">{isJustpay ? "Paying from" : "Transferred from"}</SheetTitle></SheetHeader>
+            <SheetHeader><SheetTitle className="text-left text-base">Paid from</SheetTitle></SheetHeader>
             <Button variant="ghost" size="icon" aria-label="Close bank picker" onClick={() => setBankPickerOpen(false)} className="absolute right-0 top-0 size-7 rounded-full"><X className="size-4" /></Button>
           </div>
           <div className="space-y-2">
